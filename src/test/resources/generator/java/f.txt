@@ -1,0 +1,59 @@
+<insert id="insert" parameterType="${tableClass.fullClassName}">
+        <selectKey keyProperty="${genSelectKey}" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        insert into ${tableClass.tableName}
+        (<#if tableClass.allFields??><#list tableClass.allFields as field>${field.columnName}<#if field_has_next>,</#if></#list></#if>)
+        values
+        (<#if tableClass.allFields??><#list tableClass.allFields as field><#noparse>#</#noparse>{${field.fieldName},jdbcType=${field.jdbcType}}<#if field_has_next>,</#if></#list></#if>)
+    </insert>
+    <insert id="insertSelective" parameterType="${tableClass.fullClassName}">
+        <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        insert into ${tableClass.tableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        <#if tableClass.allFields??>
+        <#list tableClass.allFields as field>
+            <if test="${field.fieldName} != null">
+                ${field.columnName},
+            </if>
+        </#list>
+        </#if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <#if tableClass.allFields??>
+        <#list tableClass.allFields as field>
+            <if test="${field.fieldName} != null">
+                <#noparse>#</#noparse>{${field.fieldName},jdbcType=${field.jdbcType}},
+            </if>
+        </#list>
+        </#if>
+        </trim>
+    </insert>
+
+
+    <select id="selectList" resultMap="BaseResultMap" parameterType="${poQm}.${tableClass.shortClassName}Query">
+        select
+        <include refid="Base_Alias_Column_List"/>
+        from ${tableClass.tableName} m
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+           <#if tableClass.allFields??>
+            <#list tableClass.allFields as field>
+                <if test="${field.fieldName} != null <#if field.stringColumn==true> and ${field.fieldName} != ''</#if>">
+                    <#if field.stringColumn==true>
+                    and m.${field.columnName}  like CONCAT('%',<#noparse>#</#noparse>{${field.fieldName}},'%')
+                    <#else>
+                    and m.${field.columnName} = <#noparse>#</#noparse>{${field.fieldName}}
+                    </#if>
+                </if>
+            </#list>
+           </#if>
+                <!--  keyword   -->
+                <if test="keyword != null and keyword != ''">
+
+                </if>
+            </trim>
+        </where>
+    </select>

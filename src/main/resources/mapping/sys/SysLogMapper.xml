@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ciaj.boot.modules.sys.mapper.SysLogMapper">
+    <!--
+        Author: Ciaj.
+        Date: 2019-04-12 16:22:41
+        Description: www.ciaj.com mapper.xml
+    -->
+    <!--<cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="MybatisRedisCache"></cache>-->
+
+    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.SysLogPo" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <id column="type" property="type" jdbcType="VARCHAR" />
+        <id column="username" property="username" jdbcType="VARCHAR" />
+        <id column="ip" property="ip" jdbcType="VARCHAR" />
+        <id column="time" property="time" jdbcType="BIGINT" />
+        <id column="operation" property="operation" jdbcType="VARCHAR" />
+        <id column="method" property="method" jdbcType="VARCHAR" />
+        <id column="description" property="description" jdbcType="VARCHAR" />
+        <id column="create_at" property="createAt" jdbcType="VARCHAR" />
+        <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
+        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <id column="del_flag" property="delFlag" jdbcType="CHAR" />
+        <id column="params" property="params" jdbcType="LONGVARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,type,username,ip,time,operation,method,description,create_at,create_time,update_at,update_time,del_flag,params
+    </sql>
+    <sql id="Base_Alias_Column_List">
+        m.id,m.type,m.username,m.ip,m.time,m.operation,m.method,m.description,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.params
+    </sql>
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM sys_log
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <delete id="delete" parameterType="com.ciaj.boot.modules.sys.entity.po.SysLogPo">
+        DELETE FROM sys_log
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null">
+                    AND id = #{id}
+                </if>
+                <if test="type != null">
+                    AND type = #{type}
+                </if>
+                <if test="username != null">
+                    AND username = #{username}
+                </if>
+                <if test="ip != null">
+                    AND ip = #{ip}
+                </if>
+                <if test="time != null">
+                    AND time = #{time}
+                </if>
+                <if test="operation != null">
+                    AND operation = #{operation}
+                </if>
+                <if test="method != null">
+                    AND method = #{method}
+                </if>
+                <if test="description != null">
+                    AND description = #{description}
+                </if>
+                <if test="createAt != null">
+                    AND create_at = #{createAt}
+                </if>
+                <if test="createTime != null">
+                    AND create_time = #{createTime}
+                </if>
+                <if test="updateAt != null">
+                    AND update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null">
+                    AND update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null">
+                    AND del_flag = #{delFlag}
+                </if>
+                <if test="params != null">
+                    AND params = #{params}
+                </if>
+            </trim>
+        </where>
+    </delete>
+    <insert id="insert"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysLogPo">
+        <selectKey keyProperty="id" order="BEFORE"  resultType="String">
+            SELECT REPLACE(uuid(),'-','') FROM DUAL
+        </selectKey>
+        INSERT INTO sys_log
+        (id,type,username,ip,time,operation,method,description,create_at,create_time,update_at,update_time,del_flag,params)
+        VALUES
+        (#{id,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{ip,jdbcType=VARCHAR},#{time,jdbcType=BIGINT},#{operation,jdbcType=VARCHAR},#{method,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{params,jdbcType=LONGVARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysLogPo">
+        <selectKey keyProperty="id" order="BEFORE" resultType="String">
+            SELECT REPLACE(UUID(),'-','') FROM DUAL
+        </selectKey>
+        INSERT INTO sys_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="ip != null">
+                ip,
+            </if>
+            <if test="time != null">
+                time,
+            </if>
+            <if test="operation != null">
+                operation,
+            </if>
+            <if test="method != null">
+                method,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="createAt != null">
+                create_at,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateAt != null">
+                update_at,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="params != null">
+                params,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="ip != null">
+                #{ip,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=BIGINT},
+            </if>
+            <if test="operation != null">
+                #{operation,jdbcType=VARCHAR},
+            </if>
+            <if test="method != null">
+                #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null">
+                #{createAt,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null">
+                #{updateAt,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=CHAR},
+            </if>
+            <if test="params != null">
+                #{params,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysLogPo">
+        UPDATE sys_log
+        <set>
+            type = #{type},
+            username = #{username},
+            ip = #{ip},
+            time = #{time},
+            operation = #{operation},
+            method = #{method},
+            description = #{description},
+            create_at = #{createAt},
+            create_time = #{createTime},
+            update_at = #{updateAt},
+            update_time = #{updateTime},
+            del_flag = #{delFlag},
+        </set>
+         WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeySelective"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysLogPo">
+        UPDATE sys_log
+        <set>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="ip != null">
+                ip = #{ip},
+            </if>
+            <if test="time != null">
+                time = #{time},
+            </if>
+            <if test="operation != null">
+                operation = #{operation},
+            </if>
+            <if test="method != null">
+                method = #{method},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="createAt != null">
+                create_at = #{createAt},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateAt != null">
+                update_at = #{updateAt},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag},
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_log
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysLogPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sys_log m
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null">
+                    AND m.id = #{id}
+                </if>
+                <if test="type != null">
+                    AND m.type = #{type}
+                </if>
+                <if test="username != null">
+                    AND m.username = #{username}
+                </if>
+                <if test="ip != null">
+                    AND m.ip = #{ip}
+                </if>
+                <if test="time != null">
+                    AND m.time = #{time}
+                </if>
+                <if test="operation != null">
+                    AND m.operation = #{operation}
+                </if>
+                <if test="method != null">
+                    AND m.method = #{method}
+                </if>
+                <if test="description != null">
+                    AND m.description = #{description}
+                </if>
+                <if test="createAt != null">
+                    AND m.create_at = #{createAt}
+                </if>
+                <if test="createTime != null">
+                    AND m.create_time = #{createTime}
+                </if>
+                <if test="updateAt != null">
+                    AND m.update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null">
+                    AND m.update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null">
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="params != null">
+                    AND m.params = #{params}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <select id="select" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysLogPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sys_log m
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null">
+                    AND m.id = #{id}
+                </if>
+                <if test="type != null">
+                    AND m.type = #{type}
+                </if>
+                <if test="username != null">
+                    AND m.username = #{username}
+                </if>
+                <if test="ip != null">
+                    AND m.ip = #{ip}
+                </if>
+                <if test="time != null">
+                    AND m.time = #{time}
+                </if>
+                <if test="operation != null">
+                    AND m.operation = #{operation}
+                </if>
+                <if test="method != null">
+                    AND m.method = #{method}
+                </if>
+                <if test="description != null">
+                    AND m.description = #{description}
+                </if>
+                <if test="createAt != null">
+                    AND m.create_at = #{createAt}
+                </if>
+                <if test="createTime != null">
+                    AND m.create_time = #{createTime}
+                </if>
+                <if test="updateAt != null">
+                    AND m.update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null">
+                    AND m.update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null">
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="params != null">
+                    AND m.params = #{params}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysLogPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sys_log m
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null">
+                    AND m.id = #{id}
+                </if>
+                <if test="type != null">
+                    AND m.type = #{type}
+                </if>
+                <if test="username != null">
+                    AND m.username = #{username}
+                </if>
+                <if test="ip != null">
+                    AND m.ip = #{ip}
+                </if>
+                <if test="time != null">
+                    AND m.time = #{time}
+                </if>
+                <if test="operation != null">
+                    AND m.operation = #{operation}
+                </if>
+                <if test="method != null">
+                    AND m.method = #{method}
+                </if>
+                <if test="description != null">
+                    AND m.description = #{description}
+                </if>
+                <if test="createAt != null">
+                    AND m.create_at = #{createAt}
+                </if>
+                <if test="createTime != null">
+                    AND m.create_time = #{createTime}
+                </if>
+                <if test="updateAt != null">
+                    AND m.update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null">
+                    AND m.update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null">
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="params != null">
+                    AND m.params = #{params}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysLogVo">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>
+        FROM sys_log m
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null  and id != ''">
+                    and m.id =#{id}
+                </if>
+                <if test="type != null  and type != ''">
+                    and m.type =#{type}
+                </if>
+                <if test="username != null  and username != ''">
+                    and m.username like CONCAT('%',#{username},'%')
+                </if>
+                <if test="ip != null  and ip != ''">
+                    and m.ip like CONCAT('%',#{ip},'%')
+                </if>
+                <if test="time != null ">
+                    and m.time = #{time}
+                </if>
+                <if test="operation != null  and operation != ''">
+                    and m.operation like CONCAT('%',#{operation},'%')
+                </if>
+                <if test="method != null  and method != ''">
+                    and m.method like CONCAT('%',#{method},'%')
+                </if>
+                <if test="params != null  and params != ''">
+                    and m.params like CONCAT('%',#{params},'%')
+                </if>
+                <if test="description != null  and description != ''">
+                    and m.description like CONCAT('%',#{description},'%')
+                </if>
+                <if test="createAt != null  and createAt != ''">
+                    and m.create_at =#{createAt}
+                </if>
+                <if test="createTime != null ">
+                    and m.create_time = #{createTime}
+                </if>
+                <if test="updateAt != null  and updateAt != ''">
+                    and m.update_at =#{updateAt}
+                </if>
+                <if test="updateTime != null ">
+                    and m.update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null  and delFlag != ''">
+                    and m.del_flag =#{delFlag}
+                </if>
+                <!--  keyword   -->
+                <if test="keyword != null and keyword != ''">
+                    and m.operation like CONCAT('%',#{keyword},'%')
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.SysLogDto" extends="BaseResultMap">
+    </resultMap>
+
+    <select id="selectDTOList" resultMap="DTOResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysLogVo">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>
+        FROM sys_log m
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null  and id != ''">
+                    and m.id =#{id}
+                </if>
+                <if test="type != null  and type != ''">
+                    and m.type =#{type}
+                </if>
+                <if test="username != null  and username != ''">
+                    and m.username like CONCAT('%',#{username},'%')
+                </if>
+                <if test="ip != null  and ip != ''">
+                    and m.ip like CONCAT('%',#{ip},'%')
+                </if>
+                <if test="time != null ">
+                    and m.time = #{time}
+                </if>
+                <if test="operation != null  and operation != ''">
+                    and m.operation like CONCAT('%',#{operation},'%')
+                </if>
+                <if test="method != null  and method != ''">
+                    and m.method like CONCAT('%',#{method},'%')
+                </if>
+                <if test="params != null  and params != ''">
+                    and m.params like CONCAT('%',#{params},'%')
+                </if>
+                <if test="description != null  and description != ''">
+                    and m.description like CONCAT('%',#{description},'%')
+                </if>
+                <if test="createAt != null  and createAt != ''">
+                    and m.create_at =#{createAt}
+                </if>
+                <if test="createTime != null ">
+                    and m.create_time = #{createTime}
+                </if>
+                <if test="updateAt != null  and updateAt != ''">
+                    and m.update_at =#{updateAt}
+                </if>
+                <if test="updateTime != null ">
+                    and m.update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null  and delFlag != ''">
+                    and m.del_flag =#{delFlag}
+                </if>
+                <!--  keyword   -->
+                <if test="keyword != null and keyword != ''">
+                    and m.operation like CONCAT('%',#{keyword},'%')
+                </if>
+            </trim>
+        </where>
+    </select>
+</mapper>

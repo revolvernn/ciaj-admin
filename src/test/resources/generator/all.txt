@@ -1,0 +1,242 @@
+目标package: 
+
+当前时间：
+2018-6-1
+14:14:57
+2018-06-01 14:14:57
+
+所有配置的属性信息:
+targetPackage - 
+templateFormatter - tk.mybatis.mapper.generator.formatter.FreemarkerTemplateFormatter
+templatePath - generator/test-one.ftl
+targetProject - src/test/resources
+fileName - ${tableClass.shortClassName}Test.txt
+
+实体和表的信息：
+表名：sys_user
+变量名：sysUserEntity
+小写名：sysuserentity
+类名：SysUserEntity
+全名：com.revolver.boot.entity.SysUserEntity
+包名：com.revolver.boot.entity
+
+列的信息：
+=====================================
+主键：
+    -------------------------------------
+    列名：id
+    列类型：INTEGER
+    字段名：id
+    注释：主键
+    类型包名：java.lang
+    类型短名：Integer
+    类型全名：java.lang.Integer
+    是否主键：true
+    是否可空：false
+    是否为BLOB列：false
+    是否为String列：false
+    是否为字符串列：false
+    是否为日期列：false
+    是否为时间列：false
+    是否为序列列：false
+    列长度：10
+    列精度：0
+
+基础列：
+    -------------------------------------
+    列名：username
+    列类型：VARCHAR
+    字段名：username
+    注释：用户名
+    类型包名：java.lang
+    类型短名：String
+    类型全名：java.lang.String
+    是否主键：false
+    是否可空：false
+    是否为BLOB列：false
+    是否为String列：true
+    是否为字符串列：true
+    是否为日期列：false
+    是否为时间列：false
+    是否为序列列：false
+    列长度：50
+    列精度：0
+    -------------------------------------
+    列名：password
+    列类型：VARCHAR
+    字段名：password
+    注释：密码
+    类型包名：java.lang
+    类型短名：String
+    类型全名：java.lang.String
+    是否主键：false
+    是否可空：false
+    是否为BLOB列：false
+    是否为String列：true
+    是否为字符串列：true
+    是否为日期列：false
+    是否为时间列：false
+    是否为序列列：false
+    列长度：100
+    列精度：0
+    -------------------------------------
+    列名：salt
+    列类型：VARCHAR
+    字段名：salt
+    注释：密码盐
+    类型包名：java.lang
+    类型短名：String
+    类型全名：java.lang.String
+    是否主键：false
+    是否可空：false
+    是否为BLOB列：false
+    是否为String列：true
+    是否为字符串列：true
+    是否为日期列：false
+    是否为时间列：false
+    是否为序列列：false
+    列长度：100
+    列精度：0
+    -------------------------------------
+    列名：mobile
+    列类型：VARCHAR
+    字段名：mobile
+    注释：电话号码
+    类型包名：java.lang
+    类型短名：String
+    类型全名：java.lang.String
+    是否主键：false
+    是否可空：false
+    是否为BLOB列：false
+    是否为String列：true
+    是否为字符串列：true
+    是否为日期列：false
+    是否为时间列：false
+    是否为序列列：false
+    列长度：255
+    列精度：0
+    -------------------------------------
+    列名：locked
+    列类型：CHAR
+    字段名：locked
+    注释：锁定状态
+    类型包名：java.lang
+    类型短名：String
+    类型全名：java.lang.String
+    是否主键：false
+    是否可空：false
+    是否为BLOB列：false
+    是否为String列：true
+    是否为字符串列：true
+    是否为日期列：false
+    是否为时间列：false
+    是否为序列列：false
+    列长度：1
+    列精度：0
+    -------------------------------------
+    列名：create_at
+    列类型：INTEGER
+    字段名：createAt
+    注释：创建人
+    类型包名：java.lang
+    类型短名：Integer
+    类型全名：java.lang.Integer
+    是否主键：false
+    是否可空：false
+    是否为BLOB列：false
+    是否为String列：false
+    是否为字符串列：false
+    是否为日期列：false
+    是否为时间列：false
+    是否为序列列：false
+    列长度：10
+    列精度：0
+    -------------------------------------
+    列名：create_time
+    列类型：TIMESTAMP
+    字段名：createTime
+    注释：创建时间
+    类型包名：java.util
+    类型短名：Date
+    类型全名：java.util.Date
+    是否主键：false
+    是否可空：false
+    是否为BLOB列：false
+    是否为String列：false
+    是否为字符串列：false
+    是否为日期列：false
+    是否为时间列：false
+    是否为序列列：false
+    列长度：19
+    列精度：0
+    -------------------------------------
+    列名：update_at
+    列类型：INTEGER
+    字段名：updateAt
+    注释：更新人
+    类型包名：java.lang
+    类型短名：Integer
+    类型全名：java.lang.Integer
+    是否主键：false
+    是否可空：false
+    是否为BLOB列：false
+    是否为String列：false
+    是否为字符串列：false
+    是否为日期列：false
+    是否为时间列：false
+    是否为序列列：false
+    列长度：10
+    列精度：0
+    -------------------------------------
+    列名：update_time
+    列类型：TIMESTAMP
+    字段名：updateTime
+    注释：更新时间
+    类型包名：java.util
+    类型短名：Date
+    类型全名：java.util.Date
+    是否主键：false
+    是否可空：false
+    是否为BLOB列：false
+    是否为String列：false
+    是否为字符串列：false
+    是否为日期列：false
+    是否为时间列：false
+    是否为序列列：false
+    列长度：19
+    列精度：0
+    -------------------------------------
+    列名：del_flag
+    列类型：CHAR
+    字段名：delFlag
+    注释：删除标记
+    类型包名：java.lang
+    类型短名：String
+    类型全名：java.lang.String
+    是否主键：false
+    是否可空：false
+    是否为BLOB列：false
+    是否为String列：true
+    是否为字符串列：true
+    是否为日期列：false
+    是否为时间列：false
+    是否为序列列：false
+    列长度：1
+    列精度：0
+
+Blob列：
+
+=====================================
+全部列：
+列名 - 字段名
+    id - id
+    username - username
+    password - password
+    salt - salt
+    mobile - mobile
+    locked - locked
+    create_at - createAt
+    create_time - createTime
+    update_at - updateAt
+    update_time - updateTime
+    del_flag - delFlag

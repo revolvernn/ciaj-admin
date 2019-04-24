@@ -1,0 +1,64 @@
+<!DOCTYPE html >
+<html lang="en"
+	  xmlns:th="http://www.thymeleaf.org">
+<head th:include="header">
+<body>
+<div id="roleapp" v-cloak>
+	<div>
+		<el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
+			<el-form-item label="关键字"  prop="keyword">
+				<el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+			</el-form-item>
+			<el-form-item label="角色类型"  prop="available">
+				<my-dict-select v-model="queryForm.type" type="role_type"></my-dict-select>
+			</el-form-item>
+			<el-form-item label="是否有效"  prop="available">
+				<my-dict-select v-model="queryForm.available" type="available"></my-dict-select>
+			</el-form-item>
+			<el-form-item>
+				<el-button type="primary" @click="myQuery">查询</el-button>
+				<el-button  @click="myQueryReset">重置</el-button>
+				<my-btn type="primary" label="新增" @click="myAdd" auth="sys:role:add"></my-btn>
+			</el-form-item>
+		</el-form>
+		<my-table  :columns="tableColumns"  :page="page" v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
+		</my-table>
+		<el-dialog :title="addOrUpdateForm.title"  :visible.sync="addOrUpdateForm.roleFormVisible" width="400px">
+			<el-form  ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.role">
+                <el-form-item label="角色名" prop="name" :label-width="addOrUpdateForm.roleFormLabelWidth" required>
+               		 <el-input v-model="addOrUpdateForm.role.name" autocomplete="off" placeholder="角色名" ></el-input>
+               	</el-form-item>
+                <el-form-item label="角色编码" prop="code" :label-width="addOrUpdateForm.roleFormLabelWidth" required>
+               		 <el-input v-model="addOrUpdateForm.role.code" autocomplete="off" placeholder="角色编码"></el-input>
+               	</el-form-item>
+                <el-form-item label="角色类型" prop="type" :label-width="addOrUpdateForm.roleFormLabelWidth" required>
+                    <my-dict-select v-model="addOrUpdateForm.role.type" type="role_type"></my-dict-select>
+               	</el-form-item>
+                <el-form-item label="角色描述" prop="description" :label-width="addOrUpdateForm.roleFormLabelWidth" >
+               		 <el-input v-model="addOrUpdateForm.role.description" autocomplete="off" placeholder="角色描述"></el-input>
+               	</el-form-item>
+                <el-form-item label="是否有效" prop="available" :label-width="addOrUpdateForm.roleFormLabelWidth" required>
+					<my-dict-select v-model="addOrUpdateForm.role.available" type="available"></my-dict-select>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="addOrUpdateForm.roleFormVisible = false">取 消</el-button>
+				<el-button type="primary" @click="saveOrUpdate">确 定</el-button>
+			</div>
+		</el-dialog>
+		<el-dialog title="分配权限资源"  :visible.sync="addOrUpdateForm.privilegesVisible" width="400px">
+            <el-input placeholder="输入关键字进行过滤" v-model="addOrUpdateForm.privilege.filterText">
+                <el-button slot="append"  @click="checkAllPrivilege">全选</el-button>
+            </el-input>
+            <el-tree class="filter-tree" :data="addOrUpdateForm.privilege.treeData" node-key="id" :props="addOrUpdateForm.privilege.defaultProps" check-strictly show-checkbox default-expand-all :filter-node-method="filterPrivilege" ref="privilegeTree">
+            </el-tree>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="addOrUpdateForm.privilegesVisible = false">取 消</el-button>
+				<el-button type="primary" @click="savePrivileges">确 定</el-button>
+			</div>
+		</el-dialog>
+    </div>
+</div>
+<script src="/statics/js/modules/sys/role.js"></script>
+</body>
+</html>

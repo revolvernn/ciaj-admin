@@ -1,0 +1,156 @@
+<!DOCTYPE html >
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="header">
+<body>
+<div id="ossapp" v-cloak>
+    <div>
+        <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
+            <el-form-item label="关键字" prop="keyword">
+                <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="myQuery">查询</el-button>
+                <el-button @click="myQueryReset">重置</el-button>
+                <el-button type="danger" @click="myAdd">云存储配置</el-button>
+                <el-button @click="ossForm.uploadFormVisible = true" type="primary">图片上传</el-button>
+            </el-form-item>
+        </el-form>
+        <my-table @sortChange="sortchange" :default-sort="defaultSort"  :columns="tableColumns" :page="page" v-on:pagesizechange="pagesizechange"
+                  v-on:currentpagechange="currentpagechange">
+        </my-table>
+        <el-dialog title="图片上传" :visible.sync="ossForm.uploadFormVisible" width="600px">
+            <el-upload
+                    class="upload-demo"
+                    action="/oss/upload"
+                    :on-success="uploadSuccess"
+                    list-type="picture">
+                <el-button size="small" type="primary">点击上传</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="ossForm.uploadFormVisible = false">取 消</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog title="图片预览" :visible.sync="imgPreVisible" width="600px">
+            <el-card :body-style="{ padding: '0px' }">
+                <img :src="rowImgUrl" class="image" v-if="rowImgUrl">
+                <div style="padding: 14px;word-break: break-all;">
+                    <a :href="rowImgUrl" target="_blank">{{rowImgUrl}}</a>
+                </div>
+            </el-card>
+        </el-dialog>
+        <el-dialog title="OSS云存储配置" :visible.sync="ossForm.ossFormVisible" width="600px">
+            <el-form ref="ossFormRef" :rules="rules" :model="ossForm.config">
+                <el-form-item label="OSS类型" prop="type" label-width="150px">
+                    <el-radio-group v-model="ossForm.config.type" size="small">
+                        <el-radio-button label="ALY">阿里云</el-radio-button>
+                        <el-radio-button label="QNY">七牛云</el-radio-button>
+                        <el-radio-button label="TXY">腾讯云</el-radio-button>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="是否启用配置" prop="type" label-width="150px">
+                    <el-switch v-model="ossForm.config.status"
+                               active-value="Y"
+                               inactive-value="N">
+                    </el-switch>
+                </el-form-item>
+                <div v-if="ossForm.config.type==='ALY'">
+                    <el-form-item label="阿里云域名" prop="aliyunDomain" label-width="150px">
+                        <el-input v-model="ossForm.config.aliyunDomain" autocomplete="off"
+                                  placeholder="阿里云绑定的域名"></el-input>
+                    </el-form-item>
+                    <el-form-item label="阿里云路径前缀" prop="aliyunPrefix" label-width="150px">
+                        <el-input v-model="ossForm.config.aliyunPrefix" autocomplete="off"
+                                  placeholder="默认为空"></el-input>
+                    </el-form-item>
+                    <el-form-item label="阿里云EndPoint" prop="aliyunEndPoint" label-width="150px">
+                        <el-input v-model="ossForm.config.aliyunEndPoint" autocomplete="off"
+                                  placeholder="阿里云EndPoint"></el-input>
+                    </el-form-item>
+                    <el-form-item label="阿里云AccessKeyId" prop="aliyunAccessKeyId" label-width="150px">
+                        <el-input v-model="ossForm.config.aliyunAccessKeyId" autocomplete="off"
+                                  placeholder="阿里云AccessKeyId"></el-input>
+                    </el-form-item>
+                    <el-form-item label="阿里云AccessKeySecret" prop="aliyunAccessKeySecret" label-width="150px">
+                        <el-input v-model="ossForm.config.aliyunAccessKeySecret" autocomplete="off"
+                                  placeholder="阿里云AccessKeySecret"></el-input>
+                    </el-form-item>
+                    <el-form-item label="阿里云BucketName" prop="aliyunBucketName" label-width="150px">
+                        <el-input v-model="ossForm.config.aliyunBucketName" autocomplete="off"
+                                  placeholder="阿里云BucketName"></el-input>
+                    </el-form-item>
+                </div>
+                <div v-if="ossForm.config.type==='QNY'">
+                    <el-form-item label="七牛域名" prop="qiniuDomain" label-width="150px">
+                        <el-input v-model="ossForm.config.qiniuDomain" autocomplete="off"
+                                  placeholder="七牛绑定的域名"></el-input>
+                    </el-form-item>
+                    <el-form-item label="七牛路径前缀" prop="qiniuPrefix" label-width="150px">
+                        <el-input v-model="ossForm.config.qiniuPrefix" autocomplete="off" placeholder="默认为空"></el-input>
+                    </el-form-item>
+                    <el-form-item label="七牛AccessKey" prop="qiniuAccessKey" label-width="150px">
+                        <el-input v-model="ossForm.config.qiniuAccessKey" autocomplete="off"
+                                  placeholder="七牛AccessKey"></el-input>
+                    </el-form-item>
+                    <el-form-item label="七牛SecretKey" prop="qiniuSecretKey" label-width="150px">
+                        <el-input v-model="ossForm.config.qiniuSecretKey" autocomplete="off"
+                                  placeholder="七牛SecretKey"></el-input>
+                    </el-form-item>
+                    <el-form-item label="七牛BucketName" prop="qiniuBucketName" label-width="150px">
+                        <el-input v-model="ossForm.config.qiniuBucketName" autocomplete="off"
+                                  placeholder="七牛BucketName"></el-input>
+                    </el-form-item>
+                </div>
+                <div v-if="ossForm.config.type==='TXY'">
+                    <el-form-item label="腾讯云域名" prop="qcloudDomain" label-width="150px">
+                        <el-input v-model="ossForm.config.qcloudDomain" autocomplete="off"
+                                  placeholder="腾讯云绑定的域名"></el-input>
+                    </el-form-item>
+                    <el-form-item label="腾讯云路径前缀" prop="qcloudPrefix" label-width="150px">
+                        <el-input v-model="ossForm.config.qcloudPrefix" autocomplete="off"
+                                  placeholder="默认为空"></el-input>
+                    </el-form-item>
+                    <el-form-item label="腾讯云AppId" prop="qcloudAppId" label-width="150px">
+                        <el-input v-model="ossForm.config.qcloudAppId" autocomplete="off"
+                                  placeholder="腾讯云AppId"></el-input>
+                    </el-form-item>
+                    <el-form-item label="腾讯云SecretId" prop="qcloudSecretId" label-width="150px">
+                        <el-input v-model="ossForm.config.qcloudSecretId" autocomplete="off"
+                                  placeholder="腾讯云SecretId"></el-input>
+                    </el-form-item>
+                    <el-form-item label="腾讯云SecretKey" prop="qcloudSecretKey" label-width="150px">
+                        <el-input v-model="ossForm.config.qcloudSecretKey" autocomplete="off"
+                                  placeholder="腾讯云SecretKey"></el-input>
+                    </el-form-item>
+                    <el-form-item label="腾讯云BucketName" prop="qcloudBucketName" label-width="150px">
+                        <el-input v-model="ossForm.config.qcloudBucketName" autocomplete="off"
+                                  placeholder="腾讯云BucketName"></el-input>
+                    </el-form-item>
+                    <el-form-item label="腾讯云Bucket所属地区" prop="qcloudRegion" label-width="150px">
+                        <el-input v-model="ossForm.config.qcloudRegion" autocomplete="off"
+                                  placeholder="如：sh（可选值 ，华南：gz 华北：tj 华东：sh）"></el-input>
+                    </el-form-item>
+                </div>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="ossForm.ossFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+<script src="/statics/js/modules/sys/oss.js"></script>
+<style>
+    .time {
+        font-size: 13px;
+        color: #999;
+    }
+    .image {
+        width: 100%;
+        display: block;
+    }
+
+</style>
+</body>
+</html>

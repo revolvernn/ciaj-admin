@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ADMIN</title>
+  <link rel="stylesheet" href="/statics/libs/vue/element-ui-2.4.11/element-ui.css">
+  <!--<link rel="stylesheet" href="/statics/css/main.css">-->
+  <script src="/statics/libs/jquery.min.js"></script>
+  <script src="/statics/libs/vue/vue-v2.5.21.js"></script>
+  <script src="/statics/libs/vue/element-ui-2.4.11/element-ui.js"></script>
+</head>
+<body>
+<div id="errorapp" class="login-box">
+  <el-container>
+    <el-main>
+      <el-row :gutter="20">
+        <el-col :span="6" :offset="8">
+          <div class="grid-content bg-purple">
+            系统异常，请联系管理员。
+          </div>
+        </el-col>
+      </el-row>
+    </el-main>
+  </el-container>
+</div>
+<script>
+  new Vue({
+    el: '#errorapp',
+    data: {}
+    ,
+    methods: {}
+  });
+</script>
+<style>
+  body{
+    background: #3c8dbc;
+  }
+  .el-main{
+    margin-top: 10%;
+  }
+  .el-row {
+    margin-bottom: 20px;
+  }
+
+  .el-col {
+    padding-left: 0;
+    border-radius: 4px;
+  }
+
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+
+  .grid-content {
+    border-radius: 4px;
+    min-height: 300px;
+    min-width: 300px;
+    padding: 30px;
+    text-align: center;
+  }
+</style>
+</body>
+</html>

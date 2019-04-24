@@ -1,0 +1,104 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  port: 1211
+  servlet:
+    context-path: /
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+  datasource:
+    username: revolver
+    password: revolver
+    url: jdbc:mysql:///boot_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    # old com.mysql.jdbc.Driver   new
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  #    schema:
+  #      - classpath:department.sql
+  redis:
+    database: 5
+    host: 127.0.0.1
+    port: 6379
+    password:      # 密码（默认为空）
+    timeout: 6000ms  # 连接超时时长（毫秒）
+    jedis:
+      pool:
+        max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+        max-wait: -1ms      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 10      # 连接池中的最大空闲连接
+        min-idle: 5
+  thymeleaf:
+    suffix: .html
+    encoding: UTF-8
+    mode: LEGACYHTML5
+    servlet:
+      content-type: text/html
+    prefix: classpath:/templates/
+    cache: false
+  devtools:
+    restart:
+      enabled: true
+
+mybatis:
+  mapper-locations: classpath:mapping/**/*.xml
+  type-aliases-package: com.ciaj.boot.modules.*.entity
+  configuration:
+    cache-enabled: true
+
+mapper:
+  mappers:
+    - com.ciaj.base.Mapper
+  not-empty: true
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+logging:
+  file: /var/logs/ciaj-admin.log
+  level: {org: error,com.ciaj: debug}
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}
+
+shiro:
+  hash-algorithm-name: md5
+  hash-iterations: 1024
+  enabled: true
+swagger:
+  title: RESTful APIs
+  description: RESTful 接口文档
+  name: Ciaj.
+  url: www.miwzn.com
+  email: 595009116@qq.com
+  version: 1.0.1
+
+executor:
+  corePoolSize: 20
+  maxPoolSize: 200
+  queueCapacity: 10

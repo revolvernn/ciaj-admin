@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BOOT ADMIN</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="statics/css/bootstrap.min.css">
+    <link rel="stylesheet" href="statics/css/font-awesome.min.css">
+    <link rel="stylesheet" href="statics/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="statics/css/all-skins.min.css">
+    <link rel="stylesheet" href="/statics/libs/vue/element-ui-2.4.11/element-ui.css">
+    <link rel="stylesheet" href="statics/css/main.css">
+    <!-- import Vue before Element -->
+    <script src="/statics/js/common.js"></script>
+    <script src="/statics/libs/vue/vue-v2.5.21.js"></script>
+    <!-- import JavaScript -->
+    <script src="/statics/libs/vue/element-ui-2.4.11/element-ui.js"></script>
+</head>
+<!-- ADD THE CLASS layout-boxed TO GET A BOXED LAYOUT -->
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper" id="vueindexapp" v-cloak>
+    <header class="main-header">
+        <a href="#" @click="indexClick" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>BOOT</b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>BOOT ADMIN</b></span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <div style="float:left;color:#fff;padding:15px 10px;">欢迎 {{user.username}}</div>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li v-if="user.role">
+                        <a><el-dropdown @command="roleChangeCommand">
+                          <span class="el-dropdown-link" style="color: white;">
+                            {{user.role.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+                          </span>
+                            <el-dropdown-menu slot="dropdown" v-if="user.roles">
+                                <el-dropdown-item v-for="role in user.roles" :command="role.id">{{role.name}}</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown></a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" @click="updatePassword"><i class="fa fa-lock"></i> &nbsp;修改密码</a>
+                    </li>
+                    <li><a href="sys/logout"><i class="fa fa-sign-out"></i> &nbsp;退出系统</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- =============================================== -->
+
+    <!-- Left side column. contains the sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- /.search form -->
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+                <!-- vue生成的菜单 -->
+                <menu-item :item="item" v-for="item in menuList"></menu-item>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+    <!-- =============================================== -->
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <el-breadcrumb separator="/">
+            <el-breadcrumb-item><a href="#" @click="indexClick">首页</a></el-breadcrumb-item>
+            <el-breadcrumb-item>{{navTitle}}</el-breadcrumb-item>
+        </el-breadcrumb>
+        <!-- Main content -->
+        <section class="content" style="background:#fff;">
+            <iframe scrolling="yes" frameborder="0"
+                    style="height:790px;width:100%;min-height:200px;overflow:visible;background:#fff;" :src="main"></iframe>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            Version 1.0.0
+        </div>
+        Copyright &copy; 2018 <a href="#" target="_blank">www.com</a> All Rights Reserved
+    </footer>
+
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+
+    <!-- 修改密码 -->
+    <div>
+        <el-dialog title="修改密码" :visible.sync="dialogVisible" width="350px">
+            <el-form ref="passwordFormRef" :rules="rules" :model="passwordForm" label-width="80px">
+                <el-form-item label="账号">
+                    <span>{{user.username}}</span>
+                </el-form-item>
+                <el-form-item label="原密码" prop="password">
+                    <el-input type="password" v-model="passwordForm.password"></el-input>
+                </el-form-item>
+                <el-form-item label="新密码" prop="newPassword">
+                    <el-input  type="password" v-model="passwordForm.newPassword"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="passwordSubmit">确 定</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+    </div>
+</div>
+<!-- ./wrapper -->
+
+
+<script src="/statics/libs/jquery.min.js"></script>
+<!--<script src="/statics/libs/vue.min.js"></script>-->
+<script src="/statics/libs/router.js"></script>
+<script src="/statics/libs/bootstrap.min.js"></script>
+<script src="/statics/libs/app.js"></script>
+<script src="/statics/js/index.js"></script>
+<style>
+    .el-breadcrumb {
+        padding: 10px;
+    }
+
+</style>
+</body>
+</html>
