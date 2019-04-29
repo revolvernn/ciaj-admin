@@ -9,6 +9,7 @@ import com.ciaj.boot.modules.sys.entity.po.SysAuthPo;
 import com.ciaj.boot.modules.sys.entity.po.SysMenuPo;
 import com.ciaj.boot.modules.sys.entity.po.SysUserPo;
 import com.ciaj.boot.modules.sys.service.SysAuthService;
+import com.ciaj.boot.modules.sys.service.SysCommService;
 import com.ciaj.boot.modules.sys.service.SysMenuService;
 import com.ciaj.boot.modules.sys.service.SysUserService;
 import com.ciaj.comm.ResponseEntity;
@@ -65,6 +66,8 @@ public class CommController {
 	private SysMenuService sysMenuService;
 	@Autowired
 	private ShiroService shiroService;
+	@Autowired
+	private SysCommService sysCommService;
 
 	@ResponseBody
 	@RequiresUser
@@ -291,6 +294,20 @@ public class CommController {
 	public void export(HttpServletResponse response, HttpServletRequest request) {
 		List<SysUserPo> sysUserPos = sysUserService.selectAll(null);
 		new ExcelUtil().build("用户", new String[]{"id", "account", "username"}, new String[]{"id", "账号", "用户名"}, sysUserPos).exportExcel(request, response);
+	}
+
+
+	/**
+	 * 系统表结构统计
+	 *
+	 * @return
+	 */
+	@ResponseBody
+	@RequiresUser
+	@GetMapping("/sys/table/status")
+	public ResponseEntity<List<Map<String, Object>>> tableStatus() {
+		List<Map<String, Object>> tables = sysCommService.selectTableStatus();
+		return new ResponseEntity<List<Map<String, Object>>>().put(tables);
 	}
 
 
