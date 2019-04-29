@@ -1,7 +1,7 @@
 package com.ciaj.boot.component.config.redis;
 
 import com.ciaj.base.Mapper;
-import com.ciaj.boot.component.config.ApplicationContextHolder;
+import com.ciaj.boot.component.config.SpringContextUtils;
 import com.ciaj.comm.annotation.MultiTableJoins;
 import com.ciaj.comm.utils.MD5Util;
 import com.ciaj.comm.utils.ObjectUtil;
@@ -74,9 +74,8 @@ public class MybatisRedisCache implements Cache {
 					log.info("Put query result to redis id：{}", getPrefix() + multiTableMapper.getCanonicalName());
 				}
 			}
-			log.info("Put query result to redis id：{}", getPrefix() + id);
-			log.info("Put query result to redis cacheKey：{}", cacheKey);
-			log.debug("Put query result to redis key：{}", key.toString());
+			log.info("Put query result to redis id：{}，cacheKey：{}", getPrefix() + id, cacheKey);
+			log.debug("Put query result to redis key：{}，cacheKey：{}", key.toString(), cacheKey);
 		} catch (Throwable t) {
 			log.error("Redis put failed key：{}，cause：{}", key.toString(), t);
 		}
@@ -164,7 +163,7 @@ public class MybatisRedisCache implements Cache {
 
 	private RedisTemplate getRedisTemplate() {
 		if (redisTemplate == null) {
-			redisTemplate = ApplicationContextHolder.getBean("redisTemplate");
+			redisTemplate = (RedisTemplate) SpringContextUtils.getBean("redisTemplate");
 		}
 		return redisTemplate;
 	}

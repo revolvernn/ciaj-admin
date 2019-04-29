@@ -130,6 +130,9 @@ var userapp = new Vue({
         this.loadData();
     },
     methods: {
+        exportUser() {
+            httpUtil.fileDownload(this,{url: "/sys/export/users"});
+        },
         handleAvatarSuccess(res, file) {
             // this.addOrUpdateForm.user.picUrl = URL.createObjectURL(file.raw);
             this.addOrUpdateForm.user.picUrl = res.data;

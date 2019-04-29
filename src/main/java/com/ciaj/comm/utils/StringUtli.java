@@ -68,8 +68,7 @@ public class StringUtli extends StringUtils {
 				if (value != null)
 					tagerStr = tagerStr.replace(key, value.toString());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				// Loggers.addException(e);
+				e.printStackTrace();
 			}
 		}
 		return tagerStr;

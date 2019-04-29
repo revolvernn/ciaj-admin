@@ -74,12 +74,12 @@ public class SysLogAspect {
 			SysLogPo sysLogPo = new SysLogPo();
 			sysLogPo.setTime(time);
 			OperationLog operationLog = method.getAnnotation(OperationLog.class);
-			if (operationLog != null) {
-				//注解上的描述
-				sysLogPo.setOperation(operationLog.operation());
-				sysLogPo.setDescription(operationLog.content());
-				sysLogPo.setType(operationLog.type().name());
-			}
+			if (operationLog == null) return;
+			//注解上的描述
+			sysLogPo.setOperation(operationLog.operation());
+			sysLogPo.setDescription(operationLog.content());
+			sysLogPo.setType(operationLog.type().name());
+
 			//请求的 类名、方法名
 			String className = joinPoint.getTarget().getClass().getName();
 			String methodName = signature.getName();

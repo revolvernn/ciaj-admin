@@ -1,7 +1,5 @@
 package com.ciaj.boot.modules.sys.web;
 
-import com.google.code.kaptcha.Constants;
-import com.google.code.kaptcha.Producer;
 import com.ciaj.base.TokenEntity;
 import com.ciaj.boot.component.config.shiro.ShiroUser;
 import com.ciaj.boot.component.service.ShiroService;
@@ -18,11 +16,14 @@ import com.ciaj.comm.annotation.OperationLog;
 import com.ciaj.comm.annotation.Resubmit;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.exception.BsRException;
-import com.ciaj.comm.utils.CommUtil;
 import com.ciaj.comm.pwd.PasswordEntity;
+import com.ciaj.comm.utils.CommUtil;
+import com.ciaj.comm.utils.ExcelUtil;
 import com.ciaj.comm.utils.PasswordUtil;
 import com.ciaj.comm.utils.ShiroUtils;
 import com.ciaj.comm.utils.validate.ValidatorUtils;
+import com.google.code.kaptcha.Constants;
+import com.google.code.kaptcha.Producer;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -37,9 +38,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -276,6 +279,18 @@ public class CommController {
 		auth.setSalt(password2.getSalt());
 		sysAuthService.updateByPrimaryKeySelective(auth);
 		return ResponseEntity.success();
+	}
+
+
+	/**
+	 * 导出用户
+	 *
+	 * @return
+	 */
+	@GetMapping("/sys/export/users")
+	public void export(HttpServletResponse response, HttpServletRequest request) {
+		List<SysUserPo> sysUserPos = sysUserService.selectAll(null);
+		new ExcelUtil().build("用户", new String[]{"id", "account", "username"}, new String[]{"id", "账号", "用户名"}, sysUserPos).exportExcel(request, response);
 	}
 
 

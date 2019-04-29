@@ -40,7 +40,6 @@ window.httpUtil = {
         }
         completeCallBack = completeCallBack || function (c) {
         }
-        // 返回ajax实例以便可以缓存它
         return $.ajax({
             url: baseURL + option.url || null,
             data: option.data || {},
@@ -65,7 +64,6 @@ window.httpUtil = {
         }
         completeCallBack = completeCallBack || function (c) {
         }
-        // 返回ajax实例以便可以缓存它
         return $.ajax({
             url: option.url || null,
             data: option.data || {},
@@ -91,7 +89,6 @@ window.httpUtil = {
         }
         completeCallBack = completeCallBack || function (c) {
         }
-        // 返回ajax实例以便可以缓存它
         return $.ajax({
             url: baseURL + option.url || '',
             data: option.data || {},
@@ -117,7 +114,6 @@ window.httpUtil = {
         }
         completeCallBack = completeCallBack || function (c) {
         }
-        // 返回ajax实例以便可以缓存它
         return $.ajax({
             url: baseURL + option.url || null,
             data: option.data || {},
@@ -143,7 +139,6 @@ window.httpUtil = {
         }
         completeCallBack = completeCallBack || function (c) {
         }
-        // 返回ajax实例以便可以缓存它
         return $.ajax({
             url: baseURL + option.url || null,
             data: option.data || {},
@@ -158,6 +153,46 @@ window.httpUtil = {
             },
             complete: function (c) {
                 (completeCallBack)(c);
+            }
+        });
+    },
+    //fileDownload  异步
+    fileDownload: function (that,option,prepareCallback,successCallback,failCallback) {
+        option = option || {url: null, data: {}};
+        var loading;
+        prepareCallback = prepareCallback || function () {
+            loading = that.$loading({
+                lock: true,
+                text: '导出中...',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            });
+        }
+        successCallback = successCallback || function () {
+            that.$message({
+                type: 'success',
+                message: '导出成功'
+            });
+            loading.close();
+        }
+        failCallback = failCallback || function () {
+            that.$message.error('导出失败');
+            loading.close();
+        }
+
+        return $.fileDownload( baseURL + option.url || null, {
+            data: option.data || {},
+            prepareCallback: function () {
+                console.log('export prepareCallback');
+                (prepareCallback)();
+            },
+            successCallback: function () {
+                console.log('export successCallback');
+                (successCallback)();
+            },
+            failCallback: function (html, url) {
+                console.log('export failCallback');
+                (failCallback)(html,url);
             }
         });
     }
