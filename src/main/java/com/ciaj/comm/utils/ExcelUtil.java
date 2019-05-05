@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -135,13 +136,15 @@ public class ExcelUtil {
 	}
 
 	/**
+	 * 获取属性值
+	 *
 	 * @param owner
 	 * @param fieldname
 	 * @return
 	 * @throws Exception
 	 */
-	private static Object invokeMethod(Object owner, String fieldname) throws Exception {
-		String methodName = "get" + fieldname.substring(0, 1).toUpperCase() + fieldname.substring(1);
+	private Object invokeMethod(Object owner, String fieldname) throws Exception {
+		String methodName = "get" + StringUtli.underlineToHumpUpperCase(fieldname);
 		Class<?> ownerClass = owner.getClass();
 		Method method = ownerClass.getMethod(methodName);
 		return method.invoke(owner);
@@ -170,7 +173,7 @@ public class ExcelUtil {
 			} else {
 				finalFileName = URLEncoder.encode(fileName, "utf-8");
 			}
-			response.setHeader("Content-Disposition", "attachment; filename=" + finalFileName + ".xlsx");
+			response.setHeader("Content-Disposition", "attachment; filename=" + finalFileName + "-" + CalendarUtils.format(new Date(), "yyyy-MM-dd") + ".xlsx");
 			Cookie cookie = new Cookie("fileDownload", "true");
 			cookie.setComment(request.getRequestURI());
 			cookie.setPath("/");
@@ -234,10 +237,5 @@ public class ExcelUtil {
 			log.info("导入文件解析失败！", e);
 		}
 		return null;
-	}
-
-	//测试导入
-	public static void main(String[] args) {
-
 	}
 }

@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 public class StringUtli extends StringUtils {
 	private static final Pattern pattern = Pattern.compile("\\{(.*?)\\}");
 	private static Matcher matcher;
+	public static final char UNDERLINE = '_';
 
 	/**
 	 * 格式化字符串 字符串中使用{key}表示占位符
@@ -95,6 +96,7 @@ public class StringUtli extends StringUtils {
 		}
 		return tagerStr;
 	}
+
 	/**
 	 * 拼接字符串
 	 *
@@ -135,5 +137,82 @@ public class StringUtli extends StringUtils {
 			return join.substring(0, join.length() - 1);
 		}
 		return "";
+	}
+
+	/**
+	 * 驼峰格式字符串转换为下划线格式字符串
+	 *
+	 * @param param
+	 * @return
+	 */
+	public static String humpToUnderline(String param) {
+		if (param == null || "".equals(param.trim())) {
+			return "";
+		}
+		int len = param.length();
+		StringBuilder sb = new StringBuilder(len);
+		for (int i = 0; i < len; i++) {
+			char c = param.charAt(i);
+			if (Character.isUpperCase(c)) {
+				sb.append(UNDERLINE);
+				sb.append(Character.toLowerCase(c));
+			} else {
+				sb.append(c);
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * 下划线格式字符串转换为驼峰格式字符串
+	 *
+	 * @param param
+	 * @return
+	 */
+	public static String underlineToHump(String param) {
+		if (param == null || "".equals(param.trim())) {
+			return "";
+		}
+		int len = param.length();
+		StringBuilder sb = new StringBuilder(len);
+		for (int i = 0; i < len; i++) {
+			char c = param.charAt(i);
+			if (c == UNDERLINE) {
+				if (++i < len) {
+					sb.append(Character.toUpperCase(param.charAt(i)));
+				}
+			} else {
+				sb.append(c);
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * 下划线格式字符串转换为驼峰格式字符串
+	 *
+	 * @param param
+	 * @return
+	 */
+	public static String underlineToHumpUpperCase(String param) {
+		if (param == null || "".equals(param.trim())) {
+			return "";
+		}
+		int len = param.length();
+		StringBuilder sb = new StringBuilder(len);
+		for (int i = 0; i < len; i++) {
+			char c = param.charAt(i);
+			if (i == 0) {
+				c = Character.toUpperCase(c);
+			}
+			if (c == UNDERLINE) {
+				if (++i < len) {
+					sb.append(Character.toUpperCase(param.charAt(i)));
+				}
+			} else {
+				sb.append(c);
+			}
+		}
+		return sb.toString();
 	}
 }
