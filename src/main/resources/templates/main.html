@@ -19,22 +19,21 @@
         var legend = [];
         var series = [];
         var data = result.data;
+        var rows = 0;
         data.forEach(function(v){
             var obj = {}
-            obj.name = v.Name+'('+v.Comment+')';
+            obj.name = [v.Name,'(',v.Comment,')-',v.Rows].join('');
             legend.push(obj.name);
-            obj.value = v.Rows;
+            obj.value = v.Rows || 0;
             series.push(obj)
-            console.log(v);
+            rows += obj.value;
         });
-        console.log(legend);
-        console.log(series);
         // 指定图表的配置项和数据
         var option = {
             title : {
                 text: '系统表结构统计',
-                subtext: '数据量',
-                x:'center'
+                subtext: ['数据量总计-[',rows,']'].join(''),
+                x: 'center'
             },
             tooltip : {
                 trigger: 'item',

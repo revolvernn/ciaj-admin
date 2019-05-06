@@ -6,21 +6,25 @@
 <div id="areaapp" v-cloak>
 	<div>
 		<el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
-			<el-form-item label="关键字"  prop="keyword">
-				<el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
-			</el-form-item>
-			<el-form-item label="区域"  prop="cascaderModel" >
-				<el-cascader placeholder="试试搜索" v-model="cascaderModel" @change="cascaderQueryChange" :options="treeData" :show-all-levels="false" filterable change-on-select clearable>
-				</el-cascader>
-			</el-form-item>
-			<el-form-item label="类型" prop="type" >
-				<my-dict-select v-model="queryForm.type" type="area_type"></my-dict-select>
-			</el-form-item>
-			<el-form-item>
-				<el-button type="primary" @click="myQuery">查询</el-button>
-				<el-button  @click="myQueryReset">重置</el-button>
-				<el-button type="primary" @click="myAdd">新增</el-button>
-			</el-form-item>
+			<el-row type="flex" class="row-bg">
+				<el-form-item label="关键字"  prop="keyword">
+					<el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+				</el-form-item>
+				<el-form-item label="区域"  prop="cascaderModel" >
+					<el-cascader placeholder="试试搜索" v-model="cascaderModel" @change="cascaderQueryChange" :options="treeData" :show-all-levels="false" filterable change-on-select clearable>
+					</el-cascader>
+				</el-form-item>
+				<el-form-item label="类型" prop="type" >
+					<my-dict-select v-model="queryForm.type" type="area_type"></my-dict-select>
+				</el-form-item>
+			</el-row>
+			<el-row type="flex" class="row-bg" justify="center">
+				<el-form-item>
+					<el-button type="primary" @click="myQuery">查询</el-button>
+					<el-button @click="myQueryReset">重置</el-button>
+					<el-button type="primary" @click="myAdd">新增</el-button>
+				</el-form-item>
+			</el-row>
 		</el-form>
 		<my-table  :columns="tableColumns" @sortChange="sortchange" :default-sort="defaultSort" :page="page" v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
 		</my-table>

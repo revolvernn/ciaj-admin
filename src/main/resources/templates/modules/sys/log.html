@@ -1,25 +1,30 @@
 <!DOCTYPE html >
 <html lang="en"
-	  xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head th:include="header">
 
 <body>
 <div id="logapp" v-cloak>
-	<div>
-		<el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
-			<el-form-item label="关键字"  prop="keyword">
-				<el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
-			</el-form-item>
-            <el-form-item label="类型" prop="type" >
-                <my-dict-select v-model="queryForm.type" type="log_type"></my-dict-select>
-            </el-form-item>
-			<el-form-item>
-				<el-button type="primary" @click="myQuery">查询</el-button>
-				<el-button  @click="myQueryReset">重置</el-button>
-			</el-form-item>
-		</el-form>
-		<my-table  :columns="tableColumns" @sortChange="sortchange" :default-sort="defaultSort"   :page="page"  v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
-		</my-table>
+    <div>
+        <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
+            <el-row type="flex" class="row-bg">
+                <el-form-item label="关键字" prop="keyword">
+                    <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+                </el-form-item>
+                <el-form-item label="类型" prop="type">
+                    <my-dict-select v-model="queryForm.type" type="log_type"></my-dict-select>
+                </el-form-item>
+            </el-row>
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-form-item>
+                    <el-button type="primary" @click="myQuery">查询</el-button>
+                    <el-button @click="myQueryReset">重置</el-button>
+                </el-form-item>
+            </el-row>
+        </el-form>
+        <my-table :columns="tableColumns" @sortChange="sortchange" :default-sort="defaultSort" :page="page"
+                  v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
+        </my-table>
     </div>
     <el-dialog
             title="提示"

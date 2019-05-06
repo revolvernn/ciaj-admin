@@ -1,49 +1,55 @@
 <!DOCTYPE html >
 <html lang="en"
-	  xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head th:include="header">
 <body>
 <div id="configapp" v-cloak>
-	<div>
-		<el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
-			<el-form-item label="关键字"  prop="keyword">
-				<el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
-			</el-form-item>
-            <el-form-item label="是否启用" prop="status" >
-                <my-dict-select v-model="queryForm.status" type="status"></my-dict-select>
-            </el-form-item>
-			<el-form-item>
-				<el-button type="primary" @click="myQuery">查询</el-button>
-				<el-button  @click="myQueryReset">重置</el-button>
-				<el-button type="primary" @click="myAdd">新增</el-button>
-			</el-form-item>
-		</el-form>
-		<my-table  :columns="tableColumns"  :page="page" v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
-		</my-table>
-		<el-dialog :title="addOrUpdateForm.title"  :visible.sync="addOrUpdateForm.configFormVisible">
-			<el-form  ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.config">
-                <el-form-item label="KEY" prop="configKey" :label-width="addOrUpdateForm.configFormLabelWidth" >
-               		 <el-input v-model="addOrUpdateForm.config.configKey" autocomplete="off" placeholder="配置KEY"></el-input>
-               	</el-form-item>
-                <el-form-item label="VALUE" prop="configValue" :label-width="addOrUpdateForm.configFormLabelWidth" >
-               		 <el-input type="textarea" autosize v-model="addOrUpdateForm.config.configValue"
-                               placeholder="配置VALUE"></el-input>
-               	</el-form-item>
-                <el-form-item label="状态" prop="status" :label-width="addOrUpdateForm.configFormLabelWidth" >
+    <div>
+        <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
+            <el-row type="flex" class="row-bg">
+                <el-form-item label="关键字" prop="keyword">
+                    <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+                </el-form-item>
+                <el-form-item label="是否启用" prop="status">
+                    <my-dict-select v-model="queryForm.status" type="status"></my-dict-select>
+                </el-form-item>
+            </el-row>
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-form-item>
+                    <el-button type="primary" @click="myQuery">查询</el-button>
+                    <el-button @click="myQueryReset">重置</el-button>
+                    <el-button type="primary" @click="myAdd">新增</el-button>
+                </el-form-item>
+            </el-row>
+        </el-form>
+        <my-table :columns="tableColumns" :page="page" v-on:pagesizechange="pagesizechange"
+                  v-on:currentpagechange="currentpagechange">
+        </my-table>
+        <el-dialog :title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.configFormVisible">
+            <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.config">
+                <el-form-item label="KEY" prop="configKey" :label-width="addOrUpdateForm.configFormLabelWidth">
+                    <el-input v-model="addOrUpdateForm.config.configKey" autocomplete="off"
+                              placeholder="配置KEY"></el-input>
+                </el-form-item>
+                <el-form-item label="VALUE" prop="configValue" :label-width="addOrUpdateForm.configFormLabelWidth">
+                    <el-input type="textarea" autosize v-model="addOrUpdateForm.config.configValue"
+                              placeholder="配置VALUE"></el-input>
+                </el-form-item>
+                <el-form-item label="状态" prop="status" :label-width="addOrUpdateForm.configFormLabelWidth">
                     <el-switch v-model="addOrUpdateForm.config.status"
                                active-value="Y"
                                inactive-value="N">
                     </el-switch>
-               	</el-form-item>
-                <el-form-item label="备注" prop="remark" :label-width="addOrUpdateForm.configFormLabelWidth" >
-               		 <el-input v-model="addOrUpdateForm.config.remark" autocomplete="off" placeholder="备注"></el-input>
-               	</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="addOrUpdateForm.configFormVisible = false">取 消</el-button>
-				<el-button type="primary" @click="saveOrUpdate">确 定</el-button>
-			</div>
-		</el-dialog>
+                </el-form-item>
+                <el-form-item label="备注" prop="remark" :label-width="addOrUpdateForm.configFormLabelWidth">
+                    <el-input v-model="addOrUpdateForm.config.remark" autocomplete="off" placeholder="备注"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="addOrUpdateForm.configFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </div>
 <script src="/statics/js/modules/sys/config.js"></script>

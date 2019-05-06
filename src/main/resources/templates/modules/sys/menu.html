@@ -1,78 +1,95 @@
 <!DOCTYPE html >
 <html lang="en"
-	  xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head th:include="header">
 <body>
 <div id="menuapp" v-cloak>
-	<el-container style="border: 1px solid #eee">
-		<el-aside width="200px" style="background-color: rgb(238, 241, 246);border: 1px solid rgb(238, 238, 238);">
-			<el-input placeholder="输入关键字进行过滤" v-model="filterText">
-				<el-button slot="append" icon="el-icon-refresh" @click="initTree"></el-button>
-			</el-input>
-			<el-tree class="filter-tree" :data="treeData" @node-click="getTreeNode" :props="defaultProps" default-expand-all :filter-node-method="filterNode" ref="menuTree">
-			</el-tree>
-		</el-aside>
-		<el-container>
-			<el-main>
-				<div>
-					<el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
-						<el-form-item label="关键字"  prop="keyword">
-							<el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
-						</el-form-item>
-						<el-form-item label="类型"  prop="type">
-							<my-dict-select v-model="queryForm.type" type="menu_type"></my-dict-select>
-						</el-form-item>
-						<el-form-item label="是否启用" prop="enabled">
-							<my-dict-select v-model="queryForm.enabled" type="enabled"></my-dict-select>
-						</el-form-item>
-						<el-form-item label="父级"  prop="parentName">
-							<el-input v-model="queryForm.parentName" placeholder="点击字典菜单获取" readonly></el-input>
-						</el-form-item>
-						<el-form-item>
-							<el-button type="primary" @click="myQuery">查询</el-button>
-							<el-button  @click="myQueryReset">重置</el-button>
-							<my-btn type="primary" label="新增" @click="myAdd" auth="sys:menu:add"></my-btn>
-						</el-form-item>
-					</el-form>
-					<my-table  :columns="tableColumns" @sortChange="sortchange" :default-sort="defaultSort"  :page="page"  v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
-					</my-table>
+    <el-container style="border: 1px solid #eee">
+        <el-aside width="200px" style="background-color: rgb(238, 241, 246);border: 1px solid rgb(238, 238, 238);">
+            <el-input placeholder="输入关键字进行过滤" v-model="filterText">
+                <el-button slot="append" icon="el-icon-refresh" @click="initTree"></el-button>
+            </el-input>
+            <el-tree class="filter-tree" :data="treeData" @node-click="getTreeNode" :props="defaultProps"
+                     default-expand-all :filter-node-method="filterNode" ref="menuTree">
+            </el-tree>
+        </el-aside>
+        <el-container>
+            <el-main>
+                <div>
+                    <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
+                        <el-row type="flex" class="row-bg" justify="space-between">
+                            <el-form-item label="关键字" prop="keyword">
+                                <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+                            </el-form-item>
+                            <el-form-item label="类型" prop="type">
+                                <my-dict-select v-model="queryForm.type" type="menu_type"></my-dict-select>
+                            </el-form-item>
+                            <el-form-item label="是否启用" prop="enabled">
+                                <my-dict-select v-model="queryForm.enabled" type="enabled"></my-dict-select>
+                            </el-form-item>
+                            <el-form-item label="父级" prop="parentName">
+                                <el-input v-model="queryForm.parentName" placeholder="点击字典菜单获取" readonly></el-input>
+                            </el-form-item>
+                        </el-row>
+                        <el-row type="flex" class="row-bg" justify="center">
+                            <el-form-item>
+                                <el-button type="primary" @click="myQuery">查询</el-button>
+                                <el-button @click="myQueryReset">重置</el-button>
+                                <my-btn type="primary" label="新增" @click="myAdd" auth="sys:menu:add"></my-btn>
+                            </el-form-item>
+                        </el-row>
+                    </el-form>
+                    <my-table :columns="tableColumns" @sortChange="sortchange" :default-sort="defaultSort" :page="page"
+                              v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
+                    </my-table>
 
-					<el-dialog :title="addOrUpdateForm.title"  :visible.sync="addOrUpdateForm.menuFormVisible" width="400px">
-						<el-form  ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.menu">
-							<el-form-item label="菜单名称" prop="name" :label-width="addOrUpdateForm.menuFormLabelWidth" >
-								<el-input v-model="addOrUpdateForm.menu.name" autocomplete="off" placeholder="name"></el-input>
-							</el-form-item>
-							<el-form-item label="父级" :label-width="addOrUpdateForm.menuFormLabelWidth"  prop="cascaderModel" >
-								<el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.cascaderModel" @change="cascaderChange" :options="treeData" :show-all-levels="false" filterable change-on-select clearable></el-cascader>
-							</el-form-item>
-							<el-form-item label="菜单url" prop="url" :label-width="addOrUpdateForm.menuFormLabelWidth" >
-								<el-input v-model="addOrUpdateForm.menu.url" autocomplete="off" placeholder="菜单url"></el-input>
-							</el-form-item>
-							<el-form-item label="权限码" prop="permissionCode" :label-width="addOrUpdateForm.menuFormLabelWidth" >
-								<el-input v-model="addOrUpdateForm.menu.permissionCode" autocomplete="off" placeholder="权限码"></el-input>
-							</el-form-item>
-							<el-form-item label="类型" prop="type" :label-width="addOrUpdateForm.menuFormLabelWidth" >
-								<my-dict-select v-model="addOrUpdateForm.menu.type" type="menu_type"></my-dict-select>
-							</el-form-item>
-							<el-form-item label="图标" prop="icon" :label-width="addOrUpdateForm.menuFormLabelWidth" >
-								<el-input v-model="addOrUpdateForm.menu.icon" autocomplete="off" placeholder="图标"></el-input>
-							</el-form-item>
-							<el-form-item label="排序" prop="sequence" :label-width="addOrUpdateForm.menuFormLabelWidth" >
-								<el-input type="number" min="0" v-model="addOrUpdateForm.menu.sequence" autocomplete="off" placeholder="排序"></el-input>
-							</el-form-item>
-							<el-form-item label="是否启用" prop="enabled" :label-width="addOrUpdateForm.menuFormLabelWidth" required>
-								<my-dict-select v-model="addOrUpdateForm.menu.enabled" type="enabled"></my-dict-select>
-							</el-form-item>
-						</el-form>
-						<div slot="footer" class="dialog-footer">
-							<el-button @click="addOrUpdateForm.menuFormVisible = false">取 消</el-button>
-							<el-button type="primary" @click="saveOrUpdate">确 定</el-button>
-						</div>
-					</el-dialog>
-				</div>
-			</el-main>
-		</el-container>
-	</el-container>
+                    <el-dialog :title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.menuFormVisible"
+                               width="400px">
+                        <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.menu">
+                            <el-form-item label="菜单名称" prop="name" :label-width="addOrUpdateForm.menuFormLabelWidth">
+                                <el-input v-model="addOrUpdateForm.menu.name" autocomplete="off"
+                                          placeholder="name"></el-input>
+                            </el-form-item>
+                            <el-form-item label="父级" :label-width="addOrUpdateForm.menuFormLabelWidth"
+                                          prop="cascaderModel">
+                                <el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.cascaderModel"
+                                             @change="cascaderChange" :options="treeData" :show-all-levels="false"
+                                             filterable change-on-select clearable></el-cascader>
+                            </el-form-item>
+                            <el-form-item label="菜单url" prop="url" :label-width="addOrUpdateForm.menuFormLabelWidth">
+                                <el-input v-model="addOrUpdateForm.menu.url" autocomplete="off"
+                                          placeholder="菜单url"></el-input>
+                            </el-form-item>
+                            <el-form-item label="权限码" prop="permissionCode"
+                                          :label-width="addOrUpdateForm.menuFormLabelWidth">
+                                <el-input v-model="addOrUpdateForm.menu.permissionCode" autocomplete="off"
+                                          placeholder="权限码"></el-input>
+                            </el-form-item>
+                            <el-form-item label="类型" prop="type" :label-width="addOrUpdateForm.menuFormLabelWidth">
+                                <my-dict-select v-model="addOrUpdateForm.menu.type" type="menu_type"></my-dict-select>
+                            </el-form-item>
+                            <el-form-item label="图标" prop="icon" :label-width="addOrUpdateForm.menuFormLabelWidth">
+                                <el-input v-model="addOrUpdateForm.menu.icon" autocomplete="off"
+                                          placeholder="图标"></el-input>
+                            </el-form-item>
+                            <el-form-item label="排序" prop="sequence" :label-width="addOrUpdateForm.menuFormLabelWidth">
+                                <el-input type="number" min="0" v-model="addOrUpdateForm.menu.sequence"
+                                          autocomplete="off" placeholder="排序"></el-input>
+                            </el-form-item>
+                            <el-form-item label="是否启用" prop="enabled" :label-width="addOrUpdateForm.menuFormLabelWidth"
+                                          required>
+                                <my-dict-select v-model="addOrUpdateForm.menu.enabled" type="enabled"></my-dict-select>
+                            </el-form-item>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="addOrUpdateForm.menuFormVisible = false">取 消</el-button>
+                            <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
+                        </div>
+                    </el-dialog>
+                </div>
+            </el-main>
+        </el-container>
+    </el-container>
 </div>
 <script src="/statics/js/modules/sys/menu.js"></script>
 </body>

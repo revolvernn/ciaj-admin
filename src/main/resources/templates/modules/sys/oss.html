@@ -6,17 +6,22 @@
 <div id="ossapp" v-cloak>
     <div>
         <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
-            <el-form-item label="关键字" prop="keyword">
-                <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="myQuery">查询</el-button>
-                <el-button @click="myQueryReset">重置</el-button>
-                <el-button type="danger" @click="myAdd">云存储配置</el-button>
-                <el-button @click="ossForm.uploadFormVisible = true" type="primary">图片上传</el-button>
-            </el-form-item>
+            <el-row type="flex" class="row-bg">
+                <el-form-item label="关键字" prop="keyword">
+                    <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+                </el-form-item>
+            </el-row>
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-form-item>
+                    <el-button type="primary" @click="myQuery">查询</el-button>
+                    <el-button @click="myQueryReset">重置</el-button>
+                    <el-button type="danger" @click="myAdd">云存储配置</el-button>
+                    <el-button @click="ossForm.uploadFormVisible = true" type="primary">图片上传</el-button>
+                </el-form-item>
+            </el-row>
         </el-form>
-        <my-table @sortChange="sortchange" :default-sort="defaultSort"  :columns="tableColumns" :page="page" v-on:pagesizechange="pagesizechange"
+        <my-table @sortChange="sortchange" :default-sort="defaultSort" :columns="tableColumns" :page="page"
+                  v-on:pagesizechange="pagesizechange"
                   v-on:currentpagechange="currentpagechange">
         </my-table>
         <el-dialog title="图片上传" :visible.sync="ossForm.uploadFormVisible" width="600px">
@@ -146,6 +151,7 @@
         font-size: 13px;
         color: #999;
     }
+
     .image {
         width: 100%;
         display: block;

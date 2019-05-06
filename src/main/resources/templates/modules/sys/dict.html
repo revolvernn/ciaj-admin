@@ -1,71 +1,88 @@
 <!DOCTYPE html >
 <html lang="en"
-	  xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head th:include="header">
 <body>
 <div id="dictapp" v-cloak>
-	<el-container style="border: 1px solid #eee">
-		<el-aside width="200px" style="background-color: rgb(238, 241, 246);border: 1px solid rgb(238, 238, 238);">
-			<el-input placeholder="输入关键字进行过滤" v-model="filterText">
+    <el-container style="border: 1px solid #eee">
+        <el-aside width="200px" style="background-color: rgb(238, 241, 246);border: 1px solid rgb(238, 238, 238);">
+            <el-input placeholder="输入关键字进行过滤" v-model="filterText">
                 <el-button slot="append" icon="el-icon-refresh" @click="initTree"></el-button>
-			</el-input>
-			<el-tree class="filter-tree" :data="treeData" @node-click="getTreeNode" :props="defaultProps" default-expand-all :filter-node-method="filterNode" ref="dictTree">
-			</el-tree>
-		</el-aside>
-		<el-container>
-			<el-main>
-				<div>
-					<el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
-						<el-form-item label="关键字"  prop="keyword">
-							<el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
-						</el-form-item>
-						<el-form-item label="类型"  prop="type">
-							<el-input v-model="queryForm.type" placeholder="类型"></el-input>
-						</el-form-item>
-						<el-form-item label="父级"  prop="parentName">
-							<el-input v-model="queryForm.parentName" placeholder="点击字典菜单获取" readonly></el-input>
-						</el-form-item>
-						<el-form-item>
-							<el-button type="primary" @click="myQuery">查询</el-button>
-							<el-button  @click="myQueryReset">重置</el-button>
-							<my-btn type="primary" label="新增" @click="myAdd" auth="sys:dict:add"></my-btn>
-						</el-form-item>
-					</el-form>
-					<my-table  :columns="tableColumns" @sortChange="sortchange" :default-sort="defaultSort"  :page="page" v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
-					</my-table>
-					<el-dialog :title="addOrUpdateForm.title"  :visible.sync="addOrUpdateForm.dictFormVisible" width="400px">
-						<el-form  ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.dict">
-							<el-form-item label="字典名称" prop="name" :label-width="addOrUpdateForm.dictFormLabelWidth" required>
-								<el-input v-model="addOrUpdateForm.dict.name" autocomplete="off" placeholder="字典名称"></el-input>
-							</el-form-item>
-							<el-form-item label="字典编码" prop="code" :label-width="addOrUpdateForm.dictFormLabelWidth" required>
-								<el-input v-model="addOrUpdateForm.dict.code" autocomplete="off" placeholder="字典编码"></el-input>
-							</el-form-item>
-							<el-form-item label="父级" :label-width="addOrUpdateForm.dictFormLabelWidth"  prop="cascaderModel" >
-                                <el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.cascaderModel" @change="cascaderChange" :options="treeData" :show-all-levels="false" filterable change-on-select clearable></el-cascader>
-							</el-form-item>
-							<el-form-item label="类型" prop="type" :label-width="addOrUpdateForm.dictFormLabelWidth" required>
-								<el-input v-model="addOrUpdateForm.dict.type" autocomplete="off" placeholder="类型"></el-input>
-							</el-form-item>
-							<el-form-item label="排序" prop="sequence" :label-width="addOrUpdateForm.dictFormLabelWidth" >
-								<el-input type="number" min="0" v-model="addOrUpdateForm.dict.sequence" autocomplete="off" placeholder="排序"></el-input>
-							</el-form-item>
-							<el-form-item label="启用" prop="enabled" :label-width="addOrUpdateForm.dictFormLabelWidth" >
-								<el-select v-model="addOrUpdateForm.dict.enabled" placeholder="启用">
-									<el-option label="是" value="Y"></el-option>
-									<el-option label="否" value="N"></el-option>
-								</el-select>
-							</el-form-item>
-						</el-form>
-						<div slot="footer" class="dialog-footer">
-							<el-button @click="addOrUpdateForm.dictFormVisible = false">取 消</el-button>
-							<el-button type="primary" @click="saveOrUpdate">确 定</el-button>
-						</div>
-					</el-dialog>
-				</div>
-			</el-main>
-		</el-container>
-	</el-container>
+            </el-input>
+            <el-tree class="filter-tree" :data="treeData" @node-click="getTreeNode" :props="defaultProps"
+                     default-expand-all :filter-node-method="filterNode" ref="dictTree">
+            </el-tree>
+        </el-aside>
+        <el-container>
+            <el-main>
+                <div>
+                    <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
+                        <el-row type="flex" class="row-bg">
+                            <el-form-item label="关键字" prop="keyword">
+                                <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+                            </el-form-item>
+                            <el-form-item label="类型" prop="type">
+                                <el-input v-model="queryForm.type" placeholder="类型"></el-input>
+                            </el-form-item>
+                            <el-form-item label="父级" prop="parentName">
+                                <el-input v-model="queryForm.parentName" placeholder="点击字典菜单获取" readonly></el-input>
+                            </el-form-item>
+                        </el-row>
+                        <el-row type="flex" class="row-bg" justify="center">
+                            <el-form-item>
+                                <el-button type="primary" @click="myQuery">查询</el-button>
+                                <el-button @click="myQueryReset">重置</el-button>
+                                <my-btn type="primary" label="新增" @click="myAdd" auth="sys:dict:add"></my-btn>
+                            </el-form-item>
+                        </el-row>
+                    </el-form>
+                    <my-table :columns="tableColumns" @sortChange="sortchange" :default-sort="defaultSort" :page="page"
+                              v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
+                    </my-table>
+                    <el-dialog :title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.dictFormVisible"
+                               width="400px">
+                        <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.dict">
+                            <el-form-item label="字典名称" prop="name" :label-width="addOrUpdateForm.dictFormLabelWidth"
+                                          required>
+                                <el-input v-model="addOrUpdateForm.dict.name" autocomplete="off"
+                                          placeholder="字典名称"></el-input>
+                            </el-form-item>
+                            <el-form-item label="字典编码" prop="code" :label-width="addOrUpdateForm.dictFormLabelWidth"
+                                          required>
+                                <el-input v-model="addOrUpdateForm.dict.code" autocomplete="off"
+                                          placeholder="字典编码"></el-input>
+                            </el-form-item>
+                            <el-form-item label="父级" :label-width="addOrUpdateForm.dictFormLabelWidth"
+                                          prop="cascaderModel">
+                                <el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.cascaderModel"
+                                             @change="cascaderChange" :options="treeData" :show-all-levels="false"
+                                             filterable change-on-select clearable></el-cascader>
+                            </el-form-item>
+                            <el-form-item label="类型" prop="type" :label-width="addOrUpdateForm.dictFormLabelWidth"
+                                          required>
+                                <el-input v-model="addOrUpdateForm.dict.type" autocomplete="off"
+                                          placeholder="类型"></el-input>
+                            </el-form-item>
+                            <el-form-item label="排序" prop="sequence" :label-width="addOrUpdateForm.dictFormLabelWidth">
+                                <el-input type="number" min="0" v-model="addOrUpdateForm.dict.sequence"
+                                          autocomplete="off" placeholder="排序"></el-input>
+                            </el-form-item>
+                            <el-form-item label="启用" prop="enabled" :label-width="addOrUpdateForm.dictFormLabelWidth">
+                                <el-select v-model="addOrUpdateForm.dict.enabled" placeholder="启用">
+                                    <el-option label="是" value="Y"></el-option>
+                                    <el-option label="否" value="N"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="addOrUpdateForm.dictFormVisible = false">取 消</el-button>
+                            <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
+                        </div>
+                    </el-dialog>
+                </div>
+            </el-main>
+        </el-container>
+    </el-container>
 </div>
 <script src="/statics/js/modules/sys/dict.js"></script>
 </body>

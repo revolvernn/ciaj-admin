@@ -1,68 +1,90 @@
 <!DOCTYPE html >
 <html lang="en"
-	  xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head th:include="header">
 <body>
 <div id="permissionapp" v-cloak>
-	<el-container style=" border: 1px solid #eee">
-		<el-aside width="200px" style="background-color: rgb(238, 241, 246);border: 1px solid rgb(238, 238, 238);">
-			<el-input placeholder="输入关键字进行过滤" v-model="filterText">
-				<el-button slot="append" icon="el-icon-refresh" @click="initTree"></el-button>
-			</el-input>
-			<el-tree class="filter-tree" :data="treeData" @node-click="getTreeNode" :props="defaultProps" default-expand-all :filter-node-method="filterNode" ref="permissionTree">
-			</el-tree>
-		</el-aside>
-		<el-container>
-			<el-main>
-				<div>
-					<el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
-						<el-form-item label="关键字"  prop="keyword">
-							<el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
-						</el-form-item>
-						<el-form-item label="权限类型" prop="type">
-							<my-dict-select v-model="queryForm.type" type="permission"></my-dict-select>
-						</el-form-item>
-						<el-form-item>
-							<el-button type="primary" @click="myQuery">查询</el-button>
-							<el-button  @click="myQueryReset">重置</el-button>
-							<my-btn type="primary" label="新增" @click="myAdd" auth="sys:permission:add"></my-btn>
-						</el-form-item>
-					</el-form>
-					<my-table  :columns="tableColumns"  :page="page" v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
-					</my-table>
-					<el-dialog :title="addOrUpdateForm.title"  :visible.sync="addOrUpdateForm.permissionFormVisible" width="400px">
-						<el-form  ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.permission">
-							<el-form-item label="权限名" prop="name" :label-width="addOrUpdateForm.permissionFormLabelWidth" >
-								<el-input v-model="addOrUpdateForm.permission.name" autocomplete="off" placeholder="权限名"></el-input>
-							</el-form-item>
-							<el-form-item label="权限描述" prop="description" :label-width="addOrUpdateForm.permissionFormLabelWidth" >
-								<el-input v-model="addOrUpdateForm.permission.description" autocomplete="off" placeholder="权限描述"></el-input>
-							</el-form-item>
-							<el-form-item label="权限类型" prop="type" :label-width="addOrUpdateForm.permissionFormLabelWidth" >
-								<my-dict-select v-model="addOrUpdateForm.permission.type" type="permission"></my-dict-select>
-							</el-form-item>
-							<el-form-item label="权限码" prop="permissionCode" :label-width="addOrUpdateForm.permissionFormLabelWidth" >
-								<el-input v-model="addOrUpdateForm.permission.permissionCode" autocomplete="off" placeholder="权限码"></el-input>
-							</el-form-item>
-							<el-form-item label="资源路径" prop="url" :label-width="addOrUpdateForm.permissionFormLabelWidth" >
-								<el-input v-model="addOrUpdateForm.permission.url" autocomplete="off" placeholder="资源路径"></el-input>
-							</el-form-item>
-							<el-form-item label="父级" :label-width="addOrUpdateForm.permissionFormLabelWidth"  prop="cascaderModel" >
-								<el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.cascaderModel" @change="cascaderChange" :options="treeData" :show-all-levels="false" filterable change-on-select clearable></el-cascader>
-							</el-form-item>
-							<el-form-item label="是否有效" prop="available" :label-width="addOrUpdateForm.permissionFormLabelWidth" >
-								<my-dict-select v-model="addOrUpdateForm.permission.available" type="available"></my-dict-select>
-							</el-form-item>
-						</el-form>
-						<div slot="footer" class="dialog-footer">
-							<el-button @click="addOrUpdateForm.permissionFormVisible = false">取 消</el-button>
-							<el-button type="primary" @click="saveOrUpdate">确 定</el-button>
-						</div>
-					</el-dialog>
-				</div>
-			</el-main>
-		</el-container>
-	</el-container>
+    <el-container style=" border: 1px solid #eee">
+        <el-aside width="200px" style="background-color: rgb(238, 241, 246);border: 1px solid rgb(238, 238, 238);">
+            <el-input placeholder="输入关键字进行过滤" v-model="filterText">
+                <el-button slot="append" icon="el-icon-refresh" @click="initTree"></el-button>
+            </el-input>
+            <el-tree class="filter-tree" :data="treeData" @node-click="getTreeNode" :props="defaultProps"
+                     default-expand-all :filter-node-method="filterNode" ref="permissionTree">
+            </el-tree>
+        </el-aside>
+        <el-container>
+            <el-main>
+                <div>
+                    <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
+                        <el-row type="flex" class="row-bg">
+                            <el-form-item label="关键字" prop="keyword">
+                                <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+                            </el-form-item>
+                            <el-form-item label="权限类型" prop="type">
+                                <my-dict-select v-model="queryForm.type" type="permission"></my-dict-select>
+                            </el-form-item>
+                        </el-row>
+                        <el-row type="flex" class="row-bg" justify="center">
+                            <el-form-item>
+                                <el-button type="primary" @click="myQuery">查询</el-button>
+                                <el-button @click="myQueryReset">重置</el-button>
+                                <my-btn type="primary" label="新增" @click="myAdd" auth="sys:permission:add"></my-btn>
+                            </el-form-item>
+                        </el-row>
+                    </el-form>
+                    <my-table :columns="tableColumns" :page="page" v-on:pagesizechange="pagesizechange"
+                              v-on:currentpagechange="currentpagechange">
+                    </my-table>
+                    <el-dialog :title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.permissionFormVisible"
+                               width="400px">
+                        <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.permission">
+                            <el-form-item label="权限名" prop="name"
+                                          :label-width="addOrUpdateForm.permissionFormLabelWidth">
+                                <el-input v-model="addOrUpdateForm.permission.name" autocomplete="off"
+                                          placeholder="权限名"></el-input>
+                            </el-form-item>
+                            <el-form-item label="权限描述" prop="description"
+                                          :label-width="addOrUpdateForm.permissionFormLabelWidth">
+                                <el-input v-model="addOrUpdateForm.permission.description" autocomplete="off"
+                                          placeholder="权限描述"></el-input>
+                            </el-form-item>
+                            <el-form-item label="权限类型" prop="type"
+                                          :label-width="addOrUpdateForm.permissionFormLabelWidth">
+                                <my-dict-select v-model="addOrUpdateForm.permission.type"
+                                                type="permission"></my-dict-select>
+                            </el-form-item>
+                            <el-form-item label="权限码" prop="permissionCode"
+                                          :label-width="addOrUpdateForm.permissionFormLabelWidth">
+                                <el-input v-model="addOrUpdateForm.permission.permissionCode" autocomplete="off"
+                                          placeholder="权限码"></el-input>
+                            </el-form-item>
+                            <el-form-item label="资源路径" prop="url"
+                                          :label-width="addOrUpdateForm.permissionFormLabelWidth">
+                                <el-input v-model="addOrUpdateForm.permission.url" autocomplete="off"
+                                          placeholder="资源路径"></el-input>
+                            </el-form-item>
+                            <el-form-item label="父级" :label-width="addOrUpdateForm.permissionFormLabelWidth"
+                                          prop="cascaderModel">
+                                <el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.cascaderModel"
+                                             @change="cascaderChange" :options="treeData" :show-all-levels="false"
+                                             filterable change-on-select clearable></el-cascader>
+                            </el-form-item>
+                            <el-form-item label="是否有效" prop="available"
+                                          :label-width="addOrUpdateForm.permissionFormLabelWidth">
+                                <my-dict-select v-model="addOrUpdateForm.permission.available"
+                                                type="available"></my-dict-select>
+                            </el-form-item>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="addOrUpdateForm.permissionFormVisible = false">取 消</el-button>
+                            <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
+                        </div>
+                    </el-dialog>
+                </div>
+            </el-main>
+        </el-container>
+    </el-container>
 </div>
 <script src="/statics/js/modules/sys/permission.js"></script>
 </body>
