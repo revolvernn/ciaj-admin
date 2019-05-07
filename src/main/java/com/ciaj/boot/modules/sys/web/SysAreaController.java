@@ -129,7 +129,7 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 		if (CollectionUtils.isNotEmpty(list)) {
 			if (entity.getId() == null) throw new BsRException("同一组区域编码不能重复");
 			for (SysAreaPo p : list) {
-				if (!p.getId().equalsIgnoreCase(entity.getId())) {
+				if (!p.getId().equals(entity.getId())) {
 					throw new BsRException("同一组区域编码不能重复");
 				}
 			}
@@ -143,7 +143,7 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 		if (CollectionUtils.isNotEmpty(list)) {
 			if (entity.getId() == null) throw new BsRException("同一组区域名称不能重复");
 			for (SysAreaPo p : list) {
-				if (!p.getId().equalsIgnoreCase(entity.getId())) {
+				if (!p.getId().equals(entity.getId())) {
 					throw new BsRException("同一组区域名称不能重复");
 				}
 			}

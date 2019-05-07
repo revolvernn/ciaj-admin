@@ -258,7 +258,7 @@ var deptapp = new Vue({
                         that.myQuery();
                         that.initTree();
                         that.addOrUpdateForm.deptFormVisible = false;
-                        alertMsg(that, r)
+                        alertMsg(that, r);
                     });
                 }
             });
@@ -272,7 +272,7 @@ var deptapp = new Vue({
             }).then(() => {
                 httpUtil.del({url: "sys/dept/delFlag/" + row.id}, function (r) {
                     that.myQuery();
-                    alertMsg(that, r)
+                    alertMsg(that, r);
                 });
             });
         },
@@ -280,7 +280,7 @@ var deptapp = new Vue({
             var that = this;
             httpUtil.get({url: "sys/dept/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
-                    that.page = result.data
+                    that.page = result.data;
                 }
             });
         }

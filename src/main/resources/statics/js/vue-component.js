@@ -23,29 +23,29 @@ var myDictSelectT = Vue.extend({
     },
     methods: {
         handleFocus(event) {
-            this.$emit('focus', event)
+            this.$emit('focus', event);
         },
         handleBlur(event) {
-            this.$emit('blur', event)
+            this.$emit('blur', event);
         },
         emitChange(val) {
-            this.$emit('change', val)
+            this.$emit('change', val);
         },
         emitInput(val) {
-            this.$emit('input', val)
+            this.$emit('input', val);
         },
         loadData() {
-            var that = this
+            var that = this;
             if (that.type === undefined || that.type === '' || that.type === null) {
-                return
+                return;
             }
             that.options = dictUtil.getDictsByType(that.type);
-            if(that.value) that.model = that.value
+            if(that.value) that.model = that.value;
         }
     },
     watch: {
         value(val) {
-            this.model = val
+            this.model = val;
         }
     },
     template: [
@@ -78,28 +78,28 @@ var myAreaSelectT = Vue.extend({
     },
     methods: {
         handleFocus(event) {
-            this.$emit('focus', event)
+            this.$emit('focus', event);
         },
         handleBlur(event) {
-            this.$emit('blur', event)
+            this.$emit('blur', event);
         },
         emitChange(val) {
-            this.$emit('change', val)
+            this.$emit('change', val);
         },
         emitInput(val) {
-            this.$emit('input', val)
+            this.$emit('input', val);
         },
         loadData() {
             var that = this
             if (that.type === undefined || that.type === '' || that.type === null) {
-                return
+                return;
             }
             that.options = dictUtil.getDictsByType(that.type);
         }
     },
     watch: {
         value(val) {
-            this.model = val
+            this.model = val;
         }
     },
     template: [
@@ -124,7 +124,7 @@ var myBtnT = Vue.extend({
         }
     },
     mounted() {
-        this.load()
+        this.load();
     },
     methods: {
         load() {
@@ -168,11 +168,11 @@ var myPaginationT = Vue.extend({
     methods: {
         // 页面大小改变重新查询数据
         pagesizechange: function (val) {
-            this.$emit('pagesizechange', val)
+            this.$emit('pagesizechange', val);
         },
         // 页码改变加载对应页码数据
         currentpagechange: function (val) {
-            this.$emit('currentpagechange', val)
+            this.$emit('currentpagechange', val);
         },
     },
     template: [
@@ -226,7 +226,7 @@ var myTableT = Vue.extend({
                 var codes = [];
                 for (var b in btns) {
                     if (btns[b].auth) {
-                        codes.push(btns[b].auth)
+                        codes.push(btns[b].auth);
                     }
                 }
                 httpUtil.get({url: '/check/permissions', data: {codes: codes.join(',')}}, function (r) {
@@ -246,38 +246,45 @@ var myTableT = Vue.extend({
                     } else {
                         val.sortBy = val.column.sortBy + "-asc";
                     }
-                    this.$emit('sortchange', val)
+                    this.$emit('sortchange', val);
                 }
             }
         },
         // 页面大小改变重新查询数据
         pagesizechange(val) {
-            this.$emit('pagesizechange', val)
+            this.$emit('pagesizechange', val);
         },
         // 页码改变加载对应页码数据
         currentpagechange(val) {
-            this.$emit('currentpagechange', val)
+            this.$emit('currentpagechange', val);
+        },
+        getDeepValue(row, rowKey){
+            let keys = rowKey.split('.');
+            let value = row;
+            for(var i=0;i<keys.length;i++){
+                value = value[keys[i]];
+            }
+            return value;
         },
         getDictLabel(type, row, rowKey) {
-            let keys = rowKey.split('.');
-            let value = row;
-            for(var i=0;i<keys.length;i++){
-                value = value[keys[i]]
-            }
-            value = dictUtil.getNameByTypeAndCode(type, value)
-            return value ? value : null
+            let value = this.getDeepValue(row,rowKey);
+            value = dictUtil.getNameByTypeAndCode(type, value);
+            return value ? value : null;
         },
         getImage (row, rowKey) {
-            let keys = rowKey.split('.');
-            let value = row;
-            for(var i=0;i<keys.length;i++){
-                value = value[keys[i]]
-            }
+            let value = this.getDeepValue(row,rowKey);
             if(!value){
                 value= '/statics/image/headPic.jpg';
             }
             let image = '<img width="30px" height="30px" src="' + value + '"/>'
-            return image
+            return image;
+        },
+        getDateFormat (row, rowKey,dateFormat) {
+            let value = this.getDeepValue(row,rowKey);
+            if(value && dateFormat){
+                value= T.dateFmt(dateFormat,new Date(value));
+            }
+            return value;
         },
         checkBtnAuth(auth) {
             if (auth) {
@@ -293,9 +300,9 @@ var myTableT = Vue.extend({
         },
         btnDisabled(disabled, index, row) {
             if (typeof disabled === 'function') {
-                return disabled(index, row)
+                return disabled(index, row);
             } else {
-                return disabled
+                return disabled;
             }
         }
     },
@@ -322,6 +329,9 @@ var myTableT = Vue.extend({
         '<template slot-scope="scope">',
         '<div v-if="item.image" v-html="getImage(scope.row,item.name)"></div>',
         '</template>',
+        '</el-table-column>',
+        '<el-table-column v-else-if="item.date" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">',
+        '<template slot-scope="scope"> {{getDateFormat(scope.row,item.name,item.date)}}</template>',
         '</el-table-column>',
         '<el-table-column v-else :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :fixed="item.fixed" :sort-by="item.sortBy" :sortable="item.sortable?item.sortable:false">',
         '</el-table-column>',

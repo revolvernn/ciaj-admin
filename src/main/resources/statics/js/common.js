@@ -1,19 +1,37 @@
 var baseURL = "../../";
 //工具集合Tools
-window.T = {};
+window.T = {local_key: {dict_key_prefix: 'local_dict_key_'}};
 
 // 获取请求参数
 // 使用示例
 // location.href = http://localhost:8080/index.html?id=123
 // T.p('id') --> 123;
-var url = function (name) {
+T.p = function (name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);
     if (r != null) return unescape(r[2]);
     return null;
 };
 
-T.p = url;
+//日期格式化
+T.dateFmt = function (fmt,date) {
+    fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
+    var o = {
+        "M+" : date.getMonth()+1,                 //月份
+        "d+" : date.getDate(),                    //日
+        "h+" : date.getHours(),                   //小时
+        "m+" : date.getMinutes(),                 //分
+        "s+" : date.getSeconds(),                 //秒
+        "q+" : Math.floor((date.getMonth()+3)/3), //季度
+        "S"  : date.getMilliseconds()             //毫秒
+    };
+    if(/(y+)/.test(fmt))
+        fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
+    for(var k in o)
+        if(new RegExp("("+ k +")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+    return fmt;
+}
 
 window.AjaxContentType = {
     'JSON': 'application/json;charset=utf-8',
@@ -157,7 +175,7 @@ window.httpUtil = {
         });
     },
     //fileDownload  异步
-    fileDownload: function (that,option,prepareCallback,successCallback,failCallback) {
+    fileDownload: function (that, option, prepareCallback, successCallback, failCallback) {
         option = option || {url: null, data: {}};
         var loading;
         prepareCallback = prepareCallback || function () {
@@ -180,7 +198,7 @@ window.httpUtil = {
             loading.close();
         }
 
-        return $.fileDownload( baseURL + option.url || null, {
+        return $.fileDownload(baseURL + option.url || null, {
             data: option.data || {},
             prepareCallback: function () {
                 console.log('export prepareCallback');
@@ -192,7 +210,7 @@ window.httpUtil = {
             },
             failCallback: function (html, url) {
                 console.log('export failCallback');
-                (failCallback)(html,url);
+                (failCallback)(html, url);
             }
         });
     }
@@ -383,7 +401,7 @@ window.areaUtil = {
                 v.disabled = true;
             }
             var c = getChildren(v, sourceArr)
-            if(c.length>0){
+            if (c.length > 0) {
                 v.children = c;
             }
         })
@@ -408,7 +426,7 @@ window.areaUtil = {
                     v.disabled = true;
                 }
                 var c = getChildren(v, sourceArr)
-                if(c.length>0){
+                if (c.length > 0) {
                     v.children = c;
                 }
             });
@@ -429,15 +447,14 @@ window.dictUtil = {
      * @returns {Array}
      */
     getDictsByType: function (type) {
-        var local_dict_key_type = 'local_dict_key_' + type;
+        var local_dict_key_type = T.local_key.dict_key_prefix + type;
         var dicts = [];
-        var dictArr = localStorage.getItem(local_dict_key_type);
-        // var dictArr = null;
-        if (dictArr != null) {
-            return JSON.parse(dictArr);
+        var dictArr = localStorageExports.get(local_dict_key_type);
+        if (dictArr != null && dictArr != undefined) {
+            return dictArr;
         } else {
             dicts = this.getDicts({type: type});
-            localStorage.setItem(local_dict_key_type, JSON.stringify(dicts));
+            localStorageExports.setAge(60 * 1000).set(local_dict_key_type, dicts);
         }
         return dicts;
     },
@@ -447,13 +464,11 @@ window.dictUtil = {
      * @returns {Array}
      */
     getNameByTypeAndCode: function (type, code) {
-        var local_dict_key_type = 'local_dict_key_' + type;
+        var local_dict_key_type = T.local_key.dict_key_prefix + type;
         var name = code;
-        var dictArr = localStorage.getItem(local_dict_key_type);
-        // var dictArr = null;
+        var dictArr = localStorageExports.get(local_dict_key_type);
         if (dictArr != null) {
-            var dicts = JSON.parse(dictArr);
-            dicts.forEach(function (v, index, arr) {
+            dictArr.forEach(function (v, index, arr) {
                 if (v.code == code) {
                     name = v.name;
                     return;
@@ -467,7 +482,7 @@ window.dictUtil = {
                     return;
                 }
             });
-            localStorage.setItem(local_dict_key_type, JSON.stringify(dicts));
+            localStorageExports.setAge(60 * 1000).set(local_dict_key_type, dicts)
         }
         return name;
     },
@@ -505,7 +520,7 @@ window.alertMsg = function (that, result) {
 }
 window.checkUtil = {
     //校验是否为空(先删除二边空格再验证)
-    isNull: function(str) {
+    isNull: function (str) {
         if (null == str || "" == str.trim()) {
             return true;
         } else {
@@ -513,98 +528,98 @@ window.checkUtil = {
         }
     },
     //校验是否全是数字
-    isDigit: function(str) {
+    isDigit: function (str) {
         var patrn = /^\d+$/;
         return patrn.test(str);
     },
     //校验是否是整数
-    isInteger: function(str) {
+    isInteger: function (str) {
         var patrn = /^([+-]?)(\d+)$/;
         return patrn.test(str);
     },
     //非负整数
-    nonNegative: function(str) {
-        if(str === 0 || str === "0"){
+    nonNegative: function (str) {
+        if (str === 0 || str === "0") {
             return true;
-        }else{
+        } else {
             var patrn = /^[1-9]\d*$/;
             return patrn.test(str);
         }
     },
     //校验是否为正整数
-    isPlusInteger: function(str) {
+    isPlusInteger: function (str) {
         //var patrn = /^([+]?)(\d+)$/;
         var patrn = /^[1-9]\d*$/;
         return patrn.test(str);
     },
     //校验是否为负整数
-    isMinusInteger : function(str) {
+    isMinusInteger: function (str) {
         var patrn = /^-(\d+)$/;
         return patrn.test(str);
     },
     //校验是否为浮点数或整数
-    isFloat: function(str) {
+    isFloat: function (str) {
         var patrn = /^([+-]?)\d*(\.\d{1,5})?$/;
         return patrn.test(str);
     },
     //校验是否为正浮点数或整数
-    isPosFloat: function(str) {
+    isPosFloat: function (str) {
         var patrn = /^([+]?)\d*(\.\d{1,5})?$/;
         return patrn.test(str);
     },
     //校验是否为正浮点数或整数，小数电后保留3位
-    isPlusFloat: function(str) {
+    isPlusFloat: function (str) {
         var patrn = /^([+]?)\d*(\.\d{1,3})?$/;
         return patrn.test(str);
     },
     //校验是否为负浮点数
-    isMinusFloat: function(str) {
+    isMinusFloat: function (str) {
         var patrn = /^-\d*\.\d+$/;
         return patrn.test(str);
     },
     //校验是否仅中文
-    isChinese: function(str) {
+    isChinese: function (str) {
         var patrn = /[\u4E00-\u9FA5\uF900-\uFA2D]{1,20}$/;
         return patrn.test(str);
     },
     //校验是否仅ACSII字符
-    isAcsii: function(str) {
+    isAcsii: function (str) {
         var patrn = /^[\x00-\xFF]+$/;
         return patrn.test(str);
     },
     //校验手机号码
-    isMobile: function(str) {
+    isMobile: function (str) {
         //var patrn = /^0?1((3[0-9]{1})|(59)){1}[0-9]{8}$/;
         var patrn = /^0?1(((3|5|8)[0-9]{1})){1}[0-9]{8}$/;
         return patrn.test(str);
     },
     //校验电话号码
-    isPhone: function(str) {
+    isPhone: function (str) {
         var patrn = /^(0[\d]{2,3}-)?\d{6,8}(-\d{3,4})?$/;
         return patrn.test(str);
     },
     // 简单的校验手机号
-    isSimpleMobile: function(str) {
+    isSimpleMobile: function (str) {
         var pattern = /^[0-9]{11}$/;
         return pattern.test(str);
     },
     //校验URL地址
-    isUrl: function(str) {
+    isUrl: function (str) {
         var patrn = /^http[s]?:\/\/[\w-]+(\.[\w-]+)+([\w-\.\/?%&=]*)?$/;
         return patrn.test(str);
     },
     //校验电邮地址
-    isEmail: function(str) {
+    isEmail: function (str) {
         var patrn = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;///^[\w-]+@[\w-]+(\.[\w-]+)+$/;
         return patrn.test(str);
     },
     //校验邮编
-    isZipCode: function(str) {
+    isZipCode: function (str) {
         var patrn = /^\d{6}$/;
         return patrn.test(str);
     },
     //校验合法时间
-    isDate: function(str) {
+    isDate: function (str) {
         if (!/\d{4}(\.|\/|\-)\d{1,2}(\.|\/|\-)\d{1,2}/.test(str)) {
             return false;
         }
@@ -617,43 +632,121 @@ window.checkUtil = {
             .getDate() == r[2]);
     },
     //校验字符串：只能输入1-20个字母、数字、下划线(常用手校验用户名和密码)
-    isString1_20: function(str) {
+    isString1_20: function (str) {
         var patrn = /^(\w){1,20}$/;
         return patrn.test(str);
     },
     //校验非空白字符
-    isNotNull1_20: function(str) {
+    isNotNull1_20: function (str) {
         var patrn = /^(\S){1,20}$/;
         return patrn.test(str);
     },
     //校验字符串：只能输入1-6个中文、字母、数字、下划线
-    isAllString1_20: function(str) {
+    isAllString1_20: function (str) {
         var patrn = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{1,20}$/;
         return patrn.test(str);
     },
     //校验字符串：只能输入个中文、字母、数字、下划线
-    isAllString1: function(str) {
+    isAllString1: function (str) {
         var patrn = /^(?!_)(?!.*?_$)[a-zA-Z0-9\s_\u4e00-\u9fa5]{1,100}$/;
         return patrn.test(str);
     },
     //校验字符串：只能输入个字母、数字
-    isAllString2: function(str) {
+    isAllString2: function (str) {
         var patrn = /^[A-Za-z0-9]+$/;
         return patrn.test(str);
     },
     //校验是否有特殊字符
-    containtSpecialChar: function(str){
+    containtSpecialChar: function (str) {
         var pattern = /[(\ )(\~)(\!)(\@)(\#)(\$)(\%)(\^)(\&)(\*)(\()(\))(\-)(\_)(\+)(\=)(\[)(\])(\{)(\})(\|)(\\)(\;)(\:)(\')(\")(\,)(\.)(\/)(\<)(\>)(\?)(\)]+/;
         return pattern.test(str);
     },
     //校验是否有中文字符
-    containtChineneChars: function(str){
-        var pattern =/.*[\u4e00-\u9fa5]+.*$/;
+    containtChineneChars: function (str) {
+        var pattern = /.*[\u4e00-\u9fa5]+.*$/;
         return pattern.test(str);
     },
     //校验是否有特殊字符(%'&^)
-    isSpecialChar: function(str){
-
+    isSpecialChar: function (str) {
         return str.search(/[%'&^]/) != -1;
+    }
+}
+/**
+ *  设置本地缓存
+ * @type {{set: (function(*=, *): Window.localStorageExports), get: (function(*=): *), isExpire: (function(*=): boolean), age: number, remove: Window.localStorageExports.remove, setAge: (function(*): Window.localStorageExports)}}
+ */
+window.localStorageExports = {
+    // 过期时间，默认30天
+    age: 30 * 24 * 60 * 60 * 1000,
+    /**
+     * 设置过期时间
+     * @param age
+     * @returns {exports}
+     */
+    setAge: function (age) {
+        this.age = age;
+        return this;
+    },
+    /**
+     * 设置 localStorage
+     * @param key
+     * @param value
+     */
+    set: function (key, value) {
+        localStorage.removeItem(key);
+        var _time = new Date().getTime()
+            , _age = this.age;
+
+        // 如果不是对象，新建一个对象把 value 存起来
+        var obj = {};
+        obj._value = value;
+        // 加入时间
+        obj._time = _time;
+        // 过期时间
+        obj._age = _time + _age;
+        localStorage.setItem(key, JSON.stringify(obj));
+        return this;
+    },
+    /**
+     * 删除 localStorage
+     * @param key
+     */
+    remove: function (key) {
+        localStorage.removeItem(key);
+    },
+    /**
+     * 判断一个 localStorage 是否过期
+     * @param key
+     * @returns {boolean}
+     */
+    isExpire: function (key) {
+
+        var isExpire = true,
+            value = localStorage.getItem(key),
+            now = new Date().getTime();
+
+        if (value) {
+            value = JSON.parse(value);
+            // 当前时间是否大于过期时间
+            isExpire = now > value._age;
+        } else {
+            // 没有值也是过期
+        }
+        return isExpire;
+    },
+    /**
+     * 获取某个 localStorage 值
+     * @param key
+     * @returns {*}
+     */
+    get: function (key) {
+        var isExpire = this.isExpire(key),
+            value = null;
+        if (!isExpire) {
+            value = localStorage.getItem(key);
+            value = JSON.parse(value);
+            value = value._value;
+        }
+        return value;
     }
 }

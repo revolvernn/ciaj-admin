@@ -83,7 +83,7 @@ public class ShiroUser extends SysUserPo {
 	}
 
 	public boolean isSuperAdmin() {
-		if ((role != null && role.getCode().equalsIgnoreCase(DefaultConstant.UserRole.SUPER_ADMIN.value)) || super.getId().equals(DefaultConstant.SUPER_ADMIN_ID)) {
+		if ((role != null && role.getCode().equals(DefaultConstant.UserRole.SUPER_ADMIN.value)) || super.getId().equals(DefaultConstant.SUPER_ADMIN_ID)) {
 			return !isSuperAdmin;
 		}
 		return isSuperAdmin;

@@ -72,7 +72,7 @@ public class CommController {
 	@ResponseBody
 	@RequiresUser
 	@GetMapping("/check/permissions")
-	protected ResponseEntity checkPermissions(String codes) {
+	protected ResponseEntity checkPermissions(@RequestParam("codes") String codes) {
 
 		Map<String, Boolean> map = new HashMap<>();
 		if (StringUtils.isNotBlank(codes)) {
@@ -90,6 +90,12 @@ public class CommController {
 	}
 
 
+	/**
+	 * 验证码
+	 *
+	 * @param response
+	 * @throws IOException
+	 */
 	@GetMapping("captcha.jpg")
 	public void captcha(HttpServletResponse response) throws IOException {
 		response.setHeader("Cache-Control", "no-store, no-cache");
@@ -177,6 +183,7 @@ public class CommController {
 	 * @return
 	 */
 	@OperationLog(operation = "系统-导航", content = "获取导航菜单")
+	@RequiresUser
 	@ResponseBody
 	@GetMapping("/sys/menu/nav")
 	public ResponseEntity<SysMenuPo> nav() {
@@ -226,6 +233,7 @@ public class CommController {
 	 * @return
 	 */
 	@OperationLog(operation = "系统-用户", content = "获取当前登录用户")
+	@RequiresUser
 	@ResponseBody
 	@GetMapping("/sys/user/info")
 	public ResponseEntity userInfo() {
@@ -240,6 +248,7 @@ public class CommController {
 	 * @return
 	 */
 	@OperationLog(operation = "系统-用户", content = "更新当前登录用户角色")
+	@RequiresUser
 	@ResponseBody
 	@PostMapping("/sys/user/role/change")
 	public ResponseEntity roleChange(@RequestParam(value = "roleId", required = true) String roleId) {
@@ -256,6 +265,7 @@ public class CommController {
 	 */
 	@Resubmit
 	@OperationLog(operation = "系统-用户", content = "密码修改")
+	@RequiresUser
 	@ResponseBody
 	@PostMapping("/sys/user/password")
 	public ResponseEntity updatePassword(String password, String newPassword) {
@@ -290,6 +300,7 @@ public class CommController {
 	 *
 	 * @return
 	 */
+	@RequiresUser
 	@GetMapping("/sys/export/users")
 	public void export(HttpServletResponse response, HttpServletRequest request) {
 		List<SysUserPo> sysUserPos = sysUserService.selectAll(null);

@@ -146,7 +146,7 @@ public class SysMenuController extends AbstractController<SysMenuPo, SysMenuDto,
 		if (CollectionUtils.isNotEmpty(sysMenus)) {
 			if (entity.getId() == null) throw new BsRException("同一组菜单名称不能重复");
 			for (SysMenuPo sysMenu : sysMenus) {
-				if (!sysMenu.getId().equalsIgnoreCase(entity.getId())) {
+				if (!sysMenu.getId().equals(entity.getId())) {
 					throw new BsRException("同一组菜单名称不能重复");
 				}
 			}
@@ -161,7 +161,7 @@ public class SysMenuController extends AbstractController<SysMenuPo, SysMenuDto,
 	 */
 	private void updateParentIds(SysMenuDto entity) {
 		SysMenuPo p = sysMenuService.selectByPrimaryKey(entity.getId());
-		if (!p.getParentId().equalsIgnoreCase(entity.getParentId())) {
+		if (!p.getParentId().equals(entity.getParentId())) {
 			SysMenuPo query = new SysMenuPo();
 			query.setParentId(entity.getId());
 			List<SysMenuPo> pos = sysMenuService.select(query);

@@ -145,7 +145,7 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 		if (CollectionUtils.isNotEmpty(sysDicts)) {
 			if (entity.getId() == null) throw new BsRException("同一组字典编码不能重复");
 			for (SysDictPo sysDict : sysDicts) {
-				if (!sysDict.getId().equalsIgnoreCase(entity.getId())) {
+				if (!sysDict.getId().equals(entity.getId())) {
 					throw new BsRException("同一组字典编码不能重复");
 				}
 			}
@@ -159,7 +159,7 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 		if (CollectionUtils.isNotEmpty(sysDicts)) {
 			if (entity.getId() == null) throw new BsRException("同一组字典名称不能重复");
 			for (SysDictPo sysDict : sysDicts) {
-				if (!sysDict.getId().equalsIgnoreCase(entity.getId())) {
+				if (!sysDict.getId().equals(entity.getId())) {
 					throw new BsRException("同一组字典名称不能重复");
 				}
 			}
@@ -171,10 +171,10 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 		//不同的父级不能有相同的类型
 		if (CollectionUtils.isNotEmpty(sysDicts)) {
 			for (SysDictPo sysDict : sysDicts) {
-				if (entity.getId() == null && !sysDict.getParentId().equalsIgnoreCase(entity.getParentId())) {
+				if (entity.getId() == null && !sysDict.getParentId().equals(entity.getParentId())) {
 					throw new BsRException("字典类型已经在其他层级存在");
 				}
-				if (entity.getId() != null && !sysDict.getId().equalsIgnoreCase(entity.getId()) && !sysDict.getParentId().equalsIgnoreCase(entity.getParentId())) {
+				if (entity.getId() != null && !sysDict.getId().equals(entity.getId()) && !sysDict.getParentId().equals(entity.getParentId())) {
 					throw new BsRException("字典类型已经在其他层级存在");
 				}
 			}
@@ -188,7 +188,7 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 	 */
 	private void updateParentIds(SysDictDto entity) {
 		SysDictPo p = sysDictService.selectByPrimaryKey(entity.getId());
-		if (!p.getParentId().equalsIgnoreCase(entity.getParentId())) {
+		if (!p.getParentId().equals(entity.getParentId())) {
 
 			SysDictPo query = new SysDictPo();
 			query.setParentId(entity.getId());

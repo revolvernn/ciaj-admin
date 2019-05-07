@@ -132,7 +132,7 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
 
 	private void updateParentIds(SysDeptDto entity) {
 		SysDeptPo p = sysDeptService.selectByPrimaryKey(entity.getId());
-		if (!p.getParentId().equalsIgnoreCase(entity.getParentId())) {
+		if (!p.getParentId().equals(entity.getParentId())) {
 
 			SysDeptPo query = new SysDeptPo();
 			query.setParentId(entity.getId());
@@ -166,7 +166,7 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
 		if (CollectionUtils.isNotEmpty(list)) {
 			if (entity.getId() == null) throw new BsRException("同一组部门名称不能重复");
 			for (SysDeptPo s : list) {
-				if (!s.getId().equalsIgnoreCase(entity.getId())) {
+				if (!s.getId().equals(entity.getId())) {
 					throw new BsRException("同一组部门名称不能重复");
 				}
 			}

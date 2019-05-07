@@ -212,7 +212,7 @@ var dictapp = new Vue({
                         type: type,
                         data: JSON.stringify(that.addOrUpdateForm.dict)
                     }, function (r) {
-                        localStorage.removeItem('local_dict_key_' + that.addOrUpdateForm.dict.type);
+                        localStorageExports.remove(T.local_key.dict_key_prefix + that.addOrUpdateForm.dict.type);
                         that.myQuery();
                         that.initTree();
                         that.addOrUpdateForm.dictFormVisible = false;

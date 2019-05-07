@@ -47,6 +47,7 @@ var userapp = new Vue({
                 },
                 {
                     name: 'birthday',
+                    date: 'yyyy-MM-dd',
                     label: '生日'
                 },
                 {

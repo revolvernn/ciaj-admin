@@ -153,7 +153,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 		if (CollectionUtils.isNotEmpty(sysPermissions)) {
 			if (entity.getId() == null) throw new BsRException("同一组权限名称不能重复");
 			for (SysPermissionPo sysPermission : sysPermissions) {
-				if (!sysPermission.getId().equalsIgnoreCase(entity.getId())) {
+				if (!sysPermission.getId().equals(entity.getId())) {
 					throw new BsRException("同一组权限名称不能重复");
 				}
 			}
@@ -168,7 +168,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 		if (CollectionUtils.isNotEmpty(sysPermissions)) {
 			if (entity.getId() == null) throw new BsRException("同一组权限码不能重复");
 			for (SysPermissionPo sysPermission : sysPermissions) {
-				if (!sysPermission.getId().equalsIgnoreCase(entity.getId())) {
+				if (!sysPermission.getId().equals(entity.getId())) {
 					throw new BsRException("同一组权限码不能重复");
 				}
 			}
@@ -178,7 +178,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 
 	private void updateParentIds(SysPermissionDto entity) {
 		SysPermissionPo sysPermission = sysPermissionService.selectByPrimaryKey(entity.getId());
-		if (!sysPermission.getParentId().equalsIgnoreCase(entity.getParentId())) {
+		if (!sysPermission.getParentId().equals(entity.getParentId())) {
 			//处理下级的父级
 			SysPermissionPo query = new SysPermissionPo();
 			query.setParentId(entity.getId());
