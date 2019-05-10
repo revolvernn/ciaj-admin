@@ -291,7 +291,7 @@ public class CommController {
 		}
 		SysAuthPo auth = new SysAuthPo();
 		final PasswordEntity password2 = PasswordUtil.getPassword(newPassword);
-		auth.setId(loginUser.getId());
+		auth.setId(sysAuth.getId());
 		auth.setPassword(password2.getPassword());
 		auth.setSalt(password2.getSalt());
 		sysAuthService.updateByPrimaryKeySelective(auth);
