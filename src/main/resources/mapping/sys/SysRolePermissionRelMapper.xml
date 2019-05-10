@@ -5,26 +5,28 @@
 <mapper namespace="com.ciaj.boot.modules.sys.mapper.SysRolePermissionRelMapper">
     <!--
         Author: Ciaj.
-        Date: 2019-04-12 16:54:59
-        Description: www.ciaj.com mapper.xml
+        Date: 2019-05-09 13:13:06
+        Description: www.ciaj.com gen mapper.xml
     -->
-    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
+    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560"
+           type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
 
-    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo" >
-        <id column="id" property="id" jdbcType="VARCHAR" />
-        <id column="role_id" property="roleId" jdbcType="VARCHAR" />
-        <id column="permission_id" property="permissionId" jdbcType="VARCHAR" />
-        <id column="create_at" property="createAt" jdbcType="VARCHAR" />
-        <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-        <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
-        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-        <id column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <id column="role_id" property="roleId" jdbcType="VARCHAR"/>
+        <id column="permission_id" property="permissionId" jdbcType="VARCHAR"/>
+        <id column="create_at" property="createAt" jdbcType="VARCHAR"/>
+        <id column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <id column="update_at" property="updateAt" jdbcType="VARCHAR"/>
+        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <id column="del_flag" property="delFlag" jdbcType="CHAR"/>
+        <id column="version" property="version" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,role_id,permission_id,create_at,create_time,update_at,update_time,del_flag
+        id,role_id,permission_id,create_at,create_time,update_at,update_time,del_flag,version
     </sql>
     <sql id="Base_Alias_Column_List">
-        m.id,m.role_id,m.permission_id,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag
+        m.id,m.role_id,m.permission_id,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
     </sql>
     <delete id="deleteByPrimaryKey">
         DELETE FROM sys_role_permission_rel
@@ -58,17 +60,20 @@
                 <if test="delFlag != null">
                     AND del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND version = #{version}
+                </if>
             </trim>
         </where>
     </delete>
-    <insert id="insert"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo">
-        <selectKey keyProperty="id" order="BEFORE"  resultType="String">
+    <insert id="insert" parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo">
+        <selectKey keyProperty="id" order="BEFORE" resultType="String">
             SELECT REPLACE(uuid(),'-','') FROM DUAL
         </selectKey>
         INSERT INTO sys_role_permission_rel
-        (id,role_id,permission_id,create_at,create_time,update_at,update_time,del_flag)
+        (id,role_id,permission_id,create_at,create_time,update_at,update_time,del_flag,version)
         VALUES
-        (#{id,jdbcType=VARCHAR},#{roleId,jdbcType=VARCHAR},#{permissionId,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR})
+        (#{id,jdbcType=VARCHAR},#{roleId,jdbcType=VARCHAR},#{permissionId,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo">
         <selectKey keyProperty="id" order="BEFORE" resultType="String">
@@ -100,6 +105,9 @@
             <if test="delFlag != null">
                 del_flag,
             </if>
+            <if test="version != null">
+                version,
+            </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -126,10 +134,13 @@
             <if test="delFlag != null">
                 #{delFlag,jdbcType=CHAR},
             </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKey"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo">
+    <update id="updateByPrimaryKey" parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo">
         UPDATE sys_role_permission_rel
         <set>
             role_id = #{roleId},
@@ -139,10 +150,25 @@
             update_at = #{updateAt},
             update_time = #{updateTime},
             del_flag = #{delFlag},
+            version = #{version},
         </set>
-         WHERE id = #{id,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKeySelective"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo">
+    <update id="updateByPrimaryKeyAndVersion">
+        UPDATE sys_role_permission_rel
+        <set>
+            role_id = #{record.roleId},
+            permission_id = #{record.permissionId},
+            create_at = #{record.createAt},
+            create_time = #{record.createTime},
+            update_at = #{record.updateAt},
+            update_time = #{record.updateTime},
+            del_flag = #{record.delFlag},
+            version = #{record.version},
+        </set>
+        WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo">
         UPDATE sys_role_permission_rel
         <set>
             <if test="roleId != null">
@@ -166,21 +192,49 @@
             <if test="delFlag != null">
                 del_flag = #{delFlag},
             </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
         </set>
         WHERE id = #{id,jdbcType=VARCHAR}
     </update>
-
+    <update id="updateByPrimaryKeySelectiveAndVersion">
+        UPDATE sys_role_permission_rel
+        <set>
+            <if test="record.roleId != null">
+                role_id = #{record.roleId},
+            </if>
+            <if test="record.permissionId != null">
+                permission_id = #{record.permissionId},
+            </if>
+            <if test="record.createAt != null">
+                create_at = #{record.createAt},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime},
+            </if>
+            <if test="record.updateAt != null">
+                update_at = #{record.updateAt},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime},
+            </if>
+            <if test="record.delFlag != null">
+                del_flag = #{record.delFlag},
+            </if>
+            <if test="record.version != null">
+                version = #{record.version},
+            </if>
+        </set>
+        WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+    </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM sys_role_permission_rel
         WHERE id = #{id,jdbcType=VARCHAR}
     </select>
-
-    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo">
-        SELECT
-        <include refid="Base_Column_List" />
-        FROM sys_role_permission_rel m
+    <sql id="base_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null">
@@ -207,122 +261,56 @@
                 <if test="delFlag != null">
                     AND m.del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND m.version = #{version}
+                </if>
             </trim>
         </where>
-    </select>
-
-    <select id="select" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo">
+    </sql>
+    <select id="selectOne" resultMap="BaseResultMap"
+            parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM sys_role_permission_rel m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="roleId != null">
-                    AND m.role_id = #{roleId}
-                </if>
-                <if test="permissionId != null">
-                    AND m.permission_id = #{permissionId}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
-    <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo">
+    <select id="select" resultMap="BaseResultMap"
+            parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM sys_role_permission_rel m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="roleId != null">
-                    AND m.role_id = #{roleId}
-                </if>
-                <if test="permissionId != null">
-                    AND m.permission_id = #{permissionId}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
-    <select id="selectList" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysRolePermissionRelVo">
+    <select id="selectAll" resultMap="BaseResultMap"
+            parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePermissionRelPo">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_role_permission_rel m
+        <include refid="base_query_condition_sql"/>
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap"
+            parameterType="com.ciaj.boot.modules.sys.entity.vo.SysRolePermissionRelVo">
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_role_permission_rel m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null  and id != ''">
-                    AND m.id = #{id}
-                </if>
-                <if test="roleId != null  and roleId != ''">
-                    AND m.role_id = #{roleId}
-                </if>
-                <if test="permissionId != null  and permissionId != ''">
-                    AND m.permission_id = #{permissionId}
-                </if>
-                <if test="createAt != null  and createAt != ''">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null ">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null  and updateAt != ''">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null ">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null  and delFlag != ''">
-                    AND m.del_flag = #{delFlag}
-                </if>
-                <!--  keyword   -->
-                <if test="keyword != null and keyword != ''">
-                </if>
-            </trim>
-        </where>
+        <include refid="cust_query_condition_sql"/>
     </select>
 
-    <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.SysRolePermissionRelDto" extends="BaseResultMap">
+    <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.SysRolePermissionRelDto"
+               extends="BaseResultMap">
     </resultMap>
 
-    <select id="selectDTOList" resultMap="DTOResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysRolePermissionRelVo">
+    <select id="selectDTOList" resultMap="DTOResultMap"
+            parameterType="com.ciaj.boot.modules.sys.entity.vo.SysRolePermissionRelVo">
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_role_permission_rel m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+    <sql id="cust_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null  and id != ''">
@@ -349,10 +337,13 @@
                 <if test="delFlag != null  and delFlag != ''">
                     AND m.del_flag = #{delFlag}
                 </if>
+                <if test="version != null ">
+                    AND m.version = #{version}
+                </if>
                 <!--  keyword   -->
                 <if test="keyword != null and keyword != ''">
                 </if>
             </trim>
         </where>
-    </select>
+    </sql>
 </mapper>

@@ -99,7 +99,7 @@ public class SysConfigController extends AbstractController<SysConfigPo, SysConf
 	@RequiresPermissions("sys:config:update")
 	@PutMapping("update")
 	public ResponseEntity update(@RequestBody SysConfigDto entity) {
-		return super.update(entity);
+		return super.updateByVersion(entity, entity.getVersion());
 	}
 
 	/**
@@ -115,7 +115,8 @@ public class SysConfigController extends AbstractController<SysConfigPo, SysConf
 	@RequiresPermissions("sys:config:delFlag")
 	@DeleteMapping("/delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
-		return super.deleteFlag(id);
+		SysConfigPo sysConfigPo = sysConfigService.selectByPrimaryKey(id);
+		return super.deleteFlagVersion(id, sysConfigPo.getVersion());
 	}
 
 }

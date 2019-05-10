@@ -1,6 +1,7 @@
 package com.ciaj.base;
 
 import com.ciaj.comm.utils.Page;
+import io.swagger.models.auth.In;
 
 import java.util.List;
 
@@ -100,10 +101,26 @@ public interface BaseService<PO, DTO extends BaseEntity, VO extends VOEntity> ex
 	PO updateByPrimaryKeySelectivePO(PO record);
 
 	/**
+	 *
+	 * @param record
+	 * @param oldVersion
+	 * @return
+	 */
+	PO updateByPrimaryKeySelectiveAndVersionPO(PO record, Integer oldVersion);
+
+	/**
 	 * @param record
 	 * @return
 	 */
 	DTO updateByPrimaryKeySelectiveDTO(PO record);
+
+
+	/**
+	 * @param record
+	 * @param oldVersion
+	 * @return
+	 */
+	DTO updateByPrimaryKeySelectiveAndVersionDTO(PO record, Integer oldVersion);
 
 	/**
 	 *

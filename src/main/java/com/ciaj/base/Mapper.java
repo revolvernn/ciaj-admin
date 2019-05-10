@@ -1,5 +1,7 @@
 package com.ciaj.base;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -49,7 +51,19 @@ public interface Mapper<PO, DTO extends BaseEntity, VO extends VOEntity> {
 	 * @param record
 	 * @return
 	 */
+	int updateByPrimaryKeyAndVersion(@Param("record") PO record, @Param("oldVersion") int oldVersion);
+
+	/**
+	 * @param record
+	 * @return
+	 */
 	int updateByPrimaryKeySelective(PO record);
+
+	/**
+	 * @param record
+	 * @return
+	 */
+	int updateByPrimaryKeySelectiveAndVersion(@Param("record") PO record, @Param("oldVersion") int oldVersion);
 
 	// select ==========================================
 

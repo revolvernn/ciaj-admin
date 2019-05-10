@@ -112,7 +112,6 @@ var deptapp = new Vue({
         }
     },
     created: function () {
-        this.loadData();
         this.initTree();
         this.initArea();
     },

@@ -5,10 +5,10 @@
 <mapper namespace="com.ciaj.boot.modules.sys.mapper.SysLogMapper">
     <!--
         Author: Ciaj.
-        Date: 2019-04-12 16:22:41
-        Description: www.ciaj.com mapper.xml
+        Date: 2019-05-09 12:57:43
+        Description: www.ciaj.com gen mapper.xml
     -->
-    <!--<cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="MybatisRedisCache"></cache>-->
+    <!--<cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>-->
 
     <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.SysLogPo" >
         <id column="id" property="id" jdbcType="VARCHAR" />
@@ -24,13 +24,14 @@
         <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
         <id column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
         <id column="del_flag" property="delFlag" jdbcType="CHAR" />
+        <id column="version" property="version" jdbcType="INTEGER" />
         <id column="params" property="params" jdbcType="LONGVARCHAR" />
     </resultMap>
     <sql id="Base_Column_List">
-        id,type,username,ip,time,operation,method,description,create_at,create_time,update_at,update_time,del_flag,params
+        id,type,username,ip,time,operation,method,description,create_at,create_time,update_at,update_time,del_flag,version,params
     </sql>
     <sql id="Base_Alias_Column_List">
-        m.id,m.type,m.username,m.ip,m.time,m.operation,m.method,m.description,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.params
+        m.id,m.type,m.username,m.ip,m.time,m.operation,m.method,m.description,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version,m.params
     </sql>
     <delete id="deleteByPrimaryKey">
         DELETE FROM sys_log
@@ -79,6 +80,9 @@
                 <if test="delFlag != null">
                     AND del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND version = #{version}
+                </if>
                 <if test="params != null">
                     AND params = #{params}
                 </if>
@@ -90,9 +94,9 @@
             SELECT REPLACE(uuid(),'-','') FROM DUAL
         </selectKey>
         INSERT INTO sys_log
-        (id,type,username,ip,time,operation,method,description,create_at,create_time,update_at,update_time,del_flag,params)
+        (id,type,username,ip,time,operation,method,description,create_at,create_time,update_at,update_time,del_flag,version,params)
         VALUES
-        (#{id,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{ip,jdbcType=VARCHAR},#{time,jdbcType=BIGINT},#{operation,jdbcType=VARCHAR},#{method,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{params,jdbcType=LONGVARCHAR})
+        (#{id,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{ip,jdbcType=VARCHAR},#{time,jdbcType=BIGINT},#{operation,jdbcType=VARCHAR},#{method,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER},#{params,jdbcType=LONGVARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysLogPo">
         <selectKey keyProperty="id" order="BEFORE" resultType="String">
@@ -139,6 +143,9 @@
             <if test="delFlag != null">
                 del_flag,
             </if>
+            <if test="version != null">
+                version,
+            </if>
             <if test="params != null">
                 params,
             </if>
@@ -183,6 +190,9 @@
             <if test="delFlag != null">
                 #{delFlag,jdbcType=CHAR},
             </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
             <if test="params != null">
                 #{params,jdbcType=LONGVARCHAR},
             </if>
@@ -204,8 +214,28 @@
             update_at = #{updateAt},
             update_time = #{updateTime},
             del_flag = #{delFlag},
+            version = #{version},
         </set>
          WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyAndVersion">
+        UPDATE sys_log
+        <set>
+            type = #{record.type},
+            username = #{record.username},
+            ip = #{record.ip},
+            time = #{record.time},
+            operation = #{record.operation},
+            method = #{record.method},
+            description = #{record.description},
+            create_at = #{record.createAt},
+            create_time = #{record.createTime},
+            update_at = #{record.updateAt},
+            update_time = #{record.updateTime},
+            del_flag = #{record.delFlag},
+            version = #{record.version},
+        </set>
+            WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
     </update>
     <update id="updateByPrimaryKeySelective"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysLogPo">
         UPDATE sys_log
@@ -246,227 +276,141 @@
             <if test="delFlag != null">
                 del_flag = #{delFlag},
             </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
         </set>
         WHERE id = #{id,jdbcType=VARCHAR}
     </update>
-
+    <update id="updateByPrimaryKeySelectiveAndVersion">
+        UPDATE sys_log
+        <set>
+            <if test="record.type != null">
+                type = #{record.type},
+            </if>
+            <if test="record.username != null">
+                username = #{record.username},
+            </if>
+            <if test="record.ip != null">
+                ip = #{record.ip},
+            </if>
+            <if test="record.time != null">
+                time = #{record.time},
+            </if>
+            <if test="record.operation != null">
+                operation = #{record.operation},
+            </if>
+            <if test="record.method != null">
+                method = #{record.method},
+            </if>
+            <if test="record.description != null">
+                description = #{record.description},
+            </if>
+            <if test="record.createAt != null">
+                create_at = #{record.createAt},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime},
+            </if>
+            <if test="record.updateAt != null">
+                update_at = #{record.updateAt},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime},
+            </if>
+            <if test="record.delFlag != null">
+                del_flag = #{record.delFlag},
+            </if>
+            <if test="record.version != null">
+                version = #{record.version},
+            </if>
+        </set>
+            WHERE id = #{record.id,jdbcType=VARCHAR}  and version = #{oldVersion}
+    </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM sys_log
         WHERE id = #{id,jdbcType=VARCHAR}
     </select>
-
+    <sql id="base_query_condition_sql">
+        <where>
+        <trim prefix="" prefixOverrides="and" suffix="">
+            <if test="id != null">
+                AND m.id = #{id}
+            </if>
+            <if test="type != null">
+                AND m.type = #{type}
+            </if>
+            <if test="username != null">
+                AND m.username = #{username}
+            </if>
+            <if test="ip != null">
+                AND m.ip = #{ip}
+            </if>
+            <if test="time != null">
+                AND m.time = #{time}
+            </if>
+            <if test="operation != null">
+                AND m.operation = #{operation}
+            </if>
+            <if test="method != null">
+                AND m.method = #{method}
+            </if>
+            <if test="description != null">
+                AND m.description = #{description}
+            </if>
+            <if test="createAt != null">
+                AND m.create_at = #{createAt}
+            </if>
+            <if test="createTime != null">
+                AND m.create_time = #{createTime}
+            </if>
+            <if test="updateAt != null">
+                AND m.update_at = #{updateAt}
+            </if>
+            <if test="updateTime != null">
+                AND m.update_time = #{updateTime}
+            </if>
+            <if test="delFlag != null">
+                AND m.del_flag = #{delFlag}
+            </if>
+            <if test="version != null">
+                AND m.version = #{version}
+            </if>
+            <if test="params != null">
+                AND m.params = #{params}
+            </if>
+        </trim>
+    </where>
+    </sql>
     <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysLogPo">
         SELECT
         <include refid="Base_Column_List" />
         FROM sys_log m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="type != null">
-                    AND m.type = #{type}
-                </if>
-                <if test="username != null">
-                    AND m.username = #{username}
-                </if>
-                <if test="ip != null">
-                    AND m.ip = #{ip}
-                </if>
-                <if test="time != null">
-                    AND m.time = #{time}
-                </if>
-                <if test="operation != null">
-                    AND m.operation = #{operation}
-                </if>
-                <if test="method != null">
-                    AND m.method = #{method}
-                </if>
-                <if test="description != null">
-                    AND m.description = #{description}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-                <if test="params != null">
-                    AND m.params = #{params}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
+
     </select>
 
     <select id="select" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysLogPo">
         SELECT
         <include refid="Base_Column_List" />
         FROM sys_log m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="type != null">
-                    AND m.type = #{type}
-                </if>
-                <if test="username != null">
-                    AND m.username = #{username}
-                </if>
-                <if test="ip != null">
-                    AND m.ip = #{ip}
-                </if>
-                <if test="time != null">
-                    AND m.time = #{time}
-                </if>
-                <if test="operation != null">
-                    AND m.operation = #{operation}
-                </if>
-                <if test="method != null">
-                    AND m.method = #{method}
-                </if>
-                <if test="description != null">
-                    AND m.description = #{description}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-                <if test="params != null">
-                    AND m.params = #{params}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysLogPo">
         SELECT
         <include refid="Base_Column_List" />
         FROM sys_log m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="type != null">
-                    AND m.type = #{type}
-                </if>
-                <if test="username != null">
-                    AND m.username = #{username}
-                </if>
-                <if test="ip != null">
-                    AND m.ip = #{ip}
-                </if>
-                <if test="time != null">
-                    AND m.time = #{time}
-                </if>
-                <if test="operation != null">
-                    AND m.operation = #{operation}
-                </if>
-                <if test="method != null">
-                    AND m.method = #{method}
-                </if>
-                <if test="description != null">
-                    AND m.description = #{description}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-                <if test="params != null">
-                    AND m.params = #{params}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="selectList" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysLogVo">
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_log m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null  and id != ''">
-                    and m.id =#{id}
-                </if>
-                <if test="type != null  and type != ''">
-                    and m.type =#{type}
-                </if>
-                <if test="username != null  and username != ''">
-                    and m.username like CONCAT('%',#{username},'%')
-                </if>
-                <if test="ip != null  and ip != ''">
-                    and m.ip like CONCAT('%',#{ip},'%')
-                </if>
-                <if test="time != null ">
-                    and m.time = #{time}
-                </if>
-                <if test="operation != null  and operation != ''">
-                    and m.operation like CONCAT('%',#{operation},'%')
-                </if>
-                <if test="method != null  and method != ''">
-                    and m.method like CONCAT('%',#{method},'%')
-                </if>
-                <if test="params != null  and params != ''">
-                    and m.params like CONCAT('%',#{params},'%')
-                </if>
-                <if test="description != null  and description != ''">
-                    and m.description like CONCAT('%',#{description},'%')
-                </if>
-                <if test="createAt != null  and createAt != ''">
-                    and m.create_at =#{createAt}
-                </if>
-                <if test="createTime != null ">
-                    and m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null  and updateAt != ''">
-                    and m.update_at =#{updateAt}
-                </if>
-                <if test="updateTime != null ">
-                    and m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null  and delFlag != ''">
-                    and m.del_flag =#{delFlag}
-                </if>
-                <!--  keyword   -->
-                <if test="keyword != null and keyword != ''">
-                    and m.operation like CONCAT('%',#{keyword},'%')
-                </if>
-            </trim>
-        </where>
+        <include refid="cust_query_condition_sql"/>
     </select>
 
     <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.SysLogDto" extends="BaseResultMap">
@@ -476,10 +420,13 @@
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_log m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+    <sql id="cust_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null  and id != ''">
-                    and m.id =#{id}
+                    AND m.id = #{id}
                 </if>
                 <if test="type != null  and type != ''">
                     and m.type =#{type}
@@ -520,11 +467,14 @@
                 <if test="delFlag != null  and delFlag != ''">
                     and m.del_flag =#{delFlag}
                 </if>
+                <if test="version != null ">
+                    AND m.version = #{version}
+                </if>
                 <!--  keyword   -->
                 <if test="keyword != null and keyword != ''">
                     and m.operation like CONCAT('%',#{keyword},'%')
                 </if>
             </trim>
         </where>
-    </select>
+    </sql>
 </mapper>

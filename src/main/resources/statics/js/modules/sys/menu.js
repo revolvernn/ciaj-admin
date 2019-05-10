@@ -118,7 +118,6 @@ var menuapp = new Vue({
         }
     },
     created: function () {
-        this.loadData();
         this.initTree();
     },
     methods: {

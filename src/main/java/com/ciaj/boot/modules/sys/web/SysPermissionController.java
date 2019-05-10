@@ -112,8 +112,14 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 	@PutMapping("update")
 	public ResponseEntity update(@RequestBody SysPermissionDto entity) {
 		checkPermission(entity);
-		updateParentIds(entity);
-		return super.update(entity);
+		SysPermissionPo sysPermission = sysPermissionService.selectByPrimaryKey(entity.getId());
+
+		ResponseEntity update = super.updateByVersion(entity, entity.getVersion());
+
+		if (!sysPermission.getParentId().equals(entity.getParentId())) {
+			updateParentIds(entity);
+		}
+		return update;
 	}
 
 	/**
@@ -129,15 +135,34 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 	@RequiresPermissions("sys:permission:delFlag")
 	@DeleteMapping("/delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
-
 		SysRolePermissionRelPo query = new SysRolePermissionRelPo();
 		List<SysRolePermissionRelPo> select = sysRolePermissionRelService.select(query);
 		if (CollectionUtils.isNotEmpty(select)) {
 			throw new BsRException("权限已绑定角色，不能删除。");
 		}
-
-		return super.deleteFlag(id);
+		SysPermissionPo sysPermissionPo = sysPermissionService.selectByPrimaryKey(id);
+		ResponseEntity responseEntity = super.deleteFlagVersion(id, sysPermissionPo.getVersion());
+		delByParentId(id);
+		return responseEntity;
 	}
+
+	/**
+	 * 递归处理下级
+	 *
+	 * @param parentId
+	 */
+	private void delByParentId(String parentId) {
+		SysPermissionPo query = new SysPermissionPo();
+		query.setParentId(parentId);
+		List<SysPermissionPo> pos = sysPermissionService.select(query);
+		if (CollectionUtils.isNotEmpty(pos)) {
+			for (SysPermissionPo po : pos) {
+				super.deleteFlagVersion(po.getId(), po.getVersion());
+				delByParentId(po.getId());
+			}
+		}
+	}
+
 
 	private void checkPermission(SysPermissionDto entity) {
 		if (entity.getParentId() == null) {
@@ -176,20 +201,22 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 
 	}
 
+	/**
+	 * 处理下级的父级
+	 *
+	 * @param entity
+	 */
 	private void updateParentIds(SysPermissionDto entity) {
-		SysPermissionPo sysPermission = sysPermissionService.selectByPrimaryKey(entity.getId());
-		if (!sysPermission.getParentId().equals(entity.getParentId())) {
-			//处理下级的父级
-			SysPermissionPo query = new SysPermissionPo();
-			query.setParentId(entity.getId());
-			List<SysPermissionPo> sysPermissions = sysPermissionService.select(query);
-			if (CollectionUtils.isNotEmpty(sysPermissions)) {
-				for (SysPermissionPo permission : sysPermissions) {
-					permission.setParentId(entity.getId());
-					permission.setParentIds(entity.getParentIds() + "," + entity.getId());
-					SysPermissionDto sysPermissionDto = sysPermissionService.updateByPrimaryKeySelectiveDTO(permission);
-					updateParentIds(sysPermissionDto);
-				}
+
+		SysPermissionPo query = new SysPermissionPo();
+		query.setParentId(entity.getId());
+		List<SysPermissionPo> sysPermissions = sysPermissionService.select(query);
+		if (CollectionUtils.isNotEmpty(sysPermissions)) {
+			for (SysPermissionPo po : sysPermissions) {
+				po.setParentId(entity.getId());
+				po.setParentIds(entity.getParentIds() + "," + entity.getId());
+				super.updateByVersion(po, po.getVersion());
+				updateParentIds(poToDto(po));
 			}
 		}
 	}

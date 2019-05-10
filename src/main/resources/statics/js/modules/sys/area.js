@@ -100,7 +100,6 @@ var areaapp = new Vue({
         }
     },
     created: function () {
-        this.loadData();
         this.initTree();
     },
     methods: {

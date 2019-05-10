@@ -1,9 +1,11 @@
 package com.ciaj.boot.component.interceptor;
 
+import com.ciaj.boot.component.filter.ResubmitRequestWrapper;
 import com.ciaj.comm.annotation.Resubmit;
 import com.ciaj.comm.exception.BsRException;
 import com.ciaj.comm.utils.JSONUtils;
 import lombok.extern.log4j.Log4j2;
+import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -109,57 +111,16 @@ public class ResubmitInterceptor extends HandlerInterceptorAdapter {
 	 * @param request
 	 * @return
 	 */
-	public static String getBodyString(final ServletRequest request) {
-		StringBuilder sb = new StringBuilder();
-		InputStream inputStream = null;
-		BufferedReader reader = null;
-		try {
-			inputStream = cloneInputStream(request.getInputStream());
-			reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
-			String line = "";
-			while ((line = reader.readLine()) != null) {
-				sb.append(line);
-			}
-		} catch (IOException e) {
-			log.error(e.getMessage(),e);
-		} finally {
-			if (inputStream != null) {
-				try {
-					inputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException e) {
-					log.error(e.getMessage(),e);
-				}
-			}
+	private String getBodyString(HttpServletRequest request) {
+		ShiroHttpServletRequest shiroHttpServletRequest = (ShiroHttpServletRequest) request;
+		ServletRequest servletRequest = shiroHttpServletRequest.getRequest();
+		String params = UUID.randomUUID().toString();
+		if (servletRequest instanceof ResubmitRequestWrapper) {
+			ResubmitRequestWrapper resubmitRequestWrapper = (ResubmitRequestWrapper) servletRequest;
+			params = resubmitRequestWrapper.getBody();
 		}
-		return sb.toString();
+		return params;
 	}
 
-	/**
-	 * Description: 复制输入流</br>
-	 *
-	 * @param inputStream
-	 * @return</br>
-	 */
-	public static InputStream cloneInputStream(ServletInputStream inputStream) {
-		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		byte[] buffer = new byte[1024];
-		int len;
-		try {
-			while ((len = inputStream.read(buffer)) > -1) {
-				byteArrayOutputStream.write(buffer, 0, len);
-			}
-			byteArrayOutputStream.flush();
-		} catch (IOException e) {
-			log.error(e.getMessage(),e);
-		}
-		InputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
-		return byteArrayInputStream;
-	}
+
 }

@@ -1,9 +1,9 @@
 package com.ciaj.boot.modules.sys.web;
 
 import com.ciaj.base.AbstractController;
+import com.ciaj.boot.modules.sys.entity.dto.SysDictDto;
 import com.ciaj.boot.modules.sys.entity.po.SysDictPo;
 import com.ciaj.boot.modules.sys.entity.vo.SysDictVo;
-import com.ciaj.boot.modules.sys.entity.dto.SysDictDto;
 import com.ciaj.boot.modules.sys.service.SysDictService;
 import com.ciaj.comm.ResponseEntity;
 import com.ciaj.comm.annotation.OperationLog;
@@ -12,7 +12,10 @@ import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.constant.ParamTypeEnum;
 import com.ciaj.comm.exception.BsRException;
 import com.ciaj.comm.utils.Page;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,8 +113,12 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 	@PutMapping("update")
 	public ResponseEntity update(@RequestBody SysDictDto entity) {
 		checkDict(entity);
-		updateParentIds(entity);
-		return super.update(entity);
+		SysDictPo p = sysDictService.selectByPrimaryKey(entity.getId());
+		ResponseEntity update = super.update(entity);
+		if (!p.getParentId().equals(entity.getParentId())) {
+			updateParentIds(entity);
+		}
+		return update;
 	}
 
 	/**
@@ -127,9 +134,34 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 	@RequiresPermissions("sys:dict:delFlag")
 	@DeleteMapping("/delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
-		return super.deleteFlag(id);
+		SysDictPo sysDictPo = sysDictService.selectByPrimaryKey(id);
+		ResponseEntity responseEntity = super.deleteFlagVersion(id, sysDictPo.getVersion());
+		delByParentId(id);
+		return responseEntity;
 	}
 
+	/**
+	 * 递归处理下级字典
+	 *
+	 * @param parentId
+	 */
+	private void delByParentId(String parentId) {
+		SysDictPo query = new SysDictPo();
+		query.setParentId(parentId);
+		List<SysDictPo> pos = sysDictService.select(query);
+		if (CollectionUtils.isNotEmpty(pos)) {
+			for (SysDictPo po : pos) {
+				super.deleteFlagVersion(po.getId(), po.getVersion());
+				delByParentId(po.getId());
+			}
+		}
+	}
+
+	/**
+	 * 添加更新前检查字典合法
+	 *
+	 * @param entity
+	 */
 	private void checkDict(SysDictDto entity) {
 		if (entity.getParentId() == null) {
 			entity.setParentId("0");
@@ -187,20 +219,16 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 	 * @param entity
 	 */
 	private void updateParentIds(SysDictDto entity) {
-		SysDictPo p = sysDictService.selectByPrimaryKey(entity.getId());
-		if (!p.getParentId().equals(entity.getParentId())) {
-
-			SysDictPo query = new SysDictPo();
-			query.setParentId(entity.getId());
-			List<SysDictPo> pos = sysDictService.select(query);
-			if (CollectionUtils.isNotEmpty(pos)) {
-				for (SysDictPo po : pos) {
-					po.setParentId(entity.getId());
-					po.setLevel(entity.getLevel() + 1);
-					po.setParentIds(entity.getParentIds() + "," + entity.getId());
-					SysDictDto dto = sysDictService.updateByPrimaryKeyDTO(po);
-					updateParentIds(dto);
-				}
+		SysDictPo query = new SysDictPo();
+		query.setParentId(entity.getId());
+		List<SysDictPo> pos = sysDictService.select(query);
+		if (CollectionUtils.isNotEmpty(pos)) {
+			for (SysDictPo po : pos) {
+				po.setParentId(entity.getId());
+				po.setLevel(entity.getLevel() + 1);
+				po.setParentIds(entity.getParentIds() + "," + entity.getId());
+				super.updateByVersion(po, po.getVersion());
+				updateParentIds(poToDto(po));
 			}
 		}
 	}

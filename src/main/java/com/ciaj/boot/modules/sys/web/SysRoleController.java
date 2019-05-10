@@ -7,6 +7,7 @@ import com.ciaj.boot.modules.sys.entity.po.SysRolePo;
 import com.ciaj.boot.modules.sys.entity.po.SysUserRoleRelPo;
 import com.ciaj.boot.modules.sys.entity.vo.SysRoleVo;
 import com.ciaj.boot.modules.sys.service.SysRolePermissionRelService;
+import com.ciaj.boot.modules.sys.service.SysRoleService;
 import com.ciaj.boot.modules.sys.service.SysUserRoleRelService;
 import com.ciaj.comm.ResponseEntity;
 import com.ciaj.comm.annotation.OperationLog;
@@ -41,6 +42,8 @@ public class SysRoleController extends AbstractController<SysRolePo, SysRoleDto,
 	private SysRolePermissionRelService sysRolePermissionRelService;
 	@Autowired
 	private SysUserRoleRelService sysUserRoleRelService;
+	@Autowired
+	private SysRoleService sysRoleService;
 
 	/**
 	 * 根据ID获取信息
@@ -111,7 +114,7 @@ public class SysRoleController extends AbstractController<SysRolePo, SysRoleDto,
 	@RequiresPermissions("sys:role:update")
 	@PutMapping("update")
 	public ResponseEntity update(@RequestBody SysRoleDto entity) {
-		return super.update(entity);
+		return super.updateByVersion(entity, entity.getVersion());
 	}
 
 	/**
@@ -133,7 +136,8 @@ public class SysRoleController extends AbstractController<SysRolePo, SysRoleDto,
 		if (CollectionUtils.isNotEmpty(select)) {
 			throw new BsRException("角色已绑定用户，不能删除。");
 		}
-		return super.deleteFlag(id);
+		SysRolePo sysRolePo = sysRoleService.selectByPrimaryKey(id);
+		return super.deleteFlagVersion(id, sysRolePo.getVersion());
 	}
 
 	/**

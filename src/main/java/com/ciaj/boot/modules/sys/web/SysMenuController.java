@@ -112,8 +112,14 @@ public class SysMenuController extends AbstractController<SysMenuPo, SysMenuDto,
 	@PutMapping("update")
 	public ResponseEntity update(@RequestBody SysMenuDto entity) {
 		checkMenu(entity);
-		updateParentIds(entity);
-		return super.update(entity);
+		SysMenuPo p = sysMenuService.selectByPrimaryKey(entity.getId());
+		//
+		ResponseEntity update = super.updateByVersion(entity, entity.getVersion());
+		//
+		if (!p.getParentId().equals(entity.getParentId())) {
+			updateParentIds(entity);
+		}
+		return update;
 	}
 
 	/**
@@ -129,8 +135,29 @@ public class SysMenuController extends AbstractController<SysMenuPo, SysMenuDto,
 	@RequiresPermissions("sys:menu:delFlag")
 	@DeleteMapping("/delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
-		return super.deleteFlag(id);
+		SysMenuPo sysMenuPo = sysMenuService.selectByPrimaryKey(id);
+		ResponseEntity responseEntity = super.deleteFlagVersion(id, sysMenuPo.getVersion());
+		delByParentId(id);
+		return responseEntity;
 	}
+
+	/**
+	 * 递归处理下级
+	 *
+	 * @param parentId
+	 */
+	private void delByParentId(String parentId) {
+		SysMenuPo query = new SysMenuPo();
+		query.setParentId(parentId);
+		List<SysMenuPo> pos = sysMenuService.select(query);
+		if (CollectionUtils.isNotEmpty(pos)) {
+			for (SysMenuPo po : pos) {
+				super.deleteFlagVersion(po.getId(), po.getVersion());
+				delByParentId(po.getId());
+			}
+		}
+	}
+
 
 	private void checkMenu(SysMenuDto entity) {
 		if (entity.getParentId() == null) {
@@ -160,18 +187,15 @@ public class SysMenuController extends AbstractController<SysMenuPo, SysMenuDto,
 	 * @param entity
 	 */
 	private void updateParentIds(SysMenuDto entity) {
-		SysMenuPo p = sysMenuService.selectByPrimaryKey(entity.getId());
-		if (!p.getParentId().equals(entity.getParentId())) {
-			SysMenuPo query = new SysMenuPo();
-			query.setParentId(entity.getId());
-			List<SysMenuPo> pos = sysMenuService.select(query);
-			if (CollectionUtils.isNotEmpty(pos)) {
-				for (SysMenuPo po : pos) {
-					po.setParentId(entity.getId());
-					po.setParentIds(entity.getParentIds() + "," + entity.getId());
-					SysMenuDto dto = sysMenuService.updateByPrimaryKeySelectiveDTO(po);
-					updateParentIds(dto);
-				}
+		SysMenuPo query = new SysMenuPo();
+		query.setParentId(entity.getId());
+		List<SysMenuPo> pos = sysMenuService.select(query);
+		if (CollectionUtils.isNotEmpty(pos)) {
+			for (SysMenuPo po : pos) {
+				po.setParentId(entity.getId());
+				po.setParentIds(entity.getParentIds() + "," + entity.getId());
+				super.updateByVersion(po, po.getVersion());
+				updateParentIds(poToDto(po));
 			}
 		}
 	}

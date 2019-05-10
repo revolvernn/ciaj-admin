@@ -5,29 +5,31 @@
 <mapper namespace="com.ciaj.boot.modules.sys.mapper.SysRoleMapper">
     <!--
         Author: Ciaj.
-        Date: 2019-04-12 16:48:09
-        Description: www.ciaj.com mapper.xml
+        Date: 2019-05-09 13:11:15
+        Description: www.ciaj.com gen mapper.xml
     -->
-    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
+    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560"
+           type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
 
-    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.SysRolePo" >
-        <id column="id" property="id" jdbcType="VARCHAR" />
-        <id column="name" property="name" jdbcType="VARCHAR" />
-        <id column="code" property="code" jdbcType="VARCHAR" />
-        <id column="type" property="type" jdbcType="VARCHAR" />
-        <id column="description" property="description" jdbcType="VARCHAR" />
-        <id column="available" property="available" jdbcType="CHAR" />
-        <id column="create_at" property="createAt" jdbcType="VARCHAR" />
-        <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-        <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
-        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-        <id column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.SysRolePo">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <id column="name" property="name" jdbcType="VARCHAR"/>
+        <id column="code" property="code" jdbcType="VARCHAR"/>
+        <id column="type" property="type" jdbcType="VARCHAR"/>
+        <id column="description" property="description" jdbcType="VARCHAR"/>
+        <id column="available" property="available" jdbcType="CHAR"/>
+        <id column="create_at" property="createAt" jdbcType="VARCHAR"/>
+        <id column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <id column="update_at" property="updateAt" jdbcType="VARCHAR"/>
+        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <id column="del_flag" property="delFlag" jdbcType="CHAR"/>
+        <id column="version" property="version" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,name,code,type,description,available,create_at,create_time,update_at,update_time,del_flag
+        id,name,code,type,description,available,create_at,create_time,update_at,update_time,del_flag,version
     </sql>
     <sql id="Base_Alias_Column_List">
-        m.id,m.name,m.code,m.type,m.description,m.available,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag
+        m.id,m.name,m.code,m.type,m.description,m.available,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
     </sql>
     <delete id="deleteByPrimaryKey">
         DELETE FROM sys_role
@@ -70,17 +72,20 @@
                 <if test="delFlag != null">
                     AND del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND version = #{version}
+                </if>
             </trim>
         </where>
     </delete>
-    <insert id="insert"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePo">
-        <selectKey keyProperty="id" order="BEFORE"  resultType="String">
+    <insert id="insert" parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePo">
+        <selectKey keyProperty="id" order="BEFORE" resultType="String">
             SELECT REPLACE(uuid(),'-','') FROM DUAL
         </selectKey>
         INSERT INTO sys_role
-        (id,name,code,type,description,available,create_at,create_time,update_at,update_time,del_flag)
+        (id,name,code,type,description,available,create_at,create_time,update_at,update_time,del_flag,version)
         VALUES
-        (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{available,jdbcType=CHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR})
+        (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{available,jdbcType=CHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePo">
         <selectKey keyProperty="id" order="BEFORE" resultType="String">
@@ -121,6 +126,9 @@
             <if test="delFlag != null">
                 del_flag,
             </if>
+            <if test="version != null">
+                version,
+            </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -156,10 +164,13 @@
             <if test="delFlag != null">
                 #{delFlag,jdbcType=CHAR},
             </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKey"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePo">
+    <update id="updateByPrimaryKey" parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePo">
         UPDATE sys_role
         <set>
             name = #{name},
@@ -172,10 +183,28 @@
             update_at = #{updateAt},
             update_time = #{updateTime},
             del_flag = #{delFlag},
+            version = #{version},
         </set>
-         WHERE id = #{id,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKeySelective"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePo">
+    <update id="updateByPrimaryKeyAndVersion">
+        UPDATE sys_role
+        <set>
+            name = #{record.name},
+            code = #{record.code},
+            type = #{record.type},
+            description = #{record.description},
+            available = #{record.available},
+            create_at = #{record.createAt},
+            create_time = #{record.createTime},
+            update_at = #{record.updateAt},
+            update_time = #{record.updateTime},
+            del_flag = #{record.delFlag},
+            version = #{record.version},
+        </set>
+        WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePo">
         UPDATE sys_role
         <set>
             <if test="name != null">
@@ -208,21 +237,58 @@
             <if test="delFlag != null">
                 del_flag = #{delFlag},
             </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
         </set>
         WHERE id = #{id,jdbcType=VARCHAR}
     </update>
-
+    <update id="updateByPrimaryKeySelectiveAndVersion">
+        UPDATE sys_role
+        <set>
+            <if test="record.name != null">
+                name = #{record.name},
+            </if>
+            <if test="record.code != null">
+                code = #{record.code},
+            </if>
+            <if test="record.type != null">
+                type = #{record.type},
+            </if>
+            <if test="record.description != null">
+                description = #{record.description},
+            </if>
+            <if test="record.available != null">
+                available = #{record.available},
+            </if>
+            <if test="record.createAt != null">
+                create_at = #{record.createAt},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime},
+            </if>
+            <if test="record.updateAt != null">
+                update_at = #{record.updateAt},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime},
+            </if>
+            <if test="record.delFlag != null">
+                del_flag = #{record.delFlag},
+            </if>
+            <if test="record.version != null">
+                version = #{record.version},
+            </if>
+        </set>
+        WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+    </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM sys_role
         WHERE id = #{id,jdbcType=VARCHAR}
     </select>
-
-    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePo">
-        SELECT
-        <include refid="Base_Column_List" />
-        FROM sys_role m
+    <sql id="base_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null">
@@ -258,149 +324,38 @@
                 <if test="delFlag != null">
                     AND m.del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND m.version = #{version}
+                </if>
             </trim>
         </where>
+    </sql>
+    <select id="selectOne" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePo">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_role m
+        <include refid="base_query_condition_sql"/>
     </select>
 
-    <select id="select" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePo">
+    <select id="select" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePo">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM sys_role m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="name != null">
-                    AND m.name = #{name}
-                </if>
-                <if test="code != null">
-                    AND m.code = #{code}
-                </if>
-                <if test="type != null">
-                    AND m.type = #{type}
-                </if>
-                <if test="description != null">
-                    AND m.description = #{description}
-                </if>
-                <if test="available != null">
-                    AND m.available = #{available}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
-    <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePo">
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysRolePo">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM sys_role m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="name != null">
-                    AND m.name = #{name}
-                </if>
-                <if test="code != null">
-                    AND m.code = #{code}
-                </if>
-                <if test="type != null">
-                    AND m.type = #{type}
-                </if>
-                <if test="description != null">
-                    AND m.description = #{description}
-                </if>
-                <if test="available != null">
-                    AND m.available = #{available}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="selectList" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysRoleVo">
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_role m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null  and id != ''">
-                    AND m.id = #{id}
-                </if>
-                <if test="name != null  and name != ''">
-                    AND m.name  like CONCAT('%',#{name},'%')
-                </if>
-                <if test="code != null  and code != ''">
-                    AND m.code = #{code}
-                </if>
-                <if test="type != null  and type != ''">
-                    AND m.type = #{type}
-                </if>
-                <if test="description != null  and description != ''">
-                    AND m.description  LIKE CONCAT('%',#{description},'%')
-                </if>
-                <if test="available != null  and available != ''">
-                    AND m.available = #{available}
-                </if>
-                <if test="createAt != null  and createAt != ''">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null ">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null  and updateAt != ''">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null ">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null  and delFlag != ''">
-                    AND m.del_flag = #{delFlag}
-                </if>
-                <!--  keyword   -->
-                <if test="keyword != null and keyword != ''">
-                    AND m.name  LIKE CONCAT('%',#{keyword},'%')
-                </if>
-            </trim>
-        </where>
-    </select>
-
-    <select id="selectRolesByUserIdMultiTable" resultMap="BaseResultMap">
-        SELECT
-        DISTINCT	<include refid="Base_Alias_Column_List"/>
-        FROM sys_user_role_rel sur
-        LEFT JOIN sys_role m on  m.id=sur.role_id
-        where m.del_flag='N' and m.available='Y' and sur.user_id= #{userId}
+        <include refid="cust_query_condition_sql"/>
     </select>
 
     <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.SysRoleDto" extends="BaseResultMap">
@@ -410,13 +365,16 @@
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_role m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+    <sql id="cust_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null  and id != ''">
                     AND m.id = #{id}
                 </if>
                 <if test="name != null  and name != ''">
-                    AND m.name  like CONCAT('%',#{name},'%')
+                    AND m.name = #{name}
                 </if>
                 <if test="code != null  and code != ''">
                     AND m.code = #{code}
@@ -425,7 +383,7 @@
                     AND m.type = #{type}
                 </if>
                 <if test="description != null  and description != ''">
-                    AND m.description  LIKE CONCAT('%',#{description},'%')
+                    AND m.description = #{description}
                 </if>
                 <if test="available != null  and available != ''">
                     AND m.available = #{available}
@@ -445,11 +403,23 @@
                 <if test="delFlag != null  and delFlag != ''">
                     AND m.del_flag = #{delFlag}
                 </if>
+                <if test="version != null ">
+                    AND m.version = #{version}
+                </if>
                 <!--  keyword   -->
                 <if test="keyword != null and keyword != ''">
-                    AND m.name  LIKE CONCAT('%',#{keyword},'%')
+                    AND m.name LIKE CONCAT('%',#{keyword},'%')
                 </if>
             </trim>
         </where>
+    </sql>
+
+    <select id="selectRolesByUserIdMultiTable" resultMap="BaseResultMap">
+        SELECT
+        DISTINCT
+        <include refid="Base_Alias_Column_List"/>
+        FROM sys_user_role_rel sur
+        LEFT JOIN sys_role m on m.id=sur.role_id
+        where m.del_flag='N' and m.available='Y' and sur.user_id= #{userId}
     </select>
 </mapper>

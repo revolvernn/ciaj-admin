@@ -5,8 +5,8 @@
 <mapper namespace="com.ciaj.boot.modules.sys.mapper.SysAuthMapper">
     <!--
         Author: Ciaj.
-        Date: 2019-04-12 15:58:51
-        Description: www.ciaj.com mapper.xml
+        Date: 2019-05-09 09:17:54
+        Description: www.ciaj.com gen mapper.xml
     -->
     <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
 
@@ -22,12 +22,13 @@
         <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
         <id column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
         <id column="del_flag" property="delFlag" jdbcType="CHAR" />
+        <id column="version" property="version" jdbcType="INTEGER" />
     </resultMap>
     <sql id="Base_Column_List">
-        id,user_id,password,salt,token,type,create_at,create_time,update_at,update_time,del_flag
+        id,user_id,password,salt,token,type,create_at,create_time,update_at,update_time,del_flag,version
     </sql>
     <sql id="Base_Alias_Column_List">
-        m.id,m.user_id,m.password,m.salt,m.token,m.type,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag
+        m.id,m.user_id,m.password,m.salt,m.token,m.type,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
     </sql>
     <delete id="deleteByPrimaryKey">
         DELETE FROM sys_auth
@@ -70,6 +71,9 @@
                 <if test="delFlag != null">
                     AND del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND version = #{version}
+                </if>
             </trim>
         </where>
     </delete>
@@ -78,9 +82,9 @@
             SELECT REPLACE(uuid(),'-','') FROM DUAL
         </selectKey>
         INSERT INTO sys_auth
-        (id,user_id,password,salt,token,type,create_at,create_time,update_at,update_time,del_flag)
+        (id,user_id,password,salt,token,type,create_at,create_time,update_at,update_time,del_flag,version)
         VALUES
-        (#{id,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{salt,jdbcType=VARCHAR},#{token,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR})
+        (#{id,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{salt,jdbcType=VARCHAR},#{token,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysAuthPo">
         <selectKey keyProperty="id" order="BEFORE" resultType="String">
@@ -121,6 +125,9 @@
             <if test="delFlag != null">
                 del_flag,
             </if>
+            <if test="version != null">
+                version,
+            </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -156,6 +163,9 @@
             <if test="delFlag != null">
                 #{delFlag,jdbcType=CHAR},
             </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
 
@@ -172,8 +182,26 @@
             update_at = #{updateAt},
             update_time = #{updateTime},
             del_flag = #{delFlag},
+            version = #{version},
         </set>
          WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyAndVersion">
+        UPDATE sys_auth
+        <set>
+            user_id = #{record.userId},
+            password = #{record.password},
+            salt = #{record.salt},
+            token = #{record.token},
+            type = #{record.type},
+            create_at = #{record.createAt},
+            create_time = #{record.createTime},
+            update_at = #{record.updateAt},
+            update_time = #{record.updateTime},
+            del_flag = #{record.delFlag},
+            version = #{record.version},
+        </set>
+            WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
     </update>
     <update id="updateByPrimaryKeySelective"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysAuthPo">
         UPDATE sys_auth
@@ -208,21 +236,58 @@
             <if test="delFlag != null">
                 del_flag = #{delFlag},
             </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
         </set>
         WHERE id = #{id,jdbcType=VARCHAR}
     </update>
-
+    <update id="updateByPrimaryKeySelectiveAndVersion">
+        UPDATE sys_auth
+        <set>
+            <if test="record.userId != null">
+                user_id = #{record.userId},
+            </if>
+            <if test="record.password != null">
+                password = #{record.password},
+            </if>
+            <if test="record.salt != null">
+                salt = #{record.salt},
+            </if>
+            <if test="record.token != null">
+                token = #{record.token},
+            </if>
+            <if test="record.type != null">
+                type = #{record.type},
+            </if>
+            <if test="record.createAt != null">
+                create_at = #{record.createAt},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime},
+            </if>
+            <if test="record.updateAt != null">
+                update_at = #{record.updateAt},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime},
+            </if>
+            <if test="record.delFlag != null">
+                del_flag = #{record.delFlag},
+            </if>
+            <if test="record.version != null">
+                version = #{record.version},
+            </if>
+        </set>
+            WHERE id = #{record.id,jdbcType=VARCHAR}  and version = #{oldVersion}
+    </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM sys_auth
         WHERE id = #{id,jdbcType=VARCHAR}
     </select>
-
-    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysAuthPo">
-        SELECT
-        <include refid="Base_Column_List" />
-        FROM sys_auth m
+    <sql id="base_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null">
@@ -258,140 +323,38 @@
                 <if test="delFlag != null">
                     AND m.del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND m.version = #{version}
+                </if>
             </trim>
         </where>
+    </sql>
+    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysAuthPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sys_auth m
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="select" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysAuthPo">
         SELECT
         <include refid="Base_Column_List" />
         FROM sys_auth m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="userId != null">
-                    AND m.user_id = #{userId}
-                </if>
-                <if test="password != null">
-                    AND m.password = #{password}
-                </if>
-                <if test="salt != null">
-                    AND m.salt = #{salt}
-                </if>
-                <if test="token != null">
-                    AND m.token = #{token}
-                </if>
-                <if test="type != null">
-                    AND m.type = #{type}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysAuthPo">
         SELECT
         <include refid="Base_Column_List" />
         FROM sys_auth m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="userId != null">
-                    AND m.user_id = #{userId}
-                </if>
-                <if test="password != null">
-                    AND m.password = #{password}
-                </if>
-                <if test="salt != null">
-                    AND m.salt = #{salt}
-                </if>
-                <if test="token != null">
-                    AND m.token = #{token}
-                </if>
-                <if test="type != null">
-                    AND m.type = #{type}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="selectList" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysAuthVo">
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_auth m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null  and id != ''">
-                    AND m.id = #{id}
-                </if>
-                <if test="userId != null  and userId != ''">
-                    AND m.user_id = #{userId}
-                </if>
-                <if test="password != null  and password != ''">
-                    AND m.password = #{password}
-                </if>
-                <if test="salt != null  and salt != ''">
-                    AND m.salt = #{salt}
-                </if>
-                <if test="token != null  and token != ''">
-                    AND m.token = #{token}
-                </if>
-                <if test="type != null  and type != ''">
-                    AND m.type = #{type}
-                </if>
-                <if test="createAt != null  and createAt != ''">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null ">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null  and updateAt != ''">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null ">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null  and delFlag != ''">
-                    AND m.del_flag = #{delFlag}
-                </if>
-                <!--  keyword   -->
-                <if test="keyword != null and keyword != ''">
-                </if>
-            </trim>
-        </where>
+        <include refid="query_condition_sql"/>
     </select>
 
     <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.SysAuthDto" extends="BaseResultMap">
@@ -401,6 +364,10 @@
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_auth m
+        <include refid="query_condition_sql"/>
+
+    </select>
+    <sql id="query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null  and id != ''">
@@ -436,10 +403,13 @@
                 <if test="delFlag != null  and delFlag != ''">
                     AND m.del_flag = #{delFlag}
                 </if>
+                <if test="version != null ">
+                    AND m.version = #{version}
+                </if>
                 <!--  keyword   -->
                 <if test="keyword != null and keyword != ''">
                 </if>
             </trim>
         </where>
-    </select>
+    </sql>
 </mapper>

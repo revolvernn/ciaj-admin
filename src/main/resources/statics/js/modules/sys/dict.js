@@ -108,7 +108,6 @@ var dictapp = new Vue({
         }
     },
     created: function () {
-        this.loadData();
         this.initTree();
     },
     methods: {

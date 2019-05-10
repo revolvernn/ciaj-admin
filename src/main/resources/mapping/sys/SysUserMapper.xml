@@ -5,41 +5,45 @@
 <mapper namespace="com.ciaj.boot.modules.sys.mapper.SysUserMapper">
     <!--
         Author: Ciaj.
-        Date: 2019-04-12 17:02:08
-        Description: www.ciaj.com mapper.xml
+        Date: 2019-05-08 15:23:02
+        Description: www.ciaj.com gen mapper.xml
     -->
-    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560"
-           type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
+    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
 
-    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.SysUserPo">
-        <id column="id" property="id" jdbcType="VARCHAR"/>
-        <id column="account" property="account" jdbcType="VARCHAR"/>
-        <id column="username" property="username" jdbcType="VARCHAR"/>
-        <id column="nickname" property="nickname" jdbcType="VARCHAR"/>
-        <id column="sex" property="sex" jdbcType="VARCHAR"/>
-        <id column="mobile" property="mobile" jdbcType="VARCHAR"/>
-        <id column="email" property="email" jdbcType="VARCHAR"/>
-        <id column="birthday" property="birthday" jdbcType="DATE"/>
-        <id column="province" property="province" jdbcType="VARCHAR"/>
-        <id column="city" property="city" jdbcType="VARCHAR"/>
-        <id column="district" property="district" jdbcType="VARCHAR"/>
-        <id column="addr" property="addr" jdbcType="VARCHAR"/>
-        <id column="source" property="source" jdbcType="VARCHAR"/>
-        <id column="type" property="type" jdbcType="VARCHAR"/>
-        <id column="dept_id" property="deptId" jdbcType="VARCHAR"/>
-        <id column="locked" property="locked" jdbcType="CHAR"/>
-        <id column="pic_url" property="picUrl" jdbcType="VARCHAR"/>
-        <id column="create_at" property="createAt" jdbcType="VARCHAR"/>
-        <id column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <id column="update_at" property="updateAt" jdbcType="VARCHAR"/>
-        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <id column="del_flag" property="delFlag" jdbcType="CHAR"/>
+    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.SysUserPo" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <id column="account" property="account" jdbcType="VARCHAR" />
+        <id column="username" property="username" jdbcType="VARCHAR" />
+        <id column="nickname" property="nickname" jdbcType="VARCHAR" />
+        <id column="sex" property="sex" jdbcType="VARCHAR" />
+        <id column="mobile" property="mobile" jdbcType="VARCHAR" />
+        <id column="email" property="email" jdbcType="VARCHAR" />
+        <id column="birthday" property="birthday" jdbcType="DATE" />
+        <id column="province" property="province" jdbcType="VARCHAR" />
+        <id column="city" property="city" jdbcType="VARCHAR" />
+        <id column="district" property="district" jdbcType="VARCHAR" />
+        <id column="addr" property="addr" jdbcType="VARCHAR" />
+        <id column="source" property="source" jdbcType="VARCHAR" />
+        <id column="user_type" property="userType" jdbcType="VARCHAR" />
+        <id column="user_status" property="userStatus" jdbcType="VARCHAR" />
+        <id column="locked" property="locked" jdbcType="CHAR" />
+        <id column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+        <id column="dept_id" property="deptId" jdbcType="VARCHAR" />
+        <id column="dept_name" property="deptName" jdbcType="VARCHAR" />
+        <id column="dept_ids" property="deptIds" jdbcType="VARCHAR" />
+        <id column="dept_names" property="deptNames" jdbcType="VARCHAR" />
+        <id column="create_at" property="createAt" jdbcType="VARCHAR" />
+        <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
+        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <id column="del_flag" property="delFlag" jdbcType="CHAR" />
+        <id column="version" property="version" jdbcType="INTEGER" />
     </resultMap>
     <sql id="Base_Column_List">
-        id,account,username,nickname,sex,mobile,email,birthday,province,city,district,addr,source,type,dept_id,locked,pic_url,create_at,create_time,update_at,update_time,del_flag
+        id,account,username,nickname,sex,mobile,email,birthday,province,city,district,addr,source,user_type,user_status,locked,pic_url,dept_id,dept_name,dept_ids,dept_names,create_at,create_time,update_at,update_time,del_flag,version
     </sql>
     <sql id="Base_Alias_Column_List">
-        m.id,m.account,m.username,m.nickname,m.sex,m.mobile,m.email,m.birthday,m.province,m.city,m.district,m.addr,m.source,m.type,m.dept_id,m.locked,m.pic_url,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag
+        m.id,m.account,m.username,m.nickname,m.sex,m.mobile,m.email,m.birthday,m.province,m.city,m.district,m.addr,m.source,m.user_type,m.user_status,m.locked,m.pic_url,m.dept_id,m.dept_name,m.dept_ids,m.dept_names,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
     </sql>
     <delete id="deleteByPrimaryKey">
         DELETE FROM sys_user
@@ -88,17 +92,29 @@
                 <if test="source != null">
                     AND source = #{source}
                 </if>
-                <if test="type != null">
-                    AND type = #{type}
+                <if test="userType != null">
+                    AND user_type = #{userType}
                 </if>
-                <if test="deptId != null">
-                    AND dept_id = #{deptId}
+                <if test="userStatus != null">
+                    AND user_status = #{userStatus}
                 </if>
                 <if test="locked != null">
                     AND locked = #{locked}
                 </if>
                 <if test="picUrl != null">
                     AND pic_url = #{picUrl}
+                </if>
+                <if test="deptId != null">
+                    AND dept_id = #{deptId}
+                </if>
+                <if test="deptName != null">
+                    AND dept_name = #{deptName}
+                </if>
+                <if test="deptIds != null">
+                    AND dept_ids = #{deptIds}
+                </if>
+                <if test="deptNames != null">
+                    AND dept_names = #{deptNames}
                 </if>
                 <if test="createAt != null">
                     AND create_at = #{createAt}
@@ -115,17 +131,20 @@
                 <if test="delFlag != null">
                     AND del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND version = #{version}
+                </if>
             </trim>
         </where>
     </delete>
-    <insert id="insert" parameterType="com.ciaj.boot.modules.sys.entity.po.SysUserPo">
-        <selectKey keyProperty="id" order="BEFORE" resultType="String">
+    <insert id="insert"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysUserPo">
+        <selectKey keyProperty="id" order="BEFORE"  resultType="String">
             SELECT REPLACE(uuid(),'-','') FROM DUAL
         </selectKey>
         INSERT INTO sys_user
-        (id,account,username,nickname,sex,mobile,email,birthday,province,city,district,addr,source,type,dept_id,locked,pic_url,create_at,create_time,update_at,update_time,del_flag)
+        (id,account,username,nickname,sex,mobile,email,birthday,province,city,district,addr,source,user_type,user_status,locked,pic_url,dept_id,dept_name,dept_ids,dept_names,create_at,create_time,update_at,update_time,del_flag,version)
         VALUES
-        (#{id,jdbcType=VARCHAR},#{account,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR},#{mobile,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},#{birthday,jdbcType=DATE},#{province,jdbcType=VARCHAR},#{city,jdbcType=VARCHAR},#{district,jdbcType=VARCHAR},#{addr,jdbcType=VARCHAR},#{source,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{deptId,jdbcType=VARCHAR},#{locked,jdbcType=CHAR},#{picUrl,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR})
+        (#{id,jdbcType=VARCHAR},#{account,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR},#{mobile,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},#{birthday,jdbcType=DATE},#{province,jdbcType=VARCHAR},#{city,jdbcType=VARCHAR},#{district,jdbcType=VARCHAR},#{addr,jdbcType=VARCHAR},#{source,jdbcType=VARCHAR},#{userType,jdbcType=VARCHAR},#{userStatus,jdbcType=VARCHAR},#{locked,jdbcType=CHAR},#{picUrl,jdbcType=VARCHAR},#{deptId,jdbcType=VARCHAR},#{deptName,jdbcType=VARCHAR},#{deptIds,jdbcType=VARCHAR},#{deptNames,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysUserPo">
         <selectKey keyProperty="id" order="BEFORE" resultType="String">
@@ -172,17 +191,29 @@
             <if test="source != null">
                 source,
             </if>
-            <if test="type != null">
-                type,
+            <if test="userType != null">
+                user_type,
             </if>
-            <if test="deptId != null">
-                dept_id,
+            <if test="userStatus != null">
+                user_status,
             </if>
             <if test="locked != null">
                 locked,
             </if>
             <if test="picUrl != null">
                 pic_url,
+            </if>
+            <if test="deptId != null">
+                dept_id,
+            </if>
+            <if test="deptName != null">
+                dept_name,
+            </if>
+            <if test="deptIds != null">
+                dept_ids,
+            </if>
+            <if test="deptNames != null">
+                dept_names,
             </if>
             <if test="createAt != null">
                 create_at,
@@ -198,6 +229,9 @@
             </if>
             <if test="delFlag != null">
                 del_flag,
+            </if>
+            <if test="version != null">
+                version,
             </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
@@ -240,17 +274,29 @@
             <if test="source != null">
                 #{source,jdbcType=VARCHAR},
             </if>
-            <if test="type != null">
-                #{type,jdbcType=VARCHAR},
+            <if test="userType != null">
+                #{userType,jdbcType=VARCHAR},
             </if>
-            <if test="deptId != null">
-                #{deptId,jdbcType=VARCHAR},
+            <if test="userStatus != null">
+                #{userStatus,jdbcType=VARCHAR},
             </if>
             <if test="locked != null">
                 #{locked,jdbcType=CHAR},
             </if>
             <if test="picUrl != null">
                 #{picUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="deptId != null">
+                #{deptId,jdbcType=VARCHAR},
+            </if>
+            <if test="deptName != null">
+                #{deptName,jdbcType=VARCHAR},
+            </if>
+            <if test="deptIds != null">
+                #{deptIds,jdbcType=VARCHAR},
+            </if>
+            <if test="deptNames != null">
+                #{deptNames,jdbcType=VARCHAR},
             </if>
             <if test="createAt != null">
                 #{createAt,jdbcType=VARCHAR},
@@ -267,10 +313,13 @@
             <if test="delFlag != null">
                 #{delFlag,jdbcType=CHAR},
             </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKey" parameterType="com.ciaj.boot.modules.sys.entity.po.SysUserPo">
+    <update id="updateByPrimaryKey"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysUserPo">
         UPDATE sys_user
         <set>
             account = #{account},
@@ -285,19 +334,56 @@
             district = #{district},
             addr = #{addr},
             source = #{source},
-            type = #{type},
-            dept_id = #{deptId},
+            user_type = #{userType},
+            user_status = #{userStatus},
             locked = #{locked},
             pic_url = #{picUrl},
+            dept_id = #{deptId},
+            dept_name = #{deptName},
+            dept_ids = #{deptIds},
+            dept_names = #{deptNames},
             create_at = #{createAt},
             create_time = #{createTime},
             update_at = #{updateAt},
             update_time = #{updateTime},
             del_flag = #{delFlag},
+            version = #{version},
         </set>
-        WHERE id = #{id,jdbcType=VARCHAR}
+         WHERE id = #{id,jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysUserPo">
+    <update id="updateByPrimaryKeyAndVersion">
+        UPDATE sys_user
+        <set>
+            account = #{record.account},
+            username = #{record.username},
+            nickname = #{record.nickname},
+            sex = #{record.sex},
+            mobile = #{record.mobile},
+            email = #{record.email},
+            birthday = #{record.birthday},
+            province = #{record.province},
+            city = #{record.city},
+            district = #{record.district},
+            addr = #{record.addr},
+            source = #{record.source},
+            user_type = #{record.userType},
+            user_status = #{record.userStatus},
+            locked = #{record.locked},
+            pic_url = #{record.picUrl},
+            dept_id = #{record.deptId},
+            dept_name = #{record.deptName},
+            dept_ids = #{record.deptIds},
+            dept_names = #{record.deptNames},
+            create_at = #{record.createAt},
+            create_time = #{record.createTime},
+            update_at = #{record.updateAt},
+            update_time = #{record.updateTime},
+            del_flag = #{record.delFlag},
+            version = #{record.version},
+        </set>
+            WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+    </update>
+    <update id="updateByPrimaryKeySelective"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysUserPo">
         UPDATE sys_user
         <set>
             <if test="account != null">
@@ -336,17 +422,29 @@
             <if test="source != null">
                 source = #{source},
             </if>
-            <if test="type != null">
-                type = #{type},
+            <if test="userType != null">
+                user_type = #{userType},
             </if>
-            <if test="deptId != null">
-                dept_id = #{deptId},
+            <if test="userStatus != null">
+                user_status = #{userStatus},
             </if>
             <if test="locked != null">
                 locked = #{locked},
             </if>
             <if test="picUrl != null">
                 pic_url = #{picUrl},
+            </if>
+            <if test="deptId != null">
+                dept_id = #{deptId},
+            </if>
+            <if test="deptName != null">
+                dept_name = #{deptName},
+            </if>
+            <if test="deptIds != null">
+                dept_ids = #{deptIds},
+            </if>
+            <if test="deptNames != null">
+                dept_names = #{deptNames},
             </if>
             <if test="createAt != null">
                 create_at = #{createAt},
@@ -363,21 +461,103 @@
             <if test="delFlag != null">
                 del_flag = #{delFlag},
             </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
         </set>
         WHERE id = #{id,jdbcType=VARCHAR}
     </update>
-
+    <update id="updateByPrimaryKeySelectiveAndVersion">
+        UPDATE sys_user
+        <set>
+            <if test="record.account != null">
+                account = #{record.account},
+            </if>
+            <if test="record.username != null">
+                username = #{record.username},
+            </if>
+            <if test="record.nickname != null">
+                nickname = #{record.nickname},
+            </if>
+            <if test="record.sex != null">
+                sex = #{record.sex},
+            </if>
+            <if test="record.mobile != null">
+                mobile = #{record.mobile},
+            </if>
+            <if test="record.email != null">
+                email = #{record.email},
+            </if>
+            <if test="record.birthday != null">
+                birthday = #{record.birthday},
+            </if>
+            <if test="record.province != null">
+                province = #{record.province},
+            </if>
+            <if test="record.city != null">
+                city = #{record.city},
+            </if>
+            <if test="record.district != null">
+                district = #{record.district},
+            </if>
+            <if test="record.addr != null">
+                addr = #{record.addr},
+            </if>
+            <if test="record.source != null">
+                source = #{record.source},
+            </if>
+            <if test="record.userType != null">
+                user_type = #{record.userType},
+            </if>
+            <if test="record.userStatus != null">
+                user_status = #{record.userStatus},
+            </if>
+            <if test="record.locked != null">
+                locked = #{record.locked},
+            </if>
+            <if test="record.picUrl != null">
+                pic_url = #{record.picUrl},
+            </if>
+            <if test="record.deptId != null">
+                dept_id = #{record.deptId},
+            </if>
+            <if test="record.deptName != null">
+                dept_name = #{record.deptName},
+            </if>
+            <if test="record.deptIds != null">
+                dept_ids = #{record.deptIds},
+            </if>
+            <if test="record.deptNames != null">
+                dept_names = #{record.deptNames},
+            </if>
+            <if test="record.createAt != null">
+                create_at = #{record.createAt},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime},
+            </if>
+            <if test="record.updateAt != null">
+                update_at = #{record.updateAt},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime},
+            </if>
+            <if test="record.delFlag != null">
+                del_flag = #{record.delFlag},
+            </if>
+            <if test="record.version != null">
+                version = #{record.version},
+            </if>
+        </set>
+            WHERE id = #{record.id,jdbcType=VARCHAR}  and version = #{oldVersion}
+    </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM sys_user
         WHERE id = #{id,jdbcType=VARCHAR}
     </select>
-
-    <select id="selectOne" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysUserPo">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM sys_user m
+    <sql id="base_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null">
@@ -419,17 +599,29 @@
                 <if test="source != null">
                     AND m.source = #{source}
                 </if>
-                <if test="type != null">
-                    AND m.type = #{type}
+                <if test="userType != null">
+                    AND m.user_type = #{userType}
                 </if>
-                <if test="deptId != null">
-                    AND m.dept_id = #{deptId}
+                <if test="userStatus != null">
+                    AND m.user_status = #{userStatus}
                 </if>
                 <if test="locked != null">
                     AND m.locked = #{locked}
                 </if>
                 <if test="picUrl != null">
                     AND m.pic_url = #{picUrl}
+                </if>
+                <if test="deptId != null">
+                    AND m.dept_id = #{deptId}
+                </if>
+                <if test="deptName != null">
+                    AND m.dept_name = #{deptName}
+                </if>
+                <if test="deptIds != null">
+                    AND m.dept_ids = #{deptIds}
+                </if>
+                <if test="deptNames != null">
+                    AND m.dept_names = #{deptNames}
                 </if>
                 <if test="createAt != null">
                     AND m.create_at = #{createAt}
@@ -446,244 +638,39 @@
                 <if test="delFlag != null">
                     AND m.del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND m.version = #{version}
+                </if>
             </trim>
         </where>
+    </sql>
+    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysUserPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sys_user m
+        <include refid="base_query_condition_sql"/>
+
     </select>
 
-    <select id="select" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysUserPo">
+    <select id="select" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysUserPo">
         SELECT
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List" />
         FROM sys_user m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="account != null">
-                    AND m.account = #{account}
-                </if>
-                <if test="username != null">
-                    AND m.username = #{username}
-                </if>
-                <if test="nickname != null">
-                    AND m.nickname = #{nickname}
-                </if>
-                <if test="sex != null">
-                    AND m.sex = #{sex}
-                </if>
-                <if test="mobile != null">
-                    AND m.mobile = #{mobile}
-                </if>
-                <if test="email != null">
-                    AND m.email = #{email}
-                </if>
-                <if test="birthday != null">
-                    AND m.birthday = #{birthday}
-                </if>
-                <if test="province != null">
-                    AND m.province = #{province}
-                </if>
-                <if test="city != null">
-                    AND m.city = #{city}
-                </if>
-                <if test="district != null">
-                    AND m.district = #{district}
-                </if>
-                <if test="addr != null">
-                    AND m.addr = #{addr}
-                </if>
-                <if test="source != null">
-                    AND m.source = #{source}
-                </if>
-                <if test="type != null">
-                    AND m.type = #{type}
-                </if>
-                <if test="deptId != null">
-                    AND m.dept_id = #{deptId}
-                </if>
-                <if test="locked != null">
-                    AND m.locked = #{locked}
-                </if>
-                <if test="picUrl != null">
-                    AND m.pic_url = #{picUrl}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
-    <select id="selectAll" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysUserPo">
+    <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysUserPo">
         SELECT
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List" />
         FROM sys_user m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="account != null">
-                    AND m.account = #{account}
-                </if>
-                <if test="username != null">
-                    AND m.username = #{username}
-                </if>
-                <if test="nickname != null">
-                    AND m.nickname = #{nickname}
-                </if>
-                <if test="sex != null">
-                    AND m.sex = #{sex}
-                </if>
-                <if test="mobile != null">
-                    AND m.mobile = #{mobile}
-                </if>
-                <if test="email != null">
-                    AND m.email = #{email}
-                </if>
-                <if test="birthday != null">
-                    AND m.birthday = #{birthday}
-                </if>
-                <if test="province != null">
-                    AND m.province = #{province}
-                </if>
-                <if test="city != null">
-                    AND m.city = #{city}
-                </if>
-                <if test="district != null">
-                    AND m.district = #{district}
-                </if>
-                <if test="addr != null">
-                    AND m.addr = #{addr}
-                </if>
-                <if test="source != null">
-                    AND m.source = #{source}
-                </if>
-                <if test="type != null">
-                    AND m.type = #{type}
-                </if>
-                <if test="deptId != null">
-                    AND m.dept_id = #{deptId}
-                </if>
-                <if test="locked != null">
-                    AND m.locked = #{locked}
-                </if>
-                <if test="picUrl != null">
-                    AND m.pic_url = #{picUrl}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="selectList" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysUserVo">
-        select
+        SELECT
         <include refid="Base_Alias_Column_List"/>
-        from sys_user m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null  and id != ''">
-                    and m.id =#{id}
-                </if>
-                <if test="account != null  and account != ''">
-                    and m.account like CONCAT('%',#{account},'%')
-                </if>
-                <if test="username != null  and username != ''">
-                    and m.username like CONCAT('%',#{username},'%')
-                </if>
-                <if test="nickname != null  and nickname != ''">
-                    and m.nickname like CONCAT('%',#{nickname},'%')
-                </if>
-                <if test="sex != null  and sex != ''">
-                    and m.sex like CONCAT('%',#{sex},'%')
-                </if>
-                <if test="mobile != null  and mobile != ''">
-                    and m.mobile like CONCAT('%',#{mobile},'%')
-                </if>
-                <if test="email != null  and email != ''">
-                    and m.email like CONCAT('%',#{email},'%')
-                </if>
-                <if test="birthday != null ">
-                    and m.birthday = #{birthday}
-                </if>
-                <if test="province != null  and province != ''">
-                    and m.province = #{province}
-                </if>
-                <if test="city != null  and city != ''">
-                    and m.city = #{city}
-                </if>
-                <if test="district != null  and district != ''">
-                    and m.district = #{district}
-                </if>
-                <if test="addr != null  and addr != ''">
-                    and m.addr like CONCAT('%',#{addr},'%')
-                </if>
-                <if test="source != null  and source != ''">
-                    and m.source =#{source}
-                </if>
-                <if test="type != null  and type != ''">
-                    and m.type =#{type}
-                </if>
-                <if test="deptId != null  and deptId != ''">
-                    and m.dept_id like CONCAT('%',#{deptId},'%')
-                </if>
-                <if test="locked != null  and locked != ''">
-                    and m.locked =#{locked}
-                </if>
-                <if test="picUrl != null  and picUrl != ''">
-                    and m.pic_url like CONCAT('%',#{picUrl},'%')
-                </if>
-                <if test="createAt != null  and createAt != ''">
-                    and m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null ">
-                    and m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null  and updateAt != ''">
-                    and m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null ">
-                    and m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null  and delFlag != ''">
-                    and m.del_flag =#{delFlag}
-                </if>
-                <!--  keyword   -->
-                <if test="keyword != null and keyword != ''">
-                    and (m.account like CONCAT('%',#{keyword},'%')
-                    or m.nickname like CONCAT('%',#{keyword},'%')
-                    or m.nickname like CONCAT('%',#{keyword},'%')
-                    or m.mobile like CONCAT('%',#{keyword},'%')
-                    )
-                </if>
-            </trim>
-        </where>
+        FROM sys_user m
+        <include refid="cust_query_condition_sql"/>
     </select>
 
     <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.SysUserDto" extends="BaseResultMap">
@@ -693,83 +680,102 @@
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_user m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+    <sql id="cust_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null  and id != ''">
-                    and m.id =#{id}
+                    AND m.id = #{id}
                 </if>
                 <if test="account != null  and account != ''">
-                    and m.account like CONCAT('%',#{account},'%')
+                    AND m.account = #{account}
                 </if>
                 <if test="username != null  and username != ''">
-                    and m.username like CONCAT('%',#{username},'%')
+                    AND m.username = #{username}
                 </if>
                 <if test="nickname != null  and nickname != ''">
-                    and m.nickname like CONCAT('%',#{nickname},'%')
+                    AND m.nickname = #{nickname}
                 </if>
                 <if test="sex != null  and sex != ''">
-                    and m.sex like CONCAT('%',#{sex},'%')
+                    AND m.sex = #{sex}
                 </if>
                 <if test="mobile != null  and mobile != ''">
-                    and m.mobile like CONCAT('%',#{mobile},'%')
+                    AND m.mobile = #{mobile}
                 </if>
                 <if test="email != null  and email != ''">
-                    and m.email like CONCAT('%',#{email},'%')
+                    AND m.email = #{email}
                 </if>
                 <if test="birthday != null ">
-                    and m.birthday = #{birthday}
+                    AND m.birthday = #{birthday}
                 </if>
                 <if test="province != null  and province != ''">
-                    and m.province = #{province}
+                    AND m.province = #{province}
                 </if>
                 <if test="city != null  and city != ''">
-                    and m.city = #{city}
+                    AND m.city = #{city}
                 </if>
                 <if test="district != null  and district != ''">
-                    and m.district = #{district}
+                    AND m.district = #{district}
                 </if>
                 <if test="addr != null  and addr != ''">
-                    and m.addr like CONCAT('%',#{addr},'%')
+                    AND m.addr = #{addr}
                 </if>
                 <if test="source != null  and source != ''">
-                    and m.source =#{source}
+                    AND m.source = #{source}
                 </if>
-                <if test="type != null  and type != ''">
-                    and m.type =#{type}
+                <if test="userType != null  and userType != ''">
+                    AND m.user_type = #{userType}
                 </if>
-                <if test="deptId != null  and deptId != ''">
-                    and m.dept_id like CONCAT('%',#{deptId},'%')
+                <if test="userStatus != null  and userStatus != ''">
+                    AND m.user_status = #{userStatus}
                 </if>
                 <if test="locked != null  and locked != ''">
-                    and m.locked =#{locked}
+                    AND m.locked = #{locked}
                 </if>
                 <if test="picUrl != null  and picUrl != ''">
-                    and m.pic_url like CONCAT('%',#{picUrl},'%')
+                    AND m.pic_url = #{picUrl}
+                </if>
+                <if test="deptId != null  and deptId != ''">
+                    AND m.dept_id = #{deptId}
+                </if>
+                <if test="deptName != null  and deptName != ''">
+                    AND m.dept_name = #{deptName}
+                </if>
+                <if test="deptIds != null  and deptIds != ''">
+                    AND m.dept_ids = #{deptIds}
+                </if>
+                <if test="deptNames != null  and deptNames != ''">
+                    AND m.dept_names = #{deptNames}
                 </if>
                 <if test="createAt != null  and createAt != ''">
-                    and m.create_at = #{createAt}
+                    AND m.create_at = #{createAt}
                 </if>
                 <if test="createTime != null ">
-                    and m.create_time = #{createTime}
+                    AND m.create_time = #{createTime}
                 </if>
                 <if test="updateAt != null  and updateAt != ''">
-                    and m.update_at = #{updateAt}
+                    AND m.update_at = #{updateAt}
                 </if>
                 <if test="updateTime != null ">
-                    and m.update_time = #{updateTime}
+                    AND m.update_time = #{updateTime}
                 </if>
                 <if test="delFlag != null  and delFlag != ''">
-                    and m.del_flag =#{delFlag}
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="version != null ">
+                    AND m.version = #{version}
                 </if>
                 <!--  keyword   -->
                 <if test="keyword != null and keyword != ''">
                     and (m.account like CONCAT('%',#{keyword},'%')
                     or m.nickname like CONCAT('%',#{keyword},'%')
+                    or m.dept_names like CONCAT('%',#{keyword},'%')
                     or m.nickname like CONCAT('%',#{keyword},'%')
                     or m.mobile like CONCAT('%',#{keyword},'%')
                     )
                 </if>
             </trim>
         </where>
-    </select>
+    </sql>
 </mapper>

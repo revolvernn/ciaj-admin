@@ -1,7 +1,9 @@
 package com.ciaj.base;
 
+import com.ciaj.comm.exception.BsRException;
 import com.ciaj.comm.utils.Page;
 import com.ciaj.comm.utils.PageUtis;
+import io.swagger.models.auth.In;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,7 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 		List<PO> list = selectList(entity);
 		return wrapPOPage(p, list);
 	}
+
 	public Page<DTO> selectDTOPage(VO entity) {
 		com.github.pagehelper.Page p = PageUtis.startPageAndOrderBy();
 		List<PO> list = selectList(entity);
@@ -145,9 +148,27 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 	}
 
 	@Transactional(rollbackFor = Exception.class)
+	public int updateByPrimaryKeyAndVersion(PO record, int oldVersion) {
+		insertOrUpdatePre(record, "update");
+		int i = mapper.updateByPrimaryKeyAndVersion(record, oldVersion);
+		if (i == 0) throw new BsRException("更新失败，数据被占用或数据不存在");
+		return i;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
 	public int updateByPrimaryKeySelective(PO record) {
 		insertOrUpdatePre(record, "update");
-		return mapper.updateByPrimaryKeySelective(record);
+		int i = mapper.updateByPrimaryKeySelective(record);
+		if (i == 0) throw new BsRException("更新失败，数据被占用或数据不存在");
+		return i;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public int updateByPrimaryKeySelectiveAndVersion(PO record, int oldVersion) {
+		insertOrUpdatePre(record, "update");
+		int i = mapper.updateByPrimaryKeySelectiveAndVersion(record, oldVersion);
+		if (i == 0) throw new BsRException("更新失败，数据被占用或数据不存在");
+		return i;
 	}
 
 	public PO updateByPrimaryKeyPO(PO record) {
@@ -165,8 +186,18 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 		return record;
 	}
 
+	public PO updateByPrimaryKeySelectiveAndVersionPO(PO record, Integer oldVersion) {
+		updateByPrimaryKeySelectiveAndVersion(record, oldVersion);
+		return record;
+	}
+
 	public DTO updateByPrimaryKeySelectiveDTO(PO record) {
 		updateByPrimaryKeySelective(record);
+		return poToDto(record);
+	}
+
+	public DTO updateByPrimaryKeySelectiveAndVersionDTO(PO record, Integer oldVersion) {
+		updateByPrimaryKeySelectiveAndVersion(record, oldVersion);
 		return poToDto(record);
 	}
 
@@ -174,12 +205,14 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 
 	@Transactional(rollbackFor = Exception.class)
 	public int deleteByPrimaryKey(Object key) {
-		return mapper.deleteByPrimaryKey(key);
+		int i = mapper.deleteByPrimaryKey(key);
+		return i;
 	}
 
 	@Transactional(rollbackFor = Exception.class)
 	public int delete(PO record) {
-		return mapper.delete(record);
+		int i = mapper.delete(record);
+		return i;
 	}
 
 	@Transactional(rollbackFor = Exception.class)

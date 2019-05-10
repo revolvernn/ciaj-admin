@@ -26,7 +26,7 @@
 				</el-form-item>
 			</el-row>
 		</el-form>
-		<my-table  :columns="tableColumns" @sortChange="sortchange" :default-sort="defaultSort" :page="page" v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
+		<my-table @sortChange="sortchange" :default-sort="defaultSort"  :columns="tableColumns"  :page="page" v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
 		</my-table>
 		<el-dialog :title="addOrUpdateForm.title"  :visible.sync="addOrUpdateForm.areaFormVisible" width="400px">
 			<el-form  ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.area">

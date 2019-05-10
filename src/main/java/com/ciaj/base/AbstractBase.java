@@ -30,6 +30,8 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 	static final String CREATE_AT = "createAt";
 	static final String UPATE_AT = "updateAt";
 	static final String DEL_FLAG = "delFlag";
+	static final String ID = "id";
+	static final String VERSION = "version";
 
 	protected Class<PO> poClass;    // 当前泛型PO真实类型的Class
 	protected Class<DTO> dtoClass;    // 当前泛型DTO真实类型的Class
@@ -49,7 +51,7 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 	 * @param fiedValue
 	 * @param record
 	 */
-	void insertFieldByT(String fieldName, Object fiedValue, PO record) {
+	void insertFieldByPO(String fieldName, Object fiedValue, PO record) {
 		try {
 			Field field = this.poClass.getDeclaredField(fieldName);
 
@@ -245,7 +247,6 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 	}
 
 
-
 	/**
 	 * 包装VO
 	 *
@@ -264,7 +265,6 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 		}
 		return d;
 	}
-
 
 
 	/**
@@ -324,7 +324,6 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 	}
 
 
-
 	/**
 	 * 包装VOs
 	 *
@@ -340,6 +339,7 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 		}
 		return vs;
 	}
+
 	/**
 	 * 包装VOs
 	 *
@@ -367,13 +367,14 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 		try {
 			loginUser = CommUtil.getLoginUser();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("插入或更新前处理时间创建人更新人删除标记获取用户失败", e);
 		}
 		String userId = loginUser != null ? loginUser.getId() : DefaultConstant.SUPER_ADMIN_ID;
 		if (INSERT.equals(opt)) {
-			insertFieldByT(CREATE_AT, userId, record);
-			insertFieldByT(CREATE_TIME, new Date(), record);
-			insertFieldByT(DEL_FLAG, DefaultConstant.FLAG_N, record);
+			insertFieldByPO(VERSION, 1, record);
+			insertFieldByPO(CREATE_AT, userId, record);
+			insertFieldByPO(CREATE_TIME, new Date(), record);
+			insertFieldByPO(DEL_FLAG, DefaultConstant.FLAG_N, record);
 		}
 		if (UPDATE.equals(opt) || INSERT.equals(opt)) {
 			updateFieldByPO(UPATE_AT, userId, record);
@@ -393,14 +394,16 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 		try {
 			loginUser = CommUtil.getLoginUser();
 		} catch (Exception e) {
+			log.error("插入或更新前处理时间创建人更新人删除标记获取用户失败", e);
 			e.printStackTrace();
 		}
 		String userId = loginUser != null ? loginUser.getId() : DefaultConstant.SUPER_ADMIN_ID;
 		for (PO record : records) {
 			if (INSERT.equals(opt)) {
-				insertFieldByT(CREATE_AT, userId, record);
-				insertFieldByT(CREATE_TIME, new Date(), record);
-				insertFieldByT(DEL_FLAG, DefaultConstant.FLAG_N, record);
+				insertFieldByPO(VERSION, 1, record);
+				insertFieldByPO(CREATE_AT, userId, record);
+				insertFieldByPO(CREATE_TIME, new Date(), record);
+				insertFieldByPO(DEL_FLAG, DefaultConstant.FLAG_N, record);
 			}
 			if (UPDATE.equals(opt) || INSERT.equals(opt)) {
 				updateFieldByPO(UPATE_AT, userId, record);

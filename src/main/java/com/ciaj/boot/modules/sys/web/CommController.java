@@ -15,6 +15,7 @@ import com.ciaj.boot.modules.sys.service.SysUserService;
 import com.ciaj.comm.ResponseEntity;
 import com.ciaj.comm.annotation.OperationLog;
 import com.ciaj.comm.annotation.Resubmit;
+import com.ciaj.comm.constant.DefaultConfigConstant;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.exception.BsRException;
 import com.ciaj.comm.pwd.PasswordEntity;
@@ -69,21 +70,24 @@ public class CommController {
 	@Autowired
 	private SysCommService sysCommService;
 
+	/**
+	 * 处理页面按钮是否有权限显示
+	 *
+	 * @param codes
+	 * @return
+	 */
 	@ResponseBody
 	@RequiresUser
 	@GetMapping("/check/permissions")
 	protected ResponseEntity checkPermissions(@RequestParam("codes") String codes) {
 
 		Map<String, Boolean> map = new HashMap<>();
+		map.put("IS_ALL_AUTH", CommUtil.getLoginUser().isSuperAdmin());
+		map.put("DEFAULT_DATA_AUTH", ShiroUtils.checkPermissions(DefaultConfigConstant.DEFAULT_FINAL_DATA_PERMISSION_UPDATE_OR_DELETE));
 		if (StringUtils.isNotBlank(codes)) {
 			for (String s : codes.split(",")) {
-				try {
-					Subject currentUser = SecurityUtils.getSubject();
-					currentUser.checkPermission(s);
-					map.put(s.replaceAll(":", ""), true);
-				} catch (AuthorizationException var3) {
-					map.put(s.replaceAll(":", ""), false);
-				}
+				boolean b = ShiroUtils.checkPermissions(s);
+				map.put(s.replaceAll(":", ""), b);
 			}
 		}
 		return new ResponseEntity().put(map);

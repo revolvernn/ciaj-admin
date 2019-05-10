@@ -111,6 +111,12 @@ public class PageUtis {
 
         System.out.println(getOrderBy(s));
 
+        String sr = "rand()";
+        String sr1 = "RAND()";
+        boolean a = sr1.toLowerCase().startsWith(sr);
+
+        System.out.println(a);
+
     }
 
     /**
@@ -209,6 +215,29 @@ public class PageUtis {
         }else {
             return false;
         }
+    }
+
+
+    /**
+     * 是否开启随机排序
+     *
+     * @return
+     */
+    public static boolean isRandOrderBy() {
+        Page page = getPageFromThreadLocal();
+        Boolean flag = false;
+        //开启排序
+        if (page != null && page.getOrderByEnabled() && StringUtils.isNotBlank(page.getOrderBy())) {
+            String orderBy = page.getOrderBy();
+            String[] split = orderBy.split(",");
+            for (String s : split) {
+                if (s.trim().toLowerCase().startsWith("rand()")) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        return flag;
     }
 
     public static void pageEnd() {

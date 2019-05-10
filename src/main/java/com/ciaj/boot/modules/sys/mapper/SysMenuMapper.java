@@ -20,14 +20,15 @@ public interface SysMenuMapper extends Mapper<SysMenuPo, SysMenuDto, SysMenuVo> 
 	 * 获取用户权限的导航菜单
 	 *
 	 * @param userId
-	 *
+	 * @param roleId
 	 * @return
 	 */
-	@MultiTableJoins(mappers = {SysUserRoleRelMapper.class,SysRolePermissionRelMapper.class,SysPermissionMapper.class})
+	@MultiTableJoins(mappers = {SysUserRoleRelMapper.class, SysRolePermissionRelMapper.class, SysPermissionMapper.class})
 	List<SysMenuPo> selectNavMultiTable(@Param("userId") String userId, @Param("roleId") String roleId);
 
 	/**
 	 * 获取导航菜单
+	 *
 	 * @param ids
 	 * @return
 	 */

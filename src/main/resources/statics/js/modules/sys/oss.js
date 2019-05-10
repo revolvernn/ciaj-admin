@@ -86,7 +86,6 @@ var ossapp = new Vue({
         }
     },
     created: function () {
-        this.loadData();
     },
     methods: {
         sortchange(val){

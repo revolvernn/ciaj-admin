@@ -6,8 +6,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @Author: Ciaj.
- * @Date: 2019-04-12 17:02:08
- * @Description: www.ciaj.com DTO
+ * @Date: 2019-05-08 15:23:02
+ * @Description: www.ciaj.com gen DTO
  */
 @ApiModel(value = "SysUser")
 public class SysUserDto extends SysUserPo {
@@ -19,7 +19,7 @@ public class SysUserDto extends SysUserPo {
     }
 
     //@javax.validation.constraints.NotBlank(message = "")
-    @ApiModelProperty("用户账号：手机号、邮箱、其他 ")
+    @ApiModelProperty("用户账号、手机号、邮箱、其他 ")
     public java.lang.String getAccount() {
         return super.getAccount();
     }
@@ -37,7 +37,7 @@ public class SysUserDto extends SysUserPo {
     }
 
     //@javax.validation.constraints.NotBlank(message = "")
-    @ApiModelProperty("性别， ")
+    @ApiModelProperty("性别,0，女,1，男,2，未知 ")
     public java.lang.String getSex() {
         return super.getSex();
     }
@@ -91,15 +91,15 @@ public class SysUserDto extends SysUserPo {
     }
 
     //@javax.validation.constraints.NotBlank(message = "")
-    @ApiModelProperty("用户类型 ")
-    public java.lang.String getType() {
-        return super.getType();
+    @ApiModelProperty("用户类型、org_user、组织用户，other_user、其他用户 ")
+    public java.lang.String getUserType() {
+        return super.getUserType();
     }
 
     //@javax.validation.constraints.NotBlank(message = "")
-    @ApiModelProperty("部门ID ")
-    public java.lang.String getDeptId() {
-        return super.getDeptId();
+    @ApiModelProperty("用户状态，在职inservice，离职中leaveing，已离职leave，重新雇佣 ")
+    public java.lang.String getUserStatus() {
+        return super.getUserStatus();
     }
 
     //@javax.validation.constraints.NotBlank(message = "")
@@ -112,6 +112,30 @@ public class SysUserDto extends SysUserPo {
     @ApiModelProperty("头像地址 ")
     public java.lang.String getPicUrl() {
         return super.getPicUrl();
+    }
+
+    //@javax.validation.constraints.NotBlank(message = "")
+    @ApiModelProperty("所在部门ID ")
+    public java.lang.String getDeptId() {
+        return super.getDeptId();
+    }
+
+    //@javax.validation.constraints.NotBlank(message = "")
+    @ApiModelProperty("所在部门名称 ")
+    public java.lang.String getDeptName() {
+        return super.getDeptName();
+    }
+
+    //@javax.validation.constraints.NotBlank(message = "")
+    @ApiModelProperty("所在部门集合ID ")
+    public java.lang.String getDeptIds() {
+        return super.getDeptIds();
+    }
+
+    //@javax.validation.constraints.NotBlank(message = "")
+    @ApiModelProperty("所在部门集合名称 ")
+    public java.lang.String getDeptNames() {
+        return super.getDeptNames();
     }
 
     //@javax.validation.constraints.NotBlank(message = "")
@@ -142,6 +166,12 @@ public class SysUserDto extends SysUserPo {
     @ApiModelProperty("删除标记 ")
     public java.lang.String getDelFlag() {
         return super.getDelFlag();
+    }
+
+    //@javax.validation.constraints.NotBlank(message = "")
+    @ApiModelProperty("版本号0为不可修改，1+可修改 ")
+    public java.lang.Integer getVersion() {
+        return super.getVersion();
     }
 
 }

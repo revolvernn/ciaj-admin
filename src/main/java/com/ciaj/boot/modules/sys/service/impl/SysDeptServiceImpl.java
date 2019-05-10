@@ -28,7 +28,7 @@ public class SysDeptServiceImpl extends AbstractService<SysDeptPo, SysDeptDto, S
     @Override
     public Page<SysDeptDto> selectDTOPage(SysDeptVo entity) {
         com.github.pagehelper.Page p = PageUtis.startPageAndOrderBy();
-        List<SysDeptDto> sysDeptDtos = sysDeptMapper.selectDTOList(entity);
+        List<SysDeptDto> sysDeptDtos = sysDeptMapper.selectDTOListMultiTable(entity);
         return wrapPageDTO(p, sysDeptDtos);
     }
 
@@ -36,7 +36,7 @@ public class SysDeptServiceImpl extends AbstractService<SysDeptPo, SysDeptDto, S
     public SysDeptDto selectById(String id) {
         SysDeptVo entity = new SysDeptVo();
         entity.setId(id);
-        List<SysDeptDto> sysDeptDtos = sysDeptMapper.selectDTOList(entity);
+        List<SysDeptDto> sysDeptDtos = sysDeptMapper.selectDTOListMultiTable(entity);
         return sysDeptDtos.get(0);
     }
 }

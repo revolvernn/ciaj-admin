@@ -6,8 +6,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @Author: Ciaj.
- * @Date: 2019-04-12 17:54:57
- * @Description: www.ciaj.com DTO
+ * @Date: 2019-05-08 13:59:02
+ * @Description: www.ciaj.com gen DTO
  */
 @ApiModel(value = "DemoTable")
 public class DemoTableDto extends DemoTablePo {
@@ -58,6 +58,12 @@ public class DemoTableDto extends DemoTablePo {
     @ApiModelProperty("删除标记 ")
     public java.lang.String getDelFlag() {
         return super.getDelFlag();
+    }
+
+    //@javax.validation.constraints.NotBlank(message = "")
+    @ApiModelProperty("版本号0为不可修改，1+可修改 ")
+    public java.lang.Integer getVersion() {
+        return super.getVersion();
     }
 
 }

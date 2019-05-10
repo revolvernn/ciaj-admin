@@ -109,8 +109,12 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
 	@PutMapping("update")
 	public ResponseEntity update(@RequestBody SysDeptDto entity) {
 		checkDept(entity);
-		updateParentIds(entity);
-		return super.update(entity);
+		SysDeptPo p = sysDeptService.selectByPrimaryKey(entity.getId());
+		ResponseEntity responseEntity = super.updateByVersion(entity, entity.getVersion());
+		if (!p.getParentId().equals(entity.getParentId())) {
+			updateParentIds(entity);
+		}
+		return responseEntity;
 	}
 
 	/**
@@ -126,25 +130,35 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
 	@RequiresPermissions("sys:dept:delFlag")
 	@DeleteMapping("/delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
-		return super.deleteFlag(id);
+		SysDeptPo sysDeptPo = sysDeptService.selectByPrimaryKey(id);
+		ResponseEntity responseEntity = super.deleteFlagVersion(id, sysDeptPo.getVersion());
+		delByParentId(id);
+		return responseEntity;
 	}
 
-
 	private void updateParentIds(SysDeptDto entity) {
-		SysDeptPo p = sysDeptService.selectByPrimaryKey(entity.getId());
-		if (!p.getParentId().equals(entity.getParentId())) {
+		SysDeptPo query = new SysDeptPo();
+		query.setParentId(entity.getId());
+		List<SysDeptPo> pos = sysDeptService.select(query);
+		if (CollectionUtils.isNotEmpty(pos)) {
+			for (SysDeptPo po : pos) {
+				po.setParentId(entity.getId());
+				po.setLevel(entity.getLevel() + 1);
+				po.setParentIds(entity.getParentIds() + "," + entity.getId());
+				super.updateByVersion(po, po.getVersion());
+				updateParentIds(poToDto(po));
+			}
+		}
+	}
 
-			SysDeptPo query = new SysDeptPo();
-			query.setParentId(entity.getId());
-			List<SysDeptPo> pos = sysDeptService.select(query);
-			if (CollectionUtils.isNotEmpty(pos)) {
-				for (SysDeptPo po : pos) {
-					po.setParentId(entity.getId());
-					po.setLevel(entity.getLevel() + 1);
-					po.setParentIds(entity.getParentIds() + "," + entity.getId());
-					SysDeptDto dto = sysDeptService.updateByPrimaryKeySelectiveDTO(po);
-					updateParentIds(dto);
-				}
+	private void delByParentId(String parentId) {
+		SysDeptPo query = new SysDeptPo();
+		query.setParentId(parentId);
+		List<SysDeptPo> pos = sysDeptService.select(query);
+		if (CollectionUtils.isNotEmpty(pos)) {
+			for (SysDeptPo po : pos) {
+				super.deleteFlagVersion(po.getId(), po.getVersion());
+				delByParentId(po.getId());
 			}
 		}
 	}

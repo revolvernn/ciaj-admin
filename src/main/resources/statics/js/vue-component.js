@@ -286,7 +286,16 @@ var myTableT = Vue.extend({
             }
             return value;
         },
-        checkBtnAuth(auth) {
+        checkBtnAuth(auth,row) {
+            if(row &&  row.version == 0){
+                var isAllAuth =  this.btnsAuth['IS_ALL_AUTH'] || false;
+                var defaultDataAuth =  this.btnsAuth['DEFAULT_DATA_AUTH'] || false;
+                if(isAllAuth){
+                    return true;
+                }else if(!defaultDataAuth){
+                    return false;
+                }
+            }
             if (auth) {
                 try {
                     return this.btnsAuth[auth.split(":").join("")];
@@ -312,7 +321,7 @@ var myTableT = Vue.extend({
         '<template  v-for="item in columns">',
         '<el-table-column v-if="item.buttons" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">',
         '<template slot-scope="scope">',
-        '<el-button v-for="btn in item.buttons"  @click.native.prevent="btn.click(scope.$index, scope.row) " v-if="checkBtnAuth(btn.auth)" :type="btn.type?btn.type:\'text\'" style="margin-bottom: 5px;" size="small" :disabled="btn.disabled">',
+        '<el-button v-for="btn in item.buttons"  @click.native.prevent="btn.click(scope.$index, scope.row) " v-if="checkBtnAuth(btn.auth,scope.row)" :type="btn.type?btn.type:\'text\'" style="margin-bottom: 5px;" size="small" :disabled="btn.disabled">',
         '<template v-if="btn.label">{{btn.label}}</template>',
         '</el-button>',
         '</template>',

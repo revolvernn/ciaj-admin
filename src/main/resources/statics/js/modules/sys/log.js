@@ -77,9 +77,13 @@ var logapp = new Vue({
         }
     },
     created: function () {
-        this.loadData();
     },
     methods: {
+        sortchange(val){
+            var that = this;
+            that.queryForm.orderBy=val.sortBy;
+            that.myQuery();
+        },
         resetForm(formName) {
             try {
                 this.$refs[formName].resetFields();
@@ -95,11 +99,6 @@ var logapp = new Vue({
         myQuery() {
             var that = this;
             that.loadData();
-        },
-        sortchange(val){
-            var that = this;
-            that.queryForm.orderBy=val.sortBy;
-            that.myQuery();
         },
         pagesizechange(val) {
             var that = this;

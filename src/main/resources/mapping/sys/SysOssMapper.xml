@@ -5,26 +5,28 @@
 <mapper namespace="com.ciaj.boot.modules.sys.mapper.SysOssMapper">
     <!--
         Author: Ciaj.
-        Date: 2019-04-12 16:35:32
-        Description: www.ciaj.com mapper.xml
+        Date: 2019-05-09 13:07:46
+        Description: www.ciaj.com gen mapper.xml
     -->
-    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
+    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560"
+           type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
 
-    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.SysOssPo" >
-        <id column="id" property="id" jdbcType="VARCHAR" />
-        <id column="url" property="url" jdbcType="VARCHAR" />
-        <id column="source" property="source" jdbcType="VARCHAR" />
-        <id column="create_at" property="createAt" jdbcType="VARCHAR" />
-        <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-        <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
-        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-        <id column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.SysOssPo">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <id column="url" property="url" jdbcType="VARCHAR"/>
+        <id column="source" property="source" jdbcType="VARCHAR"/>
+        <id column="create_at" property="createAt" jdbcType="VARCHAR"/>
+        <id column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <id column="update_at" property="updateAt" jdbcType="VARCHAR"/>
+        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <id column="del_flag" property="delFlag" jdbcType="CHAR"/>
+        <id column="version" property="version" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,url,source,create_at,create_time,update_at,update_time,del_flag
+        id,url,source,create_at,create_time,update_at,update_time,del_flag,version
     </sql>
     <sql id="Base_Alias_Column_List">
-        m.id,m.url,m.source,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag
+        m.id,m.url,m.source,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
     </sql>
     <delete id="deleteByPrimaryKey">
         DELETE FROM sys_oss
@@ -58,17 +60,20 @@
                 <if test="delFlag != null">
                     AND del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND version = #{version}
+                </if>
             </trim>
         </where>
     </delete>
-    <insert id="insert"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysOssPo">
-        <selectKey keyProperty="id" order="BEFORE"  resultType="String">
+    <insert id="insert" parameterType="com.ciaj.boot.modules.sys.entity.po.SysOssPo">
+        <selectKey keyProperty="id" order="BEFORE" resultType="String">
             SELECT REPLACE(uuid(),'-','') FROM DUAL
         </selectKey>
         INSERT INTO sys_oss
-        (id,url,source,create_at,create_time,update_at,update_time,del_flag)
+        (id,url,source,create_at,create_time,update_at,update_time,del_flag,version)
         VALUES
-        (#{id,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{source,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR})
+        (#{id,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{source,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysOssPo">
         <selectKey keyProperty="id" order="BEFORE" resultType="String">
@@ -100,6 +105,9 @@
             <if test="delFlag != null">
                 del_flag,
             </if>
+            <if test="version != null">
+                version,
+            </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -126,10 +134,13 @@
             <if test="delFlag != null">
                 #{delFlag,jdbcType=CHAR},
             </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKey"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysOssPo">
+    <update id="updateByPrimaryKey" parameterType="com.ciaj.boot.modules.sys.entity.po.SysOssPo">
         UPDATE sys_oss
         <set>
             url = #{url},
@@ -139,10 +150,25 @@
             update_at = #{updateAt},
             update_time = #{updateTime},
             del_flag = #{delFlag},
+            version = #{version},
         </set>
-         WHERE id = #{id,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKeySelective"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysOssPo">
+    <update id="updateByPrimaryKeyAndVersion">
+        UPDATE sys_oss
+        <set>
+            url = #{record.url},
+            source = #{record.source},
+            create_at = #{record.createAt},
+            create_time = #{record.createTime},
+            update_at = #{record.updateAt},
+            update_time = #{record.updateTime},
+            del_flag = #{record.delFlag},
+            version = #{record.version},
+        </set>
+        WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysOssPo">
         UPDATE sys_oss
         <set>
             <if test="url != null">
@@ -166,21 +192,49 @@
             <if test="delFlag != null">
                 del_flag = #{delFlag},
             </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
         </set>
         WHERE id = #{id,jdbcType=VARCHAR}
     </update>
-
+    <update id="updateByPrimaryKeySelectiveAndVersion">
+        UPDATE sys_oss
+        <set>
+            <if test="record.url != null">
+                url = #{record.url},
+            </if>
+            <if test="record.source != null">
+                source = #{record.source},
+            </if>
+            <if test="record.createAt != null">
+                create_at = #{record.createAt},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime},
+            </if>
+            <if test="record.updateAt != null">
+                update_at = #{record.updateAt},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime},
+            </if>
+            <if test="record.delFlag != null">
+                del_flag = #{record.delFlag},
+            </if>
+            <if test="record.version != null">
+                version = #{record.version},
+            </if>
+        </set>
+        WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+    </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM sys_oss
         WHERE id = #{id,jdbcType=VARCHAR}
     </select>
-
-    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysOssPo">
-        SELECT
-        <include refid="Base_Column_List" />
-        FROM sys_oss m
+    <sql id="base_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null">
@@ -207,113 +261,38 @@
                 <if test="delFlag != null">
                     AND m.del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND m.version = #{version}
+                </if>
             </trim>
         </where>
+    </sql>
+    <select id="selectOne" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysOssPo">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_oss m
+        <include refid="base_query_condition_sql"/>
     </select>
 
-    <select id="select" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysOssPo">
+    <select id="select" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysOssPo">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM sys_oss m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="url != null">
-                    AND m.url = #{url}
-                </if>
-                <if test="source != null">
-                    AND m.source = #{source}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
-    <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysOssPo">
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysOssPo">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM sys_oss m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="url != null">
-                    AND m.url = #{url}
-                </if>
-                <if test="source != null">
-                    AND m.source = #{source}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="selectList" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysOssVo">
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_oss m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null  and id != ''">
-                    AND m.id = #{id}
-                </if>
-                <if test="url != null  and url != ''">
-                    AND m.url = #{url}
-                </if>
-                <if test="source != null  and source != ''">
-                    AND m.source = #{source}
-                </if>
-                <if test="createAt != null  and createAt != ''">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null ">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null  and updateAt != ''">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null ">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null  and delFlag != ''">
-                    AND m.del_flag = #{delFlag}
-                </if>
-                <!--  keyword   -->
-                <if test="keyword != null and keyword != ''">
-                </if>
-            </trim>
-        </where>
+        <include refid="cust_query_condition_sql"/>
     </select>
 
     <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.SysOssDto" extends="BaseResultMap">
@@ -323,6 +302,9 @@
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_oss m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+    <sql id="cust_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null  and id != ''">
@@ -349,10 +331,13 @@
                 <if test="delFlag != null  and delFlag != ''">
                     AND m.del_flag = #{delFlag}
                 </if>
+                <if test="version != null ">
+                    AND m.version = #{version}
+                </if>
                 <!--  keyword   -->
                 <if test="keyword != null and keyword != ''">
                 </if>
             </trim>
         </where>
-    </select>
+    </sql>
 </mapper>

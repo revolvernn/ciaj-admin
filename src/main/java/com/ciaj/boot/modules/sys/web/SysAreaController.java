@@ -68,16 +68,18 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 			@ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
 			@ApiImplicitParam(name = "type", value = "类型", paramType = "query"),
+			@ApiImplicitParam(name = "level", value = "级别", dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "parentId", value = "父级ID", paramType = "query")
 	})
 	@OperationLog(operation = "系统-区域", content = "获取区域列表")
 	@RequiresPermissions("sys:area:list")
 	@GetMapping("/list")
-	public ResponseEntity<Page<SysAreaDto>> list(String keyword, String type, String parentId) {
+	public ResponseEntity<Page<SysAreaDto>> list(String keyword, String type, Integer level, String parentId) {
 		SysAreaVo entity = new SysAreaVo();
 		entity.setParentId(parentId);
 		entity.setKeyword(keyword);
 		entity.setType(type);
+		entity.setLevel(level);
 		return super.listDTOPage(entity);
 	}
 
@@ -110,8 +112,12 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 	@PutMapping("update")
 	public ResponseEntity update(@RequestBody SysAreaDto entity) {
 		checkEntity(entity);
-		updateParentIds(entity);
-		return super.update(entity);
+		SysAreaPo p = sysAreaService.selectByPrimaryKey(entity.getId());
+		ResponseEntity update = super.updateByVersion(entity, entity.getVersion());
+		if (!p.getParentId().equalsIgnoreCase(entity.getParentId())) {
+			updateParentIds(entity);
+		}
+		return update;
 	}
 
 	private void checkEntity(SysAreaDto entity) {
@@ -156,20 +162,16 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 	 * @param entity
 	 */
 	private void updateParentIds(SysAreaDto entity) {
-		SysAreaPo p = sysAreaService.selectByPrimaryKey(entity.getId());
-		if (!p.getParentId().equalsIgnoreCase(entity.getParentId())) {
-
-			SysAreaPo query = new SysAreaPo();
-			query.setParentId(entity.getId());
-			List<SysAreaPo> pos = sysAreaService.select(query);
-			if (CollectionUtils.isNotEmpty(pos)) {
-				for (SysAreaPo po : pos) {
-					po.setParentId(entity.getId());
-					po.setLevel(entity.getLevel() + 1);
-					po.setParentIds(entity.getParentIds() + "," + entity.getId());
-					SysAreaDto dto = sysAreaService.updateByPrimaryKeySelectiveDTO(po);
-					updateParentIds(dto);
-				}
+		SysAreaPo query = new SysAreaPo();
+		query.setParentId(entity.getId());
+		List<SysAreaPo> pos = sysAreaService.select(query);
+		if (CollectionUtils.isNotEmpty(pos)) {
+			for (SysAreaPo po : pos) {
+				po.setParentId(entity.getId());
+				po.setLevel(entity.getLevel() + 1);
+				po.setParentIds(entity.getParentIds() + "," + entity.getId());
+				super.updateByVersion(po, po.getVersion());
+				updateParentIds(poToDto(po));
 			}
 		}
 	}
@@ -187,7 +189,29 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 	@RequiresPermissions("sys:area:delFlag")
 	@DeleteMapping("/delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
-		return super.deleteFlag(id);
+		SysAreaPo sysAreaPo = sysAreaService.selectByPrimaryKey(id);
+		ResponseEntity responseEntity = super.deleteFlagVersion(id, sysAreaPo.getVersion());
+		delByParentId(id);
+		return responseEntity;
 	}
+
+
+	/**
+	 * 递归处理下级数据
+	 *
+	 * @param parentId
+	 */
+	private void delByParentId(String parentId) {
+		SysAreaPo query = new SysAreaPo();
+		query.setParentId(parentId);
+		List<SysAreaPo> pos = sysAreaService.select(query);
+		if (CollectionUtils.isNotEmpty(pos)) {
+			for (SysAreaPo po : pos) {
+				super.deleteFlagVersion(po.getId(), po.getVersion());
+				delByParentId(po.getId());
+			}
+		}
+	}
+
 
 }

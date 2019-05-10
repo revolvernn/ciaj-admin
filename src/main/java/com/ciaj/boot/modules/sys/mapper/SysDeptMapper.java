@@ -4,6 +4,9 @@ import com.ciaj.boot.modules.sys.entity.po.SysDeptPo;
 import com.ciaj.base.Mapper;
 import com.ciaj.boot.modules.sys.entity.vo.SysDeptVo;
 import com.ciaj.boot.modules.sys.entity.dto.SysDeptDto;
+import com.ciaj.comm.annotation.MultiTableJoins;
+
+import java.util.List;
 
 /**
  * @Author: Ciaj.
@@ -12,4 +15,6 @@ import com.ciaj.boot.modules.sys.entity.dto.SysDeptDto;
  */
 public interface SysDeptMapper extends Mapper<SysDeptPo, SysDeptDto, SysDeptVo> {
 
+	@MultiTableJoins(mappers = {SysAreaMapper.class})
+	List<SysDeptDto> selectDTOListMultiTable(SysDeptVo entity);
 }

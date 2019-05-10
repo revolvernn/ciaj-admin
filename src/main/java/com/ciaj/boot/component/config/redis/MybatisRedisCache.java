@@ -5,6 +5,7 @@ import com.ciaj.boot.component.config.SpringContextUtils;
 import com.ciaj.comm.annotation.MultiTableJoins;
 import com.ciaj.comm.utils.MD5Util;
 import com.ciaj.comm.utils.ObjectUtil;
+import com.ciaj.comm.utils.PageUtis;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.cache.Cache;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -29,6 +30,7 @@ public class MybatisRedisCache implements Cache {
 	private static final long EXPIRE_TIME_IN_MINUTES = 30; // redis过期时间
 
 	private String prefix = "mybatis_redis_cache";
+	private static final String MULTITABLE_JOINS_SUFFIX = "MultiTable";
 
 
 	public String getPrefix() {
@@ -60,13 +62,16 @@ public class MybatisRedisCache implements Cache {
 	@Override
 	public void putObject(Object key, Object value) {
 		try {
+			//处理随机排序查询不进缓存
+			if (PageUtis.isRandOrderBy()) return;
+			//
 			RedisTemplate redisTemplate = getRedisTemplate();
 			ValueOperations opsForValue = redisTemplate.opsForValue();
 			String cacheKey = getCacheKey(key);
 			opsForValue.set(getBytesKey(cacheKey), value, EXPIRE_TIME_IN_MINUTES, TimeUnit.MINUTES);
 			redisTemplate.opsForHash().put(getPrefix() + id, cacheKey, "");
 
-			//将缓存ID添加到多表mapper 集合中
+			//将缓存ID添加到多表mapper 集合中，当mapper中操作增删改时清除当前查询缓存
 			Class<? extends Mapper>[] multiTableMappers = getMultiTableMappers(key);
 			if (multiTableMappers != null) {
 				for (Class<? extends Mapper> multiTableMapper : multiTableMappers) {
@@ -205,8 +210,8 @@ public class MybatisRedisCache implements Cache {
 				if (packageAndMethods.length > 0) {
 					Class<?> aClass = Class.forName(id);
 					String methodName = packageAndMethods[packageAndMethods.length - 1];
-					log.debug("============MultiTable-methodName=============== {},{}", methodName, packageAndMethod);
-					if (methodName.endsWith("MultiTable")) {
+					if (methodName.endsWith(MULTITABLE_JOINS_SUFFIX)) {
+						log.debug("============MultiTable-methodName=============== {},{}", methodName, packageAndMethod);
 						Method[] methods = aClass.getDeclaredMethods();
 						Method method = null;
 						for (Method m : methods) {

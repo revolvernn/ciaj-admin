@@ -5,8 +5,8 @@
 <mapper namespace="com.ciaj.boot.modules.sys.mapper.SysConfigMapper">
     <!--
         Author: Ciaj.
-        Date: 2019-04-12 16:04:48
-        Description: www.ciaj.com mapper.xml
+        Date: 2019-05-09 09:11:04
+        Description: www.ciaj.com gen mapper.xml
     -->
     <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
 
@@ -21,15 +21,16 @@
         <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
         <id column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
         <id column="del_flag" property="delFlag" jdbcType="CHAR" />
+        <id column="version" property="version" jdbcType="INTEGER" />
     </resultMap>
     <sql id="Base_Column_List">
-        id,config_key,config_value,status,remark,create_at,create_time,update_at,update_time,del_flag
+        id,config_key,config_value,status,remark,create_at,create_time,update_at,update_time,del_flag,version
     </sql>
     <sql id="Base_Alias_Column_List">
-        m.id,m.config_key,m.config_value,m.status,m.remark,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag
+        m.id,m.config_key,m.config_value,m.status,m.remark,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
     </sql>
     <delete id="deleteByPrimaryKey">
-        DELETE FROM sys_config
+        DELETE FROM sys_config WHERE id = #{id,jdbcType=VARCHAR}
     </delete>
     <delete id="delete" parameterType="com.ciaj.boot.modules.sys.entity.po.SysConfigPo">
         DELETE FROM sys_config
@@ -65,6 +66,9 @@
                 <if test="delFlag != null">
                     AND del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND version = #{version}
+                </if>
             </trim>
         </where>
     </delete>
@@ -73,9 +77,9 @@
             SELECT REPLACE(uuid(),'-','') FROM DUAL
         </selectKey>
         INSERT INTO sys_config
-        (id,config_key,config_value,status,remark,create_at,create_time,update_at,update_time,del_flag)
+        (id,config_key,config_value,status,remark,create_at,create_time,update_at,update_time,del_flag,version)
         VALUES
-        (#{id,jdbcType=VARCHAR},#{configKey,jdbcType=VARCHAR},#{configValue,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR})
+        (#{id,jdbcType=VARCHAR},#{configKey,jdbcType=VARCHAR},#{configValue,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysConfigPo">
         <selectKey keyProperty="id" order="BEFORE" resultType="String">
@@ -113,6 +117,9 @@
             <if test="delFlag != null">
                 del_flag,
             </if>
+            <if test="version != null">
+                version,
+            </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -145,13 +152,15 @@
             <if test="delFlag != null">
                 #{delFlag,jdbcType=CHAR},
             </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysConfigPo">
         UPDATE sys_config
         <set>
-            id = #{id},
             config_key = #{configKey},
             config_value = #{configValue},
             status = #{status},
@@ -161,14 +170,29 @@
             update_at = #{updateAt},
             update_time = #{updateTime},
             del_flag = #{delFlag},
+            version = #{version},
         </set>
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyAndVersion">
+        UPDATE sys_config
+        <set>
+            config_key = #{record.configKey},
+            config_value = #{record.configValue},
+            status = #{record.status},
+            remark = #{record.remark},
+            create_at = #{record.createAt},
+            create_time = #{record.createTime},
+            update_at = #{record.updateAt},
+            update_time = #{record.updateTime},
+            del_flag = #{record.delFlag},
+            version = #{record.version},
+        </set>
+        WHERE id = #{id,jdbcType=VARCHAR} and version = #{oldVersion}
     </update>
     <update id="updateByPrimaryKeySelective"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysConfigPo">
         UPDATE sys_config
         <set>
-            <if test="id != null">
-                id = #{id},
-            </if>
             <if test="configKey != null">
                 config_key = #{configKey},
             </if>
@@ -196,19 +220,55 @@
             <if test="delFlag != null">
                 del_flag = #{delFlag},
             </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
         </set>
+        WHERE id = #{id,jdbcType=VARCHAR}
     </update>
-
+    <update id="updateByPrimaryKeySelectiveAndVersion">
+        UPDATE sys_config
+        <set>
+            <if test="record.configKey != null">
+                config_key = #{record.configKey},
+            </if>
+            <if test="record.configValue != null">
+                config_value = #{record.configValue},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status},
+            </if>
+            <if test="record.remark != null">
+                remark = #{record.remark},
+            </if>
+            <if test="record.createAt != null">
+                create_at = #{record.createAt},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime},
+            </if>
+            <if test="record.updateAt != null">
+                update_at = #{record.updateAt},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime},
+            </if>
+            <if test="record.delFlag != null">
+                del_flag = #{record.delFlag},
+            </if>
+            <if test="record.version != null">
+                version = #{record.version},
+            </if>
+        </set>
+        WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+    </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM sys_config
+        FROM sys_config WHERE id = #{id,jdbcType=VARCHAR}
     </select>
 
-    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysConfigPo">
-        SELECT
-        <include refid="Base_Column_List" />
-        FROM sys_config m
+    <sql id="base_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null">
@@ -241,134 +301,39 @@
                 <if test="delFlag != null">
                     AND m.del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND m.version = #{version}
+                </if>
             </trim>
         </where>
+    </sql>
+
+    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysConfigPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sys_config m
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="select" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysConfigPo">
         SELECT
         <include refid="Base_Column_List" />
         FROM sys_config m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="configKey != null">
-                    AND m.config_key = #{configKey}
-                </if>
-                <if test="configValue != null">
-                    AND m.config_value = #{configValue}
-                </if>
-                <if test="status != null">
-                    AND m.status = #{status}
-                </if>
-                <if test="remark != null">
-                    AND m.remark = #{remark}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysConfigPo">
         SELECT
         <include refid="Base_Column_List" />
         FROM sys_config m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="configKey != null">
-                    AND m.config_key = #{configKey}
-                </if>
-                <if test="configValue != null">
-                    AND m.config_value = #{configValue}
-                </if>
-                <if test="status != null">
-                    AND m.status = #{status}
-                </if>
-                <if test="remark != null">
-                    AND m.remark = #{remark}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="selectList" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysConfigVo">
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_config m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null  and id != ''">
-                    and m.id = #{id}
-                </if>
-                <if test="configKey != null  and configKey != ''">
-                    and m.config_key like CONCAT('%',#{configKey},'%')
-                </if>
-                <if test="configValue != null  and configValue != ''">
-                    and m.config_value like CONCAT('%',#{configValue},'%')
-                </if>
-                <if test="status != null  and status != ''">
-                    and m.status = #{status}
-                </if>
-                <if test="remark != null  and remark != ''">
-                    and m.remark like CONCAT('%',#{remark},'%')
-                </if>
-                <if test="createAt != null  and createAt != ''">
-                    and m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null ">
-                    and m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null  and updateAt != ''">
-                    and m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null ">
-                    and m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null  and delFlag != ''">
-                    and m.del_flag = #{delFlag}
-                </if>
-                <!--  keyword   -->
-                <if test="keyword != null and keyword != ''">
-                    and (m.config_value like CONCAT('%',#{keyword},'%') or
-                    config_key like CONCAT('%',#{keyword},'%') or
-                    m.remark like CONCAT('%',#{keyword},'%'))
-                </if>
-            </trim>
-        </where>
+        <include refid="cust_query_condition_sql"/>
     </select>
 
     <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.SysConfigDto" extends="BaseResultMap">
@@ -378,10 +343,11 @@
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_config m
+        <include refid="cust_query_condition_sql"/>
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null  and id != ''">
-                    and m.id = #{id}
+                    AND m.id = #{id}
                 </if>
                 <if test="configKey != null  and configKey != ''">
                     and m.config_key like CONCAT('%',#{configKey},'%')
@@ -396,19 +362,22 @@
                     and m.remark like CONCAT('%',#{remark},'%')
                 </if>
                 <if test="createAt != null  and createAt != ''">
-                    and m.create_at = #{createAt}
+                    AND m.create_at = #{createAt}
                 </if>
                 <if test="createTime != null ">
-                    and m.create_time = #{createTime}
+                    AND m.create_time = #{createTime}
                 </if>
                 <if test="updateAt != null  and updateAt != ''">
-                    and m.update_at = #{updateAt}
+                    AND m.update_at = #{updateAt}
                 </if>
                 <if test="updateTime != null ">
-                    and m.update_time = #{updateTime}
+                    AND m.update_time = #{updateTime}
                 </if>
                 <if test="delFlag != null  and delFlag != ''">
-                    and m.del_flag = #{delFlag}
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="version != null ">
+                    AND m.version = #{version}
                 </if>
                 <!--  keyword   -->
                 <if test="keyword != null and keyword != ''">
@@ -419,4 +388,49 @@
             </trim>
         </where>
     </select>
+    <sql id="cust_query_condition_sql">
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null  and id != ''">
+                    AND m.id = #{id}
+                </if>
+                <if test="configKey != null  and configKey != ''">
+                    and m.config_key like CONCAT('%',#{configKey},'%')
+                </if>
+                <if test="configValue != null  and configValue != ''">
+                    and m.config_value like CONCAT('%',#{configValue},'%')
+                </if>
+                <if test="status != null  and status != ''">
+                    and m.status = #{status}
+                </if>
+                <if test="remark != null  and remark != ''">
+                    and m.remark like CONCAT('%',#{remark},'%')
+                </if>
+                <if test="createAt != null  and createAt != ''">
+                    AND m.create_at = #{createAt}
+                </if>
+                <if test="createTime != null ">
+                    AND m.create_time = #{createTime}
+                </if>
+                <if test="updateAt != null  and updateAt != ''">
+                    AND m.update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null ">
+                    AND m.update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null  and delFlag != ''">
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="version != null ">
+                    AND m.version = #{version}
+                </if>
+                <!--  keyword   -->
+                <if test="keyword != null and keyword != ''">
+                    and (m.config_value like CONCAT('%',#{keyword},'%') or
+                    config_key like CONCAT('%',#{keyword},'%') or
+                    m.remark like CONCAT('%',#{keyword},'%'))
+                </if>
+            </trim>
+        </where>
+    </sql>
 </mapper>

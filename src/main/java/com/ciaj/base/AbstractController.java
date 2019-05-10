@@ -1,11 +1,16 @@
 package com.ciaj.base;
 
 import com.ciaj.comm.ResponseEntity;
+import com.ciaj.comm.constant.DefaultConfigConstant;
 import com.ciaj.comm.constant.DefaultConstant;
+import com.ciaj.comm.exception.BsRException;
+import com.ciaj.comm.utils.CommUtil;
 import com.ciaj.comm.utils.Page;
+import com.ciaj.comm.utils.ShiroUtils;
 import com.ciaj.comm.utils.validate.AddValidGroup;
 import com.ciaj.comm.utils.validate.UpdateValidGroup;
 import com.ciaj.comm.utils.validate.ValidatorUtils;
+import io.swagger.models.auth.In;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -46,7 +51,7 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 	 */
 	public ResponseEntity<Page<PO>> listPOPage(PO entity) {
 		//
-		super.insertFieldByT("delFlag", DefaultConstant.FLAG_N, entity);
+		super.insertFieldByPO("delFlag", DefaultConstant.FLAG_N, entity);
 
 		Page<PO> page = baseService.selectPOPage(entity);
 		//
@@ -108,7 +113,7 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 		//
 		ValidatorUtils.validateEntity(d, AddValidGroup.class);
 
-		baseService.insert(dtoToPo(d));
+		baseService.insertSelective(dtoToPo(d));
 		return ResponseEntity.success("添加成功");
 	}
 
@@ -134,6 +139,18 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 		return this.update(t);
 	}
 
+
+	/**
+	 * 根据版本号更新
+	 *
+	 * @param t
+	 * @param id
+	 * @return
+	 */
+	public ResponseEntity updateByVersion(PO t, String id, Integer oldVersion) {
+		return this.updateByVersion(t, oldVersion);
+	}
+
 	/**
 	 * 更新
 	 *
@@ -145,6 +162,41 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 
 		baseService.updateByPrimaryKey(t);
 		return ResponseEntity.success("更新成功");
+	}
+
+
+	/**
+	 * 根据版本号更新
+	 *
+	 * @param t
+	 * @return
+	 */
+	public ResponseEntity updateByVersion(PO t, Integer oldVersion) {
+		ValidatorUtils.validateEntity(t, UpdateValidGroup.class);
+		if (!checkUpdateOrDeleteDefaultData(oldVersion)) {
+			super.updateFieldByPO(VERSION, oldVersion + 1, t);
+		}
+		baseService.updateByPrimaryKeySelectiveAndVersion(t, oldVersion);
+		return ResponseEntity.success("更新成功");
+	}
+
+	/**
+	 * 检查数据版本修改权限
+	 *
+	 * @param oldVersion
+	 * @return
+	 */
+	public boolean checkUpdateOrDeleteDefaultData(Integer oldVersion) {
+		//如果数据版本为不可修改的版本，并没有修改的权限，抛出异常
+		if (DefaultConfigConstant.DEFAULT_FINAL_DATA_VERSION.equals(oldVersion)) {
+			//没有权限或不是超管
+			if (CommUtil.getLoginUser().isSuperAdmin()) {
+			} else if (!ShiroUtils.checkPermissions(DefaultConfigConstant.DEFAULT_FINAL_DATA_PERMISSION_UPDATE_OR_DELETE)) {
+				throw new BsRException("对不起，您没有操作这条数据的权限!");
+			}
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -167,10 +219,32 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 		try {
 			//
 			PO entity = (PO) super.poClass.newInstance();
-			super.insertFieldByT("id", id, entity);
-			super.insertFieldByT("delFlag", DefaultConstant.FLAG_Y, entity);
+			super.insertFieldByPO(ID, id, entity);
+			super.insertFieldByPO(DEL_FLAG, DefaultConstant.FLAG_Y, entity);
 
 			baseService.updateByPrimaryKeySelective(entity);
+		} catch (InstantiationException e) {
+			log.error(e.getMessage(), e);
+		} catch (IllegalAccessException e) {
+			log.error(e.getMessage(), e);
+		}
+		return ResponseEntity.success("删除成功");
+	}
+
+	/**
+	 * 软删除，
+	 *
+	 * @param id
+	 * @return
+	 */
+	public ResponseEntity deleteFlagVersion(String id, Integer oldVersion) {
+		try {
+			//
+			PO entity = (PO) super.poClass.newInstance();
+			super.updateFieldByPO(ID, id, entity);
+			super.updateFieldByPO(DEL_FLAG, DefaultConstant.FLAG_Y, entity);
+
+			this.updateByVersion(entity, oldVersion);
 		} catch (InstantiationException e) {
 			log.error(e.getMessage(), e);
 		} catch (IllegalAccessException e) {
@@ -203,7 +277,7 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 		try {
 			//
 			PO entity = (PO) super.poClass.newInstance();
-			super.insertFieldByT("id", id, entity);
+			super.insertFieldByPO(ID, id, entity);
 			baseService.deleteByPrimaryKey(entity);
 		} catch (InstantiationException e) {
 			log.error(e.getMessage(), e);

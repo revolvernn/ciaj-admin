@@ -5,33 +5,35 @@
 <mapper namespace="com.ciaj.boot.modules.sys.mapper.SysMenuMapper">
     <!--
         Author: Ciaj.
-        Date: 2019-04-12 16:28:44
-        Description: www.ciaj.com mapper.xml
+        Date: 2019-05-09 13:00:46
+        Description: www.ciaj.com gen mapper.xml
     -->
-    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
+    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560"
+           type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
 
-    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.SysMenuPo" >
-        <id column="id" property="id" jdbcType="VARCHAR" />
-        <id column="name" property="name" jdbcType="VARCHAR" />
-        <id column="parent_id" property="parentId" jdbcType="VARCHAR" />
-        <id column="parent_ids" property="parentIds" jdbcType="VARCHAR" />
-        <id column="url" property="url" jdbcType="VARCHAR" />
-        <id column="permission_code" property="permissionCode" jdbcType="VARCHAR" />
-        <id column="type" property="type" jdbcType="VARCHAR" />
-        <id column="icon" property="icon" jdbcType="VARCHAR" />
-        <id column="sequence" property="sequence" jdbcType="INTEGER" />
-        <id column="enabled" property="enabled" jdbcType="CHAR" />
-        <id column="create_at" property="createAt" jdbcType="VARCHAR" />
-        <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-        <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
-        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-        <id column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.SysMenuPo">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <id column="name" property="name" jdbcType="VARCHAR"/>
+        <id column="parent_id" property="parentId" jdbcType="VARCHAR"/>
+        <id column="parent_ids" property="parentIds" jdbcType="VARCHAR"/>
+        <id column="url" property="url" jdbcType="VARCHAR"/>
+        <id column="permission_code" property="permissionCode" jdbcType="VARCHAR"/>
+        <id column="type" property="type" jdbcType="VARCHAR"/>
+        <id column="icon" property="icon" jdbcType="VARCHAR"/>
+        <id column="sequence" property="sequence" jdbcType="INTEGER"/>
+        <id column="enabled" property="enabled" jdbcType="CHAR"/>
+        <id column="create_at" property="createAt" jdbcType="VARCHAR"/>
+        <id column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <id column="update_at" property="updateAt" jdbcType="VARCHAR"/>
+        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <id column="del_flag" property="delFlag" jdbcType="CHAR"/>
+        <id column="version" property="version" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,name,parent_id,parent_ids,url,permission_code,type,icon,sequence,enabled,create_at,create_time,update_at,update_time,del_flag
+        id,name,parent_id,parent_ids,url,permission_code,type,icon,sequence,enabled,create_at,create_time,update_at,update_time,del_flag,version
     </sql>
     <sql id="Base_Alias_Column_List">
-        m.id,m.name,m.parent_id,m.parent_ids,m.url,m.permission_code,m.type,m.icon,m.sequence,m.enabled,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag
+        m.id,m.name,m.parent_id,m.parent_ids,m.url,m.permission_code,m.type,m.icon,m.sequence,m.enabled,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
     </sql>
     <delete id="deleteByPrimaryKey">
         DELETE FROM sys_menu
@@ -86,17 +88,20 @@
                 <if test="delFlag != null">
                     AND del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND version = #{version}
+                </if>
             </trim>
         </where>
     </delete>
-    <insert id="insert"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysMenuPo">
-        <selectKey keyProperty="id" order="BEFORE"  resultType="String">
+    <insert id="insert" parameterType="com.ciaj.boot.modules.sys.entity.po.SysMenuPo">
+        <selectKey keyProperty="id" order="BEFORE" resultType="String">
             SELECT REPLACE(uuid(),'-','') FROM DUAL
         </selectKey>
         INSERT INTO sys_menu
-        (id,name,parent_id,parent_ids,url,permission_code,type,icon,sequence,enabled,create_at,create_time,update_at,update_time,del_flag)
+        (id,name,parent_id,parent_ids,url,permission_code,type,icon,sequence,enabled,create_at,create_time,update_at,update_time,del_flag,version)
         VALUES
-        (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{parentId,jdbcType=VARCHAR},#{parentIds,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{permissionCode,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{icon,jdbcType=VARCHAR},#{sequence,jdbcType=INTEGER},#{enabled,jdbcType=CHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR})
+        (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{parentId,jdbcType=VARCHAR},#{parentIds,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{permissionCode,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{icon,jdbcType=VARCHAR},#{sequence,jdbcType=INTEGER},#{enabled,jdbcType=CHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysMenuPo">
         <selectKey keyProperty="id" order="BEFORE" resultType="String">
@@ -149,6 +154,9 @@
             <if test="delFlag != null">
                 del_flag,
             </if>
+            <if test="version != null">
+                version,
+            </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -196,10 +204,13 @@
             <if test="delFlag != null">
                 #{delFlag,jdbcType=CHAR},
             </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKey"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysMenuPo">
+    <update id="updateByPrimaryKey" parameterType="com.ciaj.boot.modules.sys.entity.po.SysMenuPo">
         UPDATE sys_menu
         <set>
             name = #{name},
@@ -216,10 +227,32 @@
             update_at = #{updateAt},
             update_time = #{updateTime},
             del_flag = #{delFlag},
+            version = #{version},
         </set>
-         WHERE id = #{id,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKeySelective"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysMenuPo">
+    <update id="updateByPrimaryKeyAndVersion">
+        UPDATE sys_menu
+        <set>
+            name = #{record.name},
+            parent_id = #{record.parentId},
+            parent_ids = #{record.parentIds},
+            url = #{record.url},
+            permission_code = #{record.permissionCode},
+            type = #{record.type},
+            icon = #{record.icon},
+            sequence = #{record.sequence},
+            enabled = #{record.enabled},
+            create_at = #{record.createAt},
+            create_time = #{record.createTime},
+            update_at = #{record.updateAt},
+            update_time = #{record.updateTime},
+            del_flag = #{record.delFlag},
+            version = #{record.version},
+        </set>
+        WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysMenuPo">
         UPDATE sys_menu
         <set>
             <if test="name != null">
@@ -264,21 +297,70 @@
             <if test="delFlag != null">
                 del_flag = #{delFlag},
             </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
         </set>
         WHERE id = #{id,jdbcType=VARCHAR}
     </update>
-
+    <update id="updateByPrimaryKeySelectiveAndVersion">
+        UPDATE sys_menu
+        <set>
+            <if test="record.name != null">
+                name = #{record.name},
+            </if>
+            <if test="record.parentId != null">
+                parent_id = #{record.parentId},
+            </if>
+            <if test="record.parentIds != null">
+                parent_ids = #{record.parentIds},
+            </if>
+            <if test="record.url != null">
+                url = #{record.url},
+            </if>
+            <if test="record.permissionCode != null">
+                permission_code = #{record.permissionCode},
+            </if>
+            <if test="record.type != null">
+                type = #{record.type},
+            </if>
+            <if test="record.icon != null">
+                icon = #{record.icon},
+            </if>
+            <if test="record.sequence != null">
+                sequence = #{record.sequence},
+            </if>
+            <if test="record.enabled != null">
+                enabled = #{record.enabled},
+            </if>
+            <if test="record.createAt != null">
+                create_at = #{record.createAt},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime},
+            </if>
+            <if test="record.updateAt != null">
+                update_at = #{record.updateAt},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime},
+            </if>
+            <if test="record.delFlag != null">
+                del_flag = #{record.delFlag},
+            </if>
+            <if test="record.version != null">
+                version = #{record.version},
+            </if>
+        </set>
+        WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+    </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM sys_menu
         WHERE id = #{id,jdbcType=VARCHAR}
     </select>
-
-    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysMenuPo">
-        SELECT
-        <include refid="Base_Column_List" />
-        FROM sys_menu m
+    <sql id="base_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null">
@@ -326,170 +408,99 @@
                 <if test="delFlag != null">
                     AND m.del_flag = #{delFlag}
                 </if>
+                <if test="version != null">
+                    AND m.version = #{version}
+                </if>
             </trim>
         </where>
+    </sql>
+    <select id="selectOne" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysMenuPo">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_menu m
+        <include refid="base_query_condition_sql"/>
     </select>
 
-    <select id="select" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysMenuPo">
+    <select id="select" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysMenuPo">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM sys_menu m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="name != null">
-                    AND m.name = #{name}
-                </if>
-                <if test="parentId != null">
-                    AND m.parent_id = #{parentId}
-                </if>
-                <if test="parentIds != null">
-                    AND m.parent_ids = #{parentIds}
-                </if>
-                <if test="url != null">
-                    AND m.url = #{url}
-                </if>
-                <if test="permissionCode != null">
-                    AND m.permission_code = #{permissionCode}
-                </if>
-                <if test="type != null">
-                    AND m.type = #{type}
-                </if>
-                <if test="icon != null">
-                    AND m.icon = #{icon}
-                </if>
-                <if test="sequence != null">
-                    AND m.sequence = #{sequence}
-                </if>
-                <if test="enabled != null">
-                    AND m.enabled = #{enabled}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
-    <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysMenuPo">
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysMenuPo">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM sys_menu m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="name != null">
-                    AND m.name = #{name}
-                </if>
-                <if test="parentId != null">
-                    AND m.parent_id = #{parentId}
-                </if>
-                <if test="parentIds != null">
-                    AND m.parent_ids = #{parentIds}
-                </if>
-                <if test="url != null">
-                    AND m.url = #{url}
-                </if>
-                <if test="permissionCode != null">
-                    AND m.permission_code = #{permissionCode}
-                </if>
-                <if test="type != null">
-                    AND m.type = #{type}
-                </if>
-                <if test="icon != null">
-                    AND m.icon = #{icon}
-                </if>
-                <if test="sequence != null">
-                    AND m.sequence = #{sequence}
-                </if>
-                <if test="enabled != null">
-                    AND m.enabled = #{enabled}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="selectList" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysMenuVo">
-        select
+        SELECT
         <include refid="Base_Alias_Column_List"/>
-        from sys_menu m
+        FROM sys_menu m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+
+    <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.SysMenuDto" extends="BaseResultMap">
+    </resultMap>
+
+    <select id="selectDTOList" resultMap="DTOResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysMenuVo">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>
+        FROM sys_menu m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+    <sql id="cust_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null  and id != ''">
-                    and m.id like CONCAT('%',#{id},'%')
+                    AND m.id = #{id}
                 </if>
                 <if test="name != null  and name != ''">
-                    and m.name like CONCAT('%',#{name},'%')
+                    AND m.name = #{name}
                 </if>
                 <if test="parentId != null  and parentId != ''">
-                    and m.parent_id =#{parentId}
+                    AND m.parent_id = #{parentId}
                 </if>
                 <if test="parentIds != null  and parentIds != ''">
-                    and m.parent_ids like CONCAT('%',#{parentIds},'%')
+                    AND m.parent_ids = #{parentIds}
                 </if>
                 <if test="url != null  and url != ''">
-                    and m.url like CONCAT('%',#{url},'%')
+                    AND m.url = #{url}
                 </if>
                 <if test="permissionCode != null  and permissionCode != ''">
-                    and m.permission_code like CONCAT('%',#{permissionCode},'%')
+                    AND m.permission_code = #{permissionCode}
                 </if>
                 <if test="type != null  and type != ''">
-                    and m.type =#{type}
+                    AND m.type = #{type}
                 </if>
                 <if test="icon != null  and icon != ''">
-                    and m.icon like CONCAT('%',#{icon},'%')
+                    AND m.icon = #{icon}
                 </if>
                 <if test="sequence != null ">
-                    and m.sequence = #{sequence}
+                    AND m.sequence = #{sequence}
                 </if>
                 <if test="enabled != null  and enabled != ''">
-                    and m.enabled =#{enabled}
+                    AND m.enabled = #{enabled}
                 </if>
                 <if test="createAt != null  and createAt != ''">
-                    and m.create_at like CONCAT('%',#{createAt},'%')
+                    AND m.create_at = #{createAt}
                 </if>
                 <if test="createTime != null ">
-                    and m.create_time = #{createTime}
+                    AND m.create_time = #{createTime}
                 </if>
                 <if test="updateAt != null  and updateAt != ''">
-                    and m.update_at like CONCAT('%',#{updateAt},'%')
+                    AND m.update_at = #{updateAt}
                 </if>
                 <if test="updateTime != null ">
-                    and m.update_time = #{updateTime}
+                    AND m.update_time = #{updateTime}
                 </if>
                 <if test="delFlag != null  and delFlag != ''">
-                    and m.del_flag =#{delFlag}
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="version != null ">
+                    AND m.version = #{version}
                 </if>
                 <!--  keyword   -->
                 <if test="keyword != null and keyword != ''">
@@ -497,9 +508,11 @@
                 </if>
             </trim>
         </where>
-    </select>
+    </sql>
+
     <select id="selectNavMultiTable" resultMap="BaseResultMap">
-        SELECT DISTINCT <include refid="Base_Alias_Column_List"/>
+        SELECT DISTINCT
+        <include refid="Base_Alias_Column_List"/>
         FROM sys_user_role_rel surr
         LEFT JOIN sys_role_permission_rel srpr on surr.role_id=srpr.role_id
         LEFT JOIN sys_permission sp on sp.id=srpr.permission_id and sp.type='menu' and sp.available='Y'
@@ -512,77 +525,18 @@
             and surr.role_id=#{roleId}
         </if>
     </select>
+
     <select id="selectNavByIds" resultMap="BaseResultMap">
-        SELECT DISTINCT <include refid="Base_Alias_Column_List"/>
-        FROM  sys_menu m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="ids != null  and ids.size>0">
-                    id in
-                    <foreach  open="(" close=")" collection="ids" index="index" item="item" separator=",">
-                        #{item}
-                    </foreach>
-                </if>
-            </trim>
-        </where>
-    </select>
-
-    <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.SysMenuDto" extends="BaseResultMap">
-    </resultMap>
-
-    <select id="selectDTOList" resultMap="DTOResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysMenuVo">
-        SELECT
+        SELECT DISTINCT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_menu m
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null  and id != ''">
-                    AND m.id = #{id}
-                </if>
-                <if test="name != null  and name != ''">
-                    AND m.name = #{name}
-                </if>
-                <if test="parentId != null  and parentId != ''">
-                    AND m.parent_id = #{parentId}
-                </if>
-                <if test="parentIds != null  and parentIds != ''">
-                    AND m.parent_ids = #{parentIds}
-                </if>
-                <if test="url != null  and url != ''">
-                    AND m.url = #{url}
-                </if>
-                <if test="permissionCode != null  and permissionCode != ''">
-                    AND m.permission_code = #{permissionCode}
-                </if>
-                <if test="type != null  and type != ''">
-                    AND m.type = #{type}
-                </if>
-                <if test="icon != null  and icon != ''">
-                    AND m.icon = #{icon}
-                </if>
-                <if test="sequence != null ">
-                    AND m.sequence = #{sequence}
-                </if>
-                <if test="enabled != null  and enabled != ''">
-                    AND m.enabled = #{enabled}
-                </if>
-                <if test="createAt != null  and createAt != ''">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null ">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null  and updateAt != ''">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null ">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null  and delFlag != ''">
-                    AND m.del_flag = #{delFlag}
-                </if>
-                <!--  keyword   -->
-                <if test="keyword != null and keyword != ''">
+                <if test="ids != null  and ids.size>0">
+                    id in
+                    <foreach open="(" close=")" collection="ids" index="index" item="item" separator=",">
+                        #{item}
+                    </foreach>
                 </if>
             </trim>
         </where>

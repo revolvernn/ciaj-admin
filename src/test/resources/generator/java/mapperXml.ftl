@@ -101,6 +101,21 @@
         </#list>
         </#if>
     </update>
+    <update id="updateByPrimaryKeyAndVersion">
+        UPDATE ${tableClass.tableName}
+        <set>
+        <#if tableClass.allFields??>
+        <#list tableClass.baseFields as field>
+            ${field.columnName} = <#noparse>#{</#noparse>record.${field.fieldName}},
+        </#list>
+        </#if>
+        </set>
+        <#if tableClass.pkFields??>
+        <#list tableClass.pkFields as field>
+            WHERE ${field.columnName} = <#noparse>#{</#noparse>record.${field.fieldName},jdbcType=${field.jdbcType}<#noparse>}</#noparse> and version = <#noparse>#{</#noparse>oldVersion<#noparse>}</#noparse>
+        </#list>
+        </#if>
+    </update>
     <update id="updateByPrimaryKeySelective"  parameterType="${po}.${tableClass.shortClassName}Po">
         UPDATE ${tableClass.tableName}
         <set>
@@ -117,7 +132,22 @@
         </#list>
         </#if>
     </update>
-
+    <update id="updateByPrimaryKeySelectiveAndVersion">
+        UPDATE ${tableClass.tableName}
+        <set>
+        <#if tableClass.baseFields??><#list tableClass.baseFields as field>
+            <if test="record.${field.fieldName} != null">
+                ${field.columnName} = <#noparse>#{</#noparse>record.${field.fieldName}},
+            </if>
+        </#list>
+        </#if>
+        </set>
+        <#if tableClass.pkFields??>
+        <#list tableClass.pkFields as field>
+            WHERE ${field.columnName} = <#noparse>#{</#noparse>record.${field.fieldName},jdbcType=${field.jdbcType}<#noparse>}</#noparse>  and version = <#noparse>#{</#noparse>oldVersion<#noparse>}</#noparse>
+        </#list>
+        </#if>
+    </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -128,11 +158,7 @@
         </#list>
         </#if>
     </select>
-
-    <select id="selectOne" resultMap="BaseResultMap"  parameterType="${poPackage}.${tableClass.shortClassName}Po">
-        SELECT
-        <include refid="Base_Column_List" />
-        FROM ${tableClass.tableName} m
+    <sql id="base_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
             <#if tableClass.allFields??>
@@ -144,60 +170,33 @@
             </#if>
             </trim>
         </where>
+    </sql>
+    <select id="selectOne" resultMap="BaseResultMap"  parameterType="${poPackage}.${tableClass.shortClassName}Po">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM ${tableClass.tableName} m
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="select" resultMap="BaseResultMap"  parameterType="${poPackage}.${tableClass.shortClassName}Po">
         SELECT
         <include refid="Base_Column_List" />
         FROM ${tableClass.tableName} m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-            <#if tableClass.allFields??>
-            <#list tableClass.allFields as field>
-                <if test="${field.fieldName} != null">
-                    AND m.${field.columnName} = <#noparse>#</#noparse>{${field.fieldName}}
-                </if>
-            </#list>
-            </#if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="selectAll" resultMap="BaseResultMap"  parameterType="${poPackage}.${tableClass.shortClassName}Po">
         SELECT
         <include refid="Base_Column_List" />
         FROM ${tableClass.tableName} m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-            <#if tableClass.allFields??>
-            <#list tableClass.allFields as field>
-                <if test="${field.fieldName} != null">
-                    AND m.${field.columnName} = <#noparse>#</#noparse>{${field.fieldName}}
-                </if>
-            </#list>
-            </#if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="selectList" resultMap="BaseResultMap" parameterType="${voQm}.${tableClass.shortClassName}Vo">
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM ${tableClass.tableName} m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-            <#if tableClass.allFields??>
-            <#list tableClass.allFields as field>
-                <if test="${field.fieldName} != null <#if field.stringColumn==true> and ${field.fieldName} != ''</#if>">
-                    AND m.${field.columnName} = <#noparse>#</#noparse>{${field.fieldName}}
-                </if>
-            </#list>
-            </#if>
-                <!--  keyword   -->
-                <if test="keyword != null and keyword != ''">
-                </if>
-            </trim>
-        </where>
+        <include refid="cust_query_condition_sql"/>
     </select>
 
     <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.${tableClass.shortClassName}Dto" extends="BaseResultMap">
@@ -207,19 +206,22 @@
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM ${tableClass.tableName} m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+    <sql id="cust_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
-            <#if tableClass.allFields??>
+                <#if tableClass.allFields??>
                 <#list tableClass.allFields as field>
                 <if test="${field.fieldName} != null <#if field.stringColumn==true> and ${field.fieldName} != ''</#if>">
                     AND m.${field.columnName} = <#noparse>#</#noparse>{${field.fieldName}}
                 </if>
                 </#list>
-            </#if>
+                </#if>
                 <!--  keyword   -->
                 <if test="keyword != null and keyword != ''">
                 </if>
             </trim>
         </where>
-    </select>
+    </sql>
 </mapper>
