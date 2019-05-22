@@ -5,6 +5,30 @@ window.T = {
         dict_key_prefix: 'local_dict_key_'
     },
     local_storage_age: 24 * 60 * 60 * 1000  // 一天
+    ,
+    getBtnAuthCodes: function (tableColumns) {
+        let btns = tableColumns[tableColumns.length - 1].buttons;
+        let codes = [];
+        if (btns) {
+            for (let b in btns) {
+                if (btns[b].auth) {
+                    codes.push(btns[b].auth);
+                }
+            }
+        }
+        return codes.join(',');
+    },
+    getDictTypes: function (tableColumns) {
+        let codes = [];
+        if (tableColumns) {
+            for (let b in tableColumns) {
+                if (tableColumns[b].dict) {
+                    codes.push(tableColumns[b].dict);
+                }
+            }
+        }
+        return codes.join(',');
+    }
 };
 
 // 获取请求参数
@@ -81,7 +105,7 @@ window.httpUtil = {
         });
     },
     //同步方法
-    asyncGet: function (option, successCallback, errorCallBack, completeCallBack) {
+    syncGet: function (option, successCallback, errorCallBack, completeCallBack) {
         option = option || {url: null, data: {}};
         errorCallBack = errorCallBack || function (e) {
         }
@@ -499,7 +523,7 @@ window.dictUtil = {
     getDicts: function (param) {
         var dicts = [];
         param.orderBy = 'sequence-asc';
-        httpUtil.asyncGet({url: baseURL + 'sys/dict/list', data: param}, function (r) {
+        httpUtil.syncGet({url: baseURL + 'sys/dict/list', data: param}, function (r) {
             dicts = r.data.list;
             dicts.forEach(function (v, index, arr) {
                 if (v.enabled == 'N') {
