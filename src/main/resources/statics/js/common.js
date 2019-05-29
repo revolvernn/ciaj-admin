@@ -1,6 +1,7 @@
 var baseURL = "../../";
 //工具集合Tools
 window.T = {
+    cloud_storage_config_key: 'CLOUD_STORAGE_CONFIG_KEY',
     local_key: {
         dict_key_prefix: 'local_dict_key_'
     },

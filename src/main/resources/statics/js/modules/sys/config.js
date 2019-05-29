@@ -19,10 +19,6 @@ var configapp = new Vue({
                     label: 'KEY'
                 },
                 {
-                    name: 'configValue',
-                    label: 'VALUE'
-                },
-                {
                     name: 'status',
                     dict: 'status',
                     label: '状态'
@@ -41,12 +37,17 @@ var configapp = new Vue({
                 },
                 {
                     label: '操作',
-                    width: '150px',
+                    width: '250px',
                     buttons: [
                         {
                             label: '修改',
                             click: this.myUpdate,
                             type: 'success'
+                        },
+                        {
+                            label: '配置',
+                            click: this.myConfig,
+                            type: 'info'
                         },
                         {
                             label: '删除',
@@ -70,7 +71,40 @@ var configapp = new Vue({
             },
             rules: {
                 //username: [{required: true, message: '必填', trigger: 'blur'}]
-            }
+            },
+            ossForm: {
+                uploadFormVisible: false,
+                ossFormVisible: false,
+                config: {
+                    type: 'LOCAL',
+                    status: 'Y',
+                    fileCompress: 'true',
+                    fileQuality: '0.3',
+                    localFilePath: 'C:/upload',
+                    localFileMapping: '/oss/file',
+                    localFilePrefix: null,
+                    aliyunDomain: null,
+                    aliyunPrefix: null,
+                    aliyunEndPoint: null,
+                    aliyunAccessKeyId: null,
+                    aliyunAccessKeySecret: null,
+                    aliyunBucketName: null,
+
+                    qiniuDomain: null,
+                    qiniuPrefix: null,
+                    qiniuAccessKey: null,
+                    qiniuSecretKey: null,
+                    qiniuBucketName: null,
+
+                    qcloudDomain: null,
+                    qcloudPrefix: null,
+                    qcloudAppId: null,
+                    qcloudSecretId: null,
+                    qcloudSecretKey: null,
+                    qcloudBucketName: null,
+                    qcloudRegion: null
+                }
+            },
         }
     },
     created: function () {
@@ -101,6 +135,37 @@ var configapp = new Vue({
         currentpagechange(val) {
             this.queryForm.pageNo = val;
             this.loadData();
+        },
+        myConfig(index, row) {
+            var that = this;
+           if(row.configKey==T.cloud_storage_config_key){
+               that.ossForm.ossFormVisible = true;
+               that.resetForm('ossFormRef');
+               httpUtil.get({url: "sys/oss/getConfig"}, function (result) {
+                   if (result.code == 0) {
+                       that.ossForm.config = result.data;
+                   }
+               });
+           }else {
+               that.$message.error('该数据没有可配置项');
+           }
+        },
+        ossUpdate() {
+            var that = this;
+            that.$refs['ossFormRef'].validate((valid) => {
+                if (valid) {
+                    httpUtil.post({
+                        url: "sys/oss/config/save",
+                        data: JSON.stringify(that.ossForm.config)
+                    }, function (r) {
+                        alertMsg(that, r)
+                        if (r.code == 0) {
+                            that.myQuery();
+                            that.ossForm.ossFormVisible = false;
+                        }
+                    });
+                }
+            });
         },
         myAdd() {
             var that = this;

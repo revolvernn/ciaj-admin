@@ -1,5 +1,7 @@
 package com.ciaj.comm.utils;
 
+import org.apache.commons.lang3.time.DateUtils;
+
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -9,7 +11,7 @@ import java.util.*;
  * @Date: 2019/2/25 15:34
  * @Description:
  */
-public class CalendarUtils {
+public class CalendarUtils extends DateUtils {
 
 	private static final ThreadLocal<SimpleDateFormat> threadLocal = new ThreadLocal<SimpleDateFormat>();
 	private static final Calendar calendar = Calendar.getInstance();
@@ -22,6 +24,11 @@ public class CalendarUtils {
 	 * 时间格式(yyyy-MM-dd HH:mm:ss)
 	 */
 	public final static String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
+	/**
+	 * 小时:分;秒 HH:mm:ss
+	 */
+	public final static String TIME_SHORT = "HH:mm:ss";
 
 	/**
 	 * 日期格式化 日期格式为：yyyy-MM-dd

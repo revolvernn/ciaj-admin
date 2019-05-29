@@ -28,6 +28,11 @@ public class DefaultConfigConstant {
 	public enum OSSCloud {
 
 		/**
+		 * 本地存储
+		 */
+		LOCAL("LOCAL", "本地存储"),
+
+		/**
 		 * 阿里云
 		 */
 		ALIYUN("ALY", "阿里云"),

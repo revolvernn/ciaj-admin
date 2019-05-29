@@ -317,4 +317,68 @@ public class RequestUtils {
 		return byteArrayInputStream;
 	}
 
+
+	/**
+	 * 将路径中的路径分隔符校正为斜杠分隔符
+	 *
+	 * @param path
+	 * @return
+	 */
+	public static String convertToSlash(String path) {
+		String r = path;
+		while (r.contains(FileUtils.slash_double) || r.contains(FileUtils.backslash_double)) {
+			r = r.replace(FileUtils.slash_double, FileUtils.slash).replace(FileUtils.backslash_double, FileUtils.backslash);
+		}
+		r = r.replace(FileUtils.backslash, FileUtils.slash);
+
+		return r;
+	}
+
+	/**
+	 * 将path以斜杠分隔符开始
+	 *
+	 * @param path
+	 * @return
+	 */
+	public static String wrapStartSlash(String path) {
+		String r = path;
+		while (r.startsWith(FileUtils.slash_double) || r.startsWith(FileUtils.backslash_double)) {
+			r = FileUtils.slash + r.substring(2);
+		}
+		if (r.startsWith(FileUtils.slash) || r.startsWith(FileUtils.backslash)) {
+			r = FileUtils.slash + r.substring(1);
+		} else {
+			r = FileUtils.slash + r;
+		}
+		return r;
+	}
+
+	/**
+	 * 将path以斜杠分隔符结尾
+	 *
+	 * @param path
+	 * @return
+	 */
+	public static String wrapEndSlash(String path) {
+		String r = path;
+		while (r.endsWith(FileUtils.slash_double) || r.endsWith(FileUtils.backslash_double)) {
+			r = r.substring(0, r.length() - 2) + FileUtils.slash;
+		}
+		if (r.endsWith(FileUtils.slash) || r.endsWith(FileUtils.backslash)) {
+			r = r.substring(0, r.length() - 1) + FileUtils.slash;
+		} else {
+			r = r + FileUtils.slash;
+		}
+		return r;
+	}
+
+	public static String unwrapStartSlash(String path) {
+		String r = wrapStartSlash(path);
+		return r.substring(1);
+	}
+
+	public static String unwrapEndSlash(String path) {
+		String r = wrapEndSlash(path);
+		return r.substring(0, r.length() - 1);
+	}
 }

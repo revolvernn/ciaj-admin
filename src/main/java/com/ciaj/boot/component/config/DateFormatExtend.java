@@ -2,7 +2,6 @@ package com.ciaj.boot.component.config;
 
 import com.ciaj.comm.utils.CalendarUtils;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.*;
 import java.util.Date;
@@ -64,7 +63,7 @@ public class DateFormatExtend extends DateFormat {
 
 	private Date getParseDate(String source) {
 		try {
-			return DateUtils.parseDate(source, CalendarUtils.DATE_TIME_PATTERN, CalendarUtils.DATE_PATTERN);
+			return CalendarUtils.parseDate(source, CalendarUtils.DATE_TIME_PATTERN, CalendarUtils.DATE_PATTERN);
 		} catch (ParseException e) {
 			log.error(e.getMessage(), e);
 		}

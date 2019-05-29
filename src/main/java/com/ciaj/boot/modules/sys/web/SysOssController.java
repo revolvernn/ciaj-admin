@@ -1,5 +1,6 @@
 package com.ciaj.boot.modules.sys.web;
 
+import com.ciaj.comm.utils.validate.*;
 import com.google.gson.Gson;
 import com.ciaj.base.AbstractController;
 import com.ciaj.boot.modules.oss.cloud.CloudStorageConfig;
@@ -16,10 +17,6 @@ import com.ciaj.comm.constant.DefaultConfigConstant;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.constant.ParamTypeEnum;
 import com.ciaj.comm.utils.Page;
-import com.ciaj.comm.utils.validate.AliyunGroup;
-import com.ciaj.comm.utils.validate.QcloudGroup;
-import com.ciaj.comm.utils.validate.QiniuGroup;
-import com.ciaj.comm.utils.validate.ValidatorUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -72,6 +69,8 @@ public class SysOssController extends AbstractController<SysOssPo, SysOssDto, Sy
 		} else if (config.getType().equals(DefaultConfigConstant.OSSCloud.QCLOUD.getValue())) {
 			//校验腾讯云数据
 			ValidatorUtils.validateEntity(config, QcloudGroup.class);
+		} else if (config.getType().equals(DefaultConfigConstant.OSSCloud.LOCAL.getValue())) {
+			ValidatorUtils.validateEntity(config, LocalGroup.class);
 		}
 
 		SysConfigPo query = new SysConfigPo();

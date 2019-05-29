@@ -54,8 +54,13 @@ var ossapp = new Vue({
                 uploadFormVisible: false,
                 ossFormVisible: false,
                 config: {
-                    type: 'ALY',
+                    type: 'LOCAL',
                     status: 'Y',
+                    fileCompress: 'true',
+                    fileQuality: '0.3',
+                    localFilePath: 'C:/upload',
+                    localFileMapping: '/oss/file',
+                    localFilePrefix: null,
                     aliyunDomain: null,
                     aliyunPrefix: null,
                     aliyunEndPoint: null,
@@ -94,7 +99,8 @@ var ossapp = new Vue({
             that.myQuery();
         },
         uploadSuccess(res, file) {
-            alertMsg(this, res)
+            var that = this;
+            alertMsg(that, res)
             that.myQuery();
         },
         resetForm(formName) {
@@ -126,32 +132,6 @@ var ossapp = new Vue({
             var that = this;
             that.imgPreVisible = true;
             that.rowImgUrl = row.url || '';
-        },
-        myAdd() {
-            var that = this;
-            that.ossForm.ossFormVisible = true;
-            that.resetForm('ossFormRef');
-            httpUtil.get({url: "sys/oss/getConfig"}, function (result) {
-                if (result.code == 0) {
-                    that.ossForm.config = result.data;
-                }
-            });
-        },
-        saveOrUpdate() {
-            var that = this;
-            that.$refs['ossFormRef'].validate((valid) => {
-                if (valid) {
-                    httpUtil.post({
-                        url: "sys/oss/config/save",
-                        data: JSON.stringify(that.ossForm.config)
-                    }, function (r) {
-                        alertMsg(that, r)
-                        if (r.code == 0) {
-                            that.ossForm.ossFormVisible = false;
-                        }
-                    });
-                }
-            });
         },
         myDel(index, row) {
             var that = this;
