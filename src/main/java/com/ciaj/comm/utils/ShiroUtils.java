@@ -24,7 +24,7 @@ public class ShiroUtils {
 			currentUser.checkPermission(permission);
 			return true;
 		} catch (AuthorizationException e) {
-			log.error(e.getMessage(), e);
+			log.debug(e.getMessage(), e);
 			return false;
 		}
 	}

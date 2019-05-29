@@ -53,7 +53,7 @@ public class FileController {
         ossEntity.setUrl(url);
         ossEntity.setSource(OSSFactory.getType());
         sysOssService.insertDTO(ossEntity);
-        return ResponseEntity.success().put(url);
+        return ResponseEntity.success("上传成功").put(url);
     }
 
     /**
