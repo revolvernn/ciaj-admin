@@ -85,10 +85,20 @@ new Vue({
                 }
             });
         },
+        opChangeCommand(command){
+            if(command=='updatePassword'){
+                this.updatePassword();
+            }else if(command=='logout'){
+                this.logout();
+            }
+        },
         indexClick() {
             var that = this;
             that.main = 'main.html';
             that.navTitle = '控制台';
+        },
+        logout(){
+          window.location.href='/sys/logout'
         },
         updatePassword() {
             var that = this;
