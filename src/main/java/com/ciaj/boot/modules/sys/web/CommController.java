@@ -28,9 +28,8 @@ import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
@@ -44,7 +43,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -295,6 +293,40 @@ public class CommController {
 		auth.setPassword(password2.getPassword());
 		auth.setSalt(password2.getSalt());
 		sysAuthService.updateByPrimaryKeySelective(auth);
+		return ResponseEntity.success();
+	}
+
+
+	/**
+	 * 用户密码修改
+	 *
+	 * @param userId
+	 * @param newPassword
+	 * @return
+	 */
+	@Resubmit
+	@OperationLog(operation = "系统-用户", content = "用户密码修改")
+	@ResponseBody
+	@RequiresPermissions("sys:user:password:update")
+	@PostMapping("/sys/user/password/update")
+	public ResponseEntity updateUserPassword(String userId, String newPassword) {
+		if (StringUtils.isBlank(newPassword)) {
+			return ResponseEntity.error("密码不能为空");
+		}
+		SysAuthPo authQuery = new SysAuthPo();
+		authQuery.setDelFlag(DefaultConstant.FLAG_N);
+		authQuery.setUserId(userId);
+		List<SysAuthPo> auths = sysAuthService.select(authQuery);
+
+		final SysAuthPo sysAuth = auths.get(0);
+
+		SysAuthPo auth = new SysAuthPo();
+
+		final PasswordEntity password = PasswordUtil.getPassword(newPassword);
+		auth.setId(sysAuth.getId());
+		auth.setPassword(password.getPassword());
+		auth.setSalt(password.getSalt());
+		sysAuthService.updateByPrimaryKeySelectiveAndVersion(auth,sysAuth.getVersion());
 		return ResponseEntity.success();
 	}
 

@@ -67,8 +67,7 @@ var userapp = new Vue({
                 },
                 {
                     label: '操作',
-                    width: '250px',
-                    fixed: "right",
+                    width: '300px',
                     buttons: [
                         {
                             auth: 'sys:user:update',
@@ -80,6 +79,12 @@ var userapp = new Vue({
                             auth: 'sys:user:role:rel:adds',
                             label: '分配角色',
                             click: this.myRoles,
+                            type: 'success'
+                        },
+                        {
+                            auth: 'sys:user:password:update',
+                            label: '修改密码',
+                            click: this.myUpdatePassword,
                             type: 'success'
                         },
                         {
@@ -124,6 +129,17 @@ var userapp = new Vue({
                 account: [{required: true, message: '必填', trigger: 'blur'}],
                 username: [{required: true, message: '必填', trigger: 'blur'}],
                 mobile: [{required: true, pattern: /^1[3|4|5|6|7|8][0-9]\d{8}$/, message: '请填写正确手机号', trigger: 'blur'}]
+            },
+            passwordFormRules:{
+                newPassword: [{required: true, message: '必填', trigger: 'blur'}],
+            },
+            pd: {
+                dialogVisible: false,
+                passwordForm:{
+                    newPassword: null,
+                    userName: '',
+                    id: null
+                }
             }
         }
     },
@@ -266,6 +282,36 @@ var userapp = new Vue({
                     that.myQuery();
                     alertMsg(that, r)
                 });
+            });
+        },
+        myUpdatePassword(index, row) {
+            var that = this;
+            that.pd.dialogVisible = true;
+            that.pd.passwordForm.id= row.id;
+            that.pd.passwordForm.userName= row.username;
+            that.resetForm('passwordFormRef')
+        },
+        passwordSubmit: function () {
+            var that = this;
+            that.$refs['passwordFormRef'].validate((valid) => {
+                if (valid) {
+                    var data = "userId=" + that.pd.passwordForm.id + "&newPassword=" + that.pd.passwordForm.newPassword;
+                    httpUtil.post({
+                        url: "sys/user/password/update",
+                        data: data,
+                        contentType: AjaxContentType.URL
+                    }, function (result) {
+                        if (result.code == 0) {
+                            that.$message({message: "修改成功", type: 'success'});
+                            that.pd.dialogVisible = false;
+                        } else {
+                            that.$message.error(result.msg);
+                        }
+                    })
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
             });
         },
         loadData() {

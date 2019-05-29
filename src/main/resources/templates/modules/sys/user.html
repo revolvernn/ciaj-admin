@@ -85,6 +85,20 @@
                 <el-button type="primary" @click="saveUserRole">确 定</el-button>
             </div>
         </el-dialog>
+        <el-dialog title="修改密码" :visible.sync="pd.dialogVisible" width="350px">
+            <el-form ref="passwordFormRef" :rules="passwordFormRules" :model="pd.passwordForm" label-width="80px">
+                <el-form-item label="账号">
+                    <span>{{pd.passwordForm.userName}}</span>
+                </el-form-item>
+                <el-form-item label="新密码" prop="newPassword">
+                    <el-input  type="password" v-model="pd.passwordForm.newPassword"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="pd.dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="passwordSubmit">确 定</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
     </div>
 </div>
 <script src="/statics/js/modules/sys/user.js"></script>
