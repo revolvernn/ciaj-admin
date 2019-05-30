@@ -10,6 +10,10 @@ public class DefaultConfigConstant {
 	 * oss 服务配置，后台不可修改
 	 */
 	public final static String CLOUD_STORAGE_CONFIG_KEY = "CLOUD_STORAGE_CONFIG_KEY";
+	/**
+	 * 文件类型，后台不可修改
+	 */
+	public final static String DEFAULT_FILE_TYPE_CONFIG_KEY = "DEFAULT_FILE_TYPE_CONFIG_KEY";
 
 	/**
 	 * 默认数据版本0为不可修改

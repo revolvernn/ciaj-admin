@@ -4,7 +4,7 @@ var myDiv = Vue.extend({
     template: '<div></div>'
 })
 Vue.component('myDiv', myDiv);
-
+Vue.component('myDictSelect', myDictSelectT);
 var ossapp = new Vue({
     el: '#ossapp',
     data() {
@@ -14,16 +14,22 @@ var ossapp = new Vue({
                 pageEnabled: true,
                 pageNo: 1,
                 pageSize: 10,
+                type: null,
                 keyword: null
             },
             tableColumns: [
                 {
-                    name: 'url',
-                    label: '图片URL'
-                },
-                {
                     name: 'source',
                     label: '来源'
+                },
+                {
+                    name: 'type',
+                    dict: 'upload_file_type',
+                    label: '类型'
+                },
+                {
+                    name: 'url',
+                    label: '文件地址'
                 },
                 {
                     name: 'createTime',
@@ -37,8 +43,8 @@ var ossapp = new Vue({
                     width: '200px',
                     buttons: [
                         {
-                            label: '图片预览',
-                            click: this.rowImg,
+                            label: '预览',
+                            click: this.myRowView,
                             type: 'info'
                         },
                         {
@@ -50,43 +56,11 @@ var ossapp = new Vue({
                 }
             ],
             page: {},
-            ossForm: {
-                uploadFormVisible: false,
-                ossFormVisible: false,
-                config: {
-                    type: 'LOCAL',
-                    status: 'Y',
-                    fileCompress: 'true',
-                    fileQuality: '0.3',
-                    localFilePath: 'C:/upload',
-                    localFileMapping: '/oss/file',
-                    localFilePrefix: null,
-                    aliyunDomain: null,
-                    aliyunPrefix: null,
-                    aliyunEndPoint: null,
-                    aliyunAccessKeyId: null,
-                    aliyunAccessKeySecret: null,
-                    aliyunBucketName: null,
-
-                    qiniuDomain: null,
-                    qiniuPrefix: null,
-                    qiniuAccessKey: null,
-                    qiniuSecretKey: null,
-                    qiniuBucketName: null,
-
-                    qcloudDomain: null,
-                    qcloudPrefix: null,
-                    qcloudAppId: null,
-                    qcloudSecretId: null,
-                    qcloudSecretKey: null,
-                    qcloudBucketName: null,
-                    qcloudRegion: null
-                }
-            },
-            rowImgUrl: '',
-            imgPreVisible: false,
-            rules: {
-                //username: [{required: true, message: '必填', trigger: 'blur'}]
+            uploadFormVisible: false,
+            rowView: {
+                viewPreVisible: false,
+                url: '',
+                type: null
             }
         }
     },
@@ -128,10 +102,11 @@ var ossapp = new Vue({
             this.queryForm.pageNo = val;
             this.loadData();
         },
-        rowImg(index, row) {
+        myRowView(index, row) {
             var that = this;
-            that.imgPreVisible = true;
-            that.rowImgUrl = row.url || '';
+            that.rowView.viewPreVisible = true;
+            that.rowView.type = row.type;
+            that.rowView.url = row.url || '';
         },
         myDel(index, row) {
             var that = this;

@@ -134,14 +134,16 @@ public class SysOssController extends AbstractController<SysOssPo, SysOssDto, Sy
 			@ApiImplicitParam(name = "pageEnabled", value = "是否开启分页:true/false 默认-false", dataType = "Boolean", paramType = "query"),
 			@ApiImplicitParam(name = "pageSize", value = "每页记录数：默认每页十条", dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "type", value = "文件类型", paramType = "query"),
 			@ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query")
 	})
 	@OperationLog(operation = "系统OSS-管理", content = "获取系统OSS列表")
 	@RequiresPermissions("sys:oss:list")
 	@GetMapping("/list")
-	public ResponseEntity<Page<SysOssDto>> list(String keyword) {
+	public ResponseEntity<Page<SysOssDto>> list(String type,String keyword) {
 		SysOssVo entity = new SysOssVo();
 		entity.setKeyword(keyword);
+		entity.setType(type);
 		return super.listDTOPage(entity);
 	}
 

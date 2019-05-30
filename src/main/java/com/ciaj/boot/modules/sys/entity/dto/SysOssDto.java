@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @Author: Ciaj.
- * @Date: 2019-05-09 13:07:46
+ * @Date: 2019-05-29 18:13:13
  * @Description: www.ciaj.com gen DTO
  */
 @ApiModel(value = "SysOss")
@@ -28,6 +28,12 @@ public class SysOssDto extends SysOssPo {
     @ApiModelProperty("来源")
     public java.lang.String getSource() {
         return super.getSource();
+    }
+
+    //@javax.validation.constraints.NotBlank(message = "")
+    @ApiModelProperty("文件类型")
+    public java.lang.String getType() {
+        return super.getType();
     }
 
     //@javax.validation.constraints.NotBlank(message = "")

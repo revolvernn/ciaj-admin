@@ -5,6 +5,7 @@ import com.ciaj.boot.modules.sys.service.SysOssService;
 import com.ciaj.boot.modules.oss.cloud.OSSFactory;
 import com.ciaj.comm.ResponseEntity;
 import com.ciaj.comm.exception.BsRException;
+import com.ciaj.comm.utils.FileTypeUtil;
 import com.ciaj.comm.utils.ResponseUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,7 @@ public class FileController {
         SysOssPo ossEntity = new SysOssPo();
         ossEntity.setUrl(url);
         ossEntity.setSource(OSSFactory.getType());
+        ossEntity.setType(FileTypeUtil.getFileType(url));
         sysOssService.insertDTO(ossEntity);
         return ResponseEntity.success("上传成功").put(url);
     }
