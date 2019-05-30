@@ -20,7 +20,7 @@ public class ScheduledService {
 	Executor  executor;
 
 
-	@Scheduled(cron = "* * * * * ? ")
+	//@Scheduled(cron = "* * * * * ? ")
 	public void cron() {
 		log.info("=====>>>>>每秒使用cron  {}", System.currentTimeMillis());
 
@@ -30,5 +30,16 @@ public class ScheduledService {
 				log.info("=====>>>>>每秒使用execute  {}", System.currentTimeMillis());
 			}
 		});
+	}
+
+
+	@Scheduled(cron = "0 0/1 * * * ? ")
+	public void run() {
+		long mb = 1024 * 1024;
+		Runtime runtime = Runtime.getRuntime();
+		long total = runtime.totalMemory() / mb;
+		long max = runtime.maxMemory() / mb;
+		long free = runtime.freeMemory() / mb;
+		log.info("=====>>>>>最大内存: {}m; 已分配内存: {}m; 已分配内存中的剩余空间: {}m; 最大可用内存: {}m.", max, total, free, max - total + free);
 	}
 }

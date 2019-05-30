@@ -21,8 +21,8 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 	private RedisTemplate redisTemplate;
 
 	public ShiroRedisCache(String name, RedisTemplate redisTemplate) {
-		this.cacheKey="shiro:cache:" + name + ":";
-		this.redisTemplate=redisTemplate;
+		this.cacheKey = "shiro:cache:" + name + ":";
+		this.redisTemplate = redisTemplate;
 	}
 
 

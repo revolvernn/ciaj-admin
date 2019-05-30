@@ -5,6 +5,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @Author: Ciaj.
@@ -13,7 +14,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  */
 @Log4j2
 @SpringBootApplication
-//@EnableScheduling
+@EnableScheduling
 @MapperScan(basePackages = {"com.ciaj.boot.modules.sys.mapper"})
 public class AdminApplication extends SpringBootServletInitializer {
 

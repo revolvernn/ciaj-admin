@@ -64,10 +64,10 @@ public class SysLogController extends AbstractController<SysLogPo, SysLogDto, Sy
     @OperationLog(operation = "系统日志-管理", content = "获取系统日志列表")
     @RequiresPermissions("sys:log:list")
     @GetMapping("/list")
-    public ResponseEntity<Page<SysLogDto>> list(String keyword,String tyep) {
+    public ResponseEntity<Page<SysLogDto>> list(String keyword,String type) {
         SysLogVo entity = new SysLogVo();
         entity.setKeyword(keyword);
-        entity.setType(tyep);
+        entity.setType(type);
         return super.listDTOPage(entity);
     }
 

@@ -17,7 +17,6 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -42,18 +41,16 @@ public class ShiroConfiguration {
 	}
 
 	@Bean
-	public DefaultWebSecurityManager securityManager(AdminShiroRealm adminShiroRealm, SessionManager sessionManager, ShiroRedisCacheManager shiroRedisCacheManager) {
+	public DefaultWebSecurityManager securityManager(AdminShiroRealm adminShiroRealm, SessionManager sessionManager) {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-		//设置realm.
 		securityManager.setRealm(adminShiroRealm);
 		securityManager.setSessionManager(sessionManager);
-//		securityManager.setCacheManager(shiroRedisCacheManager);
 		return securityManager;
 	}
 
 	@Bean
 	public SimpleCookie simpleCookie() {
-		SimpleCookie cookie = new SimpleCookie("boot-cookie-id");
+		SimpleCookie cookie = new SimpleCookie("ciaj-session-id");
 		cookie.setMaxAge(-1);
 		cookie.setPath("/");
 		cookie.setHttpOnly(false);
@@ -76,14 +73,6 @@ public class ShiroConfiguration {
 		EnterpriseCacheSessionDAO enterpriseCacheSessionDAO = new EnterpriseCacheSessionDAO();
 		enterpriseCacheSessionDAO.setActiveSessionsCacheName("shiro-activeSessionCache");
 		return enterpriseCacheSessionDAO;
-	}
-
-
-	@Bean("shiroRedisCacheManager")
-	public ShiroRedisCacheManager shiroRedisCacheManager(RedisTemplate<String, Object> shiroRedisTemplate) {
-		ShiroRedisCacheManager cacheManager = new ShiroRedisCacheManager();
-		cacheManager.setRedisTemplate(shiroRedisTemplate);
-		return cacheManager;
 	}
 
 	@Bean(name = "shiroFilter")
@@ -120,8 +109,8 @@ public class ShiroConfiguration {
 	@Bean
 	public HashedCredentialsMatcher hashedCredentialsMatcher() {
 		HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-		hashedCredentialsMatcher.setHashAlgorithmName(PasswordUtil.ALGORITHM_NAME_MD5);//散列算法:这里使用MD5算法;
-		hashedCredentialsMatcher.setHashIterations(PasswordUtil.HASH_ITERATIONS);//散列的次数，比如散列两次，相当于 md5(md5(""));
+		hashedCredentialsMatcher.setHashAlgorithmName(PasswordUtil.ALGORITHM_NAME_MD5);
+		hashedCredentialsMatcher.setHashIterations(PasswordUtil.HASH_ITERATIONS);
 		return hashedCredentialsMatcher;
 	}
 

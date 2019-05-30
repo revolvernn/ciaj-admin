@@ -46,8 +46,11 @@ public class ResubmitInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 		HttpSession session = request.getSession(false);
-		if (session != null && session.getAttribute(RESUBMIT_DATA) != null) {
-			session.removeAttribute(RESUBMIT_DATA);
+		try {
+			if (session != null && session.getAttribute(RESUBMIT_DATA) != null) {
+				session.removeAttribute(RESUBMIT_DATA);
+			}
+		} catch (Exception e) {
 		}
 		super.afterCompletion(request, response, handler, ex);
 	}
