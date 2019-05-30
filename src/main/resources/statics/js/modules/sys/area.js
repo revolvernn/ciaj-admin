@@ -66,11 +66,13 @@ var areaapp = new Vue({
                     width: '150px',
                     buttons: [
                         {
+                            auth: 'sys:area:update',
                             label: '修改',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
+                            auth: 'sys:area:delFlag',
                             label: '删除',
                             click: this.myDel,
                             type: 'danger'

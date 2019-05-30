@@ -1,7 +1,7 @@
 Vue.component('myPagination', myPaginationT);
 Vue.component('myTable', myTableT);
 Vue.component('myDictSelect', myDictSelectT);
-
+Vue.component('myBtn', myBtnT);
 var configapp = new Vue({
     el: '#configapp',
     data() {
@@ -40,16 +40,19 @@ var configapp = new Vue({
                     width: '250px',
                     buttons: [
                         {
+                            auth: 'sys:config:update',
                             label: '修改',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
+                            auth:'sys:oss:config:save',
                             label: '配置',
                             click: this.myConfig,
                             type: 'info'
                         },
                         {
+                            auth: 'sys:config:delFlag',
                             label: '删除',
                             click: this.myDel,
                             type: 'danger'

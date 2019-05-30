@@ -2,7 +2,6 @@ Vue.component('myPagination', myPaginationT);
 Vue.component('myTable', myTableT);
 Vue.component('myDictSelect', myDictSelectT);
 
-Vue.component('myBtn', myBtnT);
 var logapp = new Vue({
     el: '#logapp',
     data() {

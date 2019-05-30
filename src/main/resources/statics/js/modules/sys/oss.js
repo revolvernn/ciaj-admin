@@ -5,6 +5,7 @@ var myDiv = Vue.extend({
 })
 Vue.component('myDiv', myDiv);
 Vue.component('myDictSelect', myDictSelectT);
+Vue.component('myBtn', myBtnT);
 var ossapp = new Vue({
     el: '#ossapp',
     data() {
@@ -50,6 +51,7 @@ var ossapp = new Vue({
                         {
                             label: '删除',
                             click: this.myDel,
+                            auth: 'sys:oss:delFlag',
                             type: 'danger'
                         }
                     ]
