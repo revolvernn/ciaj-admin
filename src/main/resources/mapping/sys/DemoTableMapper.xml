@@ -5,15 +5,13 @@
 <mapper namespace="com.ciaj.boot.modules.sys.mapper.DemoTableMapper">
     <!--
         Author: Ciaj.
-        Date: 2019-05-08 13:59:02
+        Date: 2019-05-30 17:18:48
         Description: www.ciaj.com gen mapper.xml
     -->
     <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
 
     <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.DemoTablePo" >
         <id column="id" property="id" jdbcType="VARCHAR" />
-        <id column="url" property="url" jdbcType="VARCHAR" />
-        <id column="source" property="source" jdbcType="VARCHAR" />
         <id column="create_at" property="createAt" jdbcType="VARCHAR" />
         <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
@@ -22,10 +20,10 @@
         <id column="version" property="version" jdbcType="INTEGER" />
     </resultMap>
     <sql id="Base_Column_List">
-        id,url,source,create_at,create_time,update_at,update_time,del_flag,version
+        id,create_at,create_time,update_at,update_time,del_flag,version
     </sql>
     <sql id="Base_Alias_Column_List">
-        m.id,m.url,m.source,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
+        m.id,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
     </sql>
     <delete id="deleteByPrimaryKey">
         DELETE FROM demo_table
@@ -37,12 +35,6 @@
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null">
                     AND id = #{id}
-                </if>
-                <if test="url != null">
-                    AND url = #{url}
-                </if>
-                <if test="source != null">
-                    AND source = #{source}
                 </if>
                 <if test="createAt != null">
                     AND create_at = #{createAt}
@@ -70,9 +62,9 @@
             SELECT REPLACE(uuid(),'-','') FROM DUAL
         </selectKey>
         INSERT INTO demo_table
-        (id,url,source,create_at,create_time,update_at,update_time,del_flag,version)
+        (id,create_at,create_time,update_at,update_time,del_flag,version)
         VALUES
-        (#{id,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{source,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
+        (#{id,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.ciaj.boot.modules.sys.entity.po.DemoTablePo">
         <selectKey keyProperty="id" order="BEFORE" resultType="String">
@@ -82,12 +74,6 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
-            </if>
-            <if test="url != null">
-                url,
-            </if>
-            <if test="source != null">
-                source,
             </if>
             <if test="createAt != null">
                 create_at,
@@ -111,12 +97,6 @@
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 #{id,jdbcType=VARCHAR},
-            </if>
-            <if test="url != null">
-                #{url,jdbcType=VARCHAR},
-            </if>
-            <if test="source != null">
-                #{source,jdbcType=VARCHAR},
             </if>
             <if test="createAt != null">
                 #{createAt,jdbcType=VARCHAR},
@@ -142,8 +122,6 @@
     <update id="updateByPrimaryKey"  parameterType="com.ciaj.boot.modules.sys.entity.po.DemoTablePo">
         UPDATE demo_table
         <set>
-            url = #{url},
-            source = #{source},
             create_at = #{createAt},
             create_time = #{createTime},
             update_at = #{updateAt},
@@ -156,26 +134,18 @@
     <update id="updateByPrimaryKeyAndVersion">
         UPDATE demo_table
         <set>
-            url = #{url},
-            source = #{source},
-            create_at = #{createAt},
-            create_time = #{createTime},
-            update_at = #{updateAt},
-            update_time = #{updateTime},
-            del_flag = #{delFlag},
-            version = #{version},
+            create_at = #{record.createAt},
+            create_time = #{record.createTime},
+            update_at = #{record.updateAt},
+            update_time = #{record.updateTime},
+            del_flag = #{record.delFlag},
+            version = #{record.version},
         </set>
-            WHERE id = #{id,jdbcType=VARCHAR} and version=#{oldVersion}
+            WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
     </update>
     <update id="updateByPrimaryKeySelective"  parameterType="com.ciaj.boot.modules.sys.entity.po.DemoTablePo">
         UPDATE demo_table
         <set>
-            <if test="url != null">
-                url = #{url},
-            </if>
-            <if test="source != null">
-                source = #{source},
-            </if>
             <if test="createAt != null">
                 create_at = #{createAt},
             </if>
@@ -200,32 +170,26 @@
     <update id="updateByPrimaryKeySelectiveAndVersion">
         UPDATE demo_table
         <set>
-            <if test="url != null">
-                url = #{url},
+            <if test="record.createAt != null">
+                create_at = #{record.createAt},
             </if>
-            <if test="source != null">
-                source = #{source},
+            <if test="record.createTime != null">
+                create_time = #{record.createTime},
             </if>
-            <if test="createAt != null">
-                create_at = #{createAt},
+            <if test="record.updateAt != null">
+                update_at = #{record.updateAt},
             </if>
-            <if test="createTime != null">
-                create_time = #{createTime},
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime},
             </if>
-            <if test="updateAt != null">
-                update_at = #{updateAt},
+            <if test="record.delFlag != null">
+                del_flag = #{record.delFlag},
             </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime},
-            </if>
-            <if test="delFlag != null">
-                del_flag = #{delFlag},
-            </if>
-            <if test="version != null">
-                version = #{version},
+            <if test="record.version != null">
+                version = #{record.version},
             </if>
         </set>
-            WHERE id = #{id,jdbcType=VARCHAR}  and version = #{oldVersion}
+            WHERE id = #{record.id,jdbcType=VARCHAR}  and version = #{oldVersion}
     </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT
@@ -233,21 +197,11 @@
         FROM demo_table
         WHERE id = #{id,jdbcType=VARCHAR}
     </select>
-
-    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.DemoTablePo">
-        SELECT
-        <include refid="Base_Column_List" />
-        FROM demo_table m
+    <sql id="base_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null">
                     AND m.id = #{id}
-                </if>
-                <if test="url != null">
-                    AND m.url = #{url}
-                </if>
-                <if test="source != null">
-                    AND m.source = #{source}
                 </if>
                 <if test="createAt != null">
                     AND m.create_at = #{createAt}
@@ -269,120 +223,33 @@
                 </if>
             </trim>
         </where>
+    </sql>
+    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.DemoTablePo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM demo_table m
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="select" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.DemoTablePo">
         SELECT
         <include refid="Base_Column_List" />
         FROM demo_table m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="url != null">
-                    AND m.url = #{url}
-                </if>
-                <if test="source != null">
-                    AND m.source = #{source}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-                <if test="version != null">
-                    AND m.version = #{version}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.DemoTablePo">
         SELECT
         <include refid="Base_Column_List" />
         FROM demo_table m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null">
-                    AND m.id = #{id}
-                </if>
-                <if test="url != null">
-                    AND m.url = #{url}
-                </if>
-                <if test="source != null">
-                    AND m.source = #{source}
-                </if>
-                <if test="createAt != null">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null">
-                    AND m.del_flag = #{delFlag}
-                </if>
-                <if test="version != null">
-                    AND m.version = #{version}
-                </if>
-            </trim>
-        </where>
+        <include refid="base_query_condition_sql"/>
     </select>
 
     <select id="selectList" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.DemoTableVo">
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM demo_table m
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null  and id != ''">
-                    AND m.id = #{id}
-                </if>
-                <if test="url != null  and url != ''">
-                    AND m.url = #{url}
-                </if>
-                <if test="source != null  and source != ''">
-                    AND m.source = #{source}
-                </if>
-                <if test="createAt != null  and createAt != ''">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null ">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null  and updateAt != ''">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null ">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null  and delFlag != ''">
-                    AND m.del_flag = #{delFlag}
-                </if>
-                <if test="version != null ">
-                    AND m.version = #{version}
-                </if>
-                <!--  keyword   -->
-                <if test="keyword != null and keyword != ''">
-                </if>
-            </trim>
-        </where>
+        <include refid="cust_query_condition_sql"/>
     </select>
 
     <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.DemoTableDto" extends="BaseResultMap">
@@ -392,16 +259,13 @@
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM demo_table m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+    <sql id="cust_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null  and id != ''">
                     AND m.id = #{id}
-                </if>
-                <if test="url != null  and url != ''">
-                    AND m.url = #{url}
-                </if>
-                <if test="source != null  and source != ''">
-                    AND m.source = #{source}
                 </if>
                 <if test="createAt != null  and createAt != ''">
                     AND m.create_at = #{createAt}
@@ -426,5 +290,5 @@
                 </if>
             </trim>
         </where>
-    </select>
+    </sql>
 </mapper>

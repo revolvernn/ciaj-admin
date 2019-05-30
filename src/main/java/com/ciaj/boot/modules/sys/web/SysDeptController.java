@@ -50,7 +50,7 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
 	@RequiresPermissions("sys:dept:getById")
 	@GetMapping("/getById/{id}")
 	public ResponseEntity<SysDeptDto> getById(@PathVariable("id") String id) {
-		return super.getById(id);
+		return new ResponseEntity<SysDeptDto>().put(sysDeptService.selectById(id));
 	}
 
 	/**
