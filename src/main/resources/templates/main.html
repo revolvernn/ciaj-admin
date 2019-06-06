@@ -21,7 +21,6 @@
     var myChart = echarts.init(document.getElementById('main'));
     httpUtil.get({url: "sys/table/status", data: {}}, function (result) {
 
-        console.log(result);
         var legend = [];
         var series = [];
         var data = result.data;

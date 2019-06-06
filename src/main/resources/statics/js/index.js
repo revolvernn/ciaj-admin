@@ -15,12 +15,13 @@ var myMenuItem = Vue.extend({
         '           <i v-else class="el-icon-setting"></i>',
         '           <span slot="title">{{children.name}}</span>',
         '       </el-menu-item>',
-        '       <my-menu-item v-if="children.type==\'0\'" :item="children"></my-menu-item>',
+        '       <my-menu-item v-else-if="children.type==\'0\'" :item="children"></my-menu-item>',
         '   </el-menu-item-group>',
         '</el-submenu>'
     ].join('')
 });
 Vue.component('myMenuItem', myMenuItem);
+var mainTitle = '主页面', mainUrl = 'main.html';
 var vm = new Vue({
     el: '#app',
     created: function () {
@@ -29,6 +30,8 @@ var vm = new Vue({
         this.iframeResize();
     },
     data: {
+        mainTitle: mainTitle,
+        mainJoin: [mainTitle, mainUrl].join(':'),
         isCollapse: false,
         dialogVisible: false,
         rules: {
@@ -46,9 +49,9 @@ var vm = new Vue({
         },
         menuList: {},
         iframeHeight: 500,
-        defaultActive: '首页:main.html',
-        defaultTabsValue: '首页',
-        tabs: [{title: '首页', name: '首页', content: 'main.html', breadcrumbs: []}],
+        defaultActive: this.mainJoin,
+        defaultTabsValue: mainTitle,
+        tabs: [{title: mainTitle, name: mainTitle, content: mainUrl, breadcrumbs: [mainTitle]}],
         elAsideStyle: {
             zIndex: '100',
             backgroundColor: '#D3DCE6',
@@ -108,7 +111,7 @@ var vm = new Vue({
          * @param indexPath
          */
         selectMenu(index, indexPath) {
-            this.breadcrumbs = this.getIndexPath(indexPath);
+            this.breadcrumbs = this.getIndexPath(index, indexPath);
             let indexs = index.split(':');
             if (indexs.length === 2) {
                 //判断tabs是否有 当前选择 url
@@ -141,8 +144,9 @@ var vm = new Vue({
          * @param indexPath
          * @returns {Array}
          */
-        getIndexPath(indexPath) {
+        getIndexPath(index, indexPath) {
             let paths = [];
+            if (index.indexOf(this.mainTitle) != -1) return paths;
             indexPath.forEach((v, i) => {
                 let path = v.split(':');
                 paths.push(path[0]);
@@ -153,7 +157,6 @@ var vm = new Vue({
             var that = this;
             httpUtil.get({url: "/sys/menu/nav?_" + $.now()}, function (r) {
                 that.menuList = treeUtil.vueTree(r.data)
-                console.log(that.menuList);
             });
         },
         /**
@@ -182,6 +185,17 @@ var vm = new Vue({
             }
             this.defaultTabsValue = activeName;
             this.tabs = tabs.filter(tab => tab.name !== targetName);
+        },
+        /**
+         * 关闭tab
+         * @param targetName
+         */
+        closeTab() {
+            let tabs = this.tabs;
+            this.defaultTabsValue = this.mainTitle;
+            this.defaultActive = this.mainJoin;
+            this.breadcrumbs = [];
+            this.tabs = tabs.filter(tab => tab.name === this.mainTitle);
         },
         /**
          * 变更角色

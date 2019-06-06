@@ -37,3 +37,7 @@ body{
 /*.el-container{*/
     /*height: 660px;*/
 /*}*/
+
+[v-cloak] {
+    display:none !important;
+}

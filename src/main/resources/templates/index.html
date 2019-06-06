@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BOOT</title>
+    <title>ADMIN</title>
     <link rel="stylesheet" href="/statics/js/libs/vue/element-ui-2.4.11/element-ui.css">
     <script src="/statics/js/jquery.min.js"></script>
     <script src="/statics/js/common.js"></script>
@@ -65,11 +65,14 @@
         .el-tabs__header {
             margin: 0px 0 2px;
         }
-    </style>
 
+        [v-cloak] {
+            display: none !important;
+        }
+    </style>
 </head>
 <body>
-<div id="app">
+<div id="app" v-cloak>
     <el-container>
         <el-header>
             <span>BOOT ADMIN</span>
@@ -97,7 +100,7 @@
         <el-container>
             <el-aside v-bind:style="elAsideStyle" id="el-aside-menu">
                 <el-menu :default-active="defaultActive" @select="selectMenu" :collapse="isCollapse">
-                    <el-menu-item index="首页:main.html"><i class="el-icon-menu"></i> <span slot="title">首页</span>
+                    <el-menu-item :index="mainJoin"><i class="el-icon-menu"></i> <span slot="title">{{mainTitle}}</span>
                     </el-menu-item>
                     <my-menu-item :item="item" v-for="item in menuList"></my-menu-item>
                 </el-menu>
@@ -107,7 +110,7 @@
                     <el-breadcrumb-item>
                         <el-switch v-model="isCollapse"></el-switch>
                     </el-breadcrumb-item>
-                    <el-breadcrumb-item>首页</el-breadcrumb-item>
+                    <el-breadcrumb-item><a @click="closeTab()"> 关闭标签 </a></el-breadcrumb-item>
                     <el-breadcrumb-item v-for="item in breadcrumbs">{{item}}</el-breadcrumb-item>
                 </el-breadcrumb>
                 <el-tabs v-model="defaultTabsValue" type="card" @tab-click="selectTab" @tab-remove="removeTab"
