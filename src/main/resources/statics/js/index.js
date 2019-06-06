@@ -1,71 +1,195 @@
-//生成菜单
-var menuItem = Vue.extend({
-    name: 'menu-item',
+var myMenuItem = Vue.extend({
+    name: 'my-menu-item',
     props: {item: {}},
-    template: [
-        '<li v-if="item.enabled ===\'Y\'">',
-        '	<a v-if="item.type === \'0\'" href="javascript:;">',
-        '		<i v-if="item.icon != null" :class="item.icon"></i>',
-        '		<span>{{item.name}}</span>',
-        '		<i class="fa fa-angle-left pull-right"></i>',
-        '	</a>',
-        '	<ul v-if="item.type === \'0\'" class="treeview-menu">',
-        '		<menu-item :item="item" v-for="item in item.children"></menu-item>',
-        '	</ul>',
-
-        '	<a v-if="item.type === \'1\' && item.parentId === \'0\'" :href="\'#\'+item.url">',
-        '		<i v-if="item.icon != null" :class="item.icon"></i>',
-        '		<span>{{item.name}}</span>',
-        '	</a>',
-
-        '	<a v-if="item.type === \'1\' && item.parentId != \'0\'" :href="\'#\'+item.url"><i v-if="item.icon != null" :class="item.icon"></i><i v-else class="fa fa-circle-o"></i> {{item.name}}</a>',
-        '</li>'
-    ].join('')
-});
-
-// iframe自适应
-$(window).on('resize', function () {
-    var $content = $('.content');
-    $content.height($(this).height() - 120);
-    $content.find('iframe').each(function () {
-        $(this).height($content.height());
-    });
-}).resize();
-
-//注册菜单组件
-Vue.component('menuItem', menuItem);
-new Vue({
-    el: '#vueindexapp',
-    data() {
-        return {
-            dialogVisible: false,
-            rules: {
-                password: [{required: true, message: '请输入原密码', trigger: 'blur'}],
-                newPassword: [{required: true, message: '请输入新密码', trigger: 'blur'}]
-            },
-            passwordForm: {password: null, newPassword: null},
-            user: {},
-            menuList: {},
-            main: "main.html",
-            navTitle: "控制台"
+    methods: {
+        getIndex(name, url) {
+            return [name, url].join(':');
         }
     },
+    template: [
+        '<el-submenu :index="item.name">',
+        '   <template slot="title"><i v-if="item.icon" :class="item.icon"></i><i v-else class="el-icon-setting"></i><span slot="title">{{item.name}}</span></template>',
+        '   <el-menu-item-group v-if="item.children"  v-for="children in item.children">',
+        '       <el-menu-item v-if="children.type==\'1\'" :index="getIndex(children.name,children.url)" :disabled="children.disabled">',
+        '           <i v-if="children.icon" :class="children.icon"></i>',
+        '           <i v-else class="el-icon-setting"></i>',
+        '           <span slot="title">{{children.name}}</span>',
+        '       </el-menu-item>',
+        '       <my-menu-item v-if="children.type==\'0\'" :item="children"></my-menu-item>',
+        '   </el-menu-item-group>',
+        '</el-submenu>'
+    ].join('')
+});
+Vue.component('myMenuItem', myMenuItem);
+var vm = new Vue({
+    el: '#app',
     created: function () {
-        var that = this;
-        that.getMenuList();
-        that.getUser();
+        this.getLoginUser();
+        this.getMenuList();
+        this.iframeResize();
     },
-    updated: function () {
-        var that = this;
-        //路由
-        var router = new Router();
-        that.routerList(router, that.menuList);
-        router.start();
+    data: {
+        isCollapse: false,
+        dialogVisible: false,
+        rules: {
+            password: [{required: true, message: '请输入原密码', trigger: 'blur'}],
+            newPassword: [{required: true, message: '请输入新密码', trigger: 'blur'}]
+        },
+        breadcrumbs: [],
+        passwordForm: {password: null, newPassword: null},
+        loginUser: {
+            username: '',
+            role: {
+                name: ''
+            },
+            roles: []
+        },
+        menuList: {},
+        iframeHeight: 500,
+        defaultActive: '首页:main.html',
+        defaultTabsValue: '首页',
+        tabs: [{title: '首页', name: '首页', content: 'main.html', breadcrumbs: []}],
+        elAsideStyle: {
+            zIndex: '100',
+            backgroundColor: '#D3DCE6',
+            width: '200px',
+            color: '#333',
+            left: '0px',
+            textAlign: 'left',
+            position: 'absolute',
+            bottom: '0px',
+            top: '60px'
+        },
+        breadcrumbStyle: {
+            backgroundColor: '#E9EEF3',
+            color: '#333',
+            textAlign: 'center',
+            left: '200px',
+            right: '0px',
+            position: 'absolute',
+            lineHeight: '30px'
+        },
+        elTabsStyle: {
+            backgroundColor: '#E9EEF3',
+            color: '#333',
+            textAlign: 'center',
+            top: '90px',
+            left: '200px',
+            right: '0px',
+            position: 'absolute',
+            bottom: '30px'
+        },
+        elFooterStyle: {
+            backgroundColor: '#F2F6FC',
+            color: '#606266',
+            height: '30px',
+            textAlign: 'center',
+            bottom: '0px',
+            position: 'absolute',
+            left: '200px',
+            right: '0px',
+            paddingTop: '5px'
+        }
     },
     methods: {
+        /**
+         *
+         * @param targetName
+         * @param action
+         */
+        selectTab(targetName, action) {
+            let tab = this.tabs[targetName.index];
+            this.defaultActive = [tab.name, tab.content].join(':');
+            this.breadcrumbs = tab.breadcrumbs;
+        },
+        /**
+         *
+         * @param index
+         * @param indexPath
+         */
+        selectMenu(index, indexPath) {
+            this.breadcrumbs = this.getIndexPath(indexPath);
+            let indexs = index.split(':');
+            if (indexs.length === 2) {
+                //判断tabs是否有 当前选择 url
+                let tabs = this.tabs;
+                let flag = true;
+                tabs.forEach((tab, i) => {
+                    if (tab.content === indexs[1]) {
+                        let nextTab = tabs[i];
+                        if (nextTab) {
+                            this.defaultTabsValue = nextTab.name;
+                            flag = false;
+                            return;
+                        }
+                    }
+                });
+                if (flag) {
+                    this.tabs.push({
+                        title: indexs[0],
+                        name: indexs[0],
+                        content: indexs[1],
+                        breadcrumbs: this.breadcrumbs
+                    });
+                    this.defaultTabsValue = indexs[0];
+                }
+            }
+
+        },
+        /**
+         * 获取路径
+         * @param indexPath
+         * @returns {Array}
+         */
+        getIndexPath(indexPath) {
+            let paths = [];
+            indexPath.forEach((v, i) => {
+                let path = v.split(':');
+                paths.push(path[0]);
+            });
+            return paths;
+        },
+        getMenuList: function () {
+            var that = this;
+            httpUtil.get({url: "/sys/menu/nav?_" + $.now()}, function (r) {
+                that.menuList = treeUtil.vueTree(r.data)
+                console.log(that.menuList);
+            });
+        },
+        /**
+         * iframe 自适应高度
+         */
+        iframeResize() {
+            let clientHeight = document.documentElement.clientHeight;
+            this.iframeHeight = clientHeight - 145;
+        },
+        /**
+         * 删除tab
+         * @param targetName
+         */
+        removeTab(targetName) {
+            let tabs = this.tabs;
+            let activeName = this.defaultTabsValue;
+            if (activeName === targetName) {
+                tabs.forEach((tab, index) => {
+                    if (tab.name === targetName) {
+                        let nextTab = tabs[index + 1] || tabs[index - 1];
+                        if (nextTab) {
+                            activeName = nextTab.name;
+                        }
+                    }
+                });
+            }
+            this.defaultTabsValue = activeName;
+            this.tabs = tabs.filter(tab => tab.name !== targetName);
+        },
+        /**
+         * 变更角色
+         * @param command
+         */
         roleChangeCommand(command) {
             var that = this;
-            if (that.user.role.id === command) {
+            if (that.loginUser.role.id === command) {
                 return;
             }
             httpUtil.post({
@@ -85,20 +209,22 @@ new Vue({
                 }
             });
         },
-        opChangeCommand(command){
-            if(command=='updatePassword'){
+        /**
+         * 操作
+         * @param command
+         */
+        opChangeCommand(command) {
+            if (command == 'updatePassword') {
                 this.updatePassword();
-            }else if(command=='logout'){
+            } else if (command == 'logout') {
                 this.logout();
             }
         },
-        indexClick() {
-            var that = this;
-            that.main = 'main.html';
-            that.navTitle = '控制台';
-        },
-        logout(){
-          window.location.href='/sys/logout'
+        /**
+         * 退出
+         */
+        logout() {
+            window.location.href = '/sys/logout'
         },
         updatePassword() {
             var that = this;
@@ -111,10 +237,10 @@ new Vue({
                 that.menuList = treeUtil.vueTree(r.data);
             });
         },
-        getUser: function () {
+        getLoginUser: function () {
             var that = this;
             httpUtil.get({url: "sys/user/info?_" + $.now()}, function (r) {
-                that.user = r.data;
+                that.loginUser = r.data;
             });
         },
         passwordSubmit: function () {
@@ -141,29 +267,26 @@ new Vue({
             });
         },
         resetPasswordForm(formName) {
-            this.$refs[formName].resetFields();
-        },
-        routerList(router, menuList) {
-            var that = this;
-            for (var key in menuList) {
-                var menu = menuList[key];
-                if (menu.type == 0) {
-                    that.routerList(router, menu.children);
-                } else if (menu.type == 1) {
-                    router.add('#' + menu.url, function () {
-                        var url = window.location.hash;
-                        //替换iframe的url
-                        that.main = url.replace('#', '');
-                        //导航菜单展开
-                        $(".treeview-menu li").removeClass("active");
-                        $("a[href='" + url + "']").parents("li").addClass("active");
-                        var titleStr = $("a[href='" + url + "']").parents('ul').prev().text() || "";
-                        var titles = titleStr.split(' ').filter(d => d).reverse() || [];
-                        titles.push($("a[href='" + url + "']").text())
-                        that.navTitle = titles.join("/");
-                    });
-                }
+            try {
+                this.$refs[formName].resetFields();
+            } catch (e) {
+            }
+        }
+    },
+    watch: {
+        isCollapse(val) {
+            if (val) {
+                this.elAsideStyle.width = '65px';
+                this.breadcrumbStyle.left = '65px';
+                this.elTabsStyle.left = '65px';
+                this.elFooterStyle.left = '65px';
+            } else {
+                this.elAsideStyle.width = '200px';
+                this.breadcrumbStyle.left = '200px';
+                this.elTabsStyle.left = '200px';
+                this.elFooterStyle.left = '200px';
             }
         }
     }
 });
+window.onresize = vm.iframeResize;
