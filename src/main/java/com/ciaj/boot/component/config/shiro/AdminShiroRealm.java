@@ -63,7 +63,7 @@ public class AdminShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
             throws AuthenticationException {
-        log.info("MyShiroRealm.doGetAuthenticationInfo()");
+        log.debug("MyShiroRealm.doGetAuthenticationInfo()");
         String principal = (String) token.getPrincipal();
         SysUserPo t = new SysUserPo();
         t.setAccount(principal);
@@ -101,14 +101,14 @@ public class AdminShiroRealm extends AuthorizingRealm {
 
     @Override
     public boolean isPermitted(PrincipalCollection principals, String permission) {
-        log.info("hasRole{},{}", principals, permission);
+        log.debug("isPermitted{},{}", principals, permission);
         final ShiroUser loginUser = CommUtil.getLoginUser();
         return loginUser.isSuperAdmin() || super.isPermitted(principals, permission);
     }
 
     @Override
     public boolean hasRole(PrincipalCollection principals, String roleIdentifier) {
-        log.info("hasRole{},{}", principals, roleIdentifier);
+        log.debug("hasRole{},{}", principals, roleIdentifier);
         final ShiroUser loginUser = CommUtil.getLoginUser();
         return loginUser.isSuperAdmin() || super.hasRole(principals, roleIdentifier);
     }

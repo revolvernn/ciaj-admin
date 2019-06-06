@@ -9,67 +9,81 @@
     </style>
 <body>
 <div id="deptapp" v-cloak>
-    <div>
-        <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
-            <el-row type="flex" class="row-bg">
-                <el-form-item label="关键字" prop="keyword">
-                    <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
-                </el-form-item>
-                <el-form-item label="部门" prop="deptModel">
-                    <el-cascader placeholder="试试搜索" v-model="deptModel" @change="deptModelQueryChange"
-                                 :options="deptData" :show-all-levels="false" change-on-select filterable clearable>
-                    </el-cascader>
-                </el-form-item>
-                <el-form-item label="区域" prop="areaModel">
-                    <el-cascader placeholder="试试搜索" v-model="areaModel" @change="areaModelQueryChange"
-                                 :options="areaData" :show-all-levels="false" filterable change-on-select clearable>
-                    </el-cascader>
-                </el-form-item>
-            </el-row>
-            <el-row type="flex" class="row-bg" justify="center">
-                <el-form-item>
-                    <el-button type="primary" @click="myQuery">查询</el-button>
-                    <el-button @click="myQueryReset">重置</el-button>
-                    <my-btn type="primary" label="新增" @click="myAdd" auth="sys:dept:add"></my-btn>
-                </el-form-item>
-            </el-row>
-        </el-form>
-        <my-table :columns="tableColumns" @sortChange="sortchange" :default-sort="defaultSort" :page="page"
-                  v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
-        </my-table>
-        <el-dialog :title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.deptFormVisible" width="400px">
-            <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.dept">
-                <el-form-item label="部门名称" prop="name" :label-width="addOrUpdateForm.deptFormLabelWidth">
-                    <el-input v-model="addOrUpdateForm.dept.name" autocomplete="off" placeholder="部门名称"></el-input>
-                </el-form-item>
-                <el-form-item label="部门编码" prop="code" :label-width="addOrUpdateForm.deptFormLabelWidth">
-                    <el-input v-model="addOrUpdateForm.dept.code" autocomplete="off" placeholder="部门编码"></el-input>
-                </el-form-item>
-                <el-form-item label="城市" prop="areaId" :label-width="addOrUpdateForm.deptFormLabelWidth">
-                    <el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.areaModel" @change="areaModelFormChange"
-                                 :options="areaData" :show-all-levels="false" filterable clearable></el-cascader>
-                </el-form-item>
-                <el-form-item label="类型：" prop="type" :label-width="addOrUpdateForm.deptFormLabelWidth">
-                    <my-dict-select v-model="addOrUpdateForm.dept.type" type="dept_type"></my-dict-select>
-                </el-form-item>
-                <el-form-item label="父级" prop="parentId" :label-width="addOrUpdateForm.deptFormLabelWidth">
-                    <el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.deptModel" @change="deptModelFormChange"
-                                 :options="deptData" :show-all-levels="false" filterable change-on-select
-                                 clearable></el-cascader>
-                </el-form-item>
-                <el-form-item label="排序" prop="sequence" :label-width="addOrUpdateForm.deptFormLabelWidth">
-                    <el-input-number :min="0" v-model="addOrUpdateForm.dept.sequence" style="width: 85%;"/>
-                </el-form-item>
-                <el-form-item label="是否可用" prop="enabled" :label-width="addOrUpdateForm.deptFormLabelWidth">
-                    <my-dict-select v-model="addOrUpdateForm.dept.enabled" type="enabled"></my-dict-select>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="addOrUpdateForm.deptFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
-            </div>
-        </el-dialog>
-    </div>
+    <el-container style="border: 1px solid #eee">
+        <el-container style="max-height: 749px;">
+            <el-main>
+                <div>
+                    <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
+                        <el-row type="flex" class="row-bg">
+                            <el-form-item label="关键字" prop="keyword">
+                                <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+                            </el-form-item>
+                            <el-form-item label="部门" prop="deptModel">
+                                <el-cascader placeholder="试试搜索" v-model="deptModel" @change="deptModelQueryChange"
+                                             :options="deptData" :show-all-levels="false" change-on-select filterable
+                                             clearable>
+                                </el-cascader>
+                            </el-form-item>
+                            <el-form-item label="区域" prop="areaModel">
+                                <el-cascader placeholder="试试搜索" v-model="areaModel" @change="areaModelQueryChange"
+                                             :options="areaData" :show-all-levels="false" filterable change-on-select
+                                             clearable>
+                                </el-cascader>
+                            </el-form-item>
+                        </el-row>
+                        <el-row type="flex" class="row-bg" justify="center">
+                            <el-form-item>
+                                <el-button type="primary" @click="myQuery">查询</el-button>
+                                <el-button @click="myQueryReset">重置</el-button>
+                                <my-btn type="primary" label="新增" @click="myAdd" auth="sys:dept:add"></my-btn>
+                            </el-form-item>
+                        </el-row>
+                    </el-form>
+                    <my-table :columns="tableColumns" @sortChange="sortchange" :default-sort="defaultSort" :page="page"
+                              v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
+                    </my-table>
+                    <el-dialog :title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.deptFormVisible"
+                               width="400px">
+                        <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.dept">
+                            <el-form-item label="部门名称" prop="name" :label-width="addOrUpdateForm.deptFormLabelWidth">
+                                <el-input v-model="addOrUpdateForm.dept.name" autocomplete="off"
+                                          placeholder="部门名称"></el-input>
+                            </el-form-item>
+                            <el-form-item label="部门编码" prop="code" :label-width="addOrUpdateForm.deptFormLabelWidth">
+                                <el-input v-model="addOrUpdateForm.dept.code" autocomplete="off"
+                                          placeholder="部门编码"></el-input>
+                            </el-form-item>
+                            <el-form-item label="城市" prop="areaId" :label-width="addOrUpdateForm.deptFormLabelWidth">
+                                <el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.areaModel"
+                                             @change="areaModelFormChange"
+                                             :options="areaData" :show-all-levels="false" filterable
+                                             clearable></el-cascader>
+                            </el-form-item>
+                            <el-form-item label="类型：" prop="type" :label-width="addOrUpdateForm.deptFormLabelWidth">
+                                <my-dict-select v-model="addOrUpdateForm.dept.type" type="dept_type"></my-dict-select>
+                            </el-form-item>
+                            <el-form-item label="父级" prop="parentId" :label-width="addOrUpdateForm.deptFormLabelWidth">
+                                <el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.deptModel"
+                                             @change="deptModelFormChange"
+                                             :options="deptData" :show-all-levels="false" filterable change-on-select
+                                             clearable></el-cascader>
+                            </el-form-item>
+                            <el-form-item label="排序" prop="sequence" :label-width="addOrUpdateForm.deptFormLabelWidth">
+                                <el-input-number :min="0" v-model="addOrUpdateForm.dept.sequence" style="width: 85%;"/>
+                            </el-form-item>
+                            <el-form-item label="是否可用" prop="enabled" :label-width="addOrUpdateForm.deptFormLabelWidth">
+                                <my-dict-select v-model="addOrUpdateForm.dept.enabled" type="enabled"></my-dict-select>
+                            </el-form-item>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="addOrUpdateForm.deptFormVisible = false">取 消</el-button>
+                            <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
+                        </div>
+                    </el-dialog>
+                </div>
+            </el-main>
+        </el-container>
+    </el-container>
 </div>
 <script src="/statics/js/modules/sys/dept.js"></script>
 </body>

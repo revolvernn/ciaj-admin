@@ -1,155 +1,146 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>BOOT ADMIN</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="stylesheet" href="statics/css/bootstrap.min.css">
-    <link rel="stylesheet" href="statics/css/font-awesome.min.css">
-    <link rel="stylesheet" href="statics/css/AdminLTE.min.css">
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="statics/css/all-skins.min.css">
-    <link rel="stylesheet" href="/statics/libs/vue/element-ui-2.4.11/element-ui.css">
-    <link rel="stylesheet" href="statics/css/main.css">
-    <!-- import Vue before Element -->
+    <meta charset="UTF-8">
+    <title>BOOT</title>
+    <link rel="stylesheet" href="/statics/js/libs/vue/element-ui-2.4.11/element-ui.css">
+    <script src="/statics/js/jquery.min.js"></script>
     <script src="/statics/js/common.js"></script>
-    <script src="/statics/libs/vue/vue-v2.5.21.js"></script>
+    <!-- import Vue before Element -->
+    <script src="/statics/js/libs/vue/vue-v2.5.21.js"></script>
     <!-- import JavaScript -->
-    <script src="/statics/libs/vue/element-ui-2.4.11/element-ui.js"></script>
+    <script src="/statics/js/libs/vue/element-ui-2.4.11/element-ui.js"></script>
+    <style>
+        body {
+            margin: unset;
+        }
+
+        .el-header {
+            line-height: 60px;
+            height: 55px;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            color: #333;
+            background: url(/statics/image/hbg.jpg) no-repeat;
+            background-size: cover;
+            position: relative;
+        }
+
+        .el-main-header {
+            line-height: 60px;
+            height: 60px;
+            top: 0px;
+            left: 200px;
+            right: 0px;
+            color: #333;
+            background-color: #D3DCE6;
+            text-align: right;
+        }
+
+        .el-main {
+            background-color: #E9EEF3;
+            color: #333;
+            text-align: center;
+            top: 120px;
+            left: 200px;
+            right: 0px;
+            position: absolute;
+            bottom: 30px;
+        }
+
+        body > .el-container {
+            margin-bottom: 40px;
+        }
+
+        .el-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .el-menu--inline {
+            background-color: #f2f3f5;
+        }
+
+        .el-tabs__header {
+            margin: 0px 0 2px;
+        }
+    </style>
+
 </head>
-<style>
-    .content-wrapper,.main-header {
-        overflow-x: auto;
-    }
-</style>
-<!-- ADD THE CLASS layout-boxed TO GET A BOXED LAYOUT -->
-<body class="hold-transition skin-blue sidebar-mini">
-<!-- Site wrapper -->
-<div class="wrapper" id="vueindexapp" v-cloak>
-    <header class="main-header">
-        <a href="#" @click="indexClick" class="logo">
-            <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>B</b></span>
-            <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>BOOT ADMIN</b></span>
-        </a>
-        <!-- Header Navbar: style can be found in header.less -->
-        <nav class="navbar navbar-static-top" role="navigation">
-            <!-- Sidebar toggle button-->
-            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                <span class="sr-only">Toggle navigation</span>
-            </a>
-            <div class="navbar-custom-menu" style="float: left;">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a><el-dropdown @command="opChangeCommand">
+<body>
+<div id="app">
+    <el-container>
+        <el-header>
+            <span>BOOT ADMIN</span>
+            <el-dropdown @command="roleChangeCommand" style="float: right">
                           <span class="el-dropdown-link" style="color: white;">
-                            欢迎： {{user.username}}<i class="el-icon-arrow-down el-icon--right"></i>
+                           角色： {{loginUser.role.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                           </span>
-                            <el-dropdown-menu slot="dropdown" >
-                                <el-dropdown-item command="updatePassword">修改密码</el-dropdown-item>
-                                <el-dropdown-item  command="logout">退出系统</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </el-dropdown></a>
-                    </li>
-                </ul>
-            </div>
-            <div class="navbar-custom-menu" style="float: left;">
-                <ul class="nav navbar-nav">
-                    <li v-if="user.role">
-                        <a><el-dropdown @command="roleChangeCommand">
-                          <span class="el-dropdown-link" style="color: white;">
-                           角色： {{user.role.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+                <el-dropdown-menu slot="dropdown" v-if="loginUser.roles">
+                    <el-dropdown-item v-for="role in loginUser.roles" :command="role.id">{{role.name}}
+                    </el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+            <el-dropdown @command="opChangeCommand" style="float: right;margin-right: 10px;">
+                <span class="el-dropdown-link" style="color: white;">
+                              <img v-if="loginUser.picUrl" :src="loginUser.picUrl" class="avatar"
+                                   style="width: 40px;height: 30px">
+                    欢迎： {{loginUser.username}}<i class="el-icon-arrow-down el-icon--right"></i>
                           </span>
-                            <el-dropdown-menu slot="dropdown" v-if="user.roles">
-                                <el-dropdown-item v-for="role in user.roles" :command="role.id">{{role.name}}</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </el-dropdown></a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
-
-    <!-- =============================================== -->
-    <!-- Left side column. contains the sidebar -->
-    <aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
-        <section class="sidebar">
-            <!-- /.search form -->
-            <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul class="sidebar-menu">
-                <!-- vue生成的菜单 -->
-                <menu-item :item="item" v-for="item in menuList"></menu-item>
-            </ul>
-        </section>
-        <!-- /.sidebar -->
-    </aside>
-    <!-- =============================================== -->
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <el-breadcrumb separator="/">
-            <el-breadcrumb-item><a href="#" @click="indexClick">首页</a></el-breadcrumb-item>
-            <el-breadcrumb-item>{{navTitle}}</el-breadcrumb-item>
-        </el-breadcrumb>
-        <!-- Main content -->
-        <section class="content" style="background:#fff;">
-            <iframe scrolling="yes" frameborder="0"
-                    style="height:790px;width:100%;min-height:200px;overflow:visible;background:#fff;" :src="main"></iframe>
-        </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-    <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-            Version 1.0.0
-        </div>
-        Copyright &copy; 2018 <a href="#" target="_blank">www.com</a> All Rights Reserved
-    </footer>
-
-    <!-- Add the sidebar's background. This div must be placed
-         immediately after the control sidebar -->
-    <div class="control-sidebar-bg"></div>
-
-    <!-- 修改密码 -->
-    <div>
-        <el-dialog title="修改密码" :visible.sync="dialogVisible" width="350px">
-            <el-form ref="passwordFormRef" :rules="rules" :model="passwordForm" label-width="80px">
-                <el-form-item label="账号">
-                    <span>{{user.username}}</span>
-                </el-form-item>
-                <el-form-item label="原密码" prop="password">
-                    <el-input type="password" v-model="passwordForm.password"></el-input>
-                </el-form-item>
-                <el-form-item label="新密码" prop="newPassword">
-                    <el-input  type="password" v-model="passwordForm.newPassword"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="passwordSubmit">确 定</el-button>
-                </el-form-item>
-            </el-form>
-        </el-dialog>
-    </div>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="updatePassword">修改密码</el-dropdown-item>
+                    <el-dropdown-item command="logout">退出系统</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+        </el-header>
+        <el-container>
+            <el-aside v-bind:style="elAsideStyle" id="el-aside-menu">
+                <el-menu :default-active="defaultActive" @select="selectMenu" :collapse="isCollapse">
+                    <el-menu-item index="首页:main.html"><i class="el-icon-menu"></i> <span slot="title">首页</span>
+                    </el-menu-item>
+                    <my-menu-item :item="item" v-for="item in menuList"></my-menu-item>
+                </el-menu>
+            </el-aside>
+            <el-container>
+                <el-breadcrumb separator="/" v-bind:style="breadcrumbStyle">
+                    <el-breadcrumb-item>
+                        <el-switch v-model="isCollapse"></el-switch>
+                    </el-breadcrumb-item>
+                    <el-breadcrumb-item>首页</el-breadcrumb-item>
+                    <el-breadcrumb-item v-for="item in breadcrumbs">{{item}}</el-breadcrumb-item>
+                </el-breadcrumb>
+                <el-tabs v-model="defaultTabsValue" type="card" @tab-click="selectTab" @tab-remove="removeTab"
+                         v-bind:style="elTabsStyle">
+                    <el-tab-pane :key="item.name" v-for="(item, index) in tabs" :label="item.title"
+                                 :name="item.name" :closable="index!=0">
+                        <iframe class="main-iframe" scrolling="yes" frameborder="0" :height="iframeHeight"
+                                style="width:100%;overflow:visible;background:#fff;"
+                                :src="item.content"></iframe>
+                    </el-tab-pane>
+                </el-tabs>
+                <el-footer v-bind:style="elFooterStyle"><span>©CopyRight 2019 ciaj. v1.0.0</span></el-footer>
+            </el-container>
+        </el-container>
+    </el-container>
+    <el-dialog title="修改密码" :visible.sync="dialogVisible" width="350px">
+        <el-form ref="passwordFormRef" :rules="rules" :model="passwordForm" label-width="80px">
+            <el-form-item label="账号">
+                <span>{{loginUser.username}}</span>
+            </el-form-item>
+            <el-form-item label="原密码" prop="password">
+                <el-input type="password" v-model="passwordForm.password"></el-input>
+            </el-form-item>
+            <el-form-item label="新密码" prop="newPassword">
+                <el-input type="password" v-model="passwordForm.newPassword"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="passwordSubmit">确 定</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
 </div>
-<!-- ./wrapper -->
-
-
-<script src="/statics/libs/jquery.min.js"></script>
-<!--<script src="/statics/libs/vue.min.js"></script>-->
-<script src="/statics/libs/router.js"></script>
-<script src="/statics/libs/bootstrap.min.js"></script>
-<script src="/statics/libs/app.js"></script>
 <script src="/statics/js/index.js"></script>
-<style>
-    .el-breadcrumb {
-        padding: 10px;
-    }
-
-</style>
 </body>
 </html>

@@ -1,27 +1,18 @@
 package com.ciaj.boot.component.config;
 
 import com.ciaj.boot.component.filter.ResubmitFilter;
-import com.ciaj.boot.component.interceptor.LoginInterceptor;
 import com.ciaj.boot.component.interceptor.PageInterceptor;
 import com.ciaj.boot.component.interceptor.ResubmitInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.support.GenericConversionService;
-import org.springframework.format.FormatterRegistry;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.bind.support.ConfigurableWebBindingInitializer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -34,7 +25,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/");
+        registry.addResourceHandler("/statics/**","/public/**").addResourceLocations("classpath:/statics/","classpath:/public/");
     }
 
     @Override
@@ -49,7 +40,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        //registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/sys/**");
         registry.addInterceptor(new PageInterceptor()).addPathPatterns("/**");
         registry.addInterceptor(new ResubmitInterceptor()).addPathPatterns("/**");
     }

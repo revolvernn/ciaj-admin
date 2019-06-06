@@ -2,12 +2,12 @@
 <html>
 <head>
     <title>ADMIN</title>
-    <link rel="stylesheet" href="/statics/libs/vue/element-ui-2.4.11/element-ui.css">
+    <link rel="stylesheet" href="/statics/js/libs/vue/element-ui-2.4.11/element-ui.css">
     <!--<link rel="stylesheet" href="/statics/css/main.css">-->
-    <script src="/statics/libs/jquery.min.js"></script>
+    <script src="/statics/js/jquery.min.js"></script>
     <script src="/statics/js/common.js"></script>
-    <script src="/statics/libs/vue/vue-v2.5.21.js"></script>
-    <script src="/statics/libs/vue/element-ui-2.4.11/element-ui.js"></script>
+    <script src="/statics/js/libs/vue/vue-v2.5.21.js"></script>
+    <script src="/statics/js/libs/vue/element-ui-2.4.11/element-ui.js"></script>
 </head>
 <body>
 <div id="loginapp" class="login-box">
@@ -99,7 +99,6 @@ new Vue({
                         httpUtil.post({url: "sys/login", data: JSON.stringify(data)}, function (result) {
                             if (result.code == 0) {//登录成功
                                 parent.location.href = 'index.html';
-                                // parent.location.href = 'dashboard.html';
                             } else {
                                 that.$message.error(result.msg);
                                 that.refreshCode();
@@ -115,7 +114,10 @@ new Vue({
 </script>
 <style>
     body{
-        background: #3c8dbc;
+        background: url(/statics/image/bg.jpg) no-repeat;
+        background-size: cover;
+        height:100%;
+        position: relative;
     }
     .el-main{
         margin-top: 10%;
