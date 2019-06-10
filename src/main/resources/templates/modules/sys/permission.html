@@ -25,6 +25,9 @@
                             <el-form-item label="权限类型" prop="type">
                                 <my-dict-select v-model="queryForm.type" type="permission"></my-dict-select>
                             </el-form-item>
+                            <el-form-item label="父级" prop="parentName">
+                                <el-input v-model="queryForm.parentName" placeholder="点击权限菜单获取" readonly></el-input>
+                            </el-form-item>
                         </el-row>
                         <el-row type="flex" class="row-bg" justify="center">
                             <el-form-item>

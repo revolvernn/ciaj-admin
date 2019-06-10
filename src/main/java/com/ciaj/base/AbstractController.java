@@ -7,10 +7,9 @@ import com.ciaj.comm.exception.BsRException;
 import com.ciaj.comm.utils.CommUtil;
 import com.ciaj.comm.utils.Page;
 import com.ciaj.comm.utils.ShiroUtils;
-import com.ciaj.comm.utils.validate.AddValidGroup;
-import com.ciaj.comm.utils.validate.UpdateValidGroup;
-import com.ciaj.comm.utils.validate.ValidatorUtils;
-import io.swagger.models.auth.In;
+import com.ciaj.comm.validate.AddValidGroup;
+import com.ciaj.comm.validate.UpdateValidGroup;
+import com.ciaj.comm.validate.ValidatorUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 

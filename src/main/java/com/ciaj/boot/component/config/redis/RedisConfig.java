@@ -35,18 +35,4 @@ public class RedisConfig {
         template.afterPropertiesSet();
         return template;
     }
-    @Bean("shiroRedisTemplate")
-    public RedisTemplate<String, Object> shiroRedisTemplate(RedisConnectionFactory factory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
-        template.setConnectionFactory(factory);
-        FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(Object.class);
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setHashKeySerializer(new StringRedisSerializer());
-        // value序列化方式采用jackson
-        template.setValueSerializer(fastJsonRedisSerializer);
-        // hash的value序列化方式采用jackson
-        template.setHashValueSerializer(fastJsonRedisSerializer);
-        template.afterPropertiesSet();
-        return template;
-    }
 }

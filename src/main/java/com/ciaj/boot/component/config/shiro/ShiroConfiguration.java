@@ -1,12 +1,16 @@
 package com.ciaj.boot.component.config.shiro;
 
 
+import com.ciaj.boot.component.config.redis.RedisConfig;
+import com.ciaj.boot.component.config.redis.StringRedisSerializer;
 import com.ciaj.comm.utils.PasswordUtil;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
-import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -17,6 +21,10 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -41,9 +49,10 @@ public class ShiroConfiguration {
 	}
 
 	@Bean
-	public DefaultWebSecurityManager securityManager(AdminShiroRealm adminShiroRealm, SessionManager sessionManager) {
+	public DefaultWebSecurityManager securityManager(AdminShiroRealm adminShiroRealm, SessionManager sessionManager,RedisConnectionFactory factory) {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		securityManager.setRealm(adminShiroRealm);
+		securityManager.setCacheManager(shiroRedisCacheManager(factory));
 		securityManager.setSessionManager(sessionManager);
 		return securityManager;
 	}
@@ -58,22 +67,37 @@ public class ShiroConfiguration {
 	}
 
 	@Bean
-	public SessionManager sessionManager(SimpleCookie simpleCookie) {
+	public SessionManager sessionManager(SimpleCookie simpleCookie,RedisConnectionFactory factory) {
 		DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
 		sessionManager.setSessionIdCookie(simpleCookie);
-		sessionManager.setSessionDAO(sessionDAO());
+		sessionManager.setSessionDAO(sessionDAO(factory));
 		sessionManager.setSessionIdCookieEnabled(true);
 		sessionManager.setDeleteInvalidSessions(true);
 		sessionManager.setSessionValidationSchedulerEnabled(true);
 		return sessionManager;
 	}
-
-	@Bean
-	public SessionDAO sessionDAO() {
-		EnterpriseCacheSessionDAO enterpriseCacheSessionDAO = new EnterpriseCacheSessionDAO();
-		enterpriseCacheSessionDAO.setActiveSessionsCacheName("shiro-activeSessionCache");
-		return enterpriseCacheSessionDAO;
+	@Bean("shiroRedisTemplate")
+	public RedisTemplate<byte[], Object> shiroRedisTemplate(RedisConnectionFactory factory) {
+		RedisTemplate<byte[], Object> template = new RedisTemplate<>();
+		template.setConnectionFactory(factory);
+		template.setKeySerializer(new StringRedisSerializer());
+		template.setHashKeySerializer(new StringRedisSerializer());
+		return template;
 	}
+	@Bean
+	@DependsOn("shiroRedisTemplate")
+	public SessionDAO sessionDAO(RedisConnectionFactory factory) {
+		RedisSessionDAO redisSessionDAO = new RedisSessionDAO(shiroRedisTemplate(factory));
+		return redisSessionDAO;
+	}
+
+	@Bean(name="shrioRedisCacheManager")
+	@DependsOn("shiroRedisTemplate")
+	public ShiroRedisCacheManager shiroRedisCacheManager(RedisConnectionFactory factory) {
+		ShiroRedisCacheManager cacheManager = new ShiroRedisCacheManager(shiroRedisTemplate(factory));
+		return cacheManager;
+	}
+
 
 	@Bean(name = "shiroFilter")
 	public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {

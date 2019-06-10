@@ -31,4 +31,12 @@ public interface SysPermissionMapper extends Mapper<SysPermissionPo, SysPermissi
 	 */
 	@MultiTableJoins(mappers = {SysUserRoleRelMapper.class,SysRolePermissionRelMapper.class})
 	List<SysPermissionPo> selectPermissionsByRoleIdMultiTable(@Param("roleId") String roleId);
+
+	/**
+	 * 获取当前用户下的权限列表
+	 * @param entity
+	 * @return
+	 */
+	@MultiTableJoins(mappers = {SysUserRoleRelMapper.class,SysRolePermissionRelMapper.class})
+	List<SysPermissionDto> selectDTOListMultiTable(SysPermissionVo entity);
 }

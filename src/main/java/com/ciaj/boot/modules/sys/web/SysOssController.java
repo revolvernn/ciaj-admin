@@ -1,7 +1,5 @@
 package com.ciaj.boot.modules.sys.web;
 
-import com.ciaj.comm.utils.validate.*;
-import com.google.gson.Gson;
 import com.ciaj.base.AbstractController;
 import com.ciaj.boot.modules.oss.cloud.CloudStorageConfig;
 import com.ciaj.boot.modules.sys.entity.dto.SysOssDto;
@@ -9,7 +7,6 @@ import com.ciaj.boot.modules.sys.entity.po.SysConfigPo;
 import com.ciaj.boot.modules.sys.entity.po.SysOssPo;
 import com.ciaj.boot.modules.sys.entity.vo.SysOssVo;
 import com.ciaj.boot.modules.sys.service.SysConfigService;
-import com.ciaj.boot.modules.sys.service.SysOssService;
 import com.ciaj.comm.ResponseEntity;
 import com.ciaj.comm.annotation.OperationLog;
 import com.ciaj.comm.annotation.Resubmit;
@@ -17,6 +14,8 @@ import com.ciaj.comm.constant.DefaultConfigConstant;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.constant.ParamTypeEnum;
 import com.ciaj.comm.utils.Page;
+import com.ciaj.comm.validate.*;
+import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -39,9 +38,6 @@ import java.util.List;
 @Controller
 @RequestMapping("sys/oss")
 public class SysOssController extends AbstractController<SysOssPo, SysOssDto, SysOssVo> {
-
-	@Autowired
-	private SysOssService sysOssService;
 	@Autowired
 	private SysConfigService sysConfigService;
 

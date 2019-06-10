@@ -19,7 +19,9 @@ var permissionapp = new Vue({
                 pageNo: 1,
                 pageSize: 10,
                 type: null,
-                keyword: null
+                keyword: null,
+                parentName: null,
+                parentId: null
             },
             tableColumns: [
                 {

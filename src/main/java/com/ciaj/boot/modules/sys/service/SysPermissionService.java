@@ -4,6 +4,7 @@ import com.ciaj.base.BaseService;
 import com.ciaj.boot.modules.sys.entity.dto.SysPermissionDto;
 import com.ciaj.boot.modules.sys.entity.po.SysPermissionPo;
 import com.ciaj.boot.modules.sys.entity.vo.SysPermissionVo;
+import com.ciaj.comm.utils.Page;
 
 import java.util.List;
 
@@ -26,4 +27,7 @@ public interface SysPermissionService extends BaseService<SysPermissionPo, SysPe
      * @return
      */
     List<SysPermissionPo> selectPermissionsByRoleId(String roleId);
+
+
+    Page<SysPermissionDto> selectDTOPage(SysPermissionVo entity);
 }

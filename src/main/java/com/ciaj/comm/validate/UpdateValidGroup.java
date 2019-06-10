@@ -1,4 +1,4 @@
-package com.ciaj.comm.utils.validate;
+package com.ciaj.comm.validate;
 
 /**
  * @Author: Ciaj.

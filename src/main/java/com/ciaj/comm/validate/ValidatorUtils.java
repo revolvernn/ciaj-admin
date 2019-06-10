@@ -1,6 +1,7 @@
-package com.ciaj.comm.utils.validate;
+package com.ciaj.comm.validate;
 
 import com.ciaj.comm.exception.BsRException;
+import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +15,8 @@ import java.util.Set;
  * @Date: 2018/12/6 15:51
  * @Description:
  */
+@Log4j2
 public class ValidatorUtils {
-    static Logger logger = LoggerFactory.getLogger(ValidatorUtils.class);
     private static Validator validator;
 
     static {
@@ -36,7 +37,7 @@ public class ValidatorUtils {
 
         if (!constraintViolations.isEmpty()) {
             for (ConstraintViolation<Object> constraintViolation : constraintViolations) {
-                logger.error("validate has error property：{},error msg：{}", constraintViolation.getPropertyPath(),constraintViolation.getMessage());
+                log.error("validate has error property：{},error msg：{}", constraintViolation.getPropertyPath(),constraintViolation.getMessage());
             }
             ConstraintViolation<Object> constraint = (ConstraintViolation<Object>) constraintViolations.iterator().next();
             throw new BsRException(constraint.getMessage());

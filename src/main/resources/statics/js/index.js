@@ -154,7 +154,7 @@ var vm = new Vue({
             return paths;
         },
         getMenuList: function () {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "/sys/menu/nav?_" + $.now()}, function (r) {
                 that.menuList = treeUtil.vueTree(r.data)
             });
@@ -202,7 +202,7 @@ var vm = new Vue({
          * @param command
          */
         roleChangeCommand(command) {
-            var that = this;
+            let that = this;
             if (that.loginUser.role.id === command) {
                 return;
             }
@@ -228,10 +228,17 @@ var vm = new Vue({
          * @param command
          */
         opChangeCommand(command) {
+            let that = this;
             if (command == 'updatePassword') {
-                this.updatePassword();
+                that.updatePassword();
             } else if (command == 'logout') {
-                this.logout();
+                that.$confirm('确定要退出系统, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    that.logout();
+                });
             }
         },
         /**
@@ -241,24 +248,24 @@ var vm = new Vue({
             window.location.href = '/sys/logout'
         },
         updatePassword() {
-            var that = this;
+            let that = this;
             that.dialogVisible = true;
             that.resetPasswordForm('passwordFormRef')
         },
         getMenuList: function (event) {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "/sys/menu/nav?_" + $.now()}, function (r) {
                 that.menuList = treeUtil.vueTree(r.data);
             });
         },
         getLoginUser: function () {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/user/info?_" + $.now()}, function (r) {
                 that.loginUser = r.data;
             });
         },
         passwordSubmit: function () {
-            var that = this;
+            let that = this;
             that.$refs['passwordFormRef'].validate((valid) => {
                 if (valid) {
                     var data = "password=" + that.passwordForm.password + "&newPassword=" + that.passwordForm.newPassword;

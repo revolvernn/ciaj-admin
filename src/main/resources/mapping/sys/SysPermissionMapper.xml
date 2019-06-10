@@ -435,6 +435,7 @@
         FROM sys_permission m
         <include refid="cust_query_condition_sql"/>
     </select>
+
     <sql id="cust_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
@@ -514,4 +515,14 @@
         where m.del_flag='N' and m.available='Y' and sur.role_id= #{roleId}
     </select>
 
+    <select id="selectDTOListMultiTable" resultMap="DTOResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysPermissionVo">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>
+        FROM sys_permission m
+        LEFT JOIN sys_role_permission_rel srp on m.id=srp.permission_id
+        <include refid="cust_query_condition_sql"/>
+        <if test="roleId != null and roleId != ''">
+           and (srp.role_id = #{roleId} or m.create_at=#{userId})
+        </if>
+    </select>
 </mapper>

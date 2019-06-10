@@ -4,6 +4,7 @@ import com.ciaj.base.BaseService;
 import com.ciaj.boot.modules.sys.entity.dto.SysRoleDto;
 import com.ciaj.boot.modules.sys.entity.po.SysRolePo;
 import com.ciaj.boot.modules.sys.entity.vo.SysRoleVo;
+import com.ciaj.comm.utils.Page;
 
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface SysRoleService extends BaseService<SysRolePo, SysRoleDto, SysRo
      * @return
      */
     List<SysRolePo> selectRolesByUserId(String userId);
+
+    Page<SysRoleDto> selectDTOPage(SysRoleVo entity);
 }

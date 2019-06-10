@@ -23,7 +23,7 @@ import com.ciaj.comm.utils.CommUtil;
 import com.ciaj.comm.utils.ExcelUtil;
 import com.ciaj.comm.utils.PasswordUtil;
 import com.ciaj.comm.utils.ShiroUtils;
-import com.ciaj.comm.utils.validate.ValidatorUtils;
+import com.ciaj.comm.validate.ValidatorUtils;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import org.apache.commons.collections.CollectionUtils;

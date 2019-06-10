@@ -123,7 +123,7 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 	 * @param list
 	 * @return
 	 */
-	Page<PO> wrapPOPage(com.github.pagehelper.Page p, List<PO> list) {
+	public Page<PO> wrapPOPage(com.github.pagehelper.Page p, List<PO> list) {
 		return wrapPagePO(p, list);
 	}
 
@@ -132,7 +132,7 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 	 * @param list
 	 * @return
 	 */
-	Page<DTO> wrapDTOPage(com.github.pagehelper.Page p, List<PO> list) {
+	public Page<DTO> wrapDTOPage(com.github.pagehelper.Page p, List<PO> list) {
 		List<DTO> ds = posToDtos(list);
 		return wrapPageDTO(p, ds);
 	}
@@ -142,7 +142,7 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 	 * @param list
 	 * @return
 	 */
-	Page<VO> wrapVoPage(com.github.pagehelper.Page p, List<PO> list) {
+	public Page<VO> wrapVoPage(com.github.pagehelper.Page p, List<PO> list) {
 		List<VO> ds = posToVos(list);
 		return wrapPageVo(p, ds);
 	}

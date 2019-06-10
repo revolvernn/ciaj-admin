@@ -23,4 +23,7 @@ public interface SysRoleMapper extends Mapper<SysRolePo, SysRoleDto, SysRoleVo> 
 	 */
 	@MultiTableJoins(mappers = {SysUserRoleRelMapper.class})
 	List<SysRolePo> selectRolesByUserIdMultiTable(@Param("userId") String userId);
+
+	@MultiTableJoins(mappers = {SysUserRoleRelMapper.class})
+	List<SysRoleDto> selectDTOListMultiTable(SysRoleVo entity);
 }

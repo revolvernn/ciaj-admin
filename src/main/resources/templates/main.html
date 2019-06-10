@@ -11,12 +11,66 @@
     <script src="/statics/js/libs/vue/element-ui-2.4.11/element-ui.js"></script>
     <script src="/statics/js/vue-component.js"></script>
     <script src="/statics/js/libs/echarts/echarts.min.js"></script>
+    <style>
+        .el-card {
+            text-align: center;
+        }
+
+        .el-card__body {
+            padding: 10px !important;
+        }
+
+        .el-card__body img{
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+        }
+    </style>
 </head>
 <body>
-<div id="main" class="grid-content bg-purple-dark" style="height: 400px;"></div>
+<div id="mainapp" v-cloak>
+    <el-card :body-style="{ padding: '0px' }">
+        <img :src="currUser.picUrl"
+             class="image" v-if="currUser.picUrl">
+        <div style="padding: 14px;">
+            <span>当前用户：{{currUser.username}}</span>
+            <span v-if="currUser.role">当前角色：{{currUser.role.name}}</span>
+            <div class="bottom clearfix">
+                <time class="time">注册时间：{{ currUser.createTime }}</time>
+            </div>
+        </div>
+    </el-card>
+</div>
+<div id="main" class="grid-content bg-purple-dark" style="height: 600px;margin-top: 20px;"></div>
 </body>
 <script type="text/javascript">
-    var option ={};
+    var mainapp = new Vue({
+        el: '#mainapp',
+        data() {
+            return {
+                currUser: {
+                    picUrl: '',
+                    username: '',
+                    role: {
+                        name: ''
+                    },
+                    createTime: ''
+                },
+            }
+        },
+        created: function () {
+            this.getLoginUser();
+        },
+        methods: {
+            getLoginUser: function () {
+                var that = this;
+                httpUtil.get({url: "sys/user/info?_" + $.now()}, function (r) {
+                    that.currUser = r.data;
+                });
+            },
+        }
+    });
+    var option = {};
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById('main'));
     httpUtil.get({url: "sys/table/status", data: {}}, function (result) {
@@ -25,22 +79,22 @@
         var series = [];
         var data = result.data;
         var rows = 0;
-        data.forEach(function(v){
+        data.forEach(function (v) {
             var obj = {}
-            obj.name = [v.Name,'(',v.Comment,')-',v.Rows].join('');
+            obj.name = [v.Name, '(', v.Comment, ')-', v.Rows].join('');
             legend.push(obj.name);
             obj.value = v.Rows || 0;
             series.push(obj)
             rows += obj.value;
         });
         // 指定图表的配置项和数据
-         option = {
-            title : {
+        option = {
+            title: {
                 text: '系统表结构统计',
-                subtext: ['数据量总计-[',rows,']'].join(''),
+                subtext: ['数据量总计-[', rows, ']'].join(''),
                 x: 'center'
             },
-            tooltip : {
+            tooltip: {
                 trigger: 'item',
                 formatter: "{a} <br/>{b} : {c} ({d}%)"
             },
@@ -49,13 +103,13 @@
                 left: 'left',
                 data: legend
             },
-            series : [
+            series: [
                 {
                     name: '访问来源',
                     type: 'pie',
-                    radius : '55%',
+                    radius: '55%',
                     center: ['50%', '60%'],
-                    data:series,
+                    data: series,
                     itemStyle: {
                         emphasis: {
                             shadowBlur: 10,
@@ -72,7 +126,7 @@
         myChart.setOption(option);
     });
 
-    window.onresize= function () {
+    window.onresize = function () {
         myChart.resize();
     }
 </script>

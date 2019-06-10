@@ -71,15 +71,17 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 			@ApiImplicitParam(name = "pageSize", value = "每页记录数：默认每页十条", dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
+			@ApiImplicitParam(name = "parentId", value = "父级ID", paramType = "query"),
 			@ApiImplicitParam(name = "type", value = "权限类型", paramType = "query")
 	})
 	@OperationLog(operation = "系统权限-管理", content = "获取系统权限列表")
 	@RequiresPermissions("sys:permission:list")
 	@GetMapping("/list")
-	public ResponseEntity<Page<SysPermissionDto>> list(String keyword, String type) {
+	public ResponseEntity<Page<SysPermissionDto>> list(String keyword, String type,String parentId) {
 		SysPermissionVo entity = new SysPermissionVo();
 		entity.setKeyword(keyword);
 		entity.setType(type);
+		entity.setParentId(parentId);
 		return super.listDTOPage(entity);
 	}
 

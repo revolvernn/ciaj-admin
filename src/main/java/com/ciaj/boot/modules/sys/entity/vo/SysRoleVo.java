@@ -8,5 +8,16 @@ import com.ciaj.boot.modules.sys.entity.po.SysRolePo;
  * @Description: www.ciaj.com vo
  */
 public class SysRoleVo extends SysRolePo {
+	/**
+	 * 用户ID
+	 */
+	private String userId;
 
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 }

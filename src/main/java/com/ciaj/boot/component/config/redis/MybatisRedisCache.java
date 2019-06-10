@@ -68,7 +68,7 @@ public class MybatisRedisCache implements Cache {
 			RedisTemplate redisTemplate = getRedisTemplate();
 			ValueOperations opsForValue = redisTemplate.opsForValue();
 			String cacheKey = getCacheKey(key);
-			opsForValue.set(getBytesKey(cacheKey), value, EXPIRE_TIME_IN_MINUTES, TimeUnit.MINUTES);
+			opsForValue.set(cacheKey, value, EXPIRE_TIME_IN_MINUTES, TimeUnit.MINUTES);
 			redisTemplate.opsForHash().put(getPrefix() + id, cacheKey, "");
 
 			//将缓存ID添加到多表mapper 集合中，当mapper中操作增删改时清除当前查询缓存
@@ -101,7 +101,7 @@ public class MybatisRedisCache implements Cache {
 			log.debug("Get cached query result from redis id: {}", getPrefix() + id);
 			log.info("Get cached query result from cacheKey：{}", cacheKey);
 			log.debug("Get cached query result from key: {}", key.toString());
-			return opsForValue.get(getBytesKey(cacheKey));
+			return opsForValue.get(cacheKey);
 		} catch (Throwable t) {
 			log.error("Redis get failed id：{} ， key：{}, fail over to db", getPrefix() + id, key.toString(), t);
 			return null;
@@ -119,7 +119,7 @@ public class MybatisRedisCache implements Cache {
 		try {
 			String cacheKey = getCacheKey(key);
 			RedisTemplate redisTemplate = getRedisTemplate();
-			redisTemplate.delete(getBytesKey(cacheKey));
+			redisTemplate.delete(cacheKey);
 			log.debug("Remove cached query result from redis cacheKey：{}", cacheKey);
 			log.debug("Remove cached query result from redis key：{}", key.toString());
 		} catch (Throwable t) {
@@ -140,7 +140,7 @@ public class MybatisRedisCache implements Cache {
 			if (entries != null) {
 				for (Map.Entry<String, String> entry : entries.entrySet()) {
 					Long result = redisTemplate.opsForHash().delete(getPrefix() + id, entry.getKey());
-					final Boolean delete = redisTemplate.delete(getBytesKey(entry.getKey()));
+					final Boolean delete = redisTemplate.delete(entry.getKey());
 					count += result;
 					log.info("clear redis cached id: {} , key: {} ,  {}", getPrefix() + id, entry.getKey(), delete);
 				}

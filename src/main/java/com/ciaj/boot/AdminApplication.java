@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @Log4j2
 @SpringBootApplication
-@EnableScheduling
+//@EnableScheduling
 @MapperScan(basePackages = {"com.ciaj.boot.modules.sys.mapper"})
 public class AdminApplication extends SpringBootServletInitializer {
 

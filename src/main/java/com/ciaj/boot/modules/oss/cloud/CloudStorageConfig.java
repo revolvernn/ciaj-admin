@@ -1,10 +1,10 @@
 package com.ciaj.boot.modules.oss.cloud;
 
 import com.ciaj.comm.utils.RegexpUtil;
-import com.ciaj.comm.utils.validate.AliyunGroup;
-import com.ciaj.comm.utils.validate.LocalGroup;
-import com.ciaj.comm.utils.validate.QcloudGroup;
-import com.ciaj.comm.utils.validate.QiniuGroup;
+import com.ciaj.comm.validate.AliyunGroup;
+import com.ciaj.comm.validate.LocalGroup;
+import com.ciaj.comm.validate.QcloudGroup;
+import com.ciaj.comm.validate.QiniuGroup;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotBlank;

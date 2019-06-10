@@ -76,7 +76,7 @@
     <el-container>
         <el-header>
             <span>BOOT ADMIN</span>
-            <el-dropdown @command="roleChangeCommand" style="float: right">
+            <el-dropdown @command="roleChangeCommand" style="float: right" v-if="loginUser.role">
                           <span class="el-dropdown-link" style="color: white;">
                            角色： {{loginUser.role.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                           </span>
@@ -110,7 +110,7 @@
                     <el-breadcrumb-item>
                         <el-switch v-model="isCollapse"></el-switch>
                     </el-breadcrumb-item>
-                    <el-breadcrumb-item><a @click="closeTab()"> 关闭标签 </a></el-breadcrumb-item>
+                    <el-breadcrumb-item v-if="breadcrumbs.length>1"><a @click="closeTab()"> 关闭标签 </a></el-breadcrumb-item>
                     <el-breadcrumb-item v-for="item in breadcrumbs">{{item}}</el-breadcrumb-item>
                 </el-breadcrumb>
                 <el-tabs v-model="defaultTabsValue" type="card" @tab-click="selectTab" @tab-remove="removeTab"
