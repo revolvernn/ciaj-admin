@@ -1,0 +1,1 @@
+UPDATE sys_permission p,sys_menu m set p.url=m.id WHERE p.url=m.url;

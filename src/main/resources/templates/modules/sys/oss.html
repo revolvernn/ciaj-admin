@@ -30,7 +30,7 @@
                               v-on:pagesizechange="pagesizechange"
                               v-on:currentpagechange="currentpagechange">
                     </my-table>
-                    <el-dialog title="文件上传" :visible.sync="uploadFormVisible" width="600px">
+                    <el-dialog :close-on-click-modal="false"title="文件上传" :visible.sync="uploadFormVisible" width="600px">
                         <el-upload
                                 class="upload-demo"
                                 action="/oss/upload"
@@ -42,7 +42,7 @@
                             <el-button @click="uploadFormVisible = false">取 消</el-button>
                         </div>
                     </el-dialog>
-                    <el-dialog title="预览" :visible.sync="rowView.viewPreVisible" width="600px">
+                    <el-dialog :close-on-click-modal="false"title="预览" :visible.sync="rowView.viewPreVisible" width="600px">
                         <el-card :body-style="{ padding: '0px' }">
                             <img v-if="rowView.type=='image' && rowView.url" :src="rowView.url" class="image">
                             <div style="padding: 14px;word-break: break-all;">

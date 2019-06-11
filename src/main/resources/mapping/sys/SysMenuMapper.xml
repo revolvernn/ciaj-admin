@@ -516,7 +516,7 @@
         FROM sys_user_role_rel surr
         LEFT JOIN sys_role_permission_rel srpr on surr.role_id=srpr.role_id
         LEFT JOIN sys_permission sp on sp.id=srpr.permission_id and sp.type='menu' and sp.available='Y'
-        LEFT JOIN sys_menu m on m.url=sp.url
+        LEFT JOIN sys_menu m on m.id=sp.url
         where m.id is not null and m.enabled='Y'
         <if test="userId!=null and userId!=''">
             and surr.user_id=#{userId}

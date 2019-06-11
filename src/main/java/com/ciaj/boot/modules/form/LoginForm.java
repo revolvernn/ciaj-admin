@@ -16,8 +16,10 @@ public class LoginForm implements Serializable {
     @NotBlank(message = "密码不能为空")
     private String password;
 
-    @NotBlank(message = "验证码不能为空")
     private String captcha;
+
+    @NotBlank(message = "登录方式不正确")
+    private String loginClient;
 
     private Boolean rememberMe = Boolean.FALSE;
 
@@ -51,5 +53,13 @@ public class LoginForm implements Serializable {
 
     public void setRememberMe(Boolean rememberMe) {
         this.rememberMe = rememberMe;
+    }
+
+    public String getLoginClient() {
+        return loginClient;
+    }
+
+    public void setLoginClient(String loginClient) {
+        this.loginClient = loginClient;
     }
 }

@@ -36,9 +36,6 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 
 	@Override
 	public V get(K key) throws CacheException {
-		if (log.isDebugEnabled()) {
-			log.debug("ShiroRedisCache get Key: {}", key);
-		}
 		if (key == null) {
 			return null;
 		}

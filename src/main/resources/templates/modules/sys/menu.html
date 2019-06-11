@@ -43,7 +43,7 @@
                               v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
                     </my-table>
 
-                    <el-dialog :title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.menuFormVisible"
+                    <el-dialog :close-on-click-modal="false":title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.menuFormVisible"
                                width="400px">
                         <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.menu">
                             <el-form-item label="菜单名称" prop="name" :label-width="addOrUpdateForm.menuFormLabelWidth">

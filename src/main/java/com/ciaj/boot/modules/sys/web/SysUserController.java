@@ -45,7 +45,7 @@ public class SysUserController extends AbstractController<SysUserPo, SysUserDto,
 	@RequiresPermissions("sys:user:getById")
 	@GetMapping("/getById/{id}")
 	public ResponseEntity<SysUserDto> getById(@PathVariable("id") String id) {
-		return super.getById(id);
+		return new ResponseEntity<SysUserDto>().put(sysUserService.selectById(id));
 	}
 
 	/**

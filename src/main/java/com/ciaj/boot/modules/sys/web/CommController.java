@@ -126,9 +126,20 @@ public class CommController {
 	@PostMapping("/sys/login")
 	public ResponseEntity<TokenEntity> login(@RequestBody LoginForm loginForm) {
 		ValidatorUtils.validateEntity(loginForm);
-		String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
-		if (!loginForm.getCaptcha().equalsIgnoreCase(kaptcha)) {
-			throw new BsRException("验证码不正确");
+		Boolean loginFlag = false;
+		for (DefaultConstant.LoginClient value : DefaultConstant.LoginClient.values()) {
+			if (value.name().equalsIgnoreCase(loginForm.getLoginClient())) {
+				loginFlag = true;
+				break;
+			}
+		}
+		if (!loginFlag) throw new BsRException("登录方式不正确");
+
+		if (DefaultConstant.LoginClient.pc.name().equalsIgnoreCase(loginForm.getLoginClient())) {
+			String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
+			if (!loginForm.getCaptcha().equalsIgnoreCase(kaptcha)) {
+				throw new BsRException("验证码不正确");
+			}
 		}
 		try {
 			Subject subject = ShiroUtils.getSubject();
@@ -326,7 +337,7 @@ public class CommController {
 		auth.setId(sysAuth.getId());
 		auth.setPassword(password.getPassword());
 		auth.setSalt(password.getSalt());
-		sysAuthService.updateByPrimaryKeySelectiveAndVersion(auth,sysAuth.getVersion());
+		sysAuthService.updateByPrimaryKeySelectiveAndVersion(auth, sysAuth.getVersion());
 		return ResponseEntity.success();
 	}
 

@@ -55,7 +55,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 	@RequiresPermissions("sys:permission:getById")
 	@GetMapping("/getById/{id}")
 	public ResponseEntity<SysPermissionDto> getById(@PathVariable("id") String id) {
-		return super.getById(id);
+		return new ResponseEntity<SysPermissionDto>().put(sysPermissionService.getById(id));
 	}
 
 	/**

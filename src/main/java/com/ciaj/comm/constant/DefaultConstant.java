@@ -25,4 +25,18 @@ public class DefaultConstant {
 		}
 
 	}
+
+	/**
+	 * 权限类型
+	 */
+	public enum PermissionType {
+		dir, menu, btn, fun;
+	}
+
+	/**
+	 * 登录类型
+	 */
+	public enum LoginClient {
+		pc, app, wx, zfb;
+	}
 }

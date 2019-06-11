@@ -391,10 +391,117 @@ window.treeUtil = {
             if (childrenArr.length == 0) {
                 return null;
             }
+            childrenArr.sort(function (a,b) {
+                if(a.sequence<b.sequence){
+                    return -1;
+                }
+                if(a.sequence>b.sequence){
+                    return 1;
+                }
+                return 0;
+            })
             return childrenArr;
         }
-
+        rooArr.sort(function (a,b) {
+            if(a.sequence<b.sequence){
+                return -1;
+            }
+            if(a.sequence>b.sequence){
+                return 1;
+            }
+            return 0;
+        })
         return rooArr;
+    },
+
+    vueTreeObj: function (arr) {
+        let obj ={}
+        if (!arr || arr.length == 0) return [];
+        var sourceArr = arr || [];
+        var rooArr = [];
+        sourceArr.forEach(function (v, index, arr) {
+            if (v.parentId == null || v.parentId == '0') {
+                rooArr.push(v);
+            }
+        });
+        rooArr.forEach(function (v, index, arr) {
+            v.label = v.name
+            v.value = v.id
+            if (v.parentIds) {
+                v.parentIds = v.parentIds.split(",");
+            } else {
+                v.parentIds = []
+            }
+            if ((v.enabled && v.enabled == 'N') || (v.available && v.available == 'N')) {
+                v.disabled = true;
+            }
+            v.children = getChildren(v, sourceArr);
+        })
+
+        function getChildren(root, arr) {
+            var childrenArr = [];
+            sourceArr.forEach(function (v, index, arr) {
+                if (v.parentId == root.id) {
+                    childrenArr.push(v);
+                }
+            });
+            childrenArr.forEach(function (v, index, arr) {
+                v.label = v.name
+                v.value = v.id
+                if (v.parentIds) {
+                    v.parentIds = v.parentIds.split(",");
+                } else {
+                    v.parentIds = []
+                }
+                if ((v.enabled && v.enabled == 'N') || (v.available && v.available == 'N') || root.disabled) {
+                    v.disabled = true;
+                }
+                v.children = getChildren(v, sourceArr);
+            });
+            if (childrenArr.length == 0) {
+                return null;
+            }
+            return childrenArr;
+        }
+        obj.data=arr;
+        obj.treeData=rooArr;
+        return obj;
+    },
+    /**
+     *
+     * @param arr
+     * @param id
+     */
+    getTreeNode: function (sourceArr, sourceId) {
+        let value = null;
+
+        for (let i = 0; i < sourceArr.length; i++) {
+            if (sourceArr[i].id === sourceId) {
+                value = sourceArr[i];
+                break;
+            }
+            if (sourceArr[i].children != null && sourceArr[i].children.length > 0) {
+                value = getChildren(sourceArr[i].children, sourceId);
+            }
+            if (value != null) break;
+        }
+
+        function getChildren(root, id) {
+            let val = null;
+            for (let i = 0; i < root.length; i++) {
+                if (root[i].id === id) {
+                    val = root[i];
+                    break;
+                }
+                if (root[i].children != null && root[i].children.length > 0) {
+                    val = getChildren(root[i].children, id);
+                }
+                if (val != null) break;
+            }
+            return val;
+        }
+
+        return value;
     }
 }
 

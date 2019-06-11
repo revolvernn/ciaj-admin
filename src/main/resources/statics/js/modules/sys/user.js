@@ -7,6 +7,8 @@ var userapp = new Vue({
     el: '#userapp',
     data() {
         return {
+            deptData: [],
+            areaData: [],
             queryForm: {
                 pageEnabled: true,
                 pageNo: 1,
@@ -22,22 +24,31 @@ var userapp = new Vue({
                 },
                 {
                     name: 'account',
+                    width: '100',
                     label: '账号'
                 },
                 {
+                    name: 'dept.name',
+                    label: '部门'
+                },
+                {
                     name: 'username',
+                    width: '100',
                     label: '用户名'
                 },
                 {
                     name: 'nickname',
+                    width: '100',
                     label: '昵称'
                 },
                 {
                     name: 'email',
+                    width: '150',
                     label: '邮箱'
                 },
                 {
                     name: 'mobile',
+                    width: '100',
                     label: '手机号'
                 },
                 {
@@ -48,6 +59,7 @@ var userapp = new Vue({
                 {
                     name: 'birthday',
                     date: 'yyyy-MM-dd',
+                    width: '100',
                     label: '生日'
                 },
                 {
@@ -56,13 +68,29 @@ var userapp = new Vue({
                     label: '状态'
                 },
                 {
+                    name: 'sysProvince.name',
+                    label: '省份'
+                },
+                {
+                    name: 'sysCity.name',
+                    label: '城市'
+                },
+                {
+                    name: 'sysDistrict.name',
+                    label: '区县'
+                },
+                {
+                    name: 'addr',
+                    label: '地址'
+                },
+                {
                     name: 'createTime',
-                    width:'140',
+                    width: '140',
                     label: '创建时间'
                 },
                 {
                     name: 'updateTime',
-                    width:'140',
+                    width: '140',
                     label: '更新时间'
                 },
                 {
@@ -98,6 +126,8 @@ var userapp = new Vue({
             ],
             page: {},
             addOrUpdateForm: {
+                areaModel: [],
+                deptModel: [],
                 title: '新增',
                 roleDialogTitle: '新增',
                 userFormLabelWidth: '80px',
@@ -117,6 +147,11 @@ var userapp = new Vue({
                     mobile: null,
                     birthday: null,
                     picUrl: '',
+                    province: null,
+                    city: null,
+                    district: null,
+                    addr: null,
+                    deptId: null,
                     locked: 'N'
                 },
                 userRole: {
@@ -128,14 +163,19 @@ var userapp = new Vue({
             rules: {
                 account: [{required: true, message: '必填', trigger: 'blur'}],
                 username: [{required: true, message: '必填', trigger: 'blur'}],
-                mobile: [{required: true, pattern: /^1[3|4|5|6|7|8][0-9]\d{8}$/, message: '请填写正确手机号', trigger: 'blur'}]
+                mobile: [{
+                    required: true,
+                    pattern: /^1[3|4|5|6|7|8][0-9]\d{8}$/,
+                    message: '请填写正确手机号',
+                    trigger: 'blur'
+                }]
             },
-            passwordFormRules:{
+            passwordFormRules: {
                 newPassword: [{required: true, message: '必填', trigger: 'blur'}],
             },
             pd: {
                 dialogVisible: false,
-                passwordForm:{
+                passwordForm: {
                     newPassword: null,
                     userName: '',
                     id: null
@@ -147,8 +187,25 @@ var userapp = new Vue({
         this.loadData();
     },
     methods: {
+        initTree() {
+            let that = this;
+            if (that.deptData.length == 0) {
+                httpUtil.get({url: "sys/dept/list", data: {}}, function (result) {
+                    if (result.code == 0) {
+                        that.deptData = treeUtil.vueTree(result.data.list);
+                    }
+                });
+            }
+            if (that.areaData.length == 0) {
+                httpUtil.get({url: "sys/area/list", data: {level: 4}}, function (result) {
+                    if (result.code == 0) {
+                        that.areaData = areaUtil.vueTree(result.data.list);
+                    }
+                });
+            }
+        },
         exportUser() {
-            httpUtil.fileDownload(this,{url: "/sys/export/users"});
+            httpUtil.fileDownload(this, {url: "/sys/export/users"});
         },
         handleAvatarSuccess(res, file) {
             // this.addOrUpdateForm.user.picUrl = URL.createObjectURL(file.raw);
@@ -167,8 +224,13 @@ var userapp = new Vue({
             return isJPG && isLt2M;
         },
         resetForm(formName) {
+            let that = this;
             try {
-                this.$refs[formName].resetFields();
+                that.eareModel = [];
+                that.deptModel = [];
+                that.queryForm.deptId = null;
+                that.queryForm.areaId = null;
+                that.$refs[formName].resetFields();
             } catch (e) {
                 console.log(e);
             }
@@ -185,7 +247,7 @@ var userapp = new Vue({
             this.loadData();
         },
         initRoles() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/role/list", data: {}}, function (result) {
                 if (result.code == 0) {
                     that.addOrUpdateForm.userRole.roleData = treeUtil.roles(result.data.list);
@@ -202,7 +264,7 @@ var userapp = new Vue({
             });
         },
         myRoles(index, row) {
-            var that = this;
+            let that = this;
             that.initRoles();
             that.addOrUpdateForm.roleVisible = true;
             that.addOrUpdateForm.roleDialogTitle = '分配角色：[ ' + row.username + ' ]';
@@ -210,11 +272,11 @@ var userapp = new Vue({
 
         },
         saveUserRole() {
-            var that = this;
-            var roles = that.addOrUpdateForm.userRole.roles;
-            var datas = roles.length == 0 ? [{userId: that.addOrUpdateForm.userRole.userId}] : [];
-            for (var v in roles) {
-                var data = {};
+            let that = this;
+            let roles = that.addOrUpdateForm.userRole.roles;
+            let datas = roles.length == 0 ? [{userId: that.addOrUpdateForm.userRole.userId}] : [];
+            for (let v in roles) {
+                let data = {};
                 data.userId = that.addOrUpdateForm.userRole.userId;
                 data.roleId = roles[v];
                 datas.push(data)
@@ -228,8 +290,12 @@ var userapp = new Vue({
             });
         },
         myAdd() {
-            this.addOrUpdateForm.userFormVisible = true;
-            this.addOrUpdateForm.user = {
+            let that = this;
+            that.initTree();
+            that.addOrUpdateForm.userFormVisible = true;
+            that.addOrUpdateForm.deptModel = [];
+            that.addOrUpdateForm.areaModel = [];
+            that.addOrUpdateForm.user = {
                 account: null,
                 username: null,
                 nickname: null,
@@ -238,23 +304,73 @@ var userapp = new Vue({
                 mobile: null,
                 birthday: new Date(),
                 picUrl: '',
+                source: 'pc',
+                province: null,
+                city: null,
+                district: null,
+                addr: null,
+                deptId: null,
                 locked: 'N'
             };
-            this.resetForm('addOrUpdateFormRef');
+            that.resetForm('addOrUpdateFormRef');
         },
         myUpdate(index, row) {
-            var that = this;
+            let that = this;
+            that.initTree();
             that.addOrUpdateForm.title = '修改';
             // that.resetForm('addOrUpdateFormRef');
             httpUtil.get({url: "sys/user/getById/" + row.id}, function (result) {
                 if (result.code == 0) {
                     that.addOrUpdateForm.user = result.data;
                     that.addOrUpdateForm.userFormVisible = true;
+                    that.addOrUpdateForm.deptModel = result.data.dept ? result.data.dept.parentIds.split(',') : [];
+                    if (that.addOrUpdateForm.deptModel.length > 0) {
+                        that.addOrUpdateForm.deptModel.push(result.data.deptId);
+                    }
+                    if (result.data.sysDistrict) {
+                        that.addOrUpdateForm.areaModel = result.data.sysDistrict.parentIds.split(',');
+                        that.addOrUpdateForm.areaModel.push(result.data.district);
+                    } else if (result.data.sysCity) {
+                        that.addOrUpdateForm.areaModel = result.data.sysCity.parentIds.split(',');
+                        that.addOrUpdateForm.areaModel.push(result.data.city);
+                    } else if (result.data.sysProvince) {
+                        that.addOrUpdateForm.areaModel = result.data.sysProvince.parentIds.split(',');
+                        that.addOrUpdateForm.areaModel.push(result.data.province);
+                    } else {
+                        that.addOrUpdateForm.areaModel = [];
+                    }
                 }
             });
         },
+        //父级选择处理
+        deptModelFormChange(val) {
+            let that = this;
+            if (val.length > 0) {
+                that.addOrUpdateForm.user.deptId = val[val.length - 1];
+            } else {
+                that.addOrUpdateForm.user.deptId = null;
+            }
+        },
+        //父级选择处理 province city district
+        areaModelFormChange(val) {
+            let that = this;
+            if (val.length === 2) {
+                that.addOrUpdateForm.user.province = val[1];
+            } else if (val.length === 3) {
+                that.addOrUpdateForm.user.province = val[1];
+                that.addOrUpdateForm.user.city = val[2];
+            } else if (val.length === 4) {
+                that.addOrUpdateForm.user.province = val[1];
+                that.addOrUpdateForm.user.city = val[2];
+                that.addOrUpdateForm.user.district = val[3];
+            } else {
+                that.addOrUpdateForm.user.province = null;
+                that.addOrUpdateForm.user.city = null;
+                that.addOrUpdateForm.user.district = null;
+            }
+        },
         saveOrUpdate() {
-            var that = this;
+            let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
                     var url = that.addOrUpdateForm.user.id == null ? "/sys/pc/register" : "sys/user/update";
@@ -272,7 +388,7 @@ var userapp = new Vue({
             });
         },
         myDel(index, row) {
-            var that = this;
+            let that = this;
             that.$confirm('此操作将删除该数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -285,17 +401,17 @@ var userapp = new Vue({
             });
         },
         myUpdatePassword(index, row) {
-            var that = this;
+            let that = this;
             that.pd.dialogVisible = true;
-            that.pd.passwordForm.id= row.id;
-            that.pd.passwordForm.userName= row.username;
+            that.pd.passwordForm.id = row.id;
+            that.pd.passwordForm.userName = row.username;
             that.resetForm('passwordFormRef')
         },
         passwordSubmit: function () {
-            var that = this;
+            let that = this;
             that.$refs['passwordFormRef'].validate((valid) => {
                 if (valid) {
-                    var data = "userId=" + that.pd.passwordForm.id + "&newPassword=" + that.pd.passwordForm.newPassword;
+                    let data = "userId=" + that.pd.passwordForm.id + "&newPassword=" + that.pd.passwordForm.newPassword;
                     httpUtil.post({
                         url: "sys/user/password/update",
                         data: data,
@@ -315,7 +431,7 @@ var userapp = new Vue({
             });
         },
         loadData() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/user/list", data: that.queryForm}, function (r) {
                 if (r.code == 0) {
                     that.page = r.data

@@ -31,7 +31,7 @@
                     <my-table :columns="tableColumns" :page="page" v-on:pagesizechange="pagesizechange"
                               v-on:currentpagechange="currentpagechange">
                     </my-table>
-                    <el-dialog :title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.roleFormVisible"
+                    <el-dialog :close-on-click-modal="false":title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.roleFormVisible"
                                width="400px">
                         <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.role">
                             <el-form-item label="角色名" prop="name" :label-width="addOrUpdateForm.roleFormLabelWidth"
@@ -64,7 +64,7 @@
                             <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
                         </div>
                     </el-dialog>
-                    <el-dialog title="分配权限资源" :visible.sync="addOrUpdateForm.privilegesVisible" width="400px">
+                    <el-dialog :close-on-click-modal="false"title="分配权限资源" :visible.sync="addOrUpdateForm.privilegesVisible" width="400px">
                         <el-input placeholder="输入关键字进行过滤" v-model="addOrUpdateForm.privilege.filterText">
                             <el-button slot="append" @click="checkAllPrivilege">全选</el-button>
                         </el-input>

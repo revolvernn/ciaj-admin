@@ -12,6 +12,60 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "SysUser")
 public class SysUserDto extends SysUserPo {
 
+
+    /**
+     * 省
+     */
+    private SysAreaDto sysProvince;
+
+    /**
+     * 市
+     */
+    private SysAreaDto sysCity;
+
+    /**
+     * 区
+     */
+    private SysAreaDto sysDistrict;
+
+    /**
+     * 部门
+     */
+    private SysDeptDto dept;
+
+    public SysDeptDto getDept() {
+        return dept;
+    }
+
+    public void setDept(SysDeptDto dept) {
+        this.dept = dept;
+    }
+
+    public SysAreaDto getSysDistrict() {
+        return sysDistrict;
+    }
+
+    public void setSysDistrict(SysAreaDto sysDistrict) {
+        this.sysDistrict = sysDistrict;
+    }
+
+    public SysAreaDto getSysProvince() {
+        return sysProvince;
+    }
+
+    public void setSysProvince(SysAreaDto sysProvince) {
+        this.sysProvince = sysProvince;
+    }
+
+
+    public SysAreaDto getSysCity() {
+        return sysCity;
+    }
+
+    public void setSysCity(SysAreaDto sysCity) {
+        this.sysCity = sysCity;
+    }
+
     //@javax.validation.constraints.NotBlank(message = "")
     @ApiModelProperty("主键 ")
     public java.lang.String getId() {

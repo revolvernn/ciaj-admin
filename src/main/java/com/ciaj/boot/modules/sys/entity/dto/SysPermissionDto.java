@@ -12,6 +12,19 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "SysPermission")
 public class SysPermissionDto extends SysPermissionPo {
 
+    /**
+     * 菜单
+     */
+    private SysMenuDto menu;
+
+    public SysMenuDto getMenu() {
+        return menu;
+    }
+
+    public void setMenu(SysMenuDto menu) {
+        this.menu = menu;
+    }
+
     //@javax.validation.constraints.NotBlank(message = "")
     @ApiModelProperty("主键")
     public java.lang.String getId() {

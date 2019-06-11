@@ -3,12 +3,13 @@ Vue.component('myTable', myTableT);
 Vue.component('myDictSelect', myDictSelectT);
 
 Vue.component('myBtn', myBtnT);
-var permissionapp = new Vue({
+let permissionapp = new Vue({
     el: '#permissionapp',
     data() {
         return {
             filterText: '',
             treeData: [],
+            menuData: [],
             defaultProps: {
                 children: 'children',
                 label: 'label',
@@ -42,22 +43,18 @@ var permissionapp = new Vue({
                     label: '权限码'
                 },
                 {
-                    name: 'url',
-                    label: '资源路径'
-                },
-                {
                     name: 'available',
                     dict: 'available',
                     label: '是否有效'
                 },
                 {
                     name: 'createTime',
-                    width:'140',
+                    width: '140',
                     label: '创建时间'
                 },
                 {
                     name: 'updateTime',
-                    width:'140',
+                    width: '140',
                     label: '更新时间'
                 },
                 {
@@ -65,13 +62,13 @@ var permissionapp = new Vue({
                     width: '150px',
                     buttons: [
                         {
-                            auth:'sys:permission:update',
+                            auth: 'sys:permission:update',
                             label: '修改',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
-                            auth:'sys:permission:delFlag',
+                            auth: 'sys:permission:delFlag',
                             label: '删除',
                             click: this.myDel,
                             type: 'danger'
@@ -82,8 +79,9 @@ var permissionapp = new Vue({
             page: {},
             addOrUpdateForm: {
                 title: '新增',
+                menuModel: [],
                 permissionFormLabelWidth: '80px',
-                cascaderModel:[],
+                cascaderModel: [],
                 permissionFormVisible: false,
                 pickerOptions: {
                     disabledDate(time) {
@@ -110,15 +108,24 @@ var permissionapp = new Vue({
     },
     methods: {
         initTree() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/permission/list", data: {}}, function (result) {
                 if (result.code == 0) {
                     that.treeData = treeUtil.vueTree(result.data.list);
                 }
             });
         },
+        initMenuTree() {
+            let that = this;
+            if (that.menuData.length == 0)
+                httpUtil.get({url: "sys/menu/list", data: {}}, function (result) {
+                    if (result.code == 0) {
+                        that.menuData = treeUtil.vueTree(result.data.list);
+                    }
+                });
+        },
         getTreeNode(data, i, c) {
-            var that = this;
+            let that = this;
             that.queryForm.parentId = data.id;
             that.queryForm.parentName = data.name;
             that.myQuery();
@@ -135,7 +142,7 @@ var permissionapp = new Vue({
             }
         },
         myQueryReset() {
-            var that = this;
+            let that = this;
             that.resetForm('queryFormRef');
             that.queryForm.parentId = null;
             that.myQuery();
@@ -153,17 +160,36 @@ var permissionapp = new Vue({
         },
         //父级选择处理
         cascaderChange(val) {
-            var that = this;
+            let that = this;
             if (val.length > 0) {
                 that.addOrUpdateForm.permission.parentId = val[val.length - 1];
                 that.addOrUpdateForm.permission.parentIds = val.join(',');
-            }else {
+            } else {
                 that.addOrUpdateForm.permission.parentId = null;
                 that.addOrUpdateForm.permission.parentIds = null;
             }
         },
+        //父级选择处理
+        menuCascaderChange(val) {
+            let that = this;
+
+            if (val.length > 0) {
+                let menuId = val[val.length - 1];
+                let menu = treeUtil.getTreeNode(that.menuData, menuId);
+                if (menu !=null  && menu.type !== '1') {
+                    that.addOrUpdateForm.menuModel = [];
+                    alertMsg(that, {code: -1, msg: '当前选择不是菜单'})
+                } else {
+                    that.addOrUpdateForm.permission.url = menuId;
+                }
+            } else {
+                that.addOrUpdateForm.permission.url = null;
+            }
+        },
+
         myAdd() {
-            var that = this;
+            let that = this;
+            that.initMenuTree();
             that.addOrUpdateForm.title = '新增';
             that.addOrUpdateForm.permissionFormVisible = true;
             that.addOrUpdateForm.cascaderModel = [];
@@ -178,25 +204,30 @@ var permissionapp = new Vue({
             that.resetForm('addOrUpdateFormRef');
         },
         myUpdate(index, row) {
-            var that = this;
+            let that = this;
+            that.initMenuTree();
             that.addOrUpdateForm.title = '修改';
             that.addOrUpdateForm.permissionFormVisible = true;
             that.addOrUpdateForm.cascaderModel = [];
             that.resetForm('addOrUpdateFormRef');
             httpUtil.get({url: "sys/permission/getById/" + row.id}, function (result) {
                 if (result.code == 0) {
-                    var parentids = result.data.parentIds;
+                    let parentids = result.data.parentIds;
                     that.addOrUpdateForm.cascaderModel = parentids ? parentids.split(',') : [];
                     that.addOrUpdateForm.permission = result.data;
+                    if (result.data.menu) {
+                        that.addOrUpdateForm.menuModel = result.data.menu.parentIds ? result.data.menu.parentIds.split(',') : [];
+                        that.addOrUpdateForm.menuModel.push(result.data.menu.id);
+                    }
                 }
             });
         },
         saveOrUpdate() {
-            var that = this;
+            let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
-                    var url = that.addOrUpdateForm.permission.id == null ? "sys/permission/add" : "sys/permission/update";
-                    var type = that.addOrUpdateForm.permission.id == null ? "POST" : "PUT";
+                    let url = that.addOrUpdateForm.permission.id == null ? "sys/permission/add" : "sys/permission/update";
+                    let type = that.addOrUpdateForm.permission.id == null ? "POST" : "PUT";
                     httpUtil.post({
                         url: url,
                         type: type,
@@ -211,7 +242,7 @@ var permissionapp = new Vue({
             });
         },
         myDel(index, row) {
-            var that = this;
+            let that = this;
             that.$confirm('此操作将删除该数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -225,7 +256,7 @@ var permissionapp = new Vue({
             });
         },
         loadData() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/permission/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data
@@ -237,11 +268,11 @@ var permissionapp = new Vue({
         filterText(val) {
             this.$refs['permissionTree'].filter(val);
         },
-        'addOrUpdateForm.permission.permissionCode'(val){
-            var that = this;
-            var value = val;
-            that.addOrUpdateForm.permission.url=value.split(':').join('/');
-            console.log(that.addOrUpdateForm.permission.url);
+        'addOrUpdateForm.permission.permissionCode'(val) {
+            let that = this;
+            let value = val;
+            if (that.addOrUpdateForm.permission.type !== 'menu')
+                that.addOrUpdateForm.permission.url = value.split(':').join('/');
         }
     }
 });

@@ -4,6 +4,7 @@ import com.ciaj.base.BaseService;
 import com.ciaj.boot.modules.sys.entity.po.SysUserPo;
 import com.ciaj.boot.modules.sys.entity.vo.SysUserVo;
 import com.ciaj.boot.modules.sys.entity.dto.SysUserDto;
+import com.ciaj.comm.utils.Page;
 
 /**
  * @Author: Ciaj.
@@ -12,4 +13,18 @@ import com.ciaj.boot.modules.sys.entity.dto.SysUserDto;
  */
 public interface SysUserService extends BaseService<SysUserPo, SysUserDto, SysUserVo> {
 
+	/**
+	 * 根据ID获取用户
+	 * @param userId
+	 * @return
+	 */
+	public SysUserDto selectById(String userId);
+
+	/**
+	 * 获取用户列表
+	 * @param entity VO
+	 * @return
+	 */
+	@Override
+	Page<SysUserDto> selectDTOPage(SysUserVo entity);
 }

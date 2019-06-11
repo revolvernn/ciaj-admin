@@ -28,7 +28,7 @@
                     <my-table :columns="tableColumns" :page="page" v-on:pagesizechange="pagesizechange"
                               v-on:currentpagechange="currentpagechange">
                     </my-table>
-                    <el-dialog :title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.configFormVisible">
+                    <el-dialog :close-on-click-modal="false":title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.configFormVisible">
                         <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.config">
                             <el-form-item label="KEY" prop="configKey"
                                           :label-width="addOrUpdateForm.configFormLabelWidth">
@@ -56,7 +56,7 @@
                             <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
                         </div>
                     </el-dialog>
-                    <el-dialog title="OSS云存储配置" :visible.sync="ossForm.ossFormVisible" width="600px">
+                    <el-dialog :close-on-click-modal="false"title="OSS云存储配置" :visible.sync="ossForm.ossFormVisible" width="600px">
                         <el-form ref="ossFormRef" :rules="rules" :model="ossForm.config">
                             <el-form-item label="OSS类型" prop="type" label-width="150px">
                                 <el-radio-group v-model="ossForm.config.type" size="small">

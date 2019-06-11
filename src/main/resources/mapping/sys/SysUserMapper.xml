@@ -682,90 +682,59 @@
         FROM sys_user m
         <include refid="cust_query_condition_sql"/>
     </select>
+    <resultMap id="DTOMultiTableResultMap" type="com.ciaj.boot.modules.sys.entity.dto.SysUserDto" extends="BaseResultMap">
+        <association property="sysProvince" javaType="com.ciaj.boot.modules.sys.entity.dto.SysAreaDto">
+            <id property="id" column="province"/>
+            <result property="name" column="ap_name"/>
+        </association>
+        <association property="sysCity" javaType="com.ciaj.boot.modules.sys.entity.dto.SysAreaDto">
+            <id property="id" column="city"/>
+            <result property="name" column="ac_name"/>
+        </association>
+        <association property="sysDistrict" javaType="com.ciaj.boot.modules.sys.entity.dto.SysAreaDto">
+            <id property="id" column="district"/>
+            <result property="name" column="ad_name"/>
+        </association>
+        <association property="dept" javaType="com.ciaj.boot.modules.sys.entity.dto.SysDeptDto">
+            <id property="id" column="dept_id"/>
+            <result property="name" column="d_name"/>
+        </association>
+    </resultMap>
+    <select id="selectDTOListMultiTable" resultMap="DTOMultiTableResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysUserVo">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>
+        ,d.name as 'd_name'
+        ,ap.name as 'ap_name'
+        ,ac.name as 'ac_name'
+        ,ad.name as 'ad_name'
+        FROM sys_user m
+        LEFT JOIN sys_dept d on m.dept_id = d.id
+        left join sys_area ap on m.province=ap.id and ap.type ='province'
+        left join sys_area ac on m.city=ac.id and ac.type ='city'
+        left join sys_area ad on m.district=ad.id and ad.type ='district'
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <include refid="query_condition_sql"/>
+                <!--  keyword   -->
+                <if test="keyword != null and keyword != ''">
+                    and (m.account like CONCAT('%',#{keyword},'%')
+                    or m.nickname like CONCAT('%',#{keyword},'%')
+                    or m.dept_names like CONCAT('%',#{keyword},'%')
+                    or m.nickname like CONCAT('%',#{keyword},'%')
+                    or m.mobile like CONCAT('%',#{keyword},'%')
+                    or ap.name like CONCAT('%',#{keyword},'%')
+                    or ac.name like CONCAT('%',#{keyword},'%')
+                    or ad.name like CONCAT('%',#{keyword},'%')
+                    or d.name like CONCAT('%',#{keyword},'%')
+                    )
+                </if>
+            </trim>
+        </where>
+    </select>
     <sql id="cust_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
-                <if test="id != null  and id != ''">
-                    AND m.id = #{id}
-                </if>
-                <if test="account != null  and account != ''">
-                    AND m.account = #{account}
-                </if>
-                <if test="username != null  and username != ''">
-                    AND m.username = #{username}
-                </if>
-                <if test="nickname != null  and nickname != ''">
-                    AND m.nickname = #{nickname}
-                </if>
-                <if test="sex != null  and sex != ''">
-                    AND m.sex = #{sex}
-                </if>
-                <if test="mobile != null  and mobile != ''">
-                    AND m.mobile = #{mobile}
-                </if>
-                <if test="email != null  and email != ''">
-                    AND m.email = #{email}
-                </if>
-                <if test="birthday != null ">
-                    AND m.birthday = #{birthday}
-                </if>
-                <if test="province != null  and province != ''">
-                    AND m.province = #{province}
-                </if>
-                <if test="city != null  and city != ''">
-                    AND m.city = #{city}
-                </if>
-                <if test="district != null  and district != ''">
-                    AND m.district = #{district}
-                </if>
-                <if test="addr != null  and addr != ''">
-                    AND m.addr = #{addr}
-                </if>
-                <if test="source != null  and source != ''">
-                    AND m.source = #{source}
-                </if>
-                <if test="userType != null  and userType != ''">
-                    AND m.user_type = #{userType}
-                </if>
-                <if test="userStatus != null  and userStatus != ''">
-                    AND m.user_status = #{userStatus}
-                </if>
-                <if test="locked != null  and locked != ''">
-                    AND m.locked = #{locked}
-                </if>
-                <if test="picUrl != null  and picUrl != ''">
-                    AND m.pic_url = #{picUrl}
-                </if>
-                <if test="deptId != null  and deptId != ''">
-                    AND m.dept_id = #{deptId}
-                </if>
-                <if test="deptName != null  and deptName != ''">
-                    AND m.dept_name = #{deptName}
-                </if>
-                <if test="deptIds != null  and deptIds != ''">
-                    AND m.dept_ids = #{deptIds}
-                </if>
-                <if test="deptNames != null  and deptNames != ''">
-                    AND m.dept_names = #{deptNames}
-                </if>
-                <if test="createAt != null  and createAt != ''">
-                    AND m.create_at = #{createAt}
-                </if>
-                <if test="createTime != null ">
-                    AND m.create_time = #{createTime}
-                </if>
-                <if test="updateAt != null  and updateAt != ''">
-                    AND m.update_at = #{updateAt}
-                </if>
-                <if test="updateTime != null ">
-                    AND m.update_time = #{updateTime}
-                </if>
-                <if test="delFlag != null  and delFlag != ''">
-                    AND m.del_flag = #{delFlag}
-                </if>
-                <if test="version != null ">
-                    AND m.version = #{version}
-                </if>
+                <include refid="query_condition_sql"/>
                 <!--  keyword   -->
                 <if test="keyword != null and keyword != ''">
                     and (m.account like CONCAT('%',#{keyword},'%')
@@ -777,5 +746,88 @@
                 </if>
             </trim>
         </where>
+    </sql>
+    <sql id="query_condition_sql">
+        <if test="id != null  and id != ''">
+            AND m.id = #{id}
+        </if>
+        <if test="account != null  and account != ''">
+            AND m.account = #{account}
+        </if>
+        <if test="username != null  and username != ''">
+            AND m.username = #{username}
+        </if>
+        <if test="nickname != null  and nickname != ''">
+            AND m.nickname = #{nickname}
+        </if>
+        <if test="sex != null  and sex != ''">
+            AND m.sex = #{sex}
+        </if>
+        <if test="mobile != null  and mobile != ''">
+            AND m.mobile = #{mobile}
+        </if>
+        <if test="email != null  and email != ''">
+            AND m.email = #{email}
+        </if>
+        <if test="birthday != null ">
+            AND m.birthday = #{birthday}
+        </if>
+        <if test="province != null  and province != ''">
+            AND m.province = #{province}
+        </if>
+        <if test="city != null  and city != ''">
+            AND m.city = #{city}
+        </if>
+        <if test="district != null  and district != ''">
+            AND m.district = #{district}
+        </if>
+        <if test="addr != null  and addr != ''">
+            AND m.addr = #{addr}
+        </if>
+        <if test="source != null  and source != ''">
+            AND m.source = #{source}
+        </if>
+        <if test="userType != null  and userType != ''">
+            AND m.user_type = #{userType}
+        </if>
+        <if test="userStatus != null  and userStatus != ''">
+            AND m.user_status = #{userStatus}
+        </if>
+        <if test="locked != null  and locked != ''">
+            AND m.locked = #{locked}
+        </if>
+        <if test="picUrl != null  and picUrl != ''">
+            AND m.pic_url = #{picUrl}
+        </if>
+        <if test="deptId != null  and deptId != ''">
+            AND m.dept_id = #{deptId}
+        </if>
+        <if test="deptName != null  and deptName != ''">
+            AND m.dept_name = #{deptName}
+        </if>
+        <if test="deptIds != null  and deptIds != ''">
+            AND m.dept_ids = #{deptIds}
+        </if>
+        <if test="deptNames != null  and deptNames != ''">
+            AND m.dept_names = #{deptNames}
+        </if>
+        <if test="createAt != null  and createAt != ''">
+            AND m.create_at = #{createAt}
+        </if>
+        <if test="createTime != null ">
+            AND m.create_time = #{createTime}
+        </if>
+        <if test="updateAt != null  and updateAt != ''">
+            AND m.update_at = #{updateAt}
+        </if>
+        <if test="updateTime != null ">
+            AND m.update_time = #{updateTime}
+        </if>
+        <if test="delFlag != null  and delFlag != ''">
+            AND m.del_flag = #{delFlag}
+        </if>
+        <if test="version != null ">
+            AND m.version = #{version}
+        </if>
     </sql>
 </mapper>

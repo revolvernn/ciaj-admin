@@ -30,4 +30,6 @@ public interface SysPermissionService extends BaseService<SysPermissionPo, SysPe
 
 
     Page<SysPermissionDto> selectDTOPage(SysPermissionVo entity);
+
+    SysPermissionDto getById(String id);
 }

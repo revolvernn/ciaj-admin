@@ -49,6 +49,8 @@ var menuapp = new Vue({
                 },
                 {
                     name: 'sequence',
+                    sortable: 'custom',
+                    sortBy:'m.sequence',
                     label: '排序'
                 },
                 {

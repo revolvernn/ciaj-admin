@@ -126,7 +126,7 @@
             </el-container>
         </el-container>
     </el-container>
-    <el-dialog title="修改密码" :visible.sync="dialogVisible" width="350px">
+    <el-dialog :close-on-click-modal="false"title="修改密码" :visible.sync="dialogVisible" width="350px">
         <el-form ref="passwordFormRef" :rules="rules" :model="passwordForm" label-width="80px">
             <el-form-item label="账号">
                 <span>{{loginUser.username}}</span>

@@ -40,11 +40,12 @@
                     <my-table :columns="tableColumns" :page="page" v-on:pagesizechange="pagesizechange"
                               v-on:currentpagechange="currentpagechange">
                     </my-table>
-                    <el-dialog :title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.permissionFormVisible"
+                    <el-dialog :close-on-click-modal="false" :title="addOrUpdateForm.title"
+                               :visible.sync="addOrUpdateForm.permissionFormVisible"
                                width="400px">
                         <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.permission">
                             <el-form-item label="权限名" prop="name"
-                                          :label-width="addOrUpdateForm.permissionFormLabelWidth">
+                                          :label-width="addOrUpdateForm.permissionFormLabelWidth" required>
                                 <el-input v-model="addOrUpdateForm.permission.name" autocomplete="off"
                                           placeholder="权限名"></el-input>
                             </el-form-item>
@@ -54,7 +55,7 @@
                                           placeholder="权限描述"></el-input>
                             </el-form-item>
                             <el-form-item label="权限类型" prop="type"
-                                          :label-width="addOrUpdateForm.permissionFormLabelWidth">
+                                          :label-width="addOrUpdateForm.permissionFormLabelWidth" required>
                                 <my-dict-select v-model="addOrUpdateForm.permission.type"
                                                 type="permission"></my-dict-select>
                             </el-form-item>
@@ -63,7 +64,14 @@
                                 <el-input v-model="addOrUpdateForm.permission.permissionCode" autocomplete="off"
                                           placeholder="权限码"></el-input>
                             </el-form-item>
-                            <el-form-item label="资源路径" prop="url"
+                            <el-form-item label="关联菜单" prop="url" v-if="addOrUpdateForm.permission.type==='menu'"
+                                          :label-width="addOrUpdateForm.permissionFormLabelWidth" required>
+                                <el-cascader placeholder="试试搜索菜单" v-model="addOrUpdateForm.menuModel"
+                                             @change="menuCascaderChange" :options="menuData"
+                                             :show-all-levels="false"
+                                             filterable change-on-select clearable></el-cascader>
+                            </el-form-item>
+                            <el-form-item label="资源路径" prop="url" v-if="addOrUpdateForm.permission.type!=='menu'"
                                           :label-width="addOrUpdateForm.permissionFormLabelWidth">
                                 <el-input v-model="addOrUpdateForm.permission.url" autocomplete="off"
                                           placeholder="资源路径"></el-input>

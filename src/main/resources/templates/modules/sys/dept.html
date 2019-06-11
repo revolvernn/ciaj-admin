@@ -42,7 +42,7 @@
                     <my-table :columns="tableColumns" @sortChange="sortchange" :default-sort="defaultSort" :page="page"
                               v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
                     </my-table>
-                    <el-dialog :title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.deptFormVisible"
+                    <el-dialog :close-on-click-modal="false":title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.deptFormVisible"
                                width="400px">
                         <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.dept">
                             <el-form-item label="部门名称" prop="name" :label-width="addOrUpdateForm.deptFormLabelWidth">

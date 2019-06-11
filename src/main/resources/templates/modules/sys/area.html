@@ -29,7 +29,7 @@
 		</el-form>
 		<my-table @sortChange="sortchange" :default-sort="defaultSort"  :columns="tableColumns"  :page="page" v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
 		</my-table>
-		<el-dialog :title="addOrUpdateForm.title"  :visible.sync="addOrUpdateForm.areaFormVisible" width="400px">
+		<el-dialog :close-on-click-modal="false":title="addOrUpdateForm.title"  :visible.sync="addOrUpdateForm.areaFormVisible" width="400px">
 			<el-form  ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.area">
                 <el-form-item label="名称" prop="name" :label-width="addOrUpdateForm.areaFormLabelWidth" >
                		 <el-input v-model="addOrUpdateForm.area.name" autocomplete="off" placeholder="城市名称"></el-input>

@@ -17,7 +17,7 @@
 		</el-form>
 		<my-table  :columns="tableColumns"  :page="page" :table-loading="tableLoading" v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
 		</my-table>
-		<el-dialog :title="addOrUpdateForm.title"  :visible.sync="addOrUpdateForm.${jsName}FormVisible" width="400px">
+		<el-dialog :close-on-click-modal="false":title="addOrUpdateForm.title"  :visible.sync="addOrUpdateForm.${jsName}FormVisible" width="400px">
 			<el-form  ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.${jsName}">
                 <!--
 				<el-form-item label="示例" prop="demo" :label-width="addOrUpdateForm.${jsName}FormLabelWidth" required>
