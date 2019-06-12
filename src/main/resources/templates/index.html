@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <title>ADMIN</title>
     <link rel="stylesheet" href="/statics/js/libs/vue/element-ui-2.4.11/element-ui.css">
-    <script src="/statics/js/jquery.min.js"></script>
+    <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
     <script src="/statics/js/common.js"></script>
     <!-- import Vue before Element -->
-    <script src="/statics/js/libs/vue/vue-v2.5.21.js"></script>
+    <script src="/webjars/vue/2.5.16/vue.min.js"></script>
     <!-- import JavaScript -->
     <script src="/statics/js/libs/vue/element-ui-2.4.11/element-ui.js"></script>
     <style>
@@ -99,7 +99,7 @@
         </el-header>
         <el-container>
             <el-aside v-bind:style="elAsideStyle" id="el-aside-menu">
-                <el-menu :default-active="defaultActive" @select="selectMenu" :collapse="isCollapse">
+                <el-menu :default-active="defaultActive" @select="selectMenu" :collapse="!isCollapse">
                     <el-menu-item :index="mainJoin"><i class="el-icon-menu"></i> <span slot="title">{{mainTitle}}</span>
                     </el-menu-item>
                     <my-menu-item :item="item" v-for="item in menuList"></my-menu-item>
@@ -108,7 +108,7 @@
             <el-container>
                 <el-breadcrumb separator="/" v-bind:style="breadcrumbStyle">
                     <el-breadcrumb-item>
-                        <el-switch v-model="isCollapse"></el-switch>
+                        <el-switch v-model="isCollapse" active-color="#dcdfe6"></el-switch>
                     </el-breadcrumb-item>
                     <el-breadcrumb-item v-if="breadcrumbs.length>1"><a @click="closeTab()"> 关闭标签 </a></el-breadcrumb-item>
                     <el-breadcrumb-item v-for="item in breadcrumbs">{{item}}</el-breadcrumb-item>

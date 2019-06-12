@@ -32,7 +32,7 @@ var vm = new Vue({
     data: {
         mainTitle: mainTitle,
         mainJoin: [mainTitle, mainUrl].join(':'),
-        isCollapse: false,
+        isCollapse: true,
         dialogVisible: false,
         rules: {
             password: [{required: true, message: '请输入原密码', trigger: 'blur'}],
@@ -153,12 +153,6 @@ var vm = new Vue({
             });
             return paths;
         },
-        getMenuList: function () {
-            let that = this;
-            httpUtil.get({url: "/sys/menu/nav?_" + $.now()}, function (r) {
-                that.menuList = treeUtil.vueTree(r.data)
-            });
-        },
         /**
          * iframe 自适应高度
          */
@@ -245,7 +239,7 @@ var vm = new Vue({
          * 退出
          */
         logout() {
-            window.location.href = '/sys/logout'
+            window.location.href = 'sys/logout'
         },
         updatePassword() {
             let that = this;
@@ -254,7 +248,7 @@ var vm = new Vue({
         },
         getMenuList: function (event) {
             let that = this;
-            httpUtil.get({url: "/sys/menu/nav?_" + $.now()}, function (r) {
+            httpUtil.get({url: "sys/menu/nav?_" + $.now()}, function (r) {
                 that.menuList = treeUtil.vueTree(r.data);
             });
         },
@@ -296,7 +290,7 @@ var vm = new Vue({
     },
     watch: {
         isCollapse(val) {
-            if (val) {
+            if (!val) {
                 this.elAsideStyle.width = '65px';
                 this.breadcrumbStyle.left = '65px';
                 this.elTabsStyle.left = '65px';
