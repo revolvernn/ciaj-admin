@@ -5,7 +5,7 @@ import com.ciaj.boot.component.config.SpringContextUtils;
 import com.ciaj.comm.annotation.MultiTableJoins;
 import com.ciaj.comm.utils.MD5Util;
 import com.ciaj.comm.utils.ObjectUtil;
-import com.ciaj.comm.utils.PageUtis;
+import com.ciaj.comm.utils.PageUtils;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.cache.Cache;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -63,7 +63,7 @@ public class MybatisRedisCache implements Cache {
 	public void putObject(Object key, Object value) {
 		try {
 			//处理随机排序查询不进缓存
-			if (PageUtis.isRandOrderBy()) return;
+			if (PageUtils.isRandOrderBy()) return;
 			//
 			RedisTemplate redisTemplate = getRedisTemplate();
 			ValueOperations opsForValue = redisTemplate.opsForValue();

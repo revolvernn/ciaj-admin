@@ -1,7 +1,6 @@
 package com.ciaj.comm.utils;
 
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
@@ -144,7 +143,7 @@ public class ExcelUtil {
 	 * @throws Exception
 	 */
 	private Object invokeMethod(Object owner, String fieldname) throws Exception {
-		String methodName = "get" + StringUtli.underlineToHumpUpperCase(fieldname);
+		String methodName = "get" + StringUtil.underlineToHumpUpperCase(fieldname);
 		Class<?> ownerClass = owner.getClass();
 		Method method = ownerClass.getMethod(methodName);
 		return method.invoke(owner);
@@ -164,11 +163,11 @@ public class ExcelUtil {
 			response.setContentType("application/vnd.ms-excel;charset=utf-8");
 			final String USER_AGENT = request.getHeader("USER-AGENT");
 			String finalFileName = null;
-			if (StringUtils.contains(USER_AGENT, "MSIE")) {//IE浏览器
+			if (StringUtil.contains(USER_AGENT, "MSIE")) {//IE浏览器
 				finalFileName = URLEncoder.encode(fileName, "utf-8");
-			} else if (StringUtils.contains(USER_AGENT, "Edge")) {//IE Edge 浏览器
+			} else if (StringUtil.contains(USER_AGENT, "Edge")) {//IE Edge 浏览器
 				finalFileName = new String(fileName.getBytes("gbk"), "iso-8859-1");
-			} else if (StringUtils.contains(USER_AGENT, "Mozilla")) {//google,火狐浏览器
+			} else if (StringUtil.contains(USER_AGENT, "Mozilla")) {//google,火狐浏览器
 				finalFileName = new String(fileName.getBytes("utf-8"), "iso-8859-1");
 			} else {
 				finalFileName = URLEncoder.encode(fileName, "utf-8");

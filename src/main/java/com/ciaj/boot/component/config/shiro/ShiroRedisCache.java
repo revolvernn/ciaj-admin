@@ -1,11 +1,11 @@
 package com.ciaj.boot.component.config.shiro;
 
 import com.ciaj.boot.component.config.redis.StringRedisSerializer;
+import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.ObjectUtil;
+import com.ciaj.comm.utils.StringUtil;
 import com.google.common.collect.Sets;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -29,7 +29,7 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 
 	public ShiroRedisCache(RedisTemplate shiroRedisTemplate, String prefix) {
 		this(shiroRedisTemplate);
-		if (StringUtils.isNoneBlank(prefix)) {
+		if (StringUtil.isNoneBlank(prefix)) {
 			this.prefix = prefix;
 		}
 	}
@@ -101,7 +101,7 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 		Set<byte[]> set = redisTemplate.keys(new StringRedisSerializer().deserialize(bkey));
 		Set<K> result = Sets.newHashSet();
 
-		if (CollectionUtils.isEmpty(set)) {
+		if (CollectionUtil.isEmpty(set)) {
 			return Collections.emptySet();
 		}
 

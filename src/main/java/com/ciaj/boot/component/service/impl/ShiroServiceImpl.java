@@ -8,8 +8,8 @@ import com.ciaj.boot.modules.sys.service.SysPermissionService;
 import com.ciaj.boot.modules.sys.service.SysRoleService;
 import com.ciaj.boot.modules.sys.service.SysUserService;
 import com.ciaj.comm.constant.DefaultConstant;
+import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.CommUtil;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class ShiroServiceImpl implements ShiroService {
         ShiroUser shiroUser = new ShiroUser();
         BeanUtils.copyProperties(sysUser, shiroUser);
         final List<SysRolePo> sysRoles = sysRoleService.selectRolesByUserId(userId);
-        if (CollectionUtils.isNotEmpty(sysRoles)) {
+        if (CollectionUtil.isNotEmpty(sysRoles)) {
             shiroUser.setRoles(sysRoles);
             shiroUser.setRole(sysRoles.get(0));
             shiroUser.setPermissions(sysPermissionService.selectPermissionsByRoleId(shiroUser.getRole().getId()));

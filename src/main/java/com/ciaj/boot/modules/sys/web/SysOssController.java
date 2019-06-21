@@ -13,6 +13,7 @@ import com.ciaj.comm.annotation.Resubmit;
 import com.ciaj.comm.constant.DefaultConfigConstant;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.constant.ParamTypeEnum;
+import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.Page;
 import com.ciaj.comm.validate.*;
 import com.google.gson.Gson;
@@ -20,7 +21,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -73,7 +73,7 @@ public class SysOssController extends AbstractController<SysOssPo, SysOssDto, Sy
 		query.setConfigKey(DefaultConfigConstant.CLOUD_STORAGE_CONFIG_KEY);
 		query.setDelFlag(DefaultConstant.FLAG_N);
 		List<SysConfigPo> select = sysConfigService.select(query);
-		if (CollectionUtils.isNotEmpty(select)) {
+		if (CollectionUtil.isNotEmpty(select)) {
 			for (SysConfigPo sysConfig : select) {
 				sysConfig.setStatus(config.getStatus());
 				sysConfig.setConfigValue(new Gson().toJson(config));
@@ -136,7 +136,7 @@ public class SysOssController extends AbstractController<SysOssPo, SysOssDto, Sy
 	@OperationLog(operation = "系统OSS-管理", content = "获取系统OSS列表")
 	@RequiresPermissions("sys:oss:list")
 	@GetMapping("/list")
-	public ResponseEntity<Page<SysOssDto>> list(String type,String keyword) {
+	public ResponseEntity<Page<SysOssDto>> list(String type, String keyword) {
 		SysOssVo entity = new SysOssVo();
 		entity.setKeyword(keyword);
 		entity.setType(type);

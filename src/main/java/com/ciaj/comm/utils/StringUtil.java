@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @Version 1.0
  */
 @SuppressWarnings("all")
-public class StringUtli extends StringUtils {
+public class StringUtil extends StringUtils {
 	private static final Pattern pattern = Pattern.compile("\\{(.*?)\\}");
 	private static Matcher matcher;
 	public static final char UNDERLINE = '_';

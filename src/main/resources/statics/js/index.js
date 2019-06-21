@@ -1,26 +1,6 @@
-var myMenuItem = Vue.extend({
-    name: 'my-menu-item',
-    props: {item: {}},
-    methods: {
-        getIndex(name, url) {
-            return [name, url].join(':');
-        }
-    },
-    template: [
-        '<el-submenu :index="item.name">',
-        '   <template slot="title"><i v-if="item.icon" :class="item.icon"></i><i v-else class="el-icon-setting"></i><span slot="title">{{item.name}}</span></template>',
-        '   <el-menu-item-group v-if="item.children"  v-for="children in item.children">',
-        '       <el-menu-item v-if="children.type==\'1\'" :index="getIndex(children.name,children.url)" :disabled="children.disabled">',
-        '           <i v-if="children.icon" :class="children.icon"></i>',
-        '           <i v-else class="el-icon-setting"></i>',
-        '           <span slot="title">{{children.name}}</span>',
-        '       </el-menu-item>',
-        '       <my-menu-item v-else-if="children.type==\'0\'" :item="children"></my-menu-item>',
-        '   </el-menu-item-group>',
-        '</el-submenu>'
-    ].join('')
-});
+
 Vue.component('myMenuItem', myMenuItem);
+Vue.component('myDictSpan', myDictSpan);
 var mainTitle = '主页面', mainUrl = 'main.html';
 var vm = new Vue({
     el: '#app',
@@ -34,6 +14,7 @@ var vm = new Vue({
         mainJoin: [mainTitle, mainUrl].join(':'),
         isCollapse: true,
         dialogVisible: false,
+        userDialogVisible: false,
         rules: {
             password: [{required: true, message: '请输入原密码', trigger: 'blur'}],
             newPassword: [{required: true, message: '请输入新密码', trigger: 'blur'}]
@@ -84,7 +65,7 @@ var vm = new Vue({
         },
         elFooterStyle: {
             backgroundColor: '#F2F6FC',
-            color: '#606266',
+            color: '#AFB2BA',
             height: '30px',
             textAlign: 'center',
             bottom: '0px',
@@ -95,6 +76,9 @@ var vm = new Vue({
         }
     },
     methods: {
+        userInfoClick() {
+            this.userDialogVisible = true;
+        },
         /**
          *
          * @param targetName
@@ -165,6 +149,7 @@ var vm = new Vue({
          * @param targetName
          */
         removeTab(targetName) {
+            let that = this;
             let tabs = this.tabs;
             let activeName = this.defaultTabsValue;
             if (activeName === targetName) {
@@ -173,6 +158,7 @@ var vm = new Vue({
                         let nextTab = tabs[index + 1] || tabs[index - 1];
                         if (nextTab) {
                             activeName = nextTab.name;
+                            that.breadcrumbs = nextTab.breadcrumbs;
                         }
                     }
                 });

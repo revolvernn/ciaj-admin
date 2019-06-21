@@ -11,18 +11,20 @@ import com.ciaj.comm.annotation.Resubmit;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.constant.ParamTypeEnum;
 import com.ciaj.comm.exception.BsRException;
+import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+;
 
 /**
  * @Author: Ciaj.
@@ -140,7 +142,7 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
 		SysDeptPo query = new SysDeptPo();
 		query.setParentId(entity.getId());
 		List<SysDeptPo> pos = sysDeptService.select(query);
-		if (CollectionUtils.isNotEmpty(pos)) {
+		if (CollectionUtil.isNotEmpty(pos)) {
 			for (SysDeptPo po : pos) {
 				po.setParentId(entity.getId());
 				po.setLevel(entity.getLevel() + 1);
@@ -155,7 +157,7 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
 		SysDeptPo query = new SysDeptPo();
 		query.setParentId(parentId);
 		List<SysDeptPo> pos = sysDeptService.select(query);
-		if (CollectionUtils.isNotEmpty(pos)) {
+		if (CollectionUtil.isNotEmpty(pos)) {
 			for (SysDeptPo po : pos) {
 				super.deleteFlagVersion(po.getId(), po.getVersion());
 				delByParentId(po.getId());
@@ -177,7 +179,7 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
 		q.setParentId(entity.getParentId());
 		List<SysDeptPo> list = sysDeptService.select(q);
 		//同一父级下不能有相同的CODE
-		if (CollectionUtils.isNotEmpty(list)) {
+		if (CollectionUtil.isNotEmpty(list)) {
 			if (entity.getId() == null) throw new BsRException("同一组部门名称不能重复");
 			for (SysDeptPo s : list) {
 				if (!s.getId().equals(entity.getId())) {

@@ -13,8 +13,8 @@ import com.ciaj.boot.modules.sys.service.SysPermissionService;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.utils.CommUtil;
 import com.ciaj.comm.utils.Page;
-import com.ciaj.comm.utils.PageUtis;
-import com.ciaj.comm.utils.StringUtli;
+import com.ciaj.comm.utils.PageUtils;
+import com.ciaj.comm.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +56,7 @@ public class SysPermissionServiceImpl extends AbstractService<SysPermissionPo, S
 				entity.setRoleId(role.getId());
 			}
 		}
-		com.github.pagehelper.Page p = PageUtis.startPageAndOrderBy();
+		com.github.pagehelper.Page p = PageUtils.startPageAndOrderBy();
 		List<SysPermissionDto> list = sysPermissionMapper.selectDTOListMultiTable(entity);
 		return wrapPageDTO(p, list);
 	}
@@ -65,7 +65,7 @@ public class SysPermissionServiceImpl extends AbstractService<SysPermissionPo, S
 	public SysPermissionDto getById(String id) {
 		SysPermissionPo sysPermissionPo = super.selectByPrimaryKey(id);
 		SysPermissionDto sysPermissionDto = poToDto(sysPermissionPo);
-		if(DefaultConstant.PermissionType.menu.name().equals(sysPermissionDto.getType()) && StringUtli.isNotBlank(sysPermissionDto.getUrl())){
+		if(DefaultConstant.PermissionType.menu.name().equals(sysPermissionDto.getType()) && StringUtil.isNotBlank(sysPermissionDto.getUrl())){
 			SysMenuPo sysMenuPo = sysMenuService.selectByPrimaryKey(sysPermissionDto.getUrl());
 			sysPermissionDto.setMenu(sysMenuService.poToDto(sysMenuPo));
 		}

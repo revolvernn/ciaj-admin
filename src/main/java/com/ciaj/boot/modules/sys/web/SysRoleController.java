@@ -14,12 +14,12 @@ import com.ciaj.comm.annotation.OperationLog;
 import com.ciaj.comm.annotation.Resubmit;
 import com.ciaj.comm.constant.ParamTypeEnum;
 import com.ciaj.comm.exception.BsRException;
+import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -133,7 +133,7 @@ public class SysRoleController extends AbstractController<SysRolePo, SysRoleDto,
 		SysUserRoleRelPo query = new SysUserRoleRelPo();
 		query.setRoleId(id);
 		List<SysUserRoleRelPo> select = sysUserRoleRelService.select(query);
-		if (CollectionUtils.isNotEmpty(select)) {
+		if (CollectionUtil.isNotEmpty(select)) {
 			throw new BsRException("角色已绑定用户，不能删除。");
 		}
 		SysRolePo sysRolePo = sysRoleService.selectByPrimaryKey(id);

@@ -1,15 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>ADMIN</title>
-    <link rel="stylesheet" href="/statics/js/libs/vue/element-ui-2.4.11/element-ui.css">
-    <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
-    <script src="/statics/js/common.js"></script>
-    <!-- import Vue before Element -->
-    <script src="/webjars/vue/2.5.16/vue.min.js"></script>
-    <!-- import JavaScript -->
-    <script src="/statics/js/libs/vue/element-ui-2.4.11/element-ui.js"></script>
+    <head th:include="header"/>
+
     <style>
         body {
             margin: unset;
@@ -22,7 +17,9 @@
             left: 0px;
             right: 0px;
             color: #333;
-            background: url(/statics/image/hbg.jpg) no-repeat;
+            background: #b3c0d1;
+            color: white;
+            font-weight: 900;
             background-size: cover;
             position: relative;
         }
@@ -66,6 +63,24 @@
             margin: 0px 0 2px;
         }
 
+        .el-card {
+            text-align: center;
+        }
+
+        .el-card__body {
+            padding: 10px !important;
+        }
+
+        .el-card__body img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+
+        .tag-group {
+            margin-bottom: 10px;
+        }
+
         [v-cloak] {
             display: none !important;
         }
@@ -75,25 +90,21 @@
 <div id="app" v-cloak>
     <el-container>
         <el-header>
-            <span>BOOT ADMIN</span>
-            <el-dropdown @command="roleChangeCommand" style="float: right" v-if="loginUser.role">
-                          <span class="el-dropdown-link" style="color: white;">
-                           角色： {{loginUser.role.name}}<i class="el-icon-arrow-down el-icon--right"></i>
-                          </span>
-                <el-dropdown-menu slot="dropdown" v-if="loginUser.roles">
-                    <el-dropdown-item v-for="role in loginUser.roles" :command="role.id">{{role.name}}
-                    </el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
-            <el-dropdown @command="opChangeCommand" style="float: right;margin-right: 10px;">
-                <span class="el-dropdown-link" style="color: white;">
-                              <img v-if="loginUser.picUrl" :src="loginUser.picUrl" class="avatar"
-                                   style="width: 40px;height: 30px">
-                    欢迎： {{loginUser.username}}<i class="el-icon-arrow-down el-icon--right"></i>
-                          </span>
+            <span>
+                BOOT ADMIN 后台管理平台</span>
+            <el-dropdown @command="opChangeCommand" style="float: right;">
+                <i class="el-icon-setting"></i>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="updatePassword">修改密码</el-dropdown-item>
                     <el-dropdown-item command="logout">退出系统</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+            <el-dropdown @command="roleChangeCommand" style="float: right;margin-right: 30px;" split-button
+                         @click="userInfoClick">
+                欢迎： {{loginUser.username}} <span v-if="loginUser.role">@{{loginUser.role.name}}</span>
+                <el-dropdown-menu slot="dropdown" v-if="loginUser.roles">
+                    <el-dropdown-item v-for="role in loginUser.roles" :command="role.id">{{role.name}}
+                    </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </el-header>
@@ -110,7 +121,8 @@
                     <el-breadcrumb-item>
                         <el-switch v-model="isCollapse" active-color="#dcdfe6"></el-switch>
                     </el-breadcrumb-item>
-                    <el-breadcrumb-item v-if="breadcrumbs.length>1"><a @click="closeTab()"> 关闭标签 </a></el-breadcrumb-item>
+                    <el-breadcrumb-item v-if="breadcrumbs.length>1"><a @click="closeTab()"> 关闭标签 </a>
+                    </el-breadcrumb-item>
                     <el-breadcrumb-item v-for="item in breadcrumbs">{{item}}</el-breadcrumb-item>
                 </el-breadcrumb>
                 <el-tabs v-model="defaultTabsValue" type="card" @tab-click="selectTab" @tab-remove="removeTab"
@@ -126,9 +138,9 @@
             </el-container>
         </el-container>
     </el-container>
-    <el-dialog :close-on-click-modal="false"title="修改密码" :visible.sync="dialogVisible" width="350px">
+    <el-dialog :close-on-click-modal="false" title="修改密码" :visible.sync="dialogVisible" width="350px">
         <el-form ref="passwordFormRef" :rules="rules" :model="passwordForm" label-width="80px">
-            <el-form-item label="账号">
+            <el-form-item label="用户">
                 <span>{{loginUser.username}}</span>
             </el-form-item>
             <el-form-item label="原密码" prop="password">
@@ -142,6 +154,33 @@
                 <el-button type="primary" @click="passwordSubmit">确 定</el-button>
             </el-form-item>
         </el-form>
+    </el-dialog>
+    <el-dialog title="个人信息" :visible.sync="userDialogVisible" width="350px">
+        <el-card :body-style="{ padding: '0px' }">
+            <img :src="loginUser.picUrl"
+                 class="image">
+            <div style="padding: 14px; text-align: left">
+                <div class="tag-group">
+                    <span class="tag-group__title">姓名：{{loginUser.username}}</span>
+                </div>
+                <div class="tag-group">
+                    <span class="tag-group__title">性别：<my-dict-span :value="loginUser.sex"
+                                                                    type="sex"></my-dict-span></span>
+                </div>
+                <div class="tag-group" v-if="loginUser.role">
+                    <span class="tag-group__title">角色：{{loginUser.role.name}}</span>
+                </div>
+                <div class="tag-group" v-if="loginUser.deptName">
+                    <span class="tag-group__title">部门：{{loginUser.deptName}}</span>
+                </div>
+                <div class="tag-group" v-if="loginUser.deptNames">
+                    <span class="tag-group__title">部门组织：{{loginUser.deptNames}}</span>
+                </div>
+                <div class="tag-group" v-if="loginUser.role">
+                    <span class="tag-group__title">注册时间：{{ loginUser.createTime }}</span>
+                </div>
+            </div>
+        </el-card>
     </el-dialog>
 </div>
 <script src="/statics/js/index.js"></script>

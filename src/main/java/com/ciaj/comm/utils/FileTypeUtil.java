@@ -28,10 +28,10 @@ public class FileTypeUtil {
 	 * @return
 	 */
 	public static String getFileType(String url) {
-		if (StringUtli.isBlank(url)) return null;
+		if (StringUtil.isBlank(url)) return null;
 		String fileTyle = url.substring(url.lastIndexOf(".") + 1, url.length());
 		String key = FILE_TYPE_MAP.get(fileTyle.toLowerCase());
-		if (StringUtli.isNotBlank(key)) {
+		if (StringUtil.isNotBlank(key)) {
 			return FileType.getEnum(key).getType();
 		}
 		return FileType.other.getType();
@@ -44,10 +44,10 @@ public class FileTypeUtil {
 	 * @return
 	 */
 	public static String getFileName(String url) {
-		if (StringUtli.isBlank(url)) return null;
+		if (StringUtil.isBlank(url)) return null;
 		String fileTyle = url.substring(url.lastIndexOf(".") + 1, url.length());
 		String key = FILE_TYPE_MAP.get(fileTyle.toLowerCase());
-		if (StringUtli.isNotBlank(key)) {
+		if (StringUtil.isNotBlank(key)) {
 			return FileType.getEnum(key).getName();
 		}
 		return FileType.other.getName();

@@ -347,6 +347,7 @@ var userapp = new Vue({
             let that = this;
             if (val.length > 0) {
                 that.addOrUpdateForm.user.deptId = val[val.length - 1];
+                console.log(val);
             } else {
                 that.addOrUpdateForm.user.deptId = null;
             }

@@ -104,4 +104,11 @@ public interface Mapper<PO, DTO extends BaseEntity, VO extends VOEntity> {
 	 * @return
 	 */
 	List<DTO> selectDTOList(VO entity);
+
+
+	/**
+	 * @param keys
+	 * @return
+	 */
+	List<PO> selectListByKeys(@Param("keys")Object[] keys);
 }

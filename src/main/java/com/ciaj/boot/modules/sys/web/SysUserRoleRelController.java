@@ -8,12 +8,12 @@ import com.ciaj.boot.modules.sys.service.SysUserRoleRelService;
 import com.ciaj.comm.ResponseEntity;
 import com.ciaj.comm.annotation.OperationLog;
 import com.ciaj.comm.annotation.Resubmit;
+import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -79,12 +79,12 @@ public class SysUserRoleRelController extends AbstractController<SysUserRoleRelP
 	}
 
 	private boolean del(List<SysUserRoleRelDto> entity) {
-		if (CollectionUtils.isNotEmpty(entity)) {
+		if (CollectionUtil.isNotEmpty(entity)) {
 			SysUserRoleRelPo sysUserRoleRel = new SysUserRoleRelPo();
 			sysUserRoleRel.setUserId(entity.get(0).getUserId());
 			sysUserRoleRelService.delete(sysUserRoleRel);
 		}
-		if (CollectionUtils.isEmpty(entity) || (CollectionUtils.isNotEmpty(entity) && entity.size() == 1 && entity.get(0).getRoleId() == null)) {
+		if (CollectionUtil.isEmpty(entity) || (CollectionUtil.isNotEmpty(entity) && entity.size() == 1 && entity.get(0).getRoleId() == null)) {
 			return false;
 		} else {
 			return true;

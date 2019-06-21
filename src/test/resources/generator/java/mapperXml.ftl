@@ -148,6 +148,7 @@
         </#list>
         </#if>
     </update>
+
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -158,6 +159,22 @@
         </#list>
         </#if>
     </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM ${tableClass.tableName}
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <#if tableClass.pkFields??>
+                and <#list tableClass.pkFields as field> ${field.columnName}</#list> in
+                <foreach collection="keys" separator="," open="(" close=")" item="item">
+                    #{item}
+                </foreach>
+                </#if>
+            </trim>
+        </where>
+    </select>
+
     <sql id="base_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">

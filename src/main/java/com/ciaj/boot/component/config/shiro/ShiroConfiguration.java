@@ -1,12 +1,8 @@
 package com.ciaj.boot.component.config.shiro;
 
 
-import com.ciaj.boot.component.config.redis.RedisConfig;
 import com.ciaj.boot.component.config.redis.StringRedisSerializer;
 import com.ciaj.comm.utils.PasswordUtil;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
@@ -24,7 +20,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

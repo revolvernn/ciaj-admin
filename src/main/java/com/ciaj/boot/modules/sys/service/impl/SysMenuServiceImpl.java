@@ -8,8 +8,8 @@ import com.ciaj.boot.modules.sys.entity.vo.SysMenuVo;
 import com.ciaj.boot.modules.sys.mapper.SysMenuMapper;
 import com.ciaj.boot.modules.sys.service.SysMenuService;
 import com.ciaj.comm.constant.DefaultConstant;
+import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.CommUtil;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +38,7 @@ public class SysMenuServiceImpl extends AbstractService<SysMenuPo, SysMenuDto, S
             return sysMenuMapper.select(q);
         } else {
             List<SysMenuPo> sysMenus = sysMenuMapper.selectNavMultiTable(loginUser.getId(), loginUser.getRole() == null ? null : loginUser.getRole().getId());
-            if (CollectionUtils.isEmpty(sysMenus)) return null;
+            if (CollectionUtil.isEmpty(sysMenus)) return null;
             Set<String> ids = new HashSet<>();
             for (SysMenuPo sysMenu : sysMenus) {
                 ids.add(sysMenu.getId());

@@ -1,11 +1,10 @@
 package com.ciaj.base;
 
 import com.ciaj.comm.exception.BsRException;
+import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.Page;
-import com.ciaj.comm.utils.PageUtis;
-import io.swagger.models.auth.In;
+import com.ciaj.comm.utils.PageUtils;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,31 +31,31 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 	//*************************select***************************************
 
 	public Page<PO> selectPOPage(PO entity) {
-		com.github.pagehelper.Page p = PageUtis.startPageAndOrderBy();
+		com.github.pagehelper.Page p = PageUtils.startPageAndOrderBy();
 		List<PO> list = select(entity);
 		return wrapPOPage(p, list);
 	}
 
 	public Page<DTO> selectDTOPage(PO entity) {
-		com.github.pagehelper.Page p = PageUtis.startPageAndOrderBy();
+		com.github.pagehelper.Page p = PageUtils.startPageAndOrderBy();
 		List<PO> list = select(entity);
 		return wrapDTOPage(p, list);
 	}
 
 	public Page<PO> selectPOPage(VO entity) {
-		com.github.pagehelper.Page p = PageUtis.startPageAndOrderBy();
+		com.github.pagehelper.Page p = PageUtils.startPageAndOrderBy();
 		List<PO> list = selectList(entity);
 		return wrapPOPage(p, list);
 	}
 
 	public Page<DTO> selectDTOPage(VO entity) {
-		com.github.pagehelper.Page p = PageUtis.startPageAndOrderBy();
+		com.github.pagehelper.Page p = PageUtils.startPageAndOrderBy();
 		List<PO> list = selectList(entity);
 		return wrapDTOPage(p, list);
 	}
 
 	public Page<VO> selectVoPage(VO entity) {
-		com.github.pagehelper.Page p = PageUtis.startPageAndOrderBy();
+		com.github.pagehelper.Page p = PageUtils.startPageAndOrderBy();
 		List<PO> list = selectList(entity);
 		return wrapVoPage(p, list);
 	}
@@ -89,6 +88,11 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 	@Transactional(readOnly = true)
 	public PO selectOne(PO record) {
 		return mapper.selectOne(record);
+	}
+
+	@Transactional(readOnly = true)
+	public List<PO> selectListByKeys(Object[] keys) {
+		return mapper.selectListByKeys(keys);
 	}
 
 	//*************************select***************************************
@@ -218,7 +222,7 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 	@Transactional(rollbackFor = Exception.class)
 	public int deleteByPrimaryKeys(List<Object> keys) {
 		int i = 0;
-		if (CollectionUtils.isNotEmpty(keys)) {
+		if (CollectionUtil.isNotEmpty(keys)) {
 			for (Object key : keys) {
 				int delete = deleteByPrimaryKey(key);
 				i += delete;

@@ -4,7 +4,7 @@ import com.ciaj.boot.component.config.shiro.ShiroUser;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.utils.CommUtil;
 import com.ciaj.comm.utils.Page;
-import com.ciaj.comm.utils.PageUtis;
+import com.ciaj.comm.utils.PageUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 
@@ -20,7 +20,6 @@ import java.util.List;
  * @Description:
  */
 @Log4j2
-@SuppressWarnings("all")
 public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEntity> {
 
 	static final String INSERT = "insert";
@@ -157,13 +156,13 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 	public Page<DTO> wrapPageDTO(com.github.pagehelper.Page p, List<DTO> list) {
 		if (p == null) {
 			Page page = new Page(list, list.size(), list.size(), 1, false);
-			if (PageUtis.isOrderBy()) {
+			if (PageUtils.isOrderBy()) {
 				page.setOrderByEnabled(true);
-				page.setOrderBy(PageUtis.getPageFromThreadLocal().getOrderBy());
+				page.setOrderBy(PageUtils.getPageFromThreadLocal().getOrderBy());
 			}
 			return page;
 		} else {
-			Page page = PageUtis.getPageFromThreadLocal();
+			Page page = PageUtils.getPageFromThreadLocal();
 			page.setCurrPage(p.getPageNum());
 			page.setPageSize(p.getPageSize());
 			page.setTotalPage(p.getPages());
@@ -184,13 +183,13 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 	public Page<VO> wrapPageVo(com.github.pagehelper.Page p, List<VO> list) {
 		if (p == null) {
 			Page page = new Page(list, list.size(), list.size(), 1, false);
-			if (PageUtis.isOrderBy()) {
+			if (PageUtils.isOrderBy()) {
 				page.setOrderByEnabled(true);
-				page.setOrderBy(PageUtis.getPageFromThreadLocal().getOrderBy());
+				page.setOrderBy(PageUtils.getPageFromThreadLocal().getOrderBy());
 			}
 			return page;
 		} else {
-			Page page = PageUtis.getPageFromThreadLocal();
+			Page page = PageUtils.getPageFromThreadLocal();
 			page.setCurrPage(p.getPageNum());
 			page.setPageSize(p.getPageSize());
 			page.setTotalPage(p.getPages());
@@ -210,13 +209,13 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 	public Page<PO> wrapPagePO(com.github.pagehelper.Page p, List<PO> list) {
 		if (p == null) {
 			Page page = new Page(list, list.size(), list.size(), 1, false);
-			if (PageUtis.isOrderBy()) {
+			if (PageUtils.isOrderBy()) {
 				page.setOrderByEnabled(true);
-				page.setOrderBy(PageUtis.getPageFromThreadLocal().getOrderBy());
+				page.setOrderBy(PageUtils.getPageFromThreadLocal().getOrderBy());
 			}
 			return page;
 		} else {
-			Page page = PageUtis.getPageFromThreadLocal();
+			Page page = PageUtils.getPageFromThreadLocal();
 			page.setCurrPage(p.getPageNum());
 			page.setPageSize(p.getPageSize());
 			page.setTotalPage(p.getPages());

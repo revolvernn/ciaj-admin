@@ -8,12 +8,12 @@ import com.ciaj.boot.modules.sys.service.SysRolePermissionRelService;
 import com.ciaj.comm.ResponseEntity;
 import com.ciaj.comm.annotation.OperationLog;
 import com.ciaj.comm.annotation.Resubmit;
+import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -79,12 +79,12 @@ public class SysRolePermissionRelController extends AbstractController<SysRolePe
 	}
 
 	private Boolean del(List<SysRolePermissionRelDto> entity) {
-		if (CollectionUtils.isNotEmpty(entity)) {
+		if (CollectionUtil.isNotEmpty(entity)) {
 			SysRolePermissionRelPo sysRolePermissionRel = new SysRolePermissionRelPo();
 			sysRolePermissionRel.setRoleId(entity.get(0).getRoleId());
 			sysRolePermissionRelService.delete(sysRolePermissionRel);
 		}
-		if (CollectionUtils.isEmpty(entity) || (CollectionUtils.isNotEmpty(entity) && entity.size() == 1 && entity.get(0).getPermissionId() == null)) {
+		if (CollectionUtil.isEmpty(entity) || (CollectionUtil.isNotEmpty(entity) && entity.size() == 1 && entity.get(0).getPermissionId() == null)) {
 			return false;
 		} else {
 			return true;

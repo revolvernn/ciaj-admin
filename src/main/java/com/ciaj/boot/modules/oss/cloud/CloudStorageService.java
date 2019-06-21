@@ -2,8 +2,8 @@ package com.ciaj.boot.modules.oss.cloud;
 
 import com.ciaj.comm.utils.CalendarUtils;
 import com.ciaj.comm.utils.ImageUtils;
+import com.ciaj.comm.utils.StringUtil;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -37,7 +37,7 @@ public abstract class CloudStorageService {
 		//文件路径
 		String path = CalendarUtils.format(new Date(), "yyyyMMdd") + "/" + uuid;
 
-		if (StringUtils.isNotBlank(prefix)) {
+		if (StringUtil.isNotBlank(prefix)) {
 			path = prefix + "/" + path;
 		}
 

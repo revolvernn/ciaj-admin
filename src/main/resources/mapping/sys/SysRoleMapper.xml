@@ -282,12 +282,27 @@
         </set>
         WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
     </update>
+
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM sys_role
         WHERE id = #{id,jdbcType=VARCHAR}
     </select>
+    <select id="selectListByKeys" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_role
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                and id in
+                <foreach collection="keys" separator="," open="(" close=")" item="item">
+                    #{item}
+                </foreach>
+            </trim>
+        </where>
+    </select>
+
     <sql id="base_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">

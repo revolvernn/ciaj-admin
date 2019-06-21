@@ -13,12 +13,12 @@ import com.ciaj.comm.annotation.Resubmit;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.constant.ParamTypeEnum;
 import com.ciaj.comm.exception.BsRException;
+import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +77,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 	@OperationLog(operation = "系统权限-管理", content = "获取系统权限列表")
 	@RequiresPermissions("sys:permission:list")
 	@GetMapping("/list")
-	public ResponseEntity<Page<SysPermissionDto>> list(String keyword, String type,String parentId) {
+	public ResponseEntity<Page<SysPermissionDto>> list(String keyword, String type, String parentId) {
 		SysPermissionVo entity = new SysPermissionVo();
 		entity.setKeyword(keyword);
 		entity.setType(type);
@@ -139,7 +139,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
 		SysRolePermissionRelPo query = new SysRolePermissionRelPo();
 		List<SysRolePermissionRelPo> select = sysRolePermissionRelService.select(query);
-		if (CollectionUtils.isNotEmpty(select)) {
+		if (CollectionUtil.isNotEmpty(select)) {
 			throw new BsRException("权限已绑定角色，不能删除。");
 		}
 		SysPermissionPo sysPermissionPo = sysPermissionService.selectByPrimaryKey(id);
@@ -157,7 +157,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 		SysPermissionPo query = new SysPermissionPo();
 		query.setParentId(parentId);
 		List<SysPermissionPo> pos = sysPermissionService.select(query);
-		if (CollectionUtils.isNotEmpty(pos)) {
+		if (CollectionUtil.isNotEmpty(pos)) {
 			for (SysPermissionPo po : pos) {
 				super.deleteFlagVersion(po.getId(), po.getVersion());
 				delByParentId(po.getId());
@@ -177,7 +177,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 		q.setParentId(entity.getParentId());
 		List<SysPermissionPo> sysPermissions = sysPermissionService.select(q);
 		//同一父级下不能有相同的NAME
-		if (CollectionUtils.isNotEmpty(sysPermissions)) {
+		if (CollectionUtil.isNotEmpty(sysPermissions)) {
 			if (entity.getId() == null) throw new BsRException("同一组权限名称不能重复");
 			for (SysPermissionPo sysPermission : sysPermissions) {
 				if (!sysPermission.getId().equals(entity.getId())) {
@@ -192,7 +192,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 		q.setParentId(entity.getParentId());
 		sysPermissions = sysPermissionService.select(q);
 		//同一父级下不能有相同的NAME
-		if (CollectionUtils.isNotEmpty(sysPermissions)) {
+		if (CollectionUtil.isNotEmpty(sysPermissions)) {
 			if (entity.getId() == null) throw new BsRException("同一组权限码不能重复");
 			for (SysPermissionPo sysPermission : sysPermissions) {
 				if (!sysPermission.getId().equals(entity.getId())) {
@@ -213,7 +213,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 		SysPermissionPo query = new SysPermissionPo();
 		query.setParentId(entity.getId());
 		List<SysPermissionPo> sysPermissions = sysPermissionService.select(query);
-		if (CollectionUtils.isNotEmpty(sysPermissions)) {
+		if (CollectionUtil.isNotEmpty(sysPermissions)) {
 			for (SysPermissionPo po : sysPermissions) {
 				po.setParentId(entity.getId());
 				po.setParentIds(entity.getParentIds() + "," + entity.getId());

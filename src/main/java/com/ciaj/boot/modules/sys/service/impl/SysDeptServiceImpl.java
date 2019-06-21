@@ -7,7 +7,7 @@ import com.ciaj.boot.modules.sys.entity.vo.SysDeptVo;
 import com.ciaj.boot.modules.sys.mapper.SysDeptMapper;
 import com.ciaj.boot.modules.sys.service.SysDeptService;
 import com.ciaj.comm.utils.Page;
-import com.ciaj.comm.utils.PageUtis;
+import com.ciaj.comm.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,7 @@ public class SysDeptServiceImpl extends AbstractService<SysDeptPo, SysDeptDto, S
 
     @Override
     public Page<SysDeptDto> selectDTOPage(SysDeptVo entity) {
-        com.github.pagehelper.Page p = PageUtis.startPageAndOrderBy();
+        com.github.pagehelper.Page p = PageUtils.startPageAndOrderBy();
         List<SysDeptDto> sysDeptDtos = sysDeptMapper.selectDTOListMultiTable(entity);
         return wrapPageDTO(p, sysDeptDtos);
     }

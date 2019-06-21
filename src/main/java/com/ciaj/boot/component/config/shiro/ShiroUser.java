@@ -4,8 +4,8 @@ import com.ciaj.boot.modules.sys.entity.po.SysPermissionPo;
 import com.ciaj.boot.modules.sys.entity.po.SysRolePo;
 import com.ciaj.boot.modules.sys.entity.po.SysUserPo;
 import com.ciaj.comm.constant.DefaultConstant;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.ciaj.comm.utils.CollectionUtil;
+import com.ciaj.comm.utils.StringUtil;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -61,7 +61,7 @@ public class ShiroUser extends SysUserPo {
 	public Set<String> getStringRoles() {
 		Set<String> stringSet = new HashSet<>();
 		if (role != null) {
-			if (StringUtils.isNotBlank(role.getCode())) {
+			if (StringUtil.isNotBlank(role.getCode())) {
 				String[] split = role.getCode().split(",");
 				stringSet.addAll(Arrays.asList(split));
 			}
@@ -71,9 +71,9 @@ public class ShiroUser extends SysUserPo {
 
 	public Set<String> getStringPermissions() {
 		Set<String> stringSet = new HashSet<>();
-		if (CollectionUtils.isNotEmpty(permissions)) {
+		if (CollectionUtil.isNotEmpty(permissions)) {
 			for (SysPermissionPo permission : permissions) {
-				if (StringUtils.isNotBlank(permission.getPermissionCode())) {
+				if (StringUtil.isNotBlank(permission.getPermissionCode())) {
 					String[] split = permission.getPermissionCode().split(",");
 					stringSet.addAll(Arrays.asList(split));
 				}

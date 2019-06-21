@@ -1,3 +1,25 @@
+var myMenuItem = Vue.extend({
+    name: 'my-menu-item',
+    props: {item: {}},
+    methods: {
+        getIndex(name, url) {
+            return [name, url].join(':');
+        }
+    },
+    template: [
+        '<el-submenu :index="item.name">',
+        '   <template slot="title"><i v-if="item.icon" :class="item.icon"></i><i v-else class="el-icon-setting"></i><span slot="title">{{item.name}}</span></template>',
+        '   <el-menu-item-group v-if="item.children"  v-for="children in item.children">',
+        '       <el-menu-item v-if="children.type==\'1\'" :index="getIndex(children.name,children.url)" :disabled="children.disabled">',
+        '           <i v-if="children.icon" :class="children.icon"></i>',
+        '           <i v-else class="el-icon-setting"></i>',
+        '           <span slot="title">{{children.name}}</span>',
+        '       </el-menu-item>',
+        '       <my-menu-item v-else-if="children.type==\'0\'" :item="children"></my-menu-item>',
+        '   </el-menu-item-group>',
+        '</el-submenu>'
+    ].join('')
+});
 var myDictSelectT = Vue.extend({
     name: 'my-dict-select',
     props: {
@@ -54,7 +76,41 @@ var myDictSelectT = Vue.extend({
         '<el-option  v-for="item in options" :label="item.name" :disabled="item.disabled" :value="item.code" :key="item.code""></el-option>',
         '</el-select>'
     ].join('')
-})
+});
+var myDictSpan = Vue.extend({
+    name: 'my-dict-span',
+    props: {
+        value: '',
+        type: {
+            default: null
+        }
+    },
+    data() {
+        return {
+            model: '',
+            options: []
+        }
+    },
+    created (){
+    },
+    mounted() {
+        this.loadData();
+    },
+    methods: {
+        loadData() {
+            var that = this;
+            if (that.type === undefined || that.type === '' || that.type === null) {
+                return;
+            }
+            that.value = dictUtil.getNameByTypeAndCode(that.type, that.value);
+            if(that.value) that.model = that.value;
+        }
+    },
+    template: [
+        '<span value="">{{model}}',
+        '</span>'
+    ].join('')
+});
 var myAreaSelectT = Vue.extend({
     name: 'my-area-select',
     props: {

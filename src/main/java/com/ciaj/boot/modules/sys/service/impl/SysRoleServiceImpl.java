@@ -10,7 +10,7 @@ import com.ciaj.boot.modules.sys.service.SysRoleService;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.utils.CommUtil;
 import com.ciaj.comm.utils.Page;
-import com.ciaj.comm.utils.PageUtis;
+import com.ciaj.comm.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +43,7 @@ public class SysRoleServiceImpl extends AbstractService<SysRolePo, SysRoleDto, S
 		}else {
 			entity.setUserId(loginUser.getId());
 		}
-		com.github.pagehelper.Page p = PageUtis.startPageAndOrderBy();
+		com.github.pagehelper.Page p = PageUtils.startPageAndOrderBy();
 		List<SysRoleDto> sysRolePos = sysRoleMapper.selectDTOListMultiTable(entity);
 		return wrapPageDTO(p, sysRolePos);
 	}

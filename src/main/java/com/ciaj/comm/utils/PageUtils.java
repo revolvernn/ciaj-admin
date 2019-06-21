@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Date: 2018/12/5 10:25
  * @Description:
  */
-public class PageUtis {
+public class PageUtils {
 
     private static final String THREAD_LOCAL_PAGE_KEY = "thread_local_page_key";
     private static String THREAD_LOCAL_PAGE_ENABLE_KEY = "thread_local_page_enable_key";

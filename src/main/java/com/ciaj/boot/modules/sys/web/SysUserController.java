@@ -2,22 +2,29 @@ package com.ciaj.boot.modules.sys.web;
 
 import com.ciaj.base.AbstractController;
 import com.ciaj.boot.modules.sys.entity.dto.SysUserDto;
+import com.ciaj.boot.modules.sys.entity.po.SysDeptPo;
 import com.ciaj.boot.modules.sys.entity.po.SysUserPo;
 import com.ciaj.boot.modules.sys.entity.vo.SysUserVo;
+import com.ciaj.boot.modules.sys.service.SysDeptService;
 import com.ciaj.boot.modules.sys.service.SysUserService;
 import com.ciaj.comm.ResponseEntity;
 import com.ciaj.comm.annotation.OperationLog;
 import com.ciaj.comm.annotation.Resubmit;
 import com.ciaj.comm.constant.ParamTypeEnum;
 import com.ciaj.comm.utils.Page;
+import com.ciaj.comm.utils.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author: Ciaj.
@@ -32,6 +39,9 @@ public class SysUserController extends AbstractController<SysUserPo, SysUserDto,
 
 	@Autowired
 	private SysUserService sysUserService;
+
+	@Autowired
+	private SysDeptService sysDeptService;
 
 	/**
 	 * 根据ID获取信息
@@ -85,6 +95,7 @@ public class SysUserController extends AbstractController<SysUserPo, SysUserDto,
 	@RequiresPermissions("sys:user:add")
 	@PostMapping("add")
 	public ResponseEntity add(@RequestBody SysUserDto entity) {
+		initDept(entity);
 		return super.add(entity);
 	}
 
@@ -100,7 +111,28 @@ public class SysUserController extends AbstractController<SysUserPo, SysUserDto,
 	@RequiresPermissions("sys:user:update")
 	@PutMapping("update")
 	public ResponseEntity update(@RequestBody SysUserDto entity) {
+		initDept(entity);
 		return super.updateByVersion(entity, entity.getVersion());
+	}
+
+	/**
+	 * 处理用户组织信息
+	 *
+	 * @param entity
+	 */
+	private void initDept(SysUserDto entity) {
+		if (StringUtil.isNotBlank(entity.getDeptId())) {
+			SysDeptPo sysDeptPo = sysDeptService.selectByPrimaryKey(entity.getDeptId());
+			entity.setDeptName(sysDeptPo.getName());
+			entity.setDeptIds(sysDeptPo.getParentIds());
+			List<SysDeptPo> sysDeptPos = sysDeptService.selectListByKeys(sysDeptPo.getParentIds().split(","));
+			List<String> list = new ArrayList<>();
+			for (SysDeptPo deptPo : sysDeptPos) {
+				list.add(deptPo.getName());
+			}
+			list.add(sysDeptPo.getName());
+			entity.setDeptNames(StringUtil.getJoinString("-", list));
+		}
 	}
 
 	/**

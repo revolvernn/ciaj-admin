@@ -6,7 +6,7 @@ import com.ciaj.boot.component.config.redis.RedisUtil;
 import com.ciaj.boot.modules.sys.entity.po.SysUserPo;
 import com.ciaj.boot.modules.sys.service.SysUserService;
 import com.ciaj.comm.utils.Page;
-import com.ciaj.comm.utils.PageUtis;
+import com.ciaj.comm.utils.PageUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class JunitTest {
         page.setPageEnabled(true);
         page.setOrderByEnabled(true);
         page.setOrderBy("id desc");
-        PageUtis.putPageToThreadLocal(page);
+        PageUtils.putPageToThreadLocal(page);
         Page pag = sysUserService.selectPOPage(null);
         final Page sysUserDtoPage = sysUserService.selectDTOPage(null);
 

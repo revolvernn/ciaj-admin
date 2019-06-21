@@ -11,12 +11,12 @@ import com.ciaj.comm.annotation.Resubmit;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.constant.ParamTypeEnum;
 import com.ciaj.comm.exception.BsRException;
+import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -114,7 +114,7 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 		checkEntity(entity);
 		SysAreaPo p = sysAreaService.selectByPrimaryKey(entity.getId());
 		ResponseEntity update = super.updateByVersion(entity, entity.getVersion());
-		if (!p.getParentId().equalsIgnoreCase(entity.getParentId())) {
+		if (!p.getParentId().equals(entity.getParentId())) {
 			updateParentIds(entity);
 		}
 		return update;
@@ -132,7 +132,7 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 		q.setParentId(entity.getParentId());
 		List<SysAreaPo> list = sysAreaService.select(q);
 		//同一父级下不能有相同的CODE
-		if (CollectionUtils.isNotEmpty(list)) {
+		if (CollectionUtil.isNotEmpty(list)) {
 			if (entity.getId() == null) throw new BsRException("同一组区域编码不能重复");
 			for (SysAreaPo p : list) {
 				if (!p.getId().equals(entity.getId())) {
@@ -146,7 +146,7 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 		q.setParentId(entity.getParentId());
 		list = sysAreaService.select(q);
 		//同一父级下不能有相同的CODE
-		if (CollectionUtils.isNotEmpty(list)) {
+		if (CollectionUtil.isNotEmpty(list)) {
 			if (entity.getId() == null) throw new BsRException("同一组区域名称不能重复");
 			for (SysAreaPo p : list) {
 				if (!p.getId().equals(entity.getId())) {
@@ -165,7 +165,7 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 		SysAreaPo query = new SysAreaPo();
 		query.setParentId(entity.getId());
 		List<SysAreaPo> pos = sysAreaService.select(query);
-		if (CollectionUtils.isNotEmpty(pos)) {
+		if (CollectionUtil.isNotEmpty(pos)) {
 			for (SysAreaPo po : pos) {
 				po.setParentId(entity.getId());
 				po.setLevel(entity.getLevel() + 1);
@@ -205,7 +205,7 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 		SysAreaPo query = new SysAreaPo();
 		query.setParentId(parentId);
 		List<SysAreaPo> pos = sysAreaService.select(query);
-		if (CollectionUtils.isNotEmpty(pos)) {
+		if (CollectionUtil.isNotEmpty(pos)) {
 			for (SysAreaPo po : pos) {
 				super.deleteFlagVersion(po.getId(), po.getVersion());
 				delByParentId(po.getId());

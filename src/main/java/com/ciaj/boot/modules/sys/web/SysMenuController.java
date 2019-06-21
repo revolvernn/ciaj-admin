@@ -11,12 +11,12 @@ import com.ciaj.comm.annotation.Resubmit;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.constant.ParamTypeEnum;
 import com.ciaj.comm.exception.BsRException;
+import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -150,7 +150,7 @@ public class SysMenuController extends AbstractController<SysMenuPo, SysMenuDto,
 		SysMenuPo query = new SysMenuPo();
 		query.setParentId(parentId);
 		List<SysMenuPo> pos = sysMenuService.select(query);
-		if (CollectionUtils.isNotEmpty(pos)) {
+		if (CollectionUtil.isNotEmpty(pos)) {
 			for (SysMenuPo po : pos) {
 				super.deleteFlagVersion(po.getId(), po.getVersion());
 				delByParentId(po.getId());
@@ -170,7 +170,7 @@ public class SysMenuController extends AbstractController<SysMenuPo, SysMenuDto,
 		q.setParentId(entity.getParentId());
 		List<SysMenuPo> sysMenus = sysMenuService.select(q);
 		//同一父级下不能有相同的CODE
-		if (CollectionUtils.isNotEmpty(sysMenus)) {
+		if (CollectionUtil.isNotEmpty(sysMenus)) {
 			if (entity.getId() == null) throw new BsRException("同一组菜单名称不能重复");
 			for (SysMenuPo sysMenu : sysMenus) {
 				if (!sysMenu.getId().equals(entity.getId())) {
@@ -190,7 +190,7 @@ public class SysMenuController extends AbstractController<SysMenuPo, SysMenuDto,
 		SysMenuPo query = new SysMenuPo();
 		query.setParentId(entity.getId());
 		List<SysMenuPo> pos = sysMenuService.select(query);
-		if (CollectionUtils.isNotEmpty(pos)) {
+		if (CollectionUtil.isNotEmpty(pos)) {
 			for (SysMenuPo po : pos) {
 				po.setParentId(entity.getId());
 				po.setParentIds(entity.getParentIds() + "," + entity.getId());

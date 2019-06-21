@@ -19,15 +19,10 @@ import com.ciaj.comm.constant.DefaultConfigConstant;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.exception.BsRException;
 import com.ciaj.comm.pwd.PasswordEntity;
-import com.ciaj.comm.utils.CommUtil;
-import com.ciaj.comm.utils.ExcelUtil;
-import com.ciaj.comm.utils.PasswordUtil;
-import com.ciaj.comm.utils.ShiroUtils;
+import com.ciaj.comm.utils.*;
 import com.ciaj.comm.validate.ValidatorUtils;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
@@ -82,7 +77,7 @@ public class CommController {
 		Map<String, Boolean> map = new HashMap<>();
 		map.put("IS_ALL_AUTH", CommUtil.getLoginUser().isSuperAdmin());
 		map.put("DEFAULT_DATA_AUTH", ShiroUtils.checkPermissions(DefaultConfigConstant.DEFAULT_FINAL_DATA_PERMISSION_UPDATE_OR_DELETE));
-		if (StringUtils.isNotBlank(codes)) {
+		if (StringUtil.isNotBlank(codes)) {
 			for (String s : codes.split(",")) {
 				boolean b = ShiroUtils.checkPermissions(s);
 				map.put(s.replaceAll(":", ""), b);
@@ -171,12 +166,12 @@ public class CommController {
 	@ResponseBody
 	@PostMapping("/sys/register")
 	public ResponseEntity register(@RequestBody LoginForm loginForm) {
-		if (StringUtils.isBlank(loginForm.getAccount())) throw new BsRException("手机号不能为空");
+		if (StringUtil.isBlank(loginForm.getAccount())) throw new BsRException("手机号不能为空");
 		final PasswordEntity p = PasswordUtil.getPassword(loginForm.getPassword());
 		SysUserPo sysUser = new SysUserPo();
 		sysUser.setAccount(loginForm.getAccount());
 		final List<SysUserPo> select = sysUserService.select(sysUser);
-		if (CollectionUtils.isNotEmpty(select)) throw new BsRException("账号已经存在");
+		if (CollectionUtil.isNotEmpty(select)) throw new BsRException("账号已经存在");
 
 		sysUser.setUsername(sysUser.getAccount());
 		sysUser.setNickname(sysUser.getAccount());
@@ -216,13 +211,13 @@ public class CommController {
 	@ResponseBody
 	@PostMapping("/sys/pc/register")
 	public ResponseEntity pcRegister(@RequestBody SysUserDto entity) {
-		if (StringUtils.isBlank(entity.getMobile())) throw new BsRException("手机号不能为空");
+		if (StringUtil.isBlank(entity.getMobile())) throw new BsRException("手机号不能为空");
 
 		SysUserPo q = new SysUserPo();
 		q.setUsername(entity.getUsername());
 		q.setDelFlag(DefaultConstant.FLAG_N);
 		final List<SysUserPo> select = sysUserService.select(q);
-		if (CollectionUtils.isNotEmpty(select)) {
+		if (CollectionUtil.isNotEmpty(select)) {
 			throw new BsRException("用户名已经存在");
 		}
 		SysUserPo user = new SysUserPo();
@@ -282,7 +277,7 @@ public class CommController {
 	@ResponseBody
 	@PostMapping("/sys/user/password")
 	public ResponseEntity updatePassword(String password, String newPassword) {
-		if (StringUtils.isBlank(password) || StringUtils.isBlank(newPassword)) {
+		if (StringUtil.isBlank(password) || StringUtil.isBlank(newPassword)) {
 			return ResponseEntity.error("密码不能为空");
 		}
 		final ShiroUser loginUser = CommUtil.getLoginUser();
@@ -321,7 +316,7 @@ public class CommController {
 	@RequiresPermissions("sys:user:password:update")
 	@PostMapping("/sys/user/password/update")
 	public ResponseEntity updateUserPassword(String userId, String newPassword) {
-		if (StringUtils.isBlank(newPassword)) {
+		if (StringUtil.isBlank(newPassword)) {
 			return ResponseEntity.error("密码不能为空");
 		}
 		SysAuthPo authQuery = new SysAuthPo();

@@ -22,7 +22,6 @@ import java.util.List;
  * @Description:
  */
 @Log4j2
-@SuppressWarnings("all")
 public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends VOEntity> extends AbstractBase<PO, DTO, VO> {
 	@Autowired
 	private BaseService<PO, DTO, VO> baseService;
@@ -50,7 +49,7 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 	 */
 	public ResponseEntity<Page<PO>> listPOPage(PO entity) {
 		//
-		super.insertFieldByPO("delFlag", DefaultConstant.FLAG_N, entity);
+		super.insertFieldByPO(DEL_FLAG, DefaultConstant.FLAG_N, entity);
 
 		Page<PO> page = baseService.selectPOPage(entity);
 		//
@@ -65,7 +64,7 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 	 */
 	public ResponseEntity<Page<PO>> listPOPage(VO entity) {
 		//
-		super.setFieldByVO("delFlag", DefaultConstant.FLAG_N, entity);
+		super.setFieldByVO(DEL_FLAG, DefaultConstant.FLAG_N, entity);
 
 		Page<PO> page = baseService.selectPOPage(entity);
 		//
@@ -81,7 +80,7 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 	 */
 	public ResponseEntity<Page<DTO>> listDTOPage(VO entity) {
 		//
-		super.setFieldByVO("delFlag", DefaultConstant.FLAG_N, entity);
+		super.setFieldByVO(DEL_FLAG, DefaultConstant.FLAG_N, entity);
 
 		Page<DTO> page = baseService.selectDTOPage(entity);
 		//

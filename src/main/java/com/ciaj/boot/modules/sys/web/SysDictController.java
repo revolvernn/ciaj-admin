@@ -11,12 +11,12 @@ import com.ciaj.comm.annotation.Resubmit;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.constant.ParamTypeEnum;
 import com.ciaj.comm.exception.BsRException;
+import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -149,7 +149,7 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 		SysDictPo query = new SysDictPo();
 		query.setParentId(parentId);
 		List<SysDictPo> pos = sysDictService.select(query);
-		if (CollectionUtils.isNotEmpty(pos)) {
+		if (CollectionUtil.isNotEmpty(pos)) {
 			for (SysDictPo po : pos) {
 				super.deleteFlagVersion(po.getId(), po.getVersion());
 				delByParentId(po.getId());
@@ -174,7 +174,7 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 		q.setParentId(entity.getParentId());
 		List<SysDictPo> sysDicts = sysDictService.select(q);
 		//同一父级下不能有相同的CODE
-		if (CollectionUtils.isNotEmpty(sysDicts)) {
+		if (CollectionUtil.isNotEmpty(sysDicts)) {
 			if (entity.getId() == null) throw new BsRException("同一组字典编码不能重复");
 			for (SysDictPo sysDict : sysDicts) {
 				if (!sysDict.getId().equals(entity.getId())) {
@@ -188,7 +188,7 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 		q.setParentId(entity.getParentId());
 		sysDicts = sysDictService.select(q);
 		//同一父级下不能有相同的CODE
-		if (CollectionUtils.isNotEmpty(sysDicts)) {
+		if (CollectionUtil.isNotEmpty(sysDicts)) {
 			if (entity.getId() == null) throw new BsRException("同一组字典名称不能重复");
 			for (SysDictPo sysDict : sysDicts) {
 				if (!sysDict.getId().equals(entity.getId())) {
@@ -201,7 +201,7 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 		q.setType(entity.getType());
 		sysDicts = sysDictService.select(q);
 		//不同的父级不能有相同的类型
-		if (CollectionUtils.isNotEmpty(sysDicts)) {
+		if (CollectionUtil.isNotEmpty(sysDicts)) {
 			for (SysDictPo sysDict : sysDicts) {
 				if (entity.getId() == null && !sysDict.getParentId().equals(entity.getParentId())) {
 					throw new BsRException("字典类型已经在其他层级存在");
@@ -222,7 +222,7 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 		SysDictPo query = new SysDictPo();
 		query.setParentId(entity.getId());
 		List<SysDictPo> pos = sysDictService.select(query);
-		if (CollectionUtils.isNotEmpty(pos)) {
+		if (CollectionUtil.isNotEmpty(pos)) {
 			for (SysDictPo po : pos) {
 				po.setParentId(entity.getId());
 				po.setLevel(entity.getLevel() + 1);

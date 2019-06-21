@@ -1,18 +1,12 @@
 package com.ciaj.boot.modules.oss.cloud;
 
-import com.ciaj.comm.utils.*;
-import com.qiniu.common.Zone;
-import com.qiniu.storage.Configuration;
-import com.qiniu.storage.UploadManager;
-import com.qiniu.util.Auth;
+import com.ciaj.comm.utils.FileUtils;
+import com.ciaj.comm.utils.RequestUtils;
+import com.ciaj.comm.utils.StreamUtils;
+import com.ciaj.comm.utils.StringUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.openxml4j.opc.internal.FileHelper;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -45,9 +39,9 @@ public class LocalStorageService extends CloudStorageService {
 	 */
 	public String wrapPath(String path) {
 
-		if (StringUtils.isNotEmpty(path)) {
+		if (StringUtil.isNotEmpty(path)) {
 			// 不充许路径回退符
-			if (StringUtils.contains(path, "..")) {
+			if (StringUtil.contains(path, "..")) {
 				throw new RuntimeException("path can not include ..");
 			}
 			path = path.replace("/", File.separator);
@@ -130,17 +124,17 @@ public class LocalStorageService extends CloudStorageService {
 			inputStream = isCompress(config.isFileCompress(), inputStream, originalFileExtention);
 
 			String filenameTemp = "";
-			if (StringUtils.isNotEmpty(originalFileExtention)) {
+			if (StringUtil.isNotEmpty(originalFileExtention)) {
 				filenameTemp += "temp." + originalFileExtention;
 			}
 			String relativePath = "";
-			if (StringUtils.isNotEmpty(filepath)) {
+			if (StringUtil.isNotEmpty(filepath)) {
 				relativePath = filepath.substring(0, filepath.lastIndexOf("/"));
 			}
 			resultPath = saveToDisk(inputStream, filenameTemp, config.getLocalFilePath(), relativePath);
 		} catch (IOException e) {
 		}
-		if (StringUtils.isNotEmpty(resultPath)) {
+		if (StringUtil.isNotEmpty(resultPath)) {
 			resultPath = RequestUtils.convertToSlash(resultPath);
 		}
 		//添加访问映射

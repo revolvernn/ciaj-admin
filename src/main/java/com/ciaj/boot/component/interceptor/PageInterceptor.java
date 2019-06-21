@@ -1,6 +1,6 @@
 package com.ciaj.boot.component.interceptor;
 
-import com.ciaj.comm.utils.PageUtis;
+import com.ciaj.comm.utils.PageUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +15,7 @@ public class PageInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        PageUtis.putPageToThreadLocal(PageUtis.getPageFromRequest(request));
+        PageUtils.putPageToThreadLocal(PageUtils.getPageFromRequest(request));
         return super.preHandle(request, response, handler);
     }
 
