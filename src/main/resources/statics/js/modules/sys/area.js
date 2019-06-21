@@ -3,7 +3,7 @@ Vue.component('myTable', myTableT);
 Vue.component('myDictSelect', myDictSelectT);
 
 Vue.component('myBtn', myBtnT);
-var areaapp = new Vue({
+let areaapp = new Vue({
     el: '#areaapp',
     data() {
         return {
@@ -106,12 +106,12 @@ var areaapp = new Vue({
     },
     methods: {
         sortchange(val){
-            var that = this;
+            let that = this;
             that.queryForm.orderBy=val.sortBy;
             that.myQuery();
         },
         initTree() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/area/list", data: {}}, function (result) {
                 if (result.code == 0) {
                     that.treeData = areaUtil.vueTree(result.data.list);
@@ -130,19 +130,19 @@ var areaapp = new Vue({
             }
         },
         myQueryReset() {
-            var that = this;
+            let that = this;
             that.cascaderModel = [];
             that.queryForm.parentId = null;
             that.resetForm('queryFormRef');
             that.myQuery();
         },
         myQuery() {
-            var that = this;
+            let that = this;
             that.loadData();
         },
         //父级选择处理
         cascaderQueryChange(val) {
-            var that = this;
+            let that = this;
             if (val.length > 0) {
                 that.queryForm.parentId = val[val.length - 1];
             } else {
@@ -150,7 +150,7 @@ var areaapp = new Vue({
             }
         },
         pagesizechange(val) {
-            var that = this;
+            let that = this;
             that.queryForm.pageSize = val;
             that.loadData();
         },
@@ -159,7 +159,7 @@ var areaapp = new Vue({
             this.loadData();
         },
         myAdd() {
-            var that = this;
+            let that = this;
             that.addOrUpdateForm.title = '新增';
             that.addOrUpdateForm.areaFormVisible = true;
             that.addOrUpdateForm.cascaderModel = [];
@@ -176,7 +176,7 @@ var areaapp = new Vue({
             that.resetForm('addOrUpdateFormRef');
         },
         myUpdate(index, row) {
-            var that = this;
+            let that = this;
             that.addOrUpdateForm.title = '修改';
             that.addOrUpdateForm.areaFormVisible = true;
             that.addOrUpdateForm.cascaderModel = [];
@@ -184,7 +184,7 @@ var areaapp = new Vue({
             httpUtil.get({url: "sys/area/getById/" + row.id}, function (result) {
                 if (result.code == 0) {
                     that.addOrUpdateForm.area = result.data;
-                    var parentids = result.data.parentIds;
+                    let parentids = result.data.parentIds;
                     that.addOrUpdateForm.cascaderModel = parentids ? parentids.split(',') : [];
                     that.addOrUpdateForm.area = result.data;
                 }
@@ -192,7 +192,7 @@ var areaapp = new Vue({
         },
         //父级选择处理
         cascaderChange(val) {
-            var that = this;
+            let that = this;
             if (val.length > 0) {
                 that.addOrUpdateForm.area.level = val.length + 1;
                 that.addOrUpdateForm.area.parentId = val[val.length - 1];
@@ -204,11 +204,11 @@ var areaapp = new Vue({
             }
         },
         saveOrUpdate() {
-            var that = this;
+            let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
-                    var url = that.addOrUpdateForm.area.id == null ? "sys/area/add" : "sys/area/update";
-                    var type = that.addOrUpdateForm.area.id == null ? "POST" : "PUT";
+                    let url = that.addOrUpdateForm.area.id == null ? "sys/area/add" : "sys/area/update";
+                    let type = that.addOrUpdateForm.area.id == null ? "POST" : "PUT";
                     httpUtil.post({
                         url: url,
                         type: type,
@@ -223,7 +223,7 @@ var areaapp = new Vue({
             });
         },
         myDel(index, row) {
-            var that = this;
+            let that = this;
             that.$confirm('此操作将删除该数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -237,7 +237,7 @@ var areaapp = new Vue({
             });
         },
         loadData() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/area/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data

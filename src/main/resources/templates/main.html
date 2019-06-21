@@ -13,17 +13,17 @@
 <div id="main" class="grid-content bg-purple-dark" style="height: 400px;margin-top: 20px;"></div>
 </body>
 <script type="text/javascript">
-    var option = {};
+    let option = {};
     // 基于准备好的dom，初始化echarts实例
-    var myChart = echarts.init(document.getElementById('main'));
+    let myChart = echarts.init(document.getElementById('main'));
     httpUtil.get({url: "sys/table/status", data: {}}, function (result) {
 
-        var legend = [];
-        var series = [];
-        var data = result.data;
-        var rows = 0;
+        let legend = [];
+        let series = [];
+        let data = result.data;
+        let rows = 0;
         data.forEach(function (v) {
-            var obj = {}
+            let obj = {}
             obj.name = [v.Name, '(', v.Comment, ')-', v.Rows].join('');
             legend.push(obj.name);
             obj.value = v.Rows || 0;

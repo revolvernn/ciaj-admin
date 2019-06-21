@@ -3,7 +3,7 @@ Vue.component('myTable', myTableT);
 Vue.component('myDictSelect', myDictSelectT);
 
 Vue.component('myBtn', myBtnT);
-var deptapp = new Vue({
+let deptapp = new Vue({
     el: '#deptapp',
     data() {
         return {
@@ -117,12 +117,12 @@ var deptapp = new Vue({
     },
     methods: {
         sortchange(val){
-            var that = this;
+            let that = this;
             that.queryForm.orderBy=val.sortBy;
             that.myQuery();
         },
         initTree() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/dept/list", data: {}}, function (result) {
                 if (result.code == 0) {
                     that.deptData = treeUtil.vueTree(result.data.list);
@@ -130,7 +130,7 @@ var deptapp = new Vue({
             });
         },
         initArea() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/area/list", data: {level:3}}, function (result) {
                 if (result.code == 0) {
                     that.areaData = areaUtil.vueTree(result.data.list);
@@ -149,7 +149,7 @@ var deptapp = new Vue({
             }
         },
         myQueryReset() {
-            var that = this;
+            let that = this;
             that.eareModel = [];
             that.deptModel = [];
             that.queryForm.parentId = null;
@@ -158,11 +158,11 @@ var deptapp = new Vue({
             that.myQuery();
         },
         myQuery() {
-            var that = this;
+            let that = this;
             that.loadData();
         },
         pagesizechange(val) {
-            var that = this;
+            let that = this;
             that.queryForm.pageSize = val;
             that.loadData();
         },

@@ -143,10 +143,10 @@ new Vue({
                 this.src = "captcha.jpg?t=" + $.now();
             },
             login: function (event) {
-                var that = this
+                let that = this
                 that.$refs['loginFormRef'].validate((valid) => {
                     if (valid) {
-                        var data = that.loginForm;
+                        let data = that.loginForm;
                         httpUtil.post({url: "/sys/login", data: JSON.stringify(data)}, function (result) {
                             if (result.code == 0) {//登录成功
                                 parent.location.href = 'index.html';

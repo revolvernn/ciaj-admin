@@ -1,4 +1,4 @@
-var baseURL = "../../";
+let baseURL = "../../";
 //工具集合Tools
 window.T = {
     cloud_storage_config_key: 'CLOUD_STORAGE_CONFIG_KEY',
@@ -37,8 +37,8 @@ window.T = {
 // location.href = http://localhost:8080/index.html?id=123
 // T.p('id') --> 123;
 T.p = function (name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-    var r = window.location.search.substr(1).match(reg);
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    let r = window.location.search.substr(1).match(reg);
     if (r != null) return unescape(r[2]);
     return null;
 };
@@ -46,7 +46,7 @@ T.p = function (name) {
 //日期格式化
 T.dateFmt = function (fmt, date) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
-    var o = {
+    let o = {
         "M+": date.getMonth() + 1,                 //月份
         "d+": date.getDate(),                    //日
         "h+": date.getHours(),                   //小时
@@ -57,7 +57,7 @@ T.dateFmt = function (fmt, date) {
     };
     if (/(y+)/.test(fmt))
         fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
-    for (var k in o)
+    for (let k in o)
         if (new RegExp("(" + k + ")").test(fmt))
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
@@ -207,7 +207,7 @@ window.httpUtil = {
     //fileDownload  异步
     fileDownload: function (that, option, prepareCallback, successCallback, failCallback) {
         option = option || {url: null, data: {}};
-        var loading;
+        let loading;
         prepareCallback = prepareCallback || function () {
             loading = that.$loading({
                 lock: true,
@@ -257,7 +257,7 @@ window.treeUtil = {
      */
     ids: function (arr) {
         if (!arr || arr.length == 0) return [];
-        var rooArr = [];
+        let rooArr = [];
         arr.forEach(function (v) {
             if (!v.disabled) {
                 rooArr.push(v.id);
@@ -272,7 +272,7 @@ window.treeUtil = {
      */
     treeToIds: function (arr) {
         if (!arr || arr.length == 0) return [];
-        var rooArr = [];
+        let rooArr = [];
         arr.forEach(function (v) {
             if (!v.disabled) {
                 rooArr.push(v.id);
@@ -302,7 +302,7 @@ window.treeUtil = {
      */
     permissionIds: function (arr) {
         if (!arr || arr.length == 0) return [];
-        var rooArr = [];
+        let rooArr = [];
         arr.forEach(function (v) {
             if (v.permissionId != null) {
                 rooArr.push(v.permissionId);
@@ -317,7 +317,7 @@ window.treeUtil = {
      */
     roleIds: function (arr) {
         if (!arr || arr.length == 0) return [];
-        var rooArr = [];
+        let rooArr = [];
         arr.forEach(function (v) {
             if (v.roleId != null) {
                 rooArr.push(v.roleId);
@@ -347,8 +347,8 @@ window.treeUtil = {
 
     vueTree: function (arr) {
         if (!arr || arr.length == 0) return [];
-        var sourceArr = arr || [];
-        var rooArr = [];
+        let sourceArr = arr || [];
+        let rooArr = [];
         sourceArr.forEach(function (v, index, arr) {
             if (v.parentId == null || v.parentId == '0') {
                 rooArr.push(v);
@@ -369,7 +369,7 @@ window.treeUtil = {
         })
 
         function getChildren(root, arr) {
-            var childrenArr = [];
+            let childrenArr = [];
             sourceArr.forEach(function (v, index, arr) {
                 if (v.parentId == root.id) {
                     childrenArr.push(v);
@@ -417,8 +417,8 @@ window.treeUtil = {
     vueTreeObj: function (arr) {
         let obj ={}
         if (!arr || arr.length == 0) return [];
-        var sourceArr = arr || [];
-        var rooArr = [];
+        let sourceArr = arr || [];
+        let rooArr = [];
         sourceArr.forEach(function (v, index, arr) {
             if (v.parentId == null || v.parentId == '0') {
                 rooArr.push(v);
@@ -439,7 +439,7 @@ window.treeUtil = {
         })
 
         function getChildren(root, arr) {
-            var childrenArr = [];
+            let childrenArr = [];
             sourceArr.forEach(function (v, index, arr) {
                 if (v.parentId == root.id) {
                     childrenArr.push(v);
@@ -518,8 +518,8 @@ window.areaUtil = {
 
     vueTree: function (arr) {
         if (!arr || arr.length == 0) return [];
-        var sourceArr = arr || [];
-        var rooArr = [];
+        let sourceArr = arr || [];
+        let rooArr = [];
         sourceArr.forEach(function (v, index, arr) {
             if (v.parentId == null || v.parentId == '0') {
                 rooArr.push(v);
@@ -537,14 +537,14 @@ window.areaUtil = {
             if ((v.enabled && v.enabled == 'N') || (v.available && v.available == 'N')) {
                 v.disabled = true;
             }
-            var c = getChildren(v, sourceArr)
+            let c = getChildren(v, sourceArr)
             if (c.length > 0) {
                 v.children = c;
             }
         })
 
         function getChildren(root, arr) {
-            var childrenArr = [];
+            let childrenArr = [];
             sourceArr.forEach(function (v, index, arr) {
                 if (v.parentId == root.id) {
                     childrenArr.push(v);
@@ -562,7 +562,7 @@ window.areaUtil = {
                 if ((v.enabled && v.enabled == 'N') || (v.available && v.available == 'N') || root.disabled) {
                     v.disabled = true;
                 }
-                var c = getChildren(v, sourceArr)
+                let c = getChildren(v, sourceArr)
                 if (c.length > 0) {
                     v.children = c;
                 }
@@ -584,9 +584,9 @@ window.dictUtil = {
      * @returns {Array}
      */
     getDictsByType: function (type) {
-        var local_dict_key_type = T.local_key.dict_key_prefix + type;
-        var dicts = [];
-        var dictArr = localStorageExports.get(local_dict_key_type);
+        let local_dict_key_type = T.local_key.dict_key_prefix + type;
+        let dicts = [];
+        let dictArr = localStorageExports.get(local_dict_key_type);
         if (dictArr != null && dictArr != undefined) {
             return dictArr;
         } else {
@@ -601,9 +601,9 @@ window.dictUtil = {
      * @returns {Array}
      */
     getNameByTypeAndCode: function (type, code) {
-        var local_dict_key_type = T.local_key.dict_key_prefix + type;
-        var name = code;
-        var dictArr = localStorageExports.get(local_dict_key_type);
+        let local_dict_key_type = T.local_key.dict_key_prefix + type;
+        let name = code;
+        let dictArr = localStorageExports.get(local_dict_key_type);
         if (dictArr != null) {
             dictArr.forEach(function (v, index, arr) {
                 if (v.code == code) {
@@ -612,7 +612,7 @@ window.dictUtil = {
                 }
             });
         } else {
-            var dicts = this.getDicts({type: type});
+            let dicts = this.getDicts({type: type});
             dicts.forEach(function (v, index, arr) {
                 if (v.code == code) {
                     name = v.name;
@@ -629,7 +629,7 @@ window.dictUtil = {
      * @returns {Array}
      */
     getDicts: function (param) {
-        var dicts = [];
+        let dicts = [];
         param.orderBy = 'sequence-asc';
         httpUtil.syncGet({url: baseURL + 'sys/dict/list', data: param}, function (r) {
             dicts = r.data.list;
@@ -666,12 +666,12 @@ window.checkUtil = {
     },
     //校验是否全是数字
     isDigit: function (str) {
-        var patrn = /^\d+$/;
+        let patrn = /^\d+$/;
         return patrn.test(str);
     },
     //校验是否是整数
     isInteger: function (str) {
-        var patrn = /^([+-]?)(\d+)$/;
+        let patrn = /^([+-]?)(\d+)$/;
         return patrn.test(str);
     },
     //非负整数
@@ -679,80 +679,80 @@ window.checkUtil = {
         if (str === 0 || str === "0") {
             return true;
         } else {
-            var patrn = /^[1-9]\d*$/;
+            let patrn = /^[1-9]\d*$/;
             return patrn.test(str);
         }
     },
     //校验是否为正整数
     isPlusInteger: function (str) {
-        //var patrn = /^([+]?)(\d+)$/;
-        var patrn = /^[1-9]\d*$/;
+        //let patrn = /^([+]?)(\d+)$/;
+        let patrn = /^[1-9]\d*$/;
         return patrn.test(str);
     },
     //校验是否为负整数
     isMinusInteger: function (str) {
-        var patrn = /^-(\d+)$/;
+        let patrn = /^-(\d+)$/;
         return patrn.test(str);
     },
     //校验是否为浮点数或整数
     isFloat: function (str) {
-        var patrn = /^([+-]?)\d*(\.\d{1,5})?$/;
+        let patrn = /^([+-]?)\d*(\.\d{1,5})?$/;
         return patrn.test(str);
     },
     //校验是否为正浮点数或整数
     isPosFloat: function (str) {
-        var patrn = /^([+]?)\d*(\.\d{1,5})?$/;
+        let patrn = /^([+]?)\d*(\.\d{1,5})?$/;
         return patrn.test(str);
     },
     //校验是否为正浮点数或整数，小数电后保留3位
     isPlusFloat: function (str) {
-        var patrn = /^([+]?)\d*(\.\d{1,3})?$/;
+        let patrn = /^([+]?)\d*(\.\d{1,3})?$/;
         return patrn.test(str);
     },
     //校验是否为负浮点数
     isMinusFloat: function (str) {
-        var patrn = /^-\d*\.\d+$/;
+        let patrn = /^-\d*\.\d+$/;
         return patrn.test(str);
     },
     //校验是否仅中文
     isChinese: function (str) {
-        var patrn = /[\u4E00-\u9FA5\uF900-\uFA2D]{1,20}$/;
+        let patrn = /[\u4E00-\u9FA5\uF900-\uFA2D]{1,20}$/;
         return patrn.test(str);
     },
     //校验是否仅ACSII字符
     isAcsii: function (str) {
-        var patrn = /^[\x00-\xFF]+$/;
+        let patrn = /^[\x00-\xFF]+$/;
         return patrn.test(str);
     },
     //校验手机号码
     isMobile: function (str) {
-        //var patrn = /^0?1((3[0-9]{1})|(59)){1}[0-9]{8}$/;
-        var patrn = /^0?1(((3|5|8)[0-9]{1})){1}[0-9]{8}$/;
+        //let patrn = /^0?1((3[0-9]{1})|(59)){1}[0-9]{8}$/;
+        let patrn = /^0?1(((3|5|8)[0-9]{1})){1}[0-9]{8}$/;
         return patrn.test(str);
     },
     //校验电话号码
     isPhone: function (str) {
-        var patrn = /^(0[\d]{2,3}-)?\d{6,8}(-\d{3,4})?$/;
+        let patrn = /^(0[\d]{2,3}-)?\d{6,8}(-\d{3,4})?$/;
         return patrn.test(str);
     },
     // 简单的校验手机号
     isSimpleMobile: function (str) {
-        var pattern = /^[0-9]{11}$/;
+        let pattern = /^[0-9]{11}$/;
         return pattern.test(str);
     },
     //校验URL地址
     isUrl: function (str) {
-        var patrn = /^http[s]?:\/\/[\w-]+(\.[\w-]+)+([\w-\.\/?%&=]*)?$/;
+        let patrn = /^http[s]?:\/\/[\w-]+(\.[\w-]+)+([\w-\.\/?%&=]*)?$/;
         return patrn.test(str);
     },
     //校验电邮地址
     isEmail: function (str) {
-        var patrn = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;///^[\w-]+@[\w-]+(\.[\w-]+)+$/;
+        let patrn = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;///^[\w-]+@[\w-]+(\.[\w-]+)+$/;
         return patrn.test(str);
     },
     //校验邮编
     isZipCode: function (str) {
-        var patrn = /^\d{6}$/;
+        let patrn = /^\d{6}$/;
         return patrn.test(str);
     },
     //校验合法时间
@@ -760,47 +760,47 @@ window.checkUtil = {
         if (!/\d{4}(\.|\/|\-)\d{1,2}(\.|\/|\-)\d{1,2}/.test(str)) {
             return false;
         }
-        var r = str.match(/\d{1,4}/g);
+        let r = str.match(/\d{1,4}/g);
         if (r == null) {
             return false;
         }
-        var d = new Date(r[0], r[1] - 1, r[2]);
+        let d = new Date(r[0], r[1] - 1, r[2]);
         return (d.getFullYear() == r[0] && (d.getMonth() + 1) == r[1] && d
             .getDate() == r[2]);
     },
     //校验字符串：只能输入1-20个字母、数字、下划线(常用手校验用户名和密码)
     isString1_20: function (str) {
-        var patrn = /^(\w){1,20}$/;
+        let patrn = /^(\w){1,20}$/;
         return patrn.test(str);
     },
     //校验非空白字符
     isNotNull1_20: function (str) {
-        var patrn = /^(\S){1,20}$/;
+        let patrn = /^(\S){1,20}$/;
         return patrn.test(str);
     },
     //校验字符串：只能输入1-6个中文、字母、数字、下划线
     isAllString1_20: function (str) {
-        var patrn = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{1,20}$/;
+        let patrn = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{1,20}$/;
         return patrn.test(str);
     },
     //校验字符串：只能输入个中文、字母、数字、下划线
     isAllString1: function (str) {
-        var patrn = /^(?!_)(?!.*?_$)[a-zA-Z0-9\s_\u4e00-\u9fa5]{1,100}$/;
+        let patrn = /^(?!_)(?!.*?_$)[a-zA-Z0-9\s_\u4e00-\u9fa5]{1,100}$/;
         return patrn.test(str);
     },
     //校验字符串：只能输入个字母、数字
     isAllString2: function (str) {
-        var patrn = /^[A-Za-z0-9]+$/;
+        let patrn = /^[A-Za-z0-9]+$/;
         return patrn.test(str);
     },
     //校验是否有特殊字符
     containtSpecialChar: function (str) {
-        var pattern = /[(\ )(\~)(\!)(\@)(\#)(\$)(\%)(\^)(\&)(\*)(\()(\))(\-)(\_)(\+)(\=)(\[)(\])(\{)(\})(\|)(\\)(\;)(\:)(\')(\")(\,)(\.)(\/)(\<)(\>)(\?)(\)]+/;
+        let pattern = /[(\ )(\~)(\!)(\@)(\#)(\$)(\%)(\^)(\&)(\*)(\()(\))(\-)(\_)(\+)(\=)(\[)(\])(\{)(\})(\|)(\\)(\;)(\:)(\')(\")(\,)(\.)(\/)(\<)(\>)(\?)(\)]+/;
         return pattern.test(str);
     },
     //校验是否有中文字符
     containtChineneChars: function (str) {
-        var pattern = /.*[\u4e00-\u9fa5]+.*$/;
+        let pattern = /.*[\u4e00-\u9fa5]+.*$/;
         return pattern.test(str);
     },
     //校验是否有特殊字符(%'&^)
@@ -831,11 +831,11 @@ window.localStorageExports = {
      */
     set: function (key, value) {
         localStorage.removeItem(key);
-        var _time = new Date().getTime()
+        let _time = new Date().getTime()
             , _age = this.age;
 
         // 如果不是对象，新建一个对象把 value 存起来
-        var obj = {};
+        let obj = {};
         obj._value = value;
         // 加入时间
         obj._time = _time;
@@ -858,7 +858,7 @@ window.localStorageExports = {
      */
     isExpire: function (key) {
 
-        var isExpire = true,
+        let isExpire = true,
             value = localStorage.getItem(key),
             now = new Date().getTime();
 
@@ -877,7 +877,7 @@ window.localStorageExports = {
      * @returns {*}
      */
     get: function (key) {
-        var isExpire = this.isExpire(key),
+        let isExpire = this.isExpire(key),
             value = null;
         if (!isExpire) {
             value = localStorage.getItem(key);

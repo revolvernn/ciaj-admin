@@ -1,14 +1,8 @@
-
 Vue.component('myMenuItem', myMenuItem);
 Vue.component('myDictSpan', myDictSpan);
-var mainTitle = '主页面', mainUrl = 'main.html';
-var vm = new Vue({
+let mainTitle = '主页面', mainUrl = 'main.html';
+let vm = new Vue({
     el: '#app',
-    created: function () {
-        this.getLoginUser();
-        this.getMenuList();
-        this.iframeResize();
-    },
     data: {
         mainTitle: mainTitle,
         mainJoin: [mainTitle, mainUrl].join(':'),
@@ -73,6 +67,14 @@ var vm = new Vue({
             left: '200px',
             right: '0px',
             paddingTop: '5px'
+        }
+    },
+    mounted(){
+        this.getLoginUser();
+        this.getMenuList();
+        this.iframeResize();
+        window.onresize = () => {
+            this.iframeResize()
         }
     },
     methods: {
@@ -141,8 +143,7 @@ var vm = new Vue({
          * iframe 自适应高度
          */
         iframeResize() {
-            let clientHeight = document.documentElement.clientHeight;
-            this.iframeHeight = clientHeight - 145;
+            this.iframeHeight = document.documentElement.clientHeight  - 145;
         },
         /**
          * 删除tab
@@ -159,6 +160,7 @@ var vm = new Vue({
                         if (nextTab) {
                             activeName = nextTab.name;
                             that.breadcrumbs = nextTab.breadcrumbs;
+                            that.defaultActive = [nextTab.name, nextTab.content].join(':');
                         }
                     }
                 });
@@ -181,43 +183,43 @@ var vm = new Vue({
          * 变更角色
          * @param command
          */
-        roleChangeCommand(command) {
-            let that = this;
-            if (that.loginUser.role.id === command) {
-                return;
-            }
-            httpUtil.post({
-                url: "sys/user/role/change",
-                data: {roleId: command},
-                contentType: AjaxContentType.URL
-            }, function (r) {
-                if (r.code == 0) {
-                    that.$alert('已切换角色：' + r.data.role.name, '提示', {
-                        confirmButtonText: '确定',
-                        callback: action => {
-                            parent.location.href = 'index.html';
-                        }
-                    });
-                } else {
-                    that.$message.error("角色切换失败");
-                }
-            });
-        },
-        /**
-         * 操作
-         * @param command
-         */
         opChangeCommand(command) {
             let that = this;
-            if (command == 'updatePassword') {
+            if (command == 'command:update:password') {
                 that.updatePassword();
-            } else if (command == 'logout') {
+            } else if (command == 'command:logout') {
                 that.$confirm('确定要退出系统, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
                     that.logout();
+                });
+            }else {
+                if (that.loginUser.role.id === command) {
+                    that.$notify({
+                        title: '角色切换提示',
+                        message: '单角色无需切换！',
+                        type: 'warning',
+                        position: 'bottom-right'
+                    });
+                    return;
+                }
+                httpUtil.post({
+                    url: "sys/user/role/change",
+                    data: {roleId: command},
+                    contentType: AjaxContentType.URL
+                }, function (r) {
+                    if (r.code == 0) {
+                        that.$alert('已切换角色：' + r.data.role.name, '提示', {
+                            confirmButtonText: '确定',
+                            callback: action => {
+                                parent.location.href = 'index.html';
+                            }
+                        });
+                    } else {
+                        that.$message.error("角色切换失败");
+                    }
                 });
             }
         },
@@ -248,7 +250,7 @@ var vm = new Vue({
             let that = this;
             that.$refs['passwordFormRef'].validate((valid) => {
                 if (valid) {
-                    var data = "password=" + that.passwordForm.password + "&newPassword=" + that.passwordForm.newPassword;
+                    let data = "password=" + that.passwordForm.password + "&newPassword=" + that.passwordForm.newPassword;
                     httpUtil.post({
                         url: "sys/user/password",
                         data: data,
@@ -290,4 +292,3 @@ var vm = new Vue({
         }
     }
 });
-window.onresize = vm.iframeResize;

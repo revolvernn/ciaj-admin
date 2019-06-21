@@ -2,7 +2,7 @@ Vue.component('myPagination', myPaginationT);
 Vue.component('myTable', myTableT);
 Vue.component('myDictSelect', myDictSelectT);
 Vue.component('myBtn', myBtnT);
-var configapp = new Vue({
+let configapp = new Vue({
     el: '#configapp',
     data() {
         return {
@@ -122,16 +122,16 @@ var configapp = new Vue({
             }
         },
         myQueryReset() {
-            var that = this;
+            let that = this;
             that.resetForm('queryFormRef');
             that.myQuery();
         },
         myQuery() {
-            var that = this;
+            let that = this;
             that.loadData();
         },
         pagesizechange(val) {
-            var that = this;
+            let that = this;
             that.queryForm.pageSize = val;
             that.loadData();
         },
@@ -140,7 +140,7 @@ var configapp = new Vue({
             this.loadData();
         },
         myConfig(index, row) {
-            var that = this;
+            let that = this;
            if(row.configKey==T.cloud_storage_config_key){
                that.ossForm.ossFormVisible = true;
                that.resetForm('ossFormRef');
@@ -154,7 +154,7 @@ var configapp = new Vue({
            }
         },
         ossUpdate() {
-            var that = this;
+            let that = this;
             that.$refs['ossFormRef'].validate((valid) => {
                 if (valid) {
                     httpUtil.post({
@@ -171,7 +171,7 @@ var configapp = new Vue({
             });
         },
         myAdd() {
-            var that = this;
+            let that = this;
             that.addOrUpdateForm.title = '新增';
             that.addOrUpdateForm.configFormVisible = true;
             that.addOrUpdateForm.config = {
@@ -183,7 +183,7 @@ var configapp = new Vue({
             that.resetForm('addOrUpdateFormRef');
         },
         myUpdate(index, row) {
-            var that = this;
+            let that = this;
             that.addOrUpdateForm.title = '修改';
             that.addOrUpdateForm.configFormVisible = true;
             that.resetForm('addOrUpdateFormRef');
@@ -194,11 +194,11 @@ var configapp = new Vue({
             });
         },
         saveOrUpdate() {
-            var that = this;
+            let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
-                    var url = that.addOrUpdateForm.config.id == null ? "sys/config/add" : "sys/config/update";
-                    var type = that.addOrUpdateForm.config.id == null ? "POST" : "PUT";
+                    let url = that.addOrUpdateForm.config.id == null ? "sys/config/add" : "sys/config/update";
+                    let type = that.addOrUpdateForm.config.id == null ? "POST" : "PUT";
                     httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.config)}, function (r) {
                         that.myQuery();
                         that.addOrUpdateForm.configFormVisible = false;
@@ -208,7 +208,7 @@ var configapp = new Vue({
             });
         },
         myDel(index, row) {
-            var that = this;
+            let that = this;
             that.$confirm('此操作将删除该数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -221,7 +221,7 @@ var configapp = new Vue({
             });
         },
         loadData() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/config/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data
