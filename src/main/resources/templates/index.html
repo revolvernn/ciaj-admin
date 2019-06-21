@@ -17,7 +17,7 @@
             left: 0px;
             right: 0px;
             color: #333;
-            background: #b3c0d1;
+            background: #398dee;
             color: white;
             font-weight: 900;
             background-size: cover;
@@ -81,6 +81,11 @@
             margin-bottom: 10px;
         }
 
+        .el-menu-item.is-active {
+            color: #f8fafd;
+            background: #398dee;
+        }
+
         [v-cloak] {
             display: none !important;
         }
@@ -92,19 +97,14 @@
         <el-header>
             <span>
                 BOOT ADMIN 后台管理平台</span>
-            <el-dropdown @command="opChangeCommand" style="float: right;">
-                <i class="el-icon-setting"></i>
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="updatePassword">修改密码</el-dropdown-item>
-                    <el-dropdown-item command="logout">退出系统</el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
-            <el-dropdown @command="roleChangeCommand" style="float: right;margin-right: 30px;" split-button
-                         @click="userInfoClick">
+            <el-dropdown @command="opChangeCommand" style="float: right;" split-button
+                         @click="userInfoClick"  size="medium">
                 欢迎： {{loginUser.username}} <span v-if="loginUser.role">@{{loginUser.role.name}}</span>
-                <el-dropdown-menu slot="dropdown" v-if="loginUser.roles">
-                    <el-dropdown-item v-for="role in loginUser.roles" :command="role.id">{{role.name}}
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item  v-if="loginUser.roles" v-for="role in loginUser.roles" :command="role.id">{{role.name}}
                     </el-dropdown-item>
+                    <el-dropdown-item command="command:update:password" divided>修改密码</el-dropdown-item>
+                    <el-dropdown-item command="command:logout" divided>退出系统</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </el-header>
@@ -129,7 +129,7 @@
                          v-bind:style="elTabsStyle">
                     <el-tab-pane :key="item.name" v-for="(item, index) in tabs" :label="item.title"
                                  :name="item.name" :closable="index!=0">
-                        <iframe class="main-iframe" scrolling="yes" frameborder="0" :height="iframeHeight"
+                        <iframe class="main-iframe" scrolling="yes" frameborder="0" ref="iframe" :height="iframeHeight"
                                 style="width:100%;overflow:visible;background:#fff;"
                                 :src="item.content"></iframe>
                     </el-tab-pane>
