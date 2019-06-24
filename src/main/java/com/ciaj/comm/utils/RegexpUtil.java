@@ -14,7 +14,7 @@ public class RegexpUtil {
 	/**
 	 * 绝对路径: /linux/path or d:/windows/path
 	 */
-	public final static String REG_ABSOLUTE_PATH = "(^/((\\w/?)*)+(\\w)$)|(^[a-zA-Z]{1}:((\\/(\\w)*)+)+(\\w)$)";
+	public final static String REG_ABSOLUTE_PATH = "(^/(\\w/?)*(\\w)$)|(^[a-zA-Z]{1}:(\\/(\\w)*)+(\\w)$)";
 	/**
 	 * RUL映射
 	 */
