@@ -1,7 +1,7 @@
 package com.ciaj.comm.utils;
 
 /**
- * @Description TODO
+ * @Description 正则
  * @Author Ciaj.
  * @Date 2019/5/29 11:18
  * @Version 1.0
@@ -12,9 +12,9 @@ public class RegexpUtil {
 	 */
 	public final static String REG_INTEGER_OR_FLOAT = "(^[1-9]\\d*\\.\\d*|^0\\.\\d*[1-9]\\d*$)|(^[1-9]\\d*$)";
 	/**
-	 * 绝对路径
+	 * 绝对路径: /linux/path or d:/windows/path
 	 */
-	public final static String REG_ABSOLUTE_PATH = "(^/(\\w/?)+(\\w)$)|(^[a-zA-Z]{1}:(\\/(\\w)+)+(\\w)$)";
+	public final static String REG_ABSOLUTE_PATH = "(^/((\\w/?)*)+(\\w)$)|(^[a-zA-Z]{1}:((\\/(\\w)*)+)+(\\w)$)";
 	/**
 	 * RUL映射
 	 */
