@@ -3,6 +3,7 @@ package com.ciaj.boot.component.config;
 import com.ciaj.boot.component.filter.ResubmitFilter;
 import com.ciaj.boot.component.interceptor.PageInterceptor;
 import com.ciaj.boot.component.interceptor.ResubmitInterceptor;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +34,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = jackson2HttpMessageConverter.getObjectMapper();
         objectMapper.setDateFormat(new DateFormatExtend());
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
 
         converters.add(0, jackson2HttpMessageConverter);
