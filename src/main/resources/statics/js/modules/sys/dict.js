@@ -26,6 +26,11 @@ var dictapp = new Vue({
             },
             tableColumns: [
                 {
+                    name: 'code',
+                    icon: true,
+                    label: '图标'
+                },
+                {
                     name: 'name',
                     label: '字典名称'
                 },

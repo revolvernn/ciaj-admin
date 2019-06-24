@@ -24,7 +24,7 @@ var myDictSelectT = Vue.extend({
     name: 'my-dict-select',
     props: {
         value: '',
-        showNone: {default: true},
+        icon: {default: false},
         type: {
             default: null
         },
@@ -34,6 +34,7 @@ var myDictSelectT = Vue.extend({
     },
     data() {
         return {
+            isShowIcon: {default: false},
             model: '',
             options: []
         }
@@ -61,6 +62,9 @@ var myDictSelectT = Vue.extend({
             if (that.type === undefined || that.type === '' || that.type === null) {
                 return;
             }
+            if(that.icon &&  that.icon==='true'){
+                that.isShowIcon = true;
+            }
             that.options = dictUtil.getDictsByType(that.type);
             if(that.value) that.model = that.value;
         }
@@ -71,9 +75,12 @@ var myDictSelectT = Vue.extend({
         }
     },
     template: [
-        '<el-select value="" :showNone="showNone" :disabled="disabled" v-model="model" v-on:focus="handleFocus($event)" v-on:handleBlur="handleBlur($event)" v-on:change="emitChange" v-on:input="emitInput"  placeholder="请选择">',
-        '<el-option label="不限" value="" v-if="showNone"></el-option>',
-        '<el-option  v-for="item in options" :label="item.name" :disabled="item.disabled" :value="item.code" :key="item.code""></el-option>',
+        '<el-select value=""  :disabled="disabled" filterable clearable v-model="model" v-on:focus="handleFocus($event)" v-on:handleBlur="handleBlur($event)" v-on:change="emitChange" v-on:input="emitInput"  placeholder="请选择">',
+        '<el-option v-if="isShowIcon"  v-for="item in options" :label="item.name" :disabled="item.disabled" :value="item.code" :key="item.code"">',
+            '<span style="float: left">{{ item.name }}</span>',
+            '<span style="float: right; color: #8492a6; font-size: 13px"> <i :class="item.code"></i></span>',
+        '</el-option>',
+        '<el-option  v-else v-for="item in options" :label="item.name" :disabled="item.disabled" :value="item.code" :key="item.code""></el-option>',
         '</el-select>'
     ].join('')
 });
@@ -335,6 +342,11 @@ var myTableT = Vue.extend({
             let image = '<img width="30px" height="30px" src="' + value + '"/>'
             return image;
         },
+        getIcon (row, rowKey) {
+            let value = this.getDeepValue(row,rowKey);
+            let icon = '<i class="'+value+'"></i>'
+            return icon;
+        },
         getDateFormat (row, rowKey,dateFormat) {
             let value = this.getDeepValue(row,rowKey);
             if(value && dateFormat){
@@ -393,6 +405,11 @@ var myTableT = Vue.extend({
         '<el-table-column v-else-if="item.image" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">',
         '<template slot-scope="scope">',
         '<div v-if="item.image" v-html="getImage(scope.row,item.name)"></div>',
+        '</template>',
+        '</el-table-column>',
+        '<el-table-column v-else-if="item.icon" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">',
+        '<template slot-scope="scope">',
+        '<div v-if="item.icon" v-html="getIcon(scope.row,item.name)"></div>',
         '</template>',
         '</el-table-column>',
         '<el-table-column v-else-if="item.date" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">',

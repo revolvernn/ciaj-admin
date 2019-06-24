@@ -50,7 +50,7 @@
                             <el-form-item label="字典编码" prop="code" :label-width="addOrUpdateForm.dictFormLabelWidth"
                                           required>
                                 <el-input v-model="addOrUpdateForm.dict.code" autocomplete="off"
-                                          placeholder="字典编码"></el-input>
+                                          placeholder="字典编码" :suffix-icon="addOrUpdateForm.dict.code" ></el-input>
                             </el-form-item>
                             <el-form-item label="父级" :label-width="addOrUpdateForm.dictFormLabelWidth"
                                           prop="cascaderModel">
