@@ -2,7 +2,7 @@ Vue.component('myPagination', myPaginationT);
 Vue.component('myTable', myTableT);
 Vue.component('myDictSelect', myDictSelectT);
 
-var logapp = new Vue({
+let logapp = new Vue({
     el: '#logapp',
     data() {
         return {
@@ -79,7 +79,7 @@ var logapp = new Vue({
     },
     methods: {
         sortchange(val){
-            var that = this;
+            let that = this;
             that.queryForm.orderBy=val.sortBy;
             that.myQuery();
         },
@@ -91,16 +91,16 @@ var logapp = new Vue({
             }
         },
         myQueryReset() {
-            var that = this;
+            let that = this;
             that.resetForm('queryFormRef');
             that.myQuery();
         },
         myQuery() {
-            var that = this;
+            let that = this;
             that.loadData();
         },
         pagesizechange(val) {
-            var that = this;
+            let that = this;
             that.queryForm.pageSize = val;
             that.loadData();
         },
@@ -109,14 +109,14 @@ var logapp = new Vue({
             this.loadData();
         },
         rowParamsInfo (index, row) {
-            var that = this;
+            let that = this;
             that.rowDialogVisible = true;
-            var b ={};
+            let b ={};
             b.p = row.params|| '';
             that.rowParams = b.p.replace(/\,/g,',<br/>').replace(/\)/g,')<br/>');
         },
         myDel(index, row) {
-            var that = this;
+            let that = this;
             that.$confirm('此操作将删除该数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -129,7 +129,7 @@ var logapp = new Vue({
             });
         },
         loadData() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/log/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data

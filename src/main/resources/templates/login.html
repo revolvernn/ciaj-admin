@@ -3,6 +3,7 @@
 <head>
     <title>ADMIN</title>
     <link rel="stylesheet" href="/statics/js/libs/vue/element-ui-2.4.11/element-ui.css">
+    <link rel="stylesheet" href="/statics/css/icon/iconfont.css">
     <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
     <script src="/webjars/vue/2.5.16/vue.min.js"></script>
     <script src="/statics/js/libs/vue/element-ui-2.4.11/element-ui.js"></script>
@@ -71,15 +72,15 @@
                                 ADMIN后台管理
                             </el-form-item>
                             <el-form-item  prop="account">
-                                <el-input v-model="loginForm.account" placeholder="账号" prefix-icon="el-icon-success" clearable></el-input>
+                                <el-input v-model="loginForm.account" placeholder="账号" prefix-icon="iconfont icondenglu-yonghu" clearable></el-input>
                             </el-form-item>
                             <el-form-item  prop="password">
-                                <el-input type="password" placeholder="密码" v-model="loginForm.password" prefix-icon="el-icon-success" clearable></el-input>
+                                <el-input type="password" placeholder="密码" v-model="loginForm.password" prefix-icon="iconfont iconmima" clearable></el-input>
                             </el-form-item>
                             <el-form-item style="margin-bottom: 5px;">
                                 <el-col :span="12" style="padding-left: 0;padding-right: 0;">
                                     <el-form-item prop="captcha">
-                                        <el-input placeholder="验证码" v-model="loginForm.captcha" prefix-icon="el-icon-success" clearable></el-input>
+                                        <el-input placeholder="验证码" v-model="loginForm.captcha" prefix-icon="iconfont iconyanzhengma" clearable></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12" style="padding-left: 5px;padding-right: 0;">

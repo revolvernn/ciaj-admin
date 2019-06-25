@@ -34,9 +34,6 @@ body{
 .el-form .el-select,.el-form .el-cascader{
     width:100%;
 }
-/*.el-container{*/
-    /*height: 660px;*/
-/*}*/
 
 [v-cloak] {
     display:none !important;

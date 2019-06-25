@@ -121,7 +121,7 @@ new Vue({
             return data.label.indexOf(value) !== -1;
         },
         initPrivilegeTree() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/permission/list", data: {}}, function (result) {
                 if (result.code == 0) {
                     that.addOrUpdateForm.privilege.treeData = treeUtil.vueTree(result.data.list);
@@ -145,7 +145,7 @@ new Vue({
             }
         },
         myQueryReset() {
-            var that = this;
+            let that = this;
             that.resetForm('queryFormRef');
             that.myQuery();
         },
@@ -161,12 +161,12 @@ new Vue({
             this.loadData();
         },
         savePrivileges() {
-            var that = this;
-            var privilegeIds = that.$refs['privilegeTree'].getCheckedKeys();
+            let that = this;
+            let privilegeIds = that.$refs['privilegeTree'].getCheckedKeys();
             //privilegeIds.push(that.$refs['privilegeTree'].getHalfCheckedKeys());
-            var datas = privilegeIds.length == 0 ? [{roleId: that.addOrUpdateForm.privilege.roleId}] : [];
-            for (var v in privilegeIds) {
-                var data = {};
+            let datas = privilegeIds.length == 0 ? [{roleId: that.addOrUpdateForm.privilege.roleId}] : [];
+            for (let v in privilegeIds) {
+                let data = {};
                 data.roleId = that.addOrUpdateForm.privilege.roleId;
                 data.permissionId = privilegeIds[v];
                 datas.push(data)
@@ -180,7 +180,7 @@ new Vue({
             });
         },
         myPrivileges(index, row) {
-            var that = this;
+            let that = this;
             that.addOrUpdateForm.privilegesVisible = true;
             that.addOrUpdateForm.privilege.roleId = row.id;
             that.initPrivilegeTree();
@@ -189,9 +189,9 @@ new Vue({
          * 全选。。
          */
         checkAllPrivilege() {
-            var that = this;
+            let that = this;
             if (that.addOrUpdateForm.privilege.checkAll) {
-                var ids = treeUtil.treeToIds(that.addOrUpdateForm.privilege.treeData);
+                let ids = treeUtil.treeToIds(that.addOrUpdateForm.privilege.treeData);
                 that.$refs['privilegeTree'].setCheckedKeys(ids)
                 that.addOrUpdateForm.privilege.checkAll = false;
             } else {
@@ -213,7 +213,7 @@ new Vue({
             this.resetForm('addOrUpdateFormRef');
         },
         myUpdate(index, row) {
-            var that = this;
+            let that = this;
             that.addOrUpdateForm.title = '修改';
             that.addOrUpdateForm.roleFormVisible = true;
             that.resetForm('addOrUpdateFormRef');
@@ -225,11 +225,11 @@ new Vue({
             });
         },
         saveOrUpdate() {
-            var that = this;
+            let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
-                    var url = that.addOrUpdateForm.role.id == null ? "sys/role/add" : "sys/role/update";
-                    var type = that.addOrUpdateForm.role.id == null ? "POST" : "PUT";
+                    let url = that.addOrUpdateForm.role.id == null ? "sys/role/add" : "sys/role/update";
+                    let type = that.addOrUpdateForm.role.id == null ? "POST" : "PUT";
                     httpUtil.post({
                         url: url,
                         type: type,
@@ -243,7 +243,7 @@ new Vue({
             });
         },
         myDel(index, row) {
-            var that = this;
+            let that = this;
             that.$confirm('此操作将删除该数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -256,7 +256,7 @@ new Vue({
             });
         },
         clearRoleRel(index, row) {
-            var that = this;
+            let that = this;
             that.$confirm('此操作将清空角色关联用户及权限数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -268,7 +268,7 @@ new Vue({
             });
         },
         loadData() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/role/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data

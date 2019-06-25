@@ -26,7 +26,7 @@ let vm = new Vue({
         iframeHeight: 500,
         defaultActive: this.mainJoin,
         defaultTabsValue: mainTitle,
-        tabs: [{title: mainTitle, name: mainTitle, content: mainUrl, breadcrumbs: [mainTitle]}],
+        tabs: [{title: mainTitle, name: mainTitle, content: mainUrl, breadcrumbs: []}],
         elAsideStyle: {
             zIndex: '100',
             backgroundColor: '#D3DCE6',
@@ -78,6 +78,19 @@ let vm = new Vue({
         }
     },
     methods: {
+        /**
+         * iframe 自适应高度
+         */
+        iframeResize() {
+            this.iframeHeight = document.documentElement.clientHeight  - 145;
+        },
+        /**
+         * 关闭菜单
+         * @param targetName
+         */
+        handleCollapse() {
+            this.isCollapse = !this.isCollapse;
+        },
         userInfoClick() {
             this.userDialogVisible = true;
         },
@@ -123,7 +136,6 @@ let vm = new Vue({
                     this.defaultTabsValue = indexs[0];
                 }
             }
-
         },
         /**
          * 获取路径
@@ -140,19 +152,13 @@ let vm = new Vue({
             return paths;
         },
         /**
-         * iframe 自适应高度
-         */
-        iframeResize() {
-            this.iframeHeight = document.documentElement.clientHeight  - 145;
-        },
-        /**
          * 删除tab
          * @param targetName
          */
         removeTab(targetName) {
             let that = this;
-            let tabs = this.tabs;
-            let activeName = this.defaultTabsValue;
+            let tabs = that.tabs;
+            let activeName = that.defaultTabsValue;
             if (activeName === targetName) {
                 tabs.forEach((tab, index) => {
                     if (tab.name === targetName) {
@@ -165,8 +171,8 @@ let vm = new Vue({
                     }
                 });
             }
-            this.defaultTabsValue = activeName;
-            this.tabs = tabs.filter(tab => tab.name !== targetName);
+            that.defaultTabsValue = activeName;
+            that.tabs = tabs.filter(tab => tab.name !== targetName);
         },
         /**
          * 关闭tab

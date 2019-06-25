@@ -3,7 +3,7 @@ Vue.component('myTable', myTableT);
 Vue.component('myDictSelect', myDictSelectT);
 
 Vue.component('myBtn', myBtnT);
-var userapp = new Vue({
+let userapp = new Vue({
     el: '#userapp',
     data() {
         return {
@@ -374,8 +374,8 @@ var userapp = new Vue({
             let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
-                    var url = that.addOrUpdateForm.user.id == null ? "/sys/pc/register" : "sys/user/update";
-                    var type = that.addOrUpdateForm.user.id == null ? "POST" : "PUT";
+                    let url = that.addOrUpdateForm.user.id == null ? "/sys/pc/register" : "sys/user/update";
+                    let type = that.addOrUpdateForm.user.id == null ? "POST" : "PUT";
                     httpUtil.post({
                         url: url,
                         type: type,

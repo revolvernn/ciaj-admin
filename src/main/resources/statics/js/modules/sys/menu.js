@@ -3,7 +3,7 @@ Vue.component('myTable', myTableT);
 Vue.component('myDictSelect', myDictSelectT);
 
 Vue.component('myBtn', myBtnT);
-var menuapp = new Vue({
+let menuapp = new Vue({
     el: '#menuapp',
     data() {
         return {
@@ -124,12 +124,12 @@ var menuapp = new Vue({
     },
     methods: {
         sortchange(val){
-            var that = this;
+            let that = this;
             that.queryForm.orderBy=val.sortBy;
             that.myQuery();
         },
         initTree(){
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/menu/list", data: {}}, function (result) {
                 if (result.code == 0) {
                     that.treeData = treeUtil.vueTree(result.data.list);
@@ -137,7 +137,7 @@ var menuapp = new Vue({
             });
         },
         getTreeNode(data, i, c) {
-            var that = this;
+            let that = this;
             that.queryForm.parentId = data.id;
             that.queryForm.parentName = data.name;
             that.myQuery();
@@ -154,7 +154,7 @@ var menuapp = new Vue({
             }
         },
         myQueryReset() {
-            var that = this;
+            let that = this;
             that.resetForm('queryFormRef');
             that.queryForm.parentId = null;
             that.myQuery();
@@ -186,14 +186,14 @@ var menuapp = new Vue({
             this.resetForm('addOrUpdateFormRef');
         },
         myUpdate(index, row) {
-            var that = this;
+            let that = this;
             that.addOrUpdateForm.title = '修改';
             that.addOrUpdateForm.menuFormVisible = true;
             that.addOrUpdateForm.cascaderModel = [];
             that.resetForm('addOrUpdateFormRef');
             httpUtil.get({url: "sys/menu/getById/" + row.id}, function (result) {
                 if (result.code == 0) {
-                    var parentids = result.data.parentIds;
+                    let parentids = result.data.parentIds;
                     that.addOrUpdateForm.cascaderModel = parentids ? parentids.split(',') : [];
                     that.addOrUpdateForm.menu = result.data;
                 }
@@ -201,7 +201,7 @@ var menuapp = new Vue({
         },
         //父级选择处理
         cascaderChange(val){
-            var that = this;
+            let that = this;
             if (val.length > 0) {
                 that.addOrUpdateForm.menu.level = val.length + 1;
                 that.addOrUpdateForm.menu.parentId = val[val.length - 1];
@@ -213,11 +213,11 @@ var menuapp = new Vue({
             }
         },
         saveOrUpdate() {
-            var that = this;
+            let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
-                    var url = that.addOrUpdateForm.menu.id == null ? "sys/menu/add" : "sys/menu/update";
-                    var type = that.addOrUpdateForm.menu.id == null ? "POST" : "PUT";
+                    let url = that.addOrUpdateForm.menu.id == null ? "sys/menu/add" : "sys/menu/update";
+                    let type = that.addOrUpdateForm.menu.id == null ? "POST" : "PUT";
                     httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.menu)}, function (r) {
                         that.myQuery();
                         that.initTree();
@@ -228,7 +228,7 @@ var menuapp = new Vue({
             });
         },
         myDel(index, row) {
-            var that = this;
+            let that = this;
             that.$confirm('此操作将删除该数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -242,7 +242,7 @@ var menuapp = new Vue({
             });
         },
         loadData() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/menu/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data

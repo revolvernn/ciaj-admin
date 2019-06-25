@@ -125,7 +125,7 @@
             <el-container>
                 <el-breadcrumb separator="/" v-bind:style="breadcrumbStyle">
                     <el-breadcrumb-item>
-                        <el-switch v-model="isCollapse" active-color="#dcdfe6"></el-switch>
+                        <a @click="handleCollapse" style="margin-left: 5px;"><i :class="[isCollapse ?'el-icon- iconfont iconmenu-two1': 'el-icon- iconfont iconmenu-two']" style="color: #a2a5ab"></i></a>
                     </el-breadcrumb-item>
                     <el-breadcrumb-item v-if="breadcrumbs.length>1"><a @click="closeTab()"> 关闭标签 </a>
                     </el-breadcrumb-item>

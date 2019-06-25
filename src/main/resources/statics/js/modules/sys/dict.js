@@ -3,7 +3,7 @@ Vue.component('myTable', myTableT);
 Vue.component('myDictSelect', myDictSelectT);
 
 Vue.component('myBtn', myBtnT);
-var dictapp = new Vue({
+let dictapp = new Vue({
     el: '#dictapp',
     data() {
         return {
@@ -117,12 +117,12 @@ var dictapp = new Vue({
     },
     methods: {
         sortchange(val) {
-            var that = this;
+            let that = this;
             that.queryForm.orderBy = val.sortBy;
             that.myQuery();
         },
         initTree() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/dict/list", data: {}}, function (result) {
                 if (result.code == 0) {
                     that.treeData = treeUtil.vueTree(result.data.list);
@@ -130,7 +130,7 @@ var dictapp = new Vue({
             });
         },
         getTreeNode(data, i, c) {
-            var that = this;
+            let that = this;
             that.queryForm.parentId = data.id;
             that.queryForm.parentName = data.name;
             that.myQuery();
@@ -147,7 +147,7 @@ var dictapp = new Vue({
             }
         },
         myQueryReset() {
-            var that = this;
+            let that = this;
             that.resetForm('queryFormRef');
             that.queryForm.parentId = null;
             that.myQuery();
@@ -178,14 +178,14 @@ var dictapp = new Vue({
             this.resetForm('addOrUpdateFormRef');
         },
         myUpdate(index, row) {
-            var that = this;
+            let that = this;
             that.addOrUpdateForm.title = '修改';
             that.addOrUpdateForm.dictFormVisible = true;
             that.addOrUpdateForm.cascaderModel = [];
             that.resetForm('addOrUpdateFormRef');
             httpUtil.get({url: "sys/dict/getById/" + row.id}, function (result) {
                 if (result.code == 0) {
-                    var parentids = result.data.parentIds;
+                    let parentids = result.data.parentIds;
                     that.addOrUpdateForm.cascaderModel = parentids ? parentids.split(',') : [];
                     that.addOrUpdateForm.dict = result.data;
                 }
@@ -193,7 +193,7 @@ var dictapp = new Vue({
         },
         //父级选择处理
         cascaderChange(val) {
-            var that = this;
+            let that = this;
             if (val.length > 0) {
                 that.addOrUpdateForm.dict.level = val.length + 1;
                 that.addOrUpdateForm.dict.parentId = val[val.length - 1];
@@ -206,11 +206,11 @@ var dictapp = new Vue({
         },
         //添加或更新
         saveOrUpdate() {
-            var that = this;
+            let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
-                    var url = that.addOrUpdateForm.dict.id == null ? "sys/dict/add" : "sys/dict/update";
-                    var type = that.addOrUpdateForm.dict.id == null ? "POST" : "PUT";
+                    let url = that.addOrUpdateForm.dict.id == null ? "sys/dict/add" : "sys/dict/update";
+                    let type = that.addOrUpdateForm.dict.id == null ? "POST" : "PUT";
                     httpUtil.post({
                         url: url,
                         type: type,
@@ -226,7 +226,7 @@ var dictapp = new Vue({
             });
         },
         myDel(index, row) {
-            var that = this;
+            let that = this;
             that.$confirm('此操作将删除该数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -240,7 +240,7 @@ var dictapp = new Vue({
             });
         },
         loadData() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/dict/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data

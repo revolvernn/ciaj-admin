@@ -1,12 +1,12 @@
 Vue.component('myPagination', myPaginationT);
 Vue.component('myTable', myTableT);
-var myDiv = Vue.extend({
+let myDiv = Vue.extend({
     template: '<div></div>'
 })
 Vue.component('myDiv', myDiv);
 Vue.component('myDictSelect', myDictSelectT);
 Vue.component('myBtn', myBtnT);
-var ossapp = new Vue({
+let ossapp = new Vue({
     el: '#ossapp',
     data() {
         return {
@@ -70,12 +70,12 @@ var ossapp = new Vue({
     },
     methods: {
         sortchange(val){
-            var that = this;
+            let that = this;
             that.queryForm.orderBy=val.sortBy;
             that.myQuery();
         },
         uploadSuccess(res, file) {
-            var that = this;
+            let that = this;
             alertMsg(that, res)
             that.myQuery();
         },
@@ -87,16 +87,16 @@ var ossapp = new Vue({
             }
         },
         myQueryReset() {
-            var that = this;
+            let that = this;
             that.resetForm('queryFormRef');
             that.myQuery();
         },
         myQuery() {
-            var that = this;
+            let that = this;
             that.loadData();
         },
         pagesizechange(val) {
-            var that = this;
+            let that = this;
             that.queryForm.pageSize = val;
             that.loadData();
         },
@@ -105,13 +105,13 @@ var ossapp = new Vue({
             this.loadData();
         },
         myRowView(index, row) {
-            var that = this;
+            let that = this;
             that.rowView.viewPreVisible = true;
             that.rowView.type = row.type;
             that.rowView.url = row.url || '';
         },
         myDel(index, row) {
-            var that = this;
+            let that = this;
             that.$confirm('此操作将删除该数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -124,7 +124,7 @@ var ossapp = new Vue({
             });
         },
         loadData() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/oss/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data

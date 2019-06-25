@@ -1,4 +1,4 @@
-var myMenuItem = Vue.extend({
+let myMenuItem = Vue.extend({
     name: 'my-menu-item',
     props: {item: {}},
     methods: {
@@ -20,7 +20,7 @@ var myMenuItem = Vue.extend({
         '</el-submenu>'
     ].join('')
 });
-var myDictSelectT = Vue.extend({
+let myDictSelectT = Vue.extend({
     name: 'my-dict-select',
     props: {
         value: '',
@@ -58,7 +58,7 @@ var myDictSelectT = Vue.extend({
             this.$emit('input', val);
         },
         loadData() {
-            var that = this;
+            let that = this;
             if (that.type === undefined || that.type === '' || that.type === null) {
                 return;
             }
@@ -84,7 +84,7 @@ var myDictSelectT = Vue.extend({
         '</el-select>'
     ].join('')
 });
-var myDictSpan = Vue.extend({
+let myDictSpan = Vue.extend({
     name: 'my-dict-span',
     props: {
         value: '',
@@ -105,7 +105,7 @@ var myDictSpan = Vue.extend({
     },
     methods: {
         loadData() {
-            var that = this;
+            let that = this;
             if (that.type === undefined || that.type === '' || that.type === null) {
                 return;
             }
@@ -118,7 +118,7 @@ var myDictSpan = Vue.extend({
         '</span>'
     ].join('')
 });
-var myAreaSelectT = Vue.extend({
+let myAreaSelectT = Vue.extend({
     name: 'my-area-select',
     props: {
         value: '',
@@ -153,7 +153,7 @@ var myAreaSelectT = Vue.extend({
             this.$emit('input', val);
         },
         loadData() {
-            var that = this
+            let that = this
             if (that.type === undefined || that.type === '' || that.type === null) {
                 return;
             }
@@ -172,7 +172,7 @@ var myAreaSelectT = Vue.extend({
         '</el-select>'
     ].join('')
 });
-var myBtnT = Vue.extend({
+let myBtnT = Vue.extend({
     name: 'my-btn',
     props: {
         label: {default: ''},
@@ -191,7 +191,7 @@ var myBtnT = Vue.extend({
     },
     methods: {
         load() {
-            var that = this;
+            let that = this;
             if (that.auth != null && that.auth != '') {
                 httpUtil.get({url: '/check/permissions', data: {codes: that.auth}}, function (r) {
                     if (r.code == 0) {
@@ -208,7 +208,7 @@ var myBtnT = Vue.extend({
         '<el-button :type="type" :icon="icon"  @click="click" :disabled="disabled" v-if="isShow">{{label}}</el-button>',
     ].join('')
 });
-var myPaginationT = Vue.extend({
+let myPaginationT = Vue.extend({
     name: 'my-pagination',
     props: {
         page: {
@@ -245,7 +245,7 @@ var myPaginationT = Vue.extend({
         '</div>',
     ].join('')
 });
-var myTableT = Vue.extend({
+let myTableT = Vue.extend({
     name: 'my-table',
     props: {
         showPage: {
@@ -283,11 +283,11 @@ var myTableT = Vue.extend({
     methods: {
         // 按钮权限
         btnAuth() {
-            var that = this;
-            var btns = that.columns[that.columns.length - 1].buttons;
+            let that = this;
+            let btns = that.columns[that.columns.length - 1].buttons;
             if (btns) {
-                var codes = [];
-                for (var b in btns) {
+                let codes = [];
+                for (let b in btns) {
                     if (btns[b].auth) {
                         codes.push(btns[b].auth);
                     }
@@ -324,7 +324,7 @@ var myTableT = Vue.extend({
         getDeepValue(row, rowKey){
             let keys = rowKey.split('.');
             let value = row;
-            for(var i=0;i<keys.length;i++){
+            for(let i=0;i<keys.length;i++){
                 value = value[keys[i]];
             }
             return value;
@@ -356,8 +356,8 @@ var myTableT = Vue.extend({
         },
         checkBtnAuth(auth,row) {
             if(row &&  row.version == 0){
-                var isAllAuth =  this.btnsAuth['IS_ALL_AUTH'] || false;
-                var defaultDataAuth =  this.btnsAuth['DEFAULT_DATA_AUTH'] || false;
+                let isAllAuth =  this.btnsAuth['IS_ALL_AUTH'] || false;
+                let defaultDataAuth =  this.btnsAuth['DEFAULT_DATA_AUTH'] || false;
                 if(isAllAuth){
                     return true;
                 }else if(!defaultDataAuth){
