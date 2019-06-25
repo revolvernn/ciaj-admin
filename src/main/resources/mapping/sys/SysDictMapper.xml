@@ -5,7 +5,7 @@
 <mapper namespace="com.ciaj.boot.modules.sys.mapper.SysDictMapper">
     <!--
         Author: Ciaj.
-        Date: 2019-05-09 12:55:06
+        Date: 2019-06-25 16:04:46
         Description: www.ciaj.com gen mapper.xml
     -->
     <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
@@ -20,6 +20,7 @@
         <id column="level" property="level" jdbcType="INTEGER" />
         <id column="sequence" property="sequence" jdbcType="INTEGER" />
         <id column="enabled" property="enabled" jdbcType="CHAR" />
+        <id column="description" property="description" jdbcType="VARCHAR" />
         <id column="create_at" property="createAt" jdbcType="VARCHAR" />
         <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
@@ -28,10 +29,10 @@
         <id column="version" property="version" jdbcType="INTEGER" />
     </resultMap>
     <sql id="Base_Column_List">
-        id,name,code,parent_id,parent_ids,type,level,sequence,enabled,create_at,create_time,update_at,update_time,del_flag,version
+        id,name,code,parent_id,parent_ids,type,level,sequence,enabled,description,create_at,create_time,update_at,update_time,del_flag,version
     </sql>
     <sql id="Base_Alias_Column_List">
-        m.id,m.name,m.code,m.parent_id,m.parent_ids,m.type,m.level,m.sequence,m.enabled,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
+        m.id,m.name,m.code,m.parent_id,m.parent_ids,m.type,m.level,m.sequence,m.enabled,m.description,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
     </sql>
     <delete id="deleteByPrimaryKey">
         DELETE FROM sys_dict
@@ -68,6 +69,9 @@
                 <if test="enabled != null">
                     AND enabled = #{enabled}
                 </if>
+                <if test="description != null">
+                    AND description = #{description}
+                </if>
                 <if test="createAt != null">
                     AND create_at = #{createAt}
                 </if>
@@ -94,9 +98,9 @@
             SELECT REPLACE(uuid(),'-','') FROM DUAL
         </selectKey>
         INSERT INTO sys_dict
-        (id,name,code,parent_id,parent_ids,type,level,sequence,enabled,create_at,create_time,update_at,update_time,del_flag,version)
+        (id,name,code,parent_id,parent_ids,type,level,sequence,enabled,description,create_at,create_time,update_at,update_time,del_flag,version)
         VALUES
-        (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{parentId,jdbcType=VARCHAR},#{parentIds,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{level,jdbcType=INTEGER},#{sequence,jdbcType=INTEGER},#{enabled,jdbcType=CHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
+        (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{parentId,jdbcType=VARCHAR},#{parentIds,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{level,jdbcType=INTEGER},#{sequence,jdbcType=INTEGER},#{enabled,jdbcType=CHAR},#{description,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysDictPo">
         <selectKey keyProperty="id" order="BEFORE" resultType="String">
@@ -130,6 +134,9 @@
             </if>
             <if test="enabled != null">
                 enabled,
+            </if>
+            <if test="description != null">
+                description,
             </if>
             <if test="createAt != null">
                 create_at,
@@ -178,6 +185,9 @@
             <if test="enabled != null">
                 #{enabled,jdbcType=CHAR},
             </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
             <if test="createAt != null">
                 #{createAt,jdbcType=VARCHAR},
             </if>
@@ -210,6 +220,7 @@
             level = #{level},
             sequence = #{sequence},
             enabled = #{enabled},
+            description = #{description},
             create_at = #{createAt},
             create_time = #{createTime},
             update_at = #{updateAt},
@@ -230,6 +241,7 @@
             level = #{record.level},
             sequence = #{record.sequence},
             enabled = #{record.enabled},
+            description = #{record.description},
             create_at = #{record.createAt},
             create_time = #{record.createTime},
             update_at = #{record.updateAt},
@@ -265,6 +277,9 @@
             </if>
             <if test="enabled != null">
                 enabled = #{enabled},
+            </if>
+            <if test="description != null">
+                description = #{description},
             </if>
             <if test="createAt != null">
                 create_at = #{createAt},
@@ -314,6 +329,9 @@
             <if test="record.enabled != null">
                 enabled = #{record.enabled},
             </if>
+            <if test="record.description != null">
+                description = #{record.description},
+            </if>
             <if test="record.createAt != null">
                 create_at = #{record.createAt},
             </if>
@@ -335,23 +353,23 @@
         </set>
             WHERE id = #{record.id,jdbcType=VARCHAR}  and version = #{oldVersion}
     </update>
+
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM sys_dict
         WHERE id = #{id,jdbcType=VARCHAR}
     </select>
-
     <select id="selectListByKeys" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM sys_dict
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
-              and id in
-              <foreach collection="keys" separator="," open="(" close=")" item="item">
-                  #{item}
-              </foreach>
+                and  id in
+                <foreach collection="keys" separator="," open="(" close=")" item="item">
+                    #{item}
+                </foreach>
             </trim>
         </where>
     </select>
@@ -385,6 +403,9 @@
                 </if>
                 <if test="enabled != null">
                     AND m.enabled = #{enabled}
+                </if>
+                <if test="description != null">
+                    AND m.description = #{description}
                 </if>
                 <if test="createAt != null">
                     AND m.create_at = #{createAt}
@@ -473,6 +494,9 @@
                 </if>
                 <if test="enabled != null  and enabled != ''">
                     AND m.enabled = #{enabled}
+                </if>
+                <if test="description != null  and description != ''">
+                    AND m.description = #{description}
                 </if>
                 <if test="createAt != null  and createAt != ''">
                     AND m.create_at = #{createAt}

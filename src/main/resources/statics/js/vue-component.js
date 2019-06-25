@@ -264,6 +264,7 @@ let myTableT = Vue.extend({
         page: {
             default: function () {
                 return {
+                    expand: {default: false}, // 是否展开行
                     pageSizes: [10, 20, 50, 100],
                     currPage: 1,
                     pageSize: 10,
@@ -325,9 +326,12 @@ let myTableT = Vue.extend({
             let keys = rowKey.split('.');
             let value = row;
             for(let i=0;i<keys.length;i++){
-                value = value[keys[i]];
+                try {
+                    value = value[keys[i]];
+                } catch (e) {
+                }
             }
-            return value;
+            return value || '';
         },
         getDictLabel(type, row, rowKey) {
             let value = this.getDeepValue(row,rowKey);
@@ -386,10 +390,21 @@ let myTableT = Vue.extend({
     template: [
         '<div>',
         '<el-table :default-sort="defaultSort" @sort-change="sortChange"  border stripe size="mini" style="width: 100%" :data="page.list">',
+        ' <el-table-column type="expand" v-if="page.expand">',
+        '   <template slot-scope="props">',
+        '       <el-form label-position="left" inline class="my-table-expand">',
+        '           <el-form-item :label="item.label"  v-for="item in columns" v-if="item.label!==\'操作\'">',
+        '           <span v-if="item.dict">：{{ getDictLabel(item.dict,props.row,item.name)}}</span>',
+        '           <span v-if="item.image" v-html="getImage(props.row,item.name)"></span>',
+        '           <span v-else>：{{ getDeepValue(props.row,item.name)}}</span>',
+        '           </el-form-item>',
+        '       </el-form>',
+        '   </template>',
+        ' </el-table-column >',
         '<template  v-for="item in columns">',
         '<el-table-column v-if="item.buttons" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">',
         '<template slot-scope="scope">',
-        '<el-button v-for="btn in item.buttons"  @click.native.prevent="btn.click(scope.$index, scope.row) " v-if="checkBtnAuth(btn.auth,scope.row)" :type="btn.type?btn.type:\'text\'" style="margin-bottom: 5px;" size="small" :disabled="btn.disabled">',
+        '<el-button v-for="btn in item.buttons"  @click.native.prevent="btn.click(scope.$index, scope.row) " v-if="checkBtnAuth(btn.auth,scope.row)" :type="btn.type?btn.type:\'text\'" :icon="btn.icon?btn.icon:\'\'" style="margin-bottom: 5px;" size="small" :disabled="btn.disabled">',
         '<template v-if="btn.label">{{btn.label}}</template>',
         '</el-button>',
         '</template>',

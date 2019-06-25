@@ -53,24 +53,28 @@ new Vue({
                     buttons: [
                         {
                             auth:'sys:role:update',
+                            icon: 'el-icon-edit',
                             label: '修改',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
                             auth:'sys:role:permission:rel:adds',
+                            icon: 'el-icon-edit',
                             label: '分配权限',
                             click: this.myPrivileges,
                             type: 'success'
                         },
                         {
                             auth:'sys:role:clearRoleRel',
+                            icon: 'el-icon-edit',
                             label: '清空关联',
                             click: this.clearRoleRel,
                             type: 'danger'
                         },
                         {
                             auth:'sys:role:delFlag',
+                            icon: 'el-icon-delete',
                             label: '删除',
                             click: this.myDel,
                             type: 'danger'

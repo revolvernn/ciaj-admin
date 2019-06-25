@@ -159,7 +159,7 @@
         </#list>
         </#if>
     </select>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    <select id="selectListByKeys" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM ${tableClass.tableName}
@@ -168,7 +168,7 @@
                 <#if tableClass.pkFields??>
                 and <#list tableClass.pkFields as field> ${field.columnName}</#list> in
                 <foreach collection="keys" separator="," open="(" close=")" item="item">
-                    #{item}
+                    <#noparse>#</#noparse>{item}
                 </foreach>
                 </#if>
             </trim>

@@ -5,35 +5,35 @@
 <mapper namespace="com.ciaj.boot.modules.sys.mapper.SysDeptMapper">
     <!--
         Author: Ciaj.
-        Date: 2019-05-09 09:20:31
+        Date: 2019-06-25 16:14:41
         Description: www.ciaj.com gen mapper.xml
     -->
-    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560"
-           type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
+    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
 
-    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.SysDeptPo">
-        <id column="id" property="id" jdbcType="VARCHAR"/>
-        <id column="name" property="name" jdbcType="VARCHAR"/>
-        <id column="code" property="code" jdbcType="VARCHAR"/>
-        <id column="area_id" property="areaId" jdbcType="VARCHAR"/>
-        <id column="level" property="level" jdbcType="INTEGER"/>
-        <id column="type" property="type" jdbcType="VARCHAR"/>
-        <id column="parent_id" property="parentId" jdbcType="VARCHAR"/>
-        <id column="parent_ids" property="parentIds" jdbcType="VARCHAR"/>
-        <id column="sequence" property="sequence" jdbcType="INTEGER"/>
-        <id column="enabled" property="enabled" jdbcType="CHAR"/>
-        <id column="create_at" property="createAt" jdbcType="VARCHAR"/>
-        <id column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <id column="update_at" property="updateAt" jdbcType="VARCHAR"/>
-        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <id column="del_flag" property="delFlag" jdbcType="CHAR"/>
-        <id column="version" property="version" jdbcType="INTEGER"/>
+    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.sys.entity.po.SysDeptPo" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <id column="name" property="name" jdbcType="VARCHAR" />
+        <id column="code" property="code" jdbcType="VARCHAR" />
+        <id column="area_id" property="areaId" jdbcType="VARCHAR" />
+        <id column="level" property="level" jdbcType="INTEGER" />
+        <id column="type" property="type" jdbcType="VARCHAR" />
+        <id column="parent_id" property="parentId" jdbcType="VARCHAR" />
+        <id column="parent_ids" property="parentIds" jdbcType="VARCHAR" />
+        <id column="sequence" property="sequence" jdbcType="INTEGER" />
+        <id column="enabled" property="enabled" jdbcType="CHAR" />
+        <id column="description" property="description" jdbcType="VARCHAR" />
+        <id column="create_at" property="createAt" jdbcType="VARCHAR" />
+        <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
+        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <id column="del_flag" property="delFlag" jdbcType="CHAR" />
+        <id column="version" property="version" jdbcType="INTEGER" />
     </resultMap>
     <sql id="Base_Column_List">
-        id,name,code,area_id,level,type,parent_id,parent_ids,sequence,enabled,create_at,create_time,update_at,update_time,del_flag,version
+        id,name,code,area_id,level,type,parent_id,parent_ids,sequence,enabled,description,create_at,create_time,update_at,update_time,del_flag,version
     </sql>
     <sql id="Base_Alias_Column_List">
-        m.id,m.name,m.code,m.area_id,m.level,m.type,m.parent_id,m.parent_ids,m.sequence,m.enabled,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
+        m.id,m.name,m.code,m.area_id,m.level,m.type,m.parent_id,m.parent_ids,m.sequence,m.enabled,m.description,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
     </sql>
     <delete id="deleteByPrimaryKey">
         DELETE FROM sys_dept
@@ -73,6 +73,9 @@
                 <if test="enabled != null">
                     AND enabled = #{enabled}
                 </if>
+                <if test="description != null">
+                    AND description = #{description}
+                </if>
                 <if test="createAt != null">
                     AND create_at = #{createAt}
                 </if>
@@ -94,14 +97,14 @@
             </trim>
         </where>
     </delete>
-    <insert id="insert" parameterType="com.ciaj.boot.modules.sys.entity.po.SysDeptPo">
-        <selectKey keyProperty="id" order="BEFORE" resultType="String">
+    <insert id="insert"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysDeptPo">
+        <selectKey keyProperty="id" order="BEFORE"  resultType="String">
             SELECT REPLACE(uuid(),'-','') FROM DUAL
         </selectKey>
         INSERT INTO sys_dept
-        (id,name,code,area_id,level,type,parent_id,parent_ids,sequence,enabled,create_at,create_time,update_at,update_time,del_flag,version)
+        (id,name,code,area_id,level,type,parent_id,parent_ids,sequence,enabled,description,create_at,create_time,update_at,update_time,del_flag,version)
         VALUES
-        (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{areaId,jdbcType=VARCHAR},#{level,jdbcType=INTEGER},#{type,jdbcType=VARCHAR},#{parentId,jdbcType=VARCHAR},#{parentIds,jdbcType=VARCHAR},#{sequence,jdbcType=INTEGER},#{enabled,jdbcType=CHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
+        (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{areaId,jdbcType=VARCHAR},#{level,jdbcType=INTEGER},#{type,jdbcType=VARCHAR},#{parentId,jdbcType=VARCHAR},#{parentIds,jdbcType=VARCHAR},#{sequence,jdbcType=INTEGER},#{enabled,jdbcType=CHAR},#{description,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysDeptPo">
         <selectKey keyProperty="id" order="BEFORE" resultType="String">
@@ -138,6 +141,9 @@
             </if>
             <if test="enabled != null">
                 enabled,
+            </if>
+            <if test="description != null">
+                description,
             </if>
             <if test="createAt != null">
                 create_at,
@@ -189,6 +195,9 @@
             <if test="enabled != null">
                 #{enabled,jdbcType=CHAR},
             </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
             <if test="createAt != null">
                 #{createAt,jdbcType=VARCHAR},
             </if>
@@ -210,7 +219,7 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKey" parameterType="com.ciaj.boot.modules.sys.entity.po.SysDeptPo">
+    <update id="updateByPrimaryKey"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysDeptPo">
         UPDATE sys_dept
         <set>
             name = #{name},
@@ -222,6 +231,7 @@
             parent_ids = #{parentIds},
             sequence = #{sequence},
             enabled = #{enabled},
+            description = #{description},
             create_at = #{createAt},
             create_time = #{createTime},
             update_at = #{updateAt},
@@ -229,7 +239,7 @@
             del_flag = #{delFlag},
             version = #{version},
         </set>
-        WHERE id = #{id,jdbcType=VARCHAR}
+         WHERE id = #{id,jdbcType=VARCHAR}
     </update>
     <update id="updateByPrimaryKeyAndVersion">
         UPDATE sys_dept
@@ -243,6 +253,7 @@
             parent_ids = #{record.parentIds},
             sequence = #{record.sequence},
             enabled = #{record.enabled},
+            description = #{record.description},
             create_at = #{record.createAt},
             create_time = #{record.createTime},
             update_at = #{record.updateAt},
@@ -250,9 +261,9 @@
             del_flag = #{record.delFlag},
             version = #{record.version},
         </set>
-        WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+            WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysDeptPo">
+    <update id="updateByPrimaryKeySelective"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysDeptPo">
         UPDATE sys_dept
         <set>
             <if test="name != null">
@@ -281,6 +292,9 @@
             </if>
             <if test="enabled != null">
                 enabled = #{enabled},
+            </if>
+            <if test="description != null">
+                description = #{description},
             </if>
             <if test="createAt != null">
                 create_at = #{createAt},
@@ -333,6 +347,9 @@
             <if test="record.enabled != null">
                 enabled = #{record.enabled},
             </if>
+            <if test="record.description != null">
+                description = #{record.description},
+            </if>
             <if test="record.createAt != null">
                 create_at = #{record.createAt},
             </if>
@@ -352,8 +369,9 @@
                 version = #{record.version},
             </if>
         </set>
-        WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+            WHERE id = #{record.id,jdbcType=VARCHAR}  and version = #{oldVersion}
     </update>
+
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -366,13 +384,14 @@
         FROM sys_dept
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
-                and id in
+                and  id in
                 <foreach collection="keys" separator="," open="(" close=")" item="item">
                     #{item}
                 </foreach>
             </trim>
         </where>
     </select>
+
     <sql id="base_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
@@ -406,6 +425,9 @@
                 <if test="enabled != null">
                     AND m.enabled = #{enabled}
                 </if>
+                <if test="description != null">
+                    AND m.description = #{description}
+                </if>
                 <if test="createAt != null">
                     AND m.create_at = #{createAt}
                 </if>
@@ -427,23 +449,23 @@
             </trim>
         </where>
     </sql>
-    <select id="selectOne" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysDeptPo">
+    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysDeptPo">
         SELECT
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List" />
         FROM sys_dept m
         <include refid="base_query_condition_sql"/>
     </select>
 
-    <select id="select" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysDeptPo">
+    <select id="select" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysDeptPo">
         SELECT
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List" />
         FROM sys_dept m
         <include refid="base_query_condition_sql"/>
     </select>
 
-    <select id="selectAll" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.sys.entity.po.SysDeptPo">
+    <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.sys.entity.po.SysDeptPo">
         SELECT
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List" />
         FROM sys_dept m
         <include refid="base_query_condition_sql"/>
     </select>
@@ -452,8 +474,7 @@
         SELECT
         <include refid="Base_Alias_Column_List"/>
         FROM sys_dept m
-        <include refid="query_condition_sql"/>
-
+        <include refid="cust_query_condition_sql"/>
     </select>
 
     <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.SysDeptDto" extends="BaseResultMap">
@@ -462,36 +483,20 @@
     <select id="selectDTOList" resultMap="DTOResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysDeptVo">
         SELECT
         <include refid="Base_Alias_Column_List"/>
-        from sys_dept m
-        <include refid="query_condition_sql"/>
+        FROM sys_dept m
+        <include refid="cust_query_condition_sql"/>
     </select>
-
-    <resultMap id="DTOResultJoinMap" type="com.ciaj.boot.modules.sys.entity.dto.SysDeptDto" extends="DTOResultMap">
-        <association property="sysArea" javaType="com.ciaj.boot.modules.sys.entity.dto.SysAreaDto">
-            <id column="area_id" property="id"></id>
-            <id column="area_name" property="name"></id>
-            <id column="area_parent_ids" property="parentIds"></id>
-        </association>
-    </resultMap>
-
-    <select id="selectDTOListMultiTable" resultMap="DTOResultJoinMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysDeptVo">
-        SELECT
-        <include refid="Base_Alias_Column_List"/>,a.name as area_name,a.parent_ids as area_parent_ids
-        from sys_dept m left  join sys_area a on m.area_id = a.id
-        <include refid="query_condition_sql"/>
-    </select>
-
-    <sql id="query_condition_sql">
+    <sql id="cust_query_condition_sql">
         <where>
             <trim prefix="" prefixOverrides="and" suffix="">
                 <if test="id != null  and id != ''">
                     AND m.id = #{id}
                 </if>
                 <if test="name != null  and name != ''">
-                    and m.name like CONCAT('%',#{name},'%')
+                    AND m.name LIKE CONCAT('%',#{name},'%')
                 </if>
                 <if test="code != null  and code != ''">
-                    and m.code like CONCAT('%',#{code},'%')
+                    AND m.code LIKE CONCAT('%',#{code},'%')
                 </if>
                 <if test="areaId != null  and areaId != ''">
                     AND m.area_id = #{areaId}
@@ -506,13 +511,16 @@
                     AND m.parent_id = #{parentId}
                 </if>
                 <if test="parentIds != null  and parentIds != ''">
-                    and m.parent_ids like CONCAT('%',#{parentIds},'%')
+                    AND m.parent_ids LIKE CONCAT('%',#{parentIds},'%')
                 </if>
                 <if test="sequence != null ">
                     AND m.sequence = #{sequence}
                 </if>
                 <if test="enabled != null  and enabled != ''">
                     AND m.enabled = #{enabled}
+                </if>
+                <if test="description != null  and description != ''">
+                    AND m.description = #{description}
                 </if>
                 <if test="createAt != null  and createAt != ''">
                     AND m.create_at = #{createAt}
@@ -534,9 +542,24 @@
                 </if>
                 <!--  keyword   -->
                 <if test="keyword != null and keyword != ''">
-                    and m.name like CONCAT('%',#{keyword},'%')
+                    AND m.name like CONCAT('%',#{keyword},'%')
                 </if>
             </trim>
         </where>
     </sql>
+
+    <resultMap id="DTOResultJoinMap" type="com.ciaj.boot.modules.sys.entity.dto.SysDeptDto" extends="DTOResultMap">
+        <association property="sysArea" javaType="com.ciaj.boot.modules.sys.entity.dto.SysAreaDto">
+            <id column="area_id" property="id"></id>
+            <id column="area_name" property="name"></id>
+            <id column="area_parent_ids" property="parentIds"></id>
+        </association>
+    </resultMap>
+
+    <select id="selectDTOListMultiTable" resultMap="DTOResultJoinMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysDeptVo">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>,a.name as area_name,a.parent_ids as area_parent_ids
+        from sys_dept m left  join sys_area a on m.area_id = a.id
+        <include refid="cust_query_condition_sql"/>
+    </select>
 </mapper>

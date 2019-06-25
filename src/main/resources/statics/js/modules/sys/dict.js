@@ -56,6 +56,10 @@ let dictapp = new Vue({
                     label: '启用'
                 },
                 {
+                    name: 'description',
+                    label: '描述'
+                },
+                {
                     name: 'createTime',
                     sortable: 'custom',
                     width: '140',
@@ -71,16 +75,18 @@ let dictapp = new Vue({
                 },
                 {
                     label: '操作',
-                    width: '150px',
+                    width: '180px',
                     buttons: [
                         {
                             auth: 'sys:dict:update',
                             label: '修改',
+                            icon: 'el-icon-edit',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
                             auth: 'sys:dict:delFlag',
+                            icon: 'el-icon-delete',
                             label: '删除',
                             click: this.myDel,
                             type: 'danger'
@@ -101,6 +107,7 @@ let dictapp = new Vue({
                     parentIds: null,
                     type: null,
                     sequence: null,
+                    description: null,
                     enabled: 'Y'
                 }
             },
@@ -172,6 +179,7 @@ let dictapp = new Vue({
                 code: null,
                 parentId: null,
                 type: null,
+                description: null,
                 sequence: 0,
                 enabled: 'Y'
             };

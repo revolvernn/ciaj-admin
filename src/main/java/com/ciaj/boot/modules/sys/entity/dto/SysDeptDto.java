@@ -84,6 +84,12 @@ public class SysDeptDto extends SysDeptPo {
     }
 
     //@javax.validation.constraints.NotBlank(message = "")
+    @ApiModelProperty("部门描述")
+    public String getDescription() {
+        return super.getDescription();
+    }
+
+    //@javax.validation.constraints.NotBlank(message = "")
     @ApiModelProperty("创建人")
     public java.lang.String getCreateAt() {
         return super.getCreateAt();

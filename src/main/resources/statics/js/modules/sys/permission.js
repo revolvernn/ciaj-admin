@@ -59,16 +59,18 @@ let permissionapp = new Vue({
                 },
                 {
                     label: '操作',
-                    width: '150px',
+                    width: '180px',
                     buttons: [
                         {
                             auth: 'sys:permission:update',
                             label: '修改',
+                            icon: 'el-icon-edit',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
                             auth: 'sys:permission:delFlag',
+                            icon: 'el-icon-delete',
                             label: '删除',
                             click: this.myDel,
                             type: 'danger'

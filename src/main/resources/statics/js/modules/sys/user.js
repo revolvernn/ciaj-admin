@@ -100,23 +100,27 @@ let userapp = new Vue({
                         {
                             auth: 'sys:user:update',
                             label: '修改',
+                            icon: 'el-icon-edit',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
                             auth: 'sys:user:role:rel:adds',
+                            icon: 'el-icon-edit',
                             label: '分配角色',
                             click: this.myRoles,
                             type: 'success'
                         },
                         {
                             auth: 'sys:user:password:update',
+                            icon: 'el-icon-edit',
                             label: '修改密码',
                             click: this.myUpdatePassword,
                             type: 'success'
                         },
                         {
                             auth: 'sys:user:delFlag',
+                            icon: 'el-icon-delete',
                             label: '删除',
                             click: this.myDel,
                             type: 'danger'
@@ -435,8 +439,8 @@ let userapp = new Vue({
             let that = this;
             httpUtil.get({url: "sys/user/list", data: that.queryForm}, function (r) {
                 if (r.code == 0) {
-                    that.page = r.data
-
+                    that.page = r.data;
+                    that.page.expand = true;
                 }
             });
         }

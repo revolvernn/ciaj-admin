@@ -42,17 +42,20 @@ let configapp = new Vue({
                         {
                             auth: 'sys:config:update',
                             label: '修改',
+                            icon: 'el-icon-edit',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
                             auth:'sys:oss:config:save',
                             label: '配置',
+                            icon: 'el-icon-edit',
                             click: this.myConfig,
                             type: 'info'
                         },
                         {
                             auth: 'sys:config:delFlag',
+                            icon: 'el-icon-delete',
                             label: '删除',
                             click: this.myDel,
                             type: 'danger'

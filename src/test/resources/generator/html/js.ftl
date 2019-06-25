@@ -22,15 +22,19 @@ let ${jsName}app = new Vue({
             </#if>
                 {
                     label: '操作',
-                    width: '150px',
+                    width: '180px',
                     buttons: [
                         {
+                            auth:'sys:${jsName}:update',
                             label: '修改',
+                            icon: 'el-icon-edit',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
+                            auth:'sys:${jsName}:delFlag',
                             label: '删除',
+                            icon: 'el-icon-delete',
                             click: this.myDel,
                             type: 'danger'
                         }

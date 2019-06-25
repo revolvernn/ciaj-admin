@@ -35,6 +35,20 @@ body{
     width:100%;
 }
 
+.my-table-expand {
+    font-size: 0;
+}
+.my-table-expand label {
+    width: 150px;
+    color: #99a9bf;
+}
+.my-table-expand .el-form-item {
+    text-align: left;
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 100%;
+}
+
 [v-cloak] {
     display:none !important;
 }

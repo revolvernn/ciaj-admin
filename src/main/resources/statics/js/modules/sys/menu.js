@@ -74,16 +74,18 @@ let menuapp = new Vue({
                 },
                 {
                     label: '操作',
-                    width:'150',
+                    width:'180px',
                     buttons: [
                         {
                             auth:'sys:menu:update',
+                            icon: 'el-icon-edit',
                             label: '修改',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
                             auth:'sys:menu:delFlag',
+                            icon: 'el-icon-delete',
                             label: '删除',
                             click: this.myDel,
                             type: 'danger'

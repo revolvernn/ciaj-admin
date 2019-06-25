@@ -9,7 +9,7 @@
                 <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="myQuery">查询</el-button>
+                <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
                 <el-button @click="myQueryReset">重置</el-button>
                 <el-button type="primary" @click="myAdd">新增</el-button>
             </el-form-item>

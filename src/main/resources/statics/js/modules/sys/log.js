@@ -60,6 +60,7 @@ let logapp = new Vue({
                         {
                             auth:'sys:log:delFlag',
                             label: '删除',
+                            icon: 'el-icon-delete',
                             click: this.myDel,
                             type: 'danger'
                         },
@@ -124,7 +125,7 @@ let logapp = new Vue({
             }).then(() => {
                 httpUtil.del({url: "sys/log/delFlag/" + row.id}, function (r) {
                     that.myQuery();
-                    alertMsg(that, r)
+                    alertMsg(that, r);
                 });
             });
         },
@@ -132,7 +133,8 @@ let logapp = new Vue({
             let that = this;
             httpUtil.get({url: "sys/log/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
-                    that.page = result.data
+                    that.page = result.data;
+                    that.page.expand = true;
                 }
             });
         }

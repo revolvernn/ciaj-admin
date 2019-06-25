@@ -45,11 +45,13 @@ let ossapp = new Vue({
                     buttons: [
                         {
                             label: '预览',
+                            icon: 'el-icon-search',
                             click: this.myRowView,
                             type: 'info'
                         },
                         {
                             label: '删除',
+                            icon: 'el-icon-edit',
                             click: this.myDel,
                             auth: 'sys:oss:delFlag',
                             type: 'danger'
