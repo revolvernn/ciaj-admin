@@ -334,9 +334,9 @@ let myTableT = Vue.extend({
             return value || '';
         },
         getDictLabel(type, row, rowKey) {
-            let value = this.getDeepValue(row,rowKey);
-            value = dictUtil.getNameByTypeAndCode(type, value);
-            return value ? value : null;
+            let value = '' ;
+            value = dictUtil.getNameByTypeAndCode(type, this.getDeepValue(row,rowKey));
+            return value;
         },
         getImage (row, rowKey) {
             let value = this.getDeepValue(row,rowKey);
@@ -394,8 +394,10 @@ let myTableT = Vue.extend({
         '   <template slot-scope="props">',
         '       <el-form label-position="left" inline class="my-table-expand">',
         '           <el-form-item :label="item.label"  v-for="item in columns" v-if="item.label!==\'操作\'">',
-        '           <span v-if="item.dict">：{{ getDictLabel(item.dict,props.row,item.name)}}</span>',
-        '           <span v-if="item.image" v-html="getImage(props.row,item.name)"></span>',
+        '           <span v-if="item.date">：{{ getDateFormat(scope.row,item.name,item.date)}}</span>',
+        '           <span v-else-if="item.dict">：{{ getDictLabel(item.dict,props.row,item.name)}}</span>',
+        '           <span v-else-if="item.image" v-html="getImage(props.row,item.name)"></span>',
+        '           <span v-else-if="item.icon" v-html="getIcon(props.row,item.name)"></span>',
         '           <span v-else>：{{ getDeepValue(props.row,item.name)}}</span>',
         '           </el-form-item>',
         '       </el-form>',
@@ -430,7 +432,7 @@ let myTableT = Vue.extend({
         '<el-table-column v-else-if="item.date" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">',
         '<template slot-scope="scope"> {{getDateFormat(scope.row,item.name,item.date)}}</template>',
         '</el-table-column>',
-        '<el-table-column v-else :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :fixed="item.fixed" :sort-by="item.sortBy" :sortable="item.sortable?item.sortable:false">',
+        '<el-table-column show-overflow-tooltip v-else :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :fixed="item.fixed" :sort-by="item.sortBy" :sortable="item.sortable?item.sortable:false">',
         '</el-table-column>',
         '</template>',
         '</el-table>',

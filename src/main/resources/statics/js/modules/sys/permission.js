@@ -221,6 +221,7 @@ let permissionapp = new Vue({
                         that.addOrUpdateForm.menuModel = result.data.menu.parentIds ? result.data.menu.parentIds.split(',') : [];
                         that.addOrUpdateForm.menuModel.push(result.data.menu.id);
                     }
+                    that.treeData = treeUtil.updateTreeNodeDisable(that.treeData, that.addOrUpdateForm.permission.id, true);
                 }
             });
         },
@@ -261,7 +262,8 @@ let permissionapp = new Vue({
             let that = this;
             httpUtil.get({url: "sys/permission/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
-                    that.page = result.data
+                    that.page = result.data;
+                    that.page.expand = true;
                 }
             });
         }
@@ -275,6 +277,12 @@ let permissionapp = new Vue({
             let value = val;
             if (that.addOrUpdateForm.permission.type !== 'menu')
                 that.addOrUpdateForm.permission.url = value.split(':').join('/');
+        },
+        'addOrUpdateForm.permissionFormVisible'(val) {
+            let that = this;
+            if(!val && that.addOrUpdateForm.permission.id != null){
+                that.treeData = treeUtil.updateTreeNodeDisable(that.treeData, that.addOrUpdateForm.permission.id, false);
+            }
         }
     }
 });

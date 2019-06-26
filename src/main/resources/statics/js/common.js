@@ -391,22 +391,23 @@ window.treeUtil = {
             if (childrenArr.length == 0) {
                 return null;
             }
-            childrenArr.sort(function (a,b) {
-                if(a.sequence<b.sequence){
+            childrenArr.sort(function (a, b) {
+                if (a.sequence < b.sequence) {
                     return -1;
                 }
-                if(a.sequence>b.sequence){
+                if (a.sequence > b.sequence) {
                     return 1;
                 }
                 return 0;
             })
             return childrenArr;
         }
-        rooArr.sort(function (a,b) {
-            if(a.sequence<b.sequence){
+
+        rooArr.sort(function (a, b) {
+            if (a.sequence < b.sequence) {
                 return -1;
             }
-            if(a.sequence>b.sequence){
+            if (a.sequence > b.sequence) {
                 return 1;
             }
             return 0;
@@ -415,7 +416,7 @@ window.treeUtil = {
     },
 
     vueTreeObj: function (arr) {
-        let obj ={}
+        let obj = {}
         if (!arr || arr.length == 0) return [];
         let sourceArr = arr || [];
         let rooArr = [];
@@ -463,12 +464,13 @@ window.treeUtil = {
             }
             return childrenArr;
         }
-        obj.data=arr;
-        obj.treeData=rooArr;
+
+        obj.data = arr;
+        obj.treeData = rooArr;
         return obj;
     },
     /**
-     *
+     * 根据ID获取树节点
      * @param arr
      * @param id
      */
@@ -502,6 +504,45 @@ window.treeUtil = {
         }
 
         return value;
+    },
+    /**
+     *   根据id更新树节点禁用状态
+     * @param sourceArr arr
+     * @param sourceId id
+     * @param disable true/false
+     * @returns {*}
+     */
+    updateTreeNodeDisable: function (sourceArr, sourceId, disable) {
+        let flag = false;
+        for (let i = 0; i < sourceArr.length; i++) {
+            if (sourceArr[i].id === sourceId) {
+                sourceArr[i].disabled = disable;
+                flag = true;
+                break;
+            }
+            if (sourceArr[i].children != null && sourceArr[i].children.length > 0) {
+                flag = getChildren(sourceArr[i].children, sourceId);
+            }
+            if (flag) break;
+        }
+
+        function getChildren(root, id) {
+            let cFlag = false;
+            for (let i = 0; i < root.length; i++) {
+                if (root[i].id === id) {
+                    root[i].disabled = disable;
+                    cFlag = true;
+                    break;
+                }
+                if (root[i].children != null && root[i].children.length > 0) {
+                    cFlag = getChildren(root[i].children, id);
+                }
+                if (cFlag) break;
+            }
+            return cFlag;
+        }
+
+        return sourceArr;
     }
 }
 

@@ -179,7 +179,7 @@ let deptapp = new Vue({
         },
         //父级选择处理
         areaModelQueryChange(val) {
-            var that = this;
+            let that = this;
             if (val.length > 0) {
                 that.queryForm.areaId = val[val.length - 1];
             } else {
@@ -188,7 +188,7 @@ let deptapp = new Vue({
         },
         //父级选择处理
         deptModelQueryChange(val) {
-            var that = this;
+            let that = this;
             if (val.length > 0) {
                 that.queryForm.parentId = val[val.length - 1];
             } else {
@@ -196,26 +196,26 @@ let deptapp = new Vue({
             }
         },
         myAdd() {
-            var that = this;
+            let that = this;
             that.addOrUpdateForm.title = '新增';
             that.addOrUpdateForm.deptFormVisible = true;
             that.addOrUpdateForm.deptModel = [];
             that.addOrUpdateForm.areaModel = [];
             that.addOrUpdateForm.dept = {
-                                         name: null,
-                                         areaId: null,
-                                         level: null,
-                                         type: null,
-                                         parentId: null,
-                                         parentIds: null,
-                                         sequence: null,
-                                         description: null,
-                                         enabled: null
-                                       }
+                name: null,
+                areaId: null,
+                level: null,
+                type: null,
+                parentId: null,
+                parentIds: null,
+                sequence: null,
+                description: null,
+                enabled: null
+            }
             that.resetForm('addOrUpdateFormRef');
         },
         myUpdate(index, row) {
-            var that = this;
+            let that = this;
             that.addOrUpdateForm.title = '修改';
             that.addOrUpdateForm.deptFormVisible = true;
             that.addOrUpdateForm.deptModel = [];
@@ -223,19 +223,20 @@ let deptapp = new Vue({
             that.resetForm('addOrUpdateFormRef');
             httpUtil.get({url: "sys/dept/getById/" + row.id}, function (result) {
                 if (result.code == 0) {
-                    var parentids = result.data.parentIds;
+                    let parentids = result.data.parentIds;
                     that.addOrUpdateForm.areaModel = result.data.sysArea ? result.data.sysArea.parentIds.split(',') : [];
                     if(that.addOrUpdateForm.areaModel.length>0){
                         that.addOrUpdateForm.areaModel.push(result.data.areaId);
                     }
                     that.addOrUpdateForm.deptModel = parentids ? parentids.split(',') : [];
                     that.addOrUpdateForm.dept = result.data;
+                    that.deptData = treeUtil.updateTreeNodeDisable(that.deptData, row.id, true);
                 }
             });
         },
         //父级选择处理
         deptModelFormChange(val) {
-            var that = this;
+            let that = this;
             if (val.length > 0) {
                 that.addOrUpdateForm.dept.level = val.length + 1;
                 that.addOrUpdateForm.dept.parentId = val[val.length - 1];
@@ -248,7 +249,7 @@ let deptapp = new Vue({
         },
         //父级选择处理
         areaModelFormChange(val) {
-            var that = this;
+            let that = this;
             if (val.length > 0) {
                 that.addOrUpdateForm.dept.areaId = val[val.length - 1];
             } else {
@@ -256,11 +257,11 @@ let deptapp = new Vue({
             }
         },
         saveOrUpdate() {
-            var that = this;
+            let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
-                    var url = that.addOrUpdateForm.dept.id == null ? "sys/dept/add" : "sys/dept/update";
-                    var type = that.addOrUpdateForm.dept.id == null ? "POST" : "PUT";
+                    let url = that.addOrUpdateForm.dept.id == null ? "sys/dept/add" : "sys/dept/update";
+                    let type = that.addOrUpdateForm.dept.id == null ? "POST" : "PUT";
                     httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.dept)}, function (r) {
                         that.myQuery();
                         that.initTree();
@@ -271,7 +272,7 @@ let deptapp = new Vue({
             });
         },
         myDel(index, row) {
-            var that = this;
+            let that = this;
             that.$confirm('此操作将删除该数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -284,12 +285,20 @@ let deptapp = new Vue({
             });
         },
         loadData() {
-            var that = this;
+            let that = this;
             httpUtil.get({url: "sys/dept/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data;
                 }
             });
+        }
+    },
+    watch: {
+        'addOrUpdateForm.deptFormVisible'(val) {
+            let that = this;
+            if(!val && that.addOrUpdateForm.dept.id != null){
+                that.deptData = treeUtil.updateTreeNodeDisable(that.deptData, that.addOrUpdateForm.dept.id, false);
+            }
         }
     }
 });

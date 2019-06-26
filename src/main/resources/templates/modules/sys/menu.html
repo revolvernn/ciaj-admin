@@ -9,7 +9,7 @@
             <el-input placeholder="输入关键字进行过滤" v-model="filterText">
                 <el-button slot="append" icon="el-icon-refresh" @click="initTree"></el-button>
             </el-input>
-            <el-tree class="filter-tree" :data="treeData" @node-click="getTreeNode" :props="defaultProps"
+            <el-tree class="filter-tree" :data="menuData" @node-click="getTreeNode" :props="defaultProps"
                      default-expand-all :filter-node-method="filterNode" ref="menuTree">
             </el-tree>
         </el-aside>
@@ -53,7 +53,7 @@
                             <el-form-item label="父级" :label-width="addOrUpdateForm.menuFormLabelWidth"
                                           prop="cascaderModel">
                                 <el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.cascaderModel"
-                                             @change="cascaderChange" :options="treeData" :show-all-levels="false"
+                                             @change="cascaderChange" :options="menuData" :show-all-levels="false"
                                              filterable change-on-select clearable></el-cascader>
                             </el-form-item>
                             <el-form-item label="菜单url" prop="url" :label-width="addOrUpdateForm.menuFormLabelWidth">

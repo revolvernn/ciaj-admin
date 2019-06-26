@@ -8,7 +8,7 @@ let menuapp = new Vue({
     data() {
         return {
             filterText: '',
-            treeData: [],
+            menuData: [],
             defaultProps: {
                 children: 'children',
                 label: 'label',
@@ -134,7 +134,7 @@ let menuapp = new Vue({
             let that = this;
             httpUtil.get({url: "sys/menu/list", data: {}}, function (result) {
                 if (result.code == 0) {
-                    that.treeData = treeUtil.vueTree(result.data.list);
+                    that.menuData = treeUtil.vueTree(result.data.list);
                 }
             });
         },
@@ -198,6 +198,7 @@ let menuapp = new Vue({
                     let parentids = result.data.parentIds;
                     that.addOrUpdateForm.cascaderModel = parentids ? parentids.split(',') : [];
                     that.addOrUpdateForm.menu = result.data;
+                    that.menuData = treeUtil.updateTreeNodeDisable(that.menuData, that.addOrUpdateForm.menu.id, true);
                 }
             });
         },
@@ -247,7 +248,8 @@ let menuapp = new Vue({
             let that = this;
             httpUtil.get({url: "sys/menu/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
-                    that.page = result.data
+                    that.page = result.data;
+                    that.page.expand = true;
                 }
             });
         }
@@ -255,6 +257,12 @@ let menuapp = new Vue({
     , watch: {
         filterText(val) {
             this.$refs['menuTree'].filter(val);
+        },
+        'addOrUpdateForm.menuFormVisible'(val) {
+            let that = this;
+            if(!val && that.addOrUpdateForm.menu.id != null){
+                that.menuData = treeUtil.updateTreeNodeDisable(that.menuData, that.addOrUpdateForm.menu.id, false);
+            }
         }
     }
 });

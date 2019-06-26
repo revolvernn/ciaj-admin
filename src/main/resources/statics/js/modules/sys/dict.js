@@ -8,7 +8,7 @@ let dictapp = new Vue({
     data() {
         return {
             filterText: '',
-            treeData: [],
+            dictData: [],
             defaultProps: {
                 children: 'children',
                 label: 'label',
@@ -132,7 +132,7 @@ let dictapp = new Vue({
             let that = this;
             httpUtil.get({url: "sys/dict/list", data: {}}, function (result) {
                 if (result.code == 0) {
-                    that.treeData = treeUtil.vueTree(result.data.list);
+                    that.dictData = treeUtil.vueTree(result.data.list);
                 }
             });
         },
@@ -196,6 +196,7 @@ let dictapp = new Vue({
                     let parentids = result.data.parentIds;
                     that.addOrUpdateForm.cascaderModel = parentids ? parentids.split(',') : [];
                     that.addOrUpdateForm.dict = result.data;
+                    that.dictData = treeUtil.updateTreeNodeDisable(that.dictData, that.addOrUpdateForm.dict.id, true);
                 }
             });
         },
@@ -251,7 +252,8 @@ let dictapp = new Vue({
             let that = this;
             httpUtil.get({url: "sys/dict/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
-                    that.page = result.data
+                    that.page = result.data;
+                    that.page.expand = true;
                 }
             });
         },
@@ -259,6 +261,12 @@ let dictapp = new Vue({
     , watch: {
         filterText(val) {
             this.$refs['dictTree'].filter(val);
+        },
+        'addOrUpdateForm.dictFormVisible'(val) {
+            let that = this;
+            if(!val && that.addOrUpdateForm.dict.id != null){
+                that.dictData = treeUtil.updateTreeNodeDisable(that.dictData, that.addOrUpdateForm.dict.id, false);
+            }
         }
     }
 });

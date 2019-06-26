@@ -12,7 +12,7 @@
 					<el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
 				</el-form-item>
 				<el-form-item label="区域"  prop="cascaderModel" >
-					<el-cascader placeholder="试试搜索" v-model="cascaderModel" @change="cascaderQueryChange" :options="treeData" :show-all-levels="false" filterable change-on-select clearable>
+					<el-cascader placeholder="试试搜索" v-model="cascaderModel" @change="cascaderQueryChange" :options="areaData" :show-all-levels="false" filterable change-on-select clearable>
 					</el-cascader>
 				</el-form-item>
 				<el-form-item label="类型" prop="type" >
@@ -38,7 +38,7 @@
                		 <el-input v-model="addOrUpdateForm.area.code" autocomplete="off" placeholder="城市编码"></el-input>
                	</el-form-item>
                 <el-form-item label="父级" prop="parentId" :label-width="addOrUpdateForm.areaFormLabelWidth" >
-					<el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.cascaderModel" @change="cascaderChange" :options="treeData" :show-all-levels="false" filterable change-on-select clearable></el-cascader>
+					<el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.cascaderModel" @change="cascaderChange" :options="areaData" :show-all-levels="false" filterable change-on-select clearable></el-cascader>
                	</el-form-item>
                 <el-form-item label="类型" prop="type" :label-width="addOrUpdateForm.areaFormLabelWidth" >
 					<my-dict-select v-model="addOrUpdateForm.area.type" type="area_type"></my-dict-select>

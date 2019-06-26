@@ -7,7 +7,7 @@ let areaapp = new Vue({
     el: '#areaapp',
     data() {
         return {
-            treeData: [],
+            areaData: [],
             cascaderModel: [],
             defaultSort: {prop: 'createTime', order: 'descending'},
             queryForm: {
@@ -116,7 +116,7 @@ let areaapp = new Vue({
             let that = this;
             httpUtil.get({url: "sys/area/list", data: {}}, function (result) {
                 if (result.code == 0) {
-                    that.treeData = areaUtil.vueTree(result.data.list);
+                    that.areaData = areaUtil.vueTree(result.data.list);
                 }
             });
         },
@@ -189,6 +189,7 @@ let areaapp = new Vue({
                     let parentids = result.data.parentIds;
                     that.addOrUpdateForm.cascaderModel = parentids ? parentids.split(',') : [];
                     that.addOrUpdateForm.area = result.data;
+                    that.areaData = treeUtil.updateTreeNodeDisable(that.areaData, row.id, true);
                 }
             });
         },
@@ -251,6 +252,12 @@ let areaapp = new Vue({
         'addOrUpdateForm.area.name'(val) {
             if(val){
                 this.addOrUpdateForm.area.code = pinyin.getFullChars(val);
+            }
+        },
+        'addOrUpdateForm.areaFormVisible'(val) {
+            let that = this;
+            if(!val && that.addOrUpdateForm.area.id != null){
+                that.areaData = treeUtil.updateTreeNodeDisable(that.areaData, that.addOrUpdateForm.area.id, false);
             }
         }
     }
