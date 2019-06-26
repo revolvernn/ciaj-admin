@@ -394,7 +394,7 @@ let myTableT = Vue.extend({
         '   <template slot-scope="props">',
         '       <el-form label-position="left" inline class="my-table-expand">',
         '           <el-form-item :label="item.label"  v-for="item in columns" v-if="item.label!==\'操作\'">',
-        '           <span v-if="item.date">：{{ getDateFormat(scope.row,item.name,item.date)}}</span>',
+        '           <span v-if="item.date">：{{ getDateFormat(props.row,item.name,item.date)}}</span>',
         '           <span v-else-if="item.dict">：{{ getDictLabel(item.dict,props.row,item.name)}}</span>',
         '           <span v-else-if="item.image" v-html="getImage(props.row,item.name)"></span>',
         '           <span v-else-if="item.icon" v-html="getIcon(props.row,item.name)"></span>',
