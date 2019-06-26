@@ -1,18 +1,38 @@
 <!DOCTYPE html >
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <!-- import CSS -->
-    <link rel="stylesheet" href="/statics/css/main.css">
-    <!---->
-    <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
+    <head th:include="header"/>
     <script src="/statics/js/libs/echarts-4.2.1/echarts.min.js"></script>
-    <script src="/statics/js/common.js"></script>
 </head>
 <body>
+
+<div id="mainapp" v-cloak>
+    <el-card :body-style="{ padding: '0px' }">
+        <div style="height: 300px;padding: 20px 0px 20px 10px;">
+            <el-steps direction="vertical" space="30%">
+                <el-step title="项目介绍" description="采用java开发的后台基础管理系统，包含基础模块：用户，角色，权限，组织，字典，配置，OSS存储，操作日志，swagger 接口"></el-step>
+                <el-step title="后台框架介绍" description="采用：Springboot2+、MyBatis、Shiro 框架，Redis 缓存，Mysql数据库，提供了代码生成器：po，dto，vo，mapper，service，impl，mvc，html...，因重写了tk生成模板：tk.mybatis.mapper.generator.MyTemplateFilePlugin，
+ 生成代码前用 test/resources/lib/mapper-4.0.0.jar 替换maven本地下载的：.m2\repository\tk\mybatis\mapper\4.0.0\mapper-4.0.0.jar"></el-step>
+                <el-step title="前台框架介绍" description="采用：vue.js、jquery.js、element-ui、echarts..."></el-step>
+                <el-step title="github 地址" description="https://github.com/revolvernn/ciaj-admin"></a></el-step>
+            </el-steps>
+        </div>
+    </el-card>
+</div>
 <div id="main" class="grid-content bg-purple-dark" style="height: 400px;margin-top: 20px;"></div>
 </body>
 <script type="text/javascript">
+    var mainapp = new Vue({
+        el: '#mainapp',
+        data() {
+            return {}
+        },
+        created: function () {
+        },
+        methods: {
+        }
+    });
     let option = {};
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById('main'));

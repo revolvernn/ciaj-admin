@@ -45,7 +45,7 @@ let ossapp = new Vue({
                     buttons: [
                         {
                             label: '预览',
-                            icon: 'el-icon-search',
+                            icon: 'el-icon-view',
                             click: this.myRowView,
                             type: 'info'
                         },
