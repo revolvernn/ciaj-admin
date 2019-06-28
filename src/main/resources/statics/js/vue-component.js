@@ -358,6 +358,15 @@ let myTableT = Vue.extend({
             }
             return value;
         },
+        getBtns(btns,row){
+            let that = this;
+            let bs = [];
+            btns.forEach(function (v) {
+                let f = that.checkBtnAuth(v.auth,row);
+                if(f) bs.push(v);
+            })
+            return bs;
+        },
         checkBtnAuth(auth,row) {
             if(row &&  row.version == 0){
                 let isAllAuth =  this.btnsAuth['IS_ALL_AUTH'] || false;
@@ -406,9 +415,21 @@ let myTableT = Vue.extend({
         '<template  v-for="item in columns">',
         '<el-table-column v-if="item.buttons" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">',
         '<template slot-scope="scope">',
-        '<el-button v-for="btn in item.buttons"  @click.native.prevent="btn.click(scope.$index, scope.row) " v-if="checkBtnAuth(btn.auth,scope.row)" :type="btn.type?btn.type:\'text\'" :icon="btn.icon?btn.icon:\'\'" style="margin-bottom: 5px;" size="small" :disabled="btn.disabled">',
+        '   <el-button v-if="getBtns(item.buttons,scope.row).length ==1 "  @click.native.prevent="getBtns(item.buttons,scope.row)[0].click(scope.$index, scope.row) " :type="getBtns(item.buttons,scope.row)[0].type?getBtns(item.buttons,scope.row)[0].type:\'text\'" :icon="getBtns(item.buttons,scope.row)[0].icon?getBtns(item.buttons,scope.row)[0].icon:\'\'" style="margin-bottom: 5px;" size="small" :disabled="getBtns(item.buttons,scope.row)[0].disabled">',
+        '       <template v-if="getBtns(item.buttons,scope.row)[0].label">{{getBtns(item.buttons,scope.row)[0].label}}</template>',
+        '   </el-button>',
+        '   <el-dropdown   v-if="getBtns(item.buttons,scope.row).length>1" :split-button="getBtns(item.buttons,scope.row).length >1" size="medium">',
+        '       <el-button   @click.native.prevent="getBtns(item.buttons,scope.row)[0].click(scope.$index, scope.row) " :type="getBtns(item.buttons,scope.row)[0].type?getBtns(item.buttons,scope.row)[0].type:\'text\'" :icon="getBtns(item.buttons,scope.row)[0].icon?getBtns(item.buttons,scope.row)[0].icon:\'\'" style="margin-bottom: 5px;" size="small" :disabled="getBtns(item.buttons,scope.row)[0].disabled">',
+        '           <template v-if="getBtns(item.buttons,scope.row)[0].label">{{getBtns(item.buttons,scope.row)[0].label}}</template>',
+        '       </el-button>',
+        '       <el-dropdown-menu slot="dropdown">',
+        '           <el-dropdown-item  v-for="(btn,btnIndex) in getBtns(item.buttons,scope.row)" v-if=" btnIndex>0">',
+        '<el-button   @click.native.prevent="btn.click(scope.$index, scope.row) " :type="btn.type?btn.type:\'text\'" :icon="btn.icon?btn.icon:\'\'" style="margin-bottom: 5px;" size="small" :disabled="btn.disabled">',
         '<template v-if="btn.label">{{btn.label}}</template>',
         '</el-button>',
+        '           </el-dropdown-item>',
+        '       </el-dropdown-menu>',
+        '   </el-dropdown>',
         '</template>',
         '</el-table-column>',
         '<el-table-column v-else-if="item.dict" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width"  :fixed="item.fixed">',
@@ -436,7 +457,7 @@ let myTableT = Vue.extend({
         '</el-table-column>',
         '</template>',
         '</el-table>',
-        '<my-pagination v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange" :page="page">',
+        '<my-pagination v-if="page.pageEnabled && page.totalPage > 1 " v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange" :page="page">',
         '</my-pagination>',
         '</div>',
     ].join('')

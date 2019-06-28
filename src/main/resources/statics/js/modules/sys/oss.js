@@ -41,7 +41,8 @@ let ossapp = new Vue({
                 },
                 {
                     label: '操作',
-                    width: '200px',
+                    fixed: 'right',
+                    width: '180px',
                     buttons: [
                         {
                             label: '预览',

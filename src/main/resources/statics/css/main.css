@@ -49,6 +49,10 @@ body{
     width: 100%;
 }
 
+.el-table .el-dropdown button{
+    border: none !important;
+}
+
 [v-cloak] {
     display:none !important;
 }

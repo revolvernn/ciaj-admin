@@ -37,7 +37,8 @@ let configapp = new Vue({
                 },
                 {
                     label: '操作',
-                    width: '250px',
+                    fixed: 'right',
+                    width: '180px',
                     buttons: [
                         {
                             auth: 'sys:config:update',

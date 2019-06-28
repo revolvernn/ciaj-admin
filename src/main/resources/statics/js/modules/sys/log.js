@@ -55,19 +55,21 @@ let logapp = new Vue({
                 },
                 {
                     label: '操作',
-                    width: '200px',
+                    fixed: 'right',
+                    width: '180px',
                     buttons: [
+                        {
+                            label: '详情',
+                            icon: 'el-icon-view',
+                            click: this.rowParamsInfo,
+                            type: 'success'
+                        },
                         {
                             auth:'sys:log:delFlag',
                             label: '删除',
                             icon: 'el-icon-delete',
                             click: this.myDel,
                             type: 'danger'
-                        },
-                        {
-                            label: '参数详情',
-                            click: this.rowParamsInfo,
-                            type: 'success'
                         }
                     ]
                 }

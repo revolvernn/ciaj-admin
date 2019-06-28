@@ -75,6 +75,7 @@ let dictapp = new Vue({
                 },
                 {
                     label: '操作',
+                    fixed: 'right',
                     width: '180px',
                     buttons: [
                         {

@@ -74,7 +74,8 @@ let menuapp = new Vue({
                 },
                 {
                     label: '操作',
-                    width:'180px',
+                    fixed: 'right',
+                    width: '180px',
                     buttons: [
                         {
                             auth:'sys:menu:update',

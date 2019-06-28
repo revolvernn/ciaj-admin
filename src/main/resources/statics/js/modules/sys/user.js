@@ -95,7 +95,8 @@ let userapp = new Vue({
                 },
                 {
                     label: '操作',
-                    width: '300px',
+                    fixed: 'right',
+                    width: '180px',
                     buttons: [
                         {
                             auth: 'sys:user:update',
