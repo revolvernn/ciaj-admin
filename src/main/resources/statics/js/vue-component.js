@@ -40,9 +40,9 @@ let myDictSelectT = Vue.extend({
         }
     },
     created (){
+        this.loadData();
     },
     mounted() {
-        this.loadData();
     },
     methods: {
         handleFocus(event) {
