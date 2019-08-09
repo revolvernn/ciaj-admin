@@ -1,5 +1,6 @@
 package com.ciaj.boot;
 
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import lombok.extern.log4j.Log4j2;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -13,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @Description:
  */
 @Log4j2
-@SpringBootApplication
+@SpringBootApplication(exclude = DruidDataSourceAutoConfigure.class)
 //@EnableScheduling
 @MapperScan(basePackages = {"com.ciaj.boot.modules.sys.mapper"})
 public class AdminApplication extends SpringBootServletInitializer {

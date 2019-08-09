@@ -16,30 +16,43 @@ spring:
       max-request-size: 100MB
       enabled: true
   datasource:
-    username: revolver
-    password: revolver
-    url: jdbc:mysql:///boot_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
-    # old com.mysql.jdbc.Driver   new
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    type: com.alibaba.druid.pool.DruidDataSource
-    initialSize: 5
-    minIdle: 5
-    maxActive: 20
-    maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 FROM DUAL
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
-    filters: stat,wall,log4j
-    maxPoolPreparedStatementPerConnectionSize: 20
-    useGlobalDataSourceStat: true
-    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-  #    schema:
-  #      - classpath:department.sql
+    dynamic:
+      druid: #以下是全局默认值，可以全局更改
+        initial-size: 0
+        max-active: 8
+        min-idle: 2
+        max-wait: -1
+        min-evictable-idle-time-millis: 30000
+        max-evictable-idle-time-millis: 30000
+        time-between-eviction-runs-millis: 0
+        validation-query: select 1
+        validation-query-timeout: -1
+        test-on-borrow: false
+        test-on-return: false
+        test-while-idle: true
+        pool-prepared-statements: true
+        max-open-prepared-statements: 100
+        filters: stat,wall
+        share-prepared-statements: true
+      primary: master
+      strict: false
+      datasource:
+        master:
+          url: jdbc:mysql:///boot_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+          username: root
+          password: root
+          # old com.mysql.jdbc.Driver   new
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          druid:
+            initial-size: 5
+        slave:
+          url: jdbc:mysql:///boot_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+          username: root
+          password: root
+          # old com.mysql.jdbc.Driver   new
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          druid:
+            initial-size: 5
   redis:
     database: 5
     host: 127.0.0.1
