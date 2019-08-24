@@ -7,7 +7,7 @@ import ${dtoPo}.${tableClass.shortClassName}Dto;
 import ${servicePackage}.${tableClass.shortClassName}Service;
 import com.ciaj.comm.ResponseEntity;
 import com.ciaj.comm.annotation.OperationLog;
-import com.ciaj.comm.constant.ParamType;
+import com.ciaj.comm.constant.ParamTypeEnum;
 import io.swagger.annotations.*;
 import com.ciaj.comm.annotation.Resubmit;
 import com.ciaj.comm.utils.Page;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @Author: ${author}
  * @Date: ${dateTime?string["yyyy-MM-dd HH:mm:ss"]}
- * @Description: ${description} mvc api TODO
+ * @Description: ${description} mvc api
  */
 @Api(tags = "${mvcDesc}-管理")
 @ResponseBody
@@ -109,7 +109,7 @@ public class ${tableClass.shortClassName}Controller extends AbstractController<$
      *
      * @return
      */
-    @Resubmit(ParamType.url)
+    @Resubmit(ParamTypeEnum.url)
     @ApiOperation("根据ID删除${mvcDesc}")
     @ApiImplicitParam(name = "id", value = "${mvcDesc}ID", required = true, dataType = "string", paramType = "path")
     @OperationLog(operation = "${mvcDesc}-管理", content = "根据ID删除${mvcDesc}")

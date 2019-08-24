@@ -63,7 +63,7 @@ public class MybatisRedisCache implements Cache {
 	public void putObject(Object key, Object value) {
 		try {
 			//处理随机排序查询不进缓存
-			if (PageUtils.isRandOrderBy()) return;
+			if (PageUtils.isRandOrderBy() || value == null) return;
 			//
 			RedisTemplate redisTemplate = getRedisTemplate();
 			ValueOperations opsForValue = redisTemplate.opsForValue();

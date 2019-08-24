@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <Target>System.out</Target>
+        <encoder>
+            <pattern>>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] [%file:%line] - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="R" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <!--and http://logback.qos.ch/manual/appenders.html#TimeBasedRollingPolicy-->
+        <Append>true</Append>
+        <File>./logs/admin-etl/stdout.log</File>
+        <encoder charset="UTF-8">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] [%file:%line] - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./logs/admin-etl/stdout.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <!--日志文件最大的大小-->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>     
+        </triggeringPolicy>
+    </appender>
+    <appender name="D" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Append>true</Append>
+        <File>./logs/stderr.log</File>
+        <encoder charset="UTF-8">
+            <pattern> %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] [%file:%line] - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./logs/admin-etl/stderr.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <!--日志文件最大的大小-->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>     
+        </triggeringPolicy>
+    </appender>
+    <appender name="mybatis" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Append>true</Append>
+        <File>./logs/admin-etl/mybatis-sql.log</File>
+        <encoder charset="UTF-8">
+            <pattern> %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] [%file:%line] - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./logs/admin-etl/mybatis.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <!--<logger name="org" level="info"/>-->
+    <!--<logger name="com" level="info"/>-->
+    <logger name="com.ciaj.boot.modules" level="DEBUG" />
+    <root level="info">
+        <appender-ref ref="stdout"/>
+        <appender-ref ref="R"/>
+        <appender-ref ref="D"/>
+        <!--<appender-ref ref="mybatis"/>-->
+    </root>
+</configuration>

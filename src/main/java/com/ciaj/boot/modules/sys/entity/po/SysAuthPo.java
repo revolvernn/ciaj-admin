@@ -1,6 +1,8 @@
 package com.ciaj.boot.modules.sys.entity.po;
 
 import com.ciaj.base.BaseEntity;
+import lombok.Data;
+
 import java.util.*;
 import java.lang.*;
 /**
@@ -8,6 +10,7 @@ import java.lang.*;
  * @Date: 2019-05-09 09:17:54
  * @Description: www.ciaj.com gen PO
  */
+@Data
 public class SysAuthPo extends BaseEntity {
     /**
     *
@@ -104,186 +107,4 @@ public class SysAuthPo extends BaseEntity {
     * 注释：版本号0为不可修改，1+可修改 
     */
     private Integer version;
-
-
-    /**
-    * 注释：主键 
-    * @return the value of sys_auth.id
-    */
-    public String getId() {
-         return id;
-    }
-
-    /**
-    * 注释：主键 
-    * @param id the value of sys_auth.id
-    */
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
-    /**
-    * 注释：图片URL 
-    * @return the value of sys_auth.user_id
-    */
-    public String getUserId() {
-         return userId;
-    }
-
-    /**
-    * 注释：图片URL 
-    * @param userId the value of sys_auth.user_id
-    */
-    public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
-    }
-    /**
-    * 注释：密码 
-    * @return the value of sys_auth.password
-    */
-    public String getPassword() {
-         return password;
-    }
-
-    /**
-    * 注释：密码 
-    * @param password the value of sys_auth.password
-    */
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
-    }
-    /**
-    * 注释：密码盐 
-    * @return the value of sys_auth.salt
-    */
-    public String getSalt() {
-         return salt;
-    }
-
-    /**
-    * 注释：密码盐 
-    * @param salt the value of sys_auth.salt
-    */
-    public void setSalt(String salt) {
-        this.salt = salt == null ? null : salt.trim();
-    }
-    /**
-    * 注释：token 
-    * @return the value of sys_auth.token
-    */
-    public String getToken() {
-         return token;
-    }
-
-    /**
-    * 注释：token 
-    * @param token the value of sys_auth.token
-    */
-    public void setToken(String token) {
-        this.token = token == null ? null : token.trim();
-    }
-    /**
-    * 注释：验证方式：pwd/token 
-    * @return the value of sys_auth.type
-    */
-    public String getType() {
-         return type;
-    }
-
-    /**
-    * 注释：验证方式：pwd/token 
-    * @param type the value of sys_auth.type
-    */
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
-    }
-    /**
-    * 注释：创建人 
-    * @return the value of sys_auth.create_at
-    */
-    public String getCreateAt() {
-         return createAt;
-    }
-
-    /**
-    * 注释：创建人 
-    * @param createAt the value of sys_auth.create_at
-    */
-    public void setCreateAt(String createAt) {
-        this.createAt = createAt == null ? null : createAt.trim();
-    }
-    /**
-    * 注释：创建时间 
-    * @return the value of sys_auth.create_time
-    */
-    public Date getCreateTime() {
-         return createTime;
-    }
-
-    /**
-    * 注释：创建时间 
-    * @param createTime the value of sys_auth.create_time
-    */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-    /**
-    * 注释：更新人 
-    * @return the value of sys_auth.update_at
-    */
-    public String getUpdateAt() {
-         return updateAt;
-    }
-
-    /**
-    * 注释：更新人 
-    * @param updateAt the value of sys_auth.update_at
-    */
-    public void setUpdateAt(String updateAt) {
-        this.updateAt = updateAt == null ? null : updateAt.trim();
-    }
-    /**
-    * 注释：更新时间 
-    * @return the value of sys_auth.update_time
-    */
-    public Date getUpdateTime() {
-         return updateTime;
-    }
-
-    /**
-    * 注释：更新时间 
-    * @param updateTime the value of sys_auth.update_time
-    */
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-    /**
-    * 注释：删除标记 
-    * @return the value of sys_auth.del_flag
-    */
-    public String getDelFlag() {
-         return delFlag;
-    }
-
-    /**
-    * 注释：删除标记 
-    * @param delFlag the value of sys_auth.del_flag
-    */
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag == null ? null : delFlag.trim();
-    }
-    /**
-    * 注释：版本号0为不可修改，1+可修改 
-    * @return the value of sys_auth.version
-    */
-    public Integer getVersion() {
-         return version;
-    }
-
-    /**
-    * 注释：版本号0为不可修改，1+可修改 
-    * @param version the value of sys_auth.version
-    */
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 }

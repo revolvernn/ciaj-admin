@@ -1,12 +1,11 @@
-server:
-  tomcat:
-    uri-encoding: UTF-8
-    max-threads: 1000
-    min-spare-threads: 30
-  port: 1211
-  servlet:
-    context-path: /
 spring:
+  profiles:
+    active: dev
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -15,56 +14,7 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
       enabled: true
-  datasource:
-    dynamic:
-      druid: #以下是全局默认值，可以全局更改
-        initial-size: 0
-        max-active: 8
-        min-idle: 2
-        max-wait: -1
-        min-evictable-idle-time-millis: 30000
-        max-evictable-idle-time-millis: 30000
-        time-between-eviction-runs-millis: 0
-        validation-query: select 1
-        validation-query-timeout: -1
-        test-on-borrow: false
-        test-on-return: false
-        test-while-idle: true
-        pool-prepared-statements: true
-        max-open-prepared-statements: 100
-        filters: stat,wall
-        share-prepared-statements: true
-      primary: master
-      strict: false
-      datasource:
-        master:
-          url: jdbc:mysql:///boot_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
-          username: root
-          password: root
-          # old com.mysql.jdbc.Driver   new
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          druid:
-            initial-size: 5
-        slave:
-          url: jdbc:mysql:///boot_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
-          username: root
-          password: root
-          # old com.mysql.jdbc.Driver   new
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          druid:
-            initial-size: 5
-  redis:
-    database: 5
-    host: 127.0.0.1
-    port: 6379
-    password:      # 密码（默认为空）
-    timeout: 6000ms  # 连接超时时长（毫秒）
-    jedis:
-      pool:
-        max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
-        max-wait: -1ms      # 连接池最大阻塞等待时间（使用负值表示没有限制）
-        max-idle: 10      # 连接池中的最大空闲连接
-        min-idle: 5
+
   thymeleaf:
     suffix: .html
     encoding: UTF-8
@@ -81,7 +31,7 @@ mybatis:
   mapper-locations: classpath:mapping/**/*.xml
   type-aliases-package: com.ciaj.boot.modules.*.entity
   configuration:
-    cache-enabled: true
+    cache-enabled: false
 
 mapper:
   mappers:
@@ -93,12 +43,15 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
-logging:
-  file: /var/logs/ciaj-admin.log
-  level: {org: error,com.ciaj: debug}
-  pattern:
-    console: ${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}
+#logging:
+#  file: /home/ec2-user/logs/ciaj-admin.log
+#  level: {com.ciaj: info}
+#  pattern:
+#    console: ${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}
 
+
+log:
+  isInsert: false
 shiro:
   hash-algorithm-name: md5
   hash-iterations: 1024
@@ -107,11 +60,8 @@ swagger:
   title: RESTful APIs
   description: RESTful 接口文档
   name: Ciaj.
-  url: www.miwzn.com
+  url: www.com
   email: 595009116@qq.com
   version: 1.0.1
-
-executor:
-  corePoolSize: 20
-  maxPoolSize: 200
-  queueCapacity: 10
+logging:
+  config: classpath:logback-spring.xml

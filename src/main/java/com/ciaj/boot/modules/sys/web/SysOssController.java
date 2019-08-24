@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * @Author: Ciaj.
  * @Date: 2019-04-12 16:35:33
- * @Description: www.ciaj.com mvc api TODO
+ * @Description: www.ciaj.com mvc api
  */
 @Api(tags = "系统OSS-管理")
 @ResponseBody
@@ -77,6 +77,7 @@ public class SysOssController extends AbstractController<SysOssPo, SysOssDto, Sy
 			for (SysConfigPo sysConfig : select) {
 				sysConfig.setStatus(config.getStatus());
 				sysConfig.setConfigValue(new Gson().toJson(config));
+				sysConfigService.insertOrUpdatePre(sysConfig,UPDATE);
 				sysConfigService.updateByPrimaryKey(sysConfig);
 			}
 		} else {
@@ -84,6 +85,7 @@ public class SysOssController extends AbstractController<SysOssPo, SysOssDto, Sy
 			entity.setConfigKey(DefaultConfigConstant.CLOUD_STORAGE_CONFIG_KEY);
 			entity.setStatus(config.getStatus());
 			entity.setConfigValue(new Gson().toJson(config));
+			sysConfigService.insertOrUpdatePre(entity,INSERT);
 			sysConfigService.insert(entity);
 		}
 		return ResponseEntity.success("保存成功");

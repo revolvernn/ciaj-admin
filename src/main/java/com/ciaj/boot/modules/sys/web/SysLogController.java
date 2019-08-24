@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @Author: Ciaj.
  * @Date: 2019-04-12 16:26:57
- * @Description: www.ciaj.com mvc api TODO
+ * @Description: www.ciaj.com mvc api
  */
 @Api(tags = "系统日志-管理")
 @ResponseBody

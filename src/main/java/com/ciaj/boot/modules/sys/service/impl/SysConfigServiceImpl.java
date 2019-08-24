@@ -1,5 +1,6 @@
 package com.ciaj.boot.modules.sys.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.ciaj.base.AbstractService;
 import com.ciaj.boot.modules.sys.entity.dto.SysConfigDto;
 import com.ciaj.boot.modules.sys.entity.po.SysConfigPo;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
  * @Description: www.ciaj.com service  实现
  */
 @Service
+@DS("mydb")
 public class SysConfigServiceImpl extends AbstractService<SysConfigPo, SysConfigDto, SysConfigVo> implements SysConfigService {
 
 

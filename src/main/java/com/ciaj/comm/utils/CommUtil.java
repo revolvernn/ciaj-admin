@@ -20,7 +20,6 @@ public class CommUtil {
         try {
             return (ShiroUser) SecurityUtils.getSubject().getSession().getAttribute(DefaultConstant.LOGIN_USER);
         } catch (InvalidSessionException e) {
-            logger.error(e.getMessage(), e);
         }
         return null;
     }

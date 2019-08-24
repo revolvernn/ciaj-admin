@@ -8,12 +8,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +38,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
         objectMapper.setDateFormat(new DateFormatExtend());
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
+        List<MediaType> list = new ArrayList<>();
+        list.add(MediaType.APPLICATION_JSON_UTF8);
+        jackson2HttpMessageConverter.setSupportedMediaTypes(list);
 
         converters.add(0, jackson2HttpMessageConverter);
     }

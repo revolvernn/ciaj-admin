@@ -22,7 +22,7 @@ public class ResubmitRequestWrapper extends HttpServletRequestWrapper {
 		try {
 			InputStream inputStream = request.getInputStream();
 			if (inputStream != null) {
-				bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+				bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
 				char[] charBuffer = new char[128];
 				int bytesRead = -1;
 				while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
@@ -50,7 +50,7 @@ public class ResubmitRequestWrapper extends HttpServletRequestWrapper {
 
 	@Override
 	public ServletInputStream getInputStream() throws IOException {
-		final ByteArrayInputStream bais = new ByteArrayInputStream(body.getBytes());
+		final ByteArrayInputStream bais = new ByteArrayInputStream(body.getBytes("UTF-8"));
 		return new ServletInputStream() {
 			@Override
 			public boolean isFinished() {

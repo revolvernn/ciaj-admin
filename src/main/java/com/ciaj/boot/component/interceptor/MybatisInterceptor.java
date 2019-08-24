@@ -19,42 +19,42 @@ import java.util.Properties;
  * @Description:
  */
 @Intercepts({
-        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
-        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),
-        @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),
+		@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
+		@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),
+		@Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),
 })
 @Component
 @Log4j2
 public class MybatisInterceptor implements Interceptor {
 
-    @Override
-    public Object intercept(Invocation invocation) throws Throwable {
-        Object target = invocation.getTarget();
-        Object result = null;
-        // 拦截sql
-        Object[] args = invocation.getArgs();
-        MappedStatement statement = (MappedStatement) args[0];
-        Object parameterObject = args[1];
-        BoundSql boundSql = statement.getBoundSql(parameterObject);
-        String sql = boundSql.getSql();
-        log.info("MybatisInterceptor sql Log sql：{}，param：{}",sql,JSONUtils.obj2json(parameterObject));
+	@Override
+	public Object intercept(Invocation invocation) throws Throwable {
+//		Object target = invocation.getTarget();
+//		Object result = null;
+//		// 拦截sql
+//		Object[] args = invocation.getArgs();
+//		MappedStatement statement = (MappedStatement) args[0];
+//		Object parameterObject = args[1];
+//		BoundSql boundSql = statement.getBoundSql(parameterObject);
+//		String sql = boundSql.getSql();
+//		//log.info("MybatisInterceptor sql Log sql：{}，param：{}", sql, JSONUtils.obj2json(parameterObject));
+//
+//		if (target instanceof Executor) {
+//			long start = System.currentTimeMillis();
+//			result = invocation.proceed();
+//			long end = System.currentTimeMillis();
+//			log.info("MybatisInterceptor sql TimerInterceptor execute [{}] cost [{}] ms", invocation.getMethod().getName(), (end - start));
+//		}
+		return invocation.proceed();
+	}
 
-        if (target instanceof Executor) {
-             long start = System.currentTimeMillis();
-            result = invocation.proceed();
-            long end = System.currentTimeMillis();
-            log.info("MybatisInterceptor sql TimerInterceptor execute [{}] cost [{}] ms",invocation.getMethod().getName(),(end - start));
-        }
-        return result;
-    }
+	@Override
+	public Object plugin(Object o) {
+		return Plugin.wrap(o, this);
+	}
 
-    @Override
-    public Object plugin(Object o) {
-        return Plugin.wrap(o, this);
-    }
+	@Override
+	public void setProperties(Properties properties) {
 
-    @Override
-    public void setProperties(Properties properties) {
-
-    }
+	}
 }

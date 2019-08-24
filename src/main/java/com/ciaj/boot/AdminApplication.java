@@ -6,7 +6,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * @Author: Ciaj.
@@ -16,7 +16,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Log4j2
 @SpringBootApplication(exclude = DruidDataSourceAutoConfigure.class)
 //@EnableScheduling
-@MapperScan(basePackages = {"com.ciaj.boot.modules.sys.mapper"})
+@MapperScan(basePackages = {"com.ciaj.boot.modules.*.mapper"})
+@EnableAsync
 public class AdminApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

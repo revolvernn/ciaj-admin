@@ -1,5 +1,6 @@
 package com.ciaj.boot.modules.sys.web;
 
+import com.ciaj.base.AbstractBase;
 import com.ciaj.base.TokenEntity;
 import com.ciaj.boot.component.config.shiro.ShiroUser;
 import com.ciaj.boot.component.service.ShiroService;
@@ -175,11 +176,13 @@ public class CommController {
 
 		sysUser.setUsername(sysUser.getAccount());
 		sysUser.setNickname(sysUser.getAccount());
+		sysUserService.insertOrUpdatePre(sysUser, AbstractBase.INSERT);
 		sysUserService.insert(sysUser);
 
 		SysAuthPo sysAuth = new SysAuthPo();
 		sysAuth.setPassword(p.getPassword());
 		sysAuth.setSalt(p.getSalt());
+		sysAuthService.insertOrUpdatePre(sysAuth, AbstractBase.INSERT);
 		sysAuthService.insert(sysAuth);
 		return ResponseEntity.success("注册成功");
 	}
@@ -224,12 +227,14 @@ public class CommController {
 		BeanUtils.copyProperties(entity, user);
 		String password = user.getMobile().substring(entity.getMobile().length() - 6);
 		final PasswordEntity p = PasswordUtil.getPassword(password);
+		sysUserService.insertOrUpdatePre(user, AbstractBase.INSERT);
 		sysUserService.insert(user);
 
 		SysAuthPo sysAuth = new SysAuthPo();
 		sysAuth.setUserId(user.getId());
 		sysAuth.setPassword(p.getPassword());
 		sysAuth.setSalt(p.getSalt());
+		sysAuthService.insertOrUpdatePre(sysAuth, AbstractBase.INSERT);
 		sysAuthService.insert(sysAuth);
 
 		return ResponseEntity.success("添加成功").put(entity);
@@ -298,6 +303,7 @@ public class CommController {
 		auth.setId(sysAuth.getId());
 		auth.setPassword(password2.getPassword());
 		auth.setSalt(password2.getSalt());
+		sysAuthService.insertOrUpdatePre(sysAuth, AbstractBase.UPDATE);
 		sysAuthService.updateByPrimaryKeySelective(auth);
 		return ResponseEntity.success();
 	}
@@ -332,6 +338,7 @@ public class CommController {
 		auth.setId(sysAuth.getId());
 		auth.setPassword(password.getPassword());
 		auth.setSalt(password.getSalt());
+		sysAuthService.insertOrUpdatePre(auth, AbstractBase.UPDATE);
 		sysAuthService.updateByPrimaryKeySelectiveAndVersion(auth, sysAuth.getVersion());
 		return ResponseEntity.success();
 	}

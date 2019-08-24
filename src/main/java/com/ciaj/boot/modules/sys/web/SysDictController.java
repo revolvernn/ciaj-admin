@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * @Author: Ciaj.
  * @Date: 2019-04-12 16:17:42
- * @Description: www.ciaj.com mvc api TODO
+ * @Description: www.ciaj.com mvc api
  */
 @Api(tags = "系统字典-管理")
 @ResponseBody

@@ -99,7 +99,6 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 	//*************************insert***************************************
 	@Transactional(rollbackFor = Exception.class)
 	public int insert(PO record) {
-		insertOrUpdatePre(record, INSERT);
 		return mapper.insert(record);
 	}
 
@@ -116,11 +115,9 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 
 
 	@Transactional(rollbackFor = Exception.class)
-	public int insertDtos(List<DTO> dtos) {
+	public int insertPOs(List<PO> pos) {
 		int i = 0;
-		for (DTO dto : dtos) {
-			PO po = dtoToPo(dto);
-			insertOrUpdatePre(po, INSERT);
+		for (PO po : pos) {
 			int insert = mapper.insert(po);
 			i += insert;
 		}
@@ -138,7 +135,6 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 	}
 
 	public int insertSelective(PO record) {
-		insertOrUpdatePre(record, INSERT);
 		return mapper.insertSelective(record);
 	}
 
@@ -147,13 +143,11 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 
 	@Transactional(rollbackFor = Exception.class)
 	public int updateByPrimaryKey(PO record) {
-		insertOrUpdatePre(record, UPDATE);
 		return mapper.updateByPrimaryKey(record);
 	}
 
 	@Transactional(rollbackFor = Exception.class)
 	public int updateByPrimaryKeyAndVersion(PO record, int oldVersion) {
-		insertOrUpdatePre(record, UPDATE);
 		int i = mapper.updateByPrimaryKeyAndVersion(record, oldVersion);
 		if (i == 0) throw new BsRException("更新失败，数据被占用或数据不存在");
 		return i;
@@ -161,7 +155,6 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 
 	@Transactional(rollbackFor = Exception.class)
 	public int updateByPrimaryKeySelective(PO record) {
-		insertOrUpdatePre(record, UPDATE);
 		int i = mapper.updateByPrimaryKeySelective(record);
 		if (i == 0) throw new BsRException("更新失败，数据被占用或数据不存在");
 		return i;
@@ -169,7 +162,6 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 
 	@Transactional(rollbackFor = Exception.class)
 	public int updateByPrimaryKeySelectiveAndVersion(PO record, int oldVersion) {
-		insertOrUpdatePre(record, UPDATE);
 		int i = mapper.updateByPrimaryKeySelectiveAndVersion(record, oldVersion);
 		if (i == 0) throw new BsRException("更新失败，数据被占用或数据不存在");
 		return i;

@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * @Author: Ciaj.
  * @Date: 2019-04-12 16:41:56
- * @Description: www.ciaj.com mvc api TODO
+ * @Description: www.ciaj.com mvc api
  */
 @Api(tags = "系统权限-管理")
 @ResponseBody
@@ -138,6 +138,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 	@DeleteMapping("/delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
 		SysRolePermissionRelPo query = new SysRolePermissionRelPo();
+		query.setPermissionId(id);
 		List<SysRolePermissionRelPo> select = sysRolePermissionRelService.select(query);
 		if (CollectionUtil.isNotEmpty(select)) {
 			throw new BsRException("权限已绑定角色，不能删除。");

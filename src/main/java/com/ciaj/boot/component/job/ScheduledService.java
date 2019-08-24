@@ -40,6 +40,6 @@ public class ScheduledService {
 		long total = runtime.totalMemory() / mb;
 		long max = runtime.maxMemory() / mb;
 		long free = runtime.freeMemory() / mb;
-		log.info("=====>>>>>最大内存: {}m; 已分配内存: {}m; 已分配内存中的剩余空间: {}m; 最大可用内存: {}m.", max, total, free, max - total + free);
+		log.debug("=====>>>>>最大内存: {}m; 已分配内存: {}m; 已分配内存中的剩余空间: {}m; 最大可用内存: {}m.", max, total, free, max - total + free);
 	}
 }

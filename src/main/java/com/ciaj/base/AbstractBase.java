@@ -22,15 +22,15 @@ import java.util.List;
 @Log4j2
 public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEntity> {
 
-	static final String INSERT = "insert";
-	static final String UPDATE = "update";
-	static final String CREATE_TIME = "createTime";
-	static final String UPATE_TIME = "updateTime";
-	static final String CREATE_AT = "createAt";
-	static final String UPATE_AT = "updateAt";
-	static final String DEL_FLAG = "delFlag";
-	static final String ID = "id";
-	static final String VERSION = "version";
+	public static final String INSERT = "insert";
+	public static final String UPDATE = "update";
+	public static final String CREATE_TIME = "createTime";
+	public static final String UPATE_TIME = "updateTime";
+	public static final String CREATE_AT = "createAt";
+	public static final String UPATE_AT = "updateAt";
+	public static final String DEL_FLAG = "delFlag";
+	public static final String ID = "id";
+	public static final String VERSION = "version";
 
 	protected Class<PO> poClass;    // 当前泛型PO真实类型的Class
 	protected Class<DTO> dtoClass;    // 当前泛型DTO真实类型的Class
@@ -61,9 +61,7 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 			}
 			field.setAccessible(false);
 		} catch (IllegalAccessException e) {
-			log.error(e.getMessage(), e);
 		} catch (NoSuchFieldException e) {
-			log.error(e.getMessage(), e);
 		}
 	}
 
@@ -85,9 +83,7 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 			}
 			field.setAccessible(false);
 		} catch (IllegalAccessException e) {
-			log.error(e.getMessage(), e);
 		} catch (NoSuchFieldException e) {
-			log.error(e.getMessage(), e);
 		}
 	}
 
@@ -361,12 +357,11 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 	 * @param record
 	 * @param opt
 	 */
-	void insertOrUpdatePre(PO record, String opt) {
+	public void insertOrUpdatePre(PO record, String opt) {
 		ShiroUser loginUser = null;
 		try {
 			loginUser = CommUtil.getLoginUser();
 		} catch (Exception e) {
-			log.error("插入或更新前处理时间创建人更新人删除标记获取用户失败", e);
 		}
 		String userId = loginUser != null ? loginUser.getId() : DefaultConstant.SUPER_ADMIN_ID;
 		if (INSERT.equals(opt)) {
@@ -387,14 +382,12 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 	 * @param records
 	 * @param opt
 	 */
-	void insertOrUpdatePre(List<PO> records, String opt) {
+	public void insertOrUpdatePre(List<PO> records, String opt) {
 		if (records == null || records.size() == 0) return;
 		ShiroUser loginUser = null;
 		try {
 			loginUser = CommUtil.getLoginUser();
 		} catch (Exception e) {
-			log.error("插入或更新前处理时间创建人更新人删除标记获取用户失败", e);
-			e.printStackTrace();
 		}
 		String userId = loginUser != null ? loginUser.getId() : DefaultConstant.SUPER_ADMIN_ID;
 		for (PO record : records) {

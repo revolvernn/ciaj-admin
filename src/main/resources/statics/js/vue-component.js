@@ -398,7 +398,7 @@ let myTableT = Vue.extend({
     },
     template: [
         '<div>',
-        '<el-table :default-sort="defaultSort" @sort-change="sortChange"  border stripe size="mini" style="width: 100%" :data="page.list">',
+        '<el-table :default-sort="defaultSort" @sort-change="sortChange"  border stripe size="small" style="width: 100%" :data="page.list">',
         ' <el-table-column type="expand" v-if="page.expand">',
         '   <template slot-scope="props">',
         '       <el-form label-position="left" inline class="my-table-expand">',

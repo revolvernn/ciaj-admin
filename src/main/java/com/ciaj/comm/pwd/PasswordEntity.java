@@ -1,10 +1,15 @@
 package com.ciaj.comm.pwd;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 /**
  * @Author: Ciaj.
  * @Date: 2018/6/19 12:37
  * @Description: 密码
  */
+@Data
+@AllArgsConstructor
 public class PasswordEntity {
 	/**
 	 * 密码
@@ -15,27 +20,5 @@ public class PasswordEntity {
 	 */
 	private String salt;
 
-	public PasswordEntity() {
-	}
-
-	public PasswordEntity(String password, String salt) {
-		this.password = password;
-		this.salt = salt;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getSalt() {
-		return salt;
-	}
-
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
+	public PasswordEntity(){}
 }

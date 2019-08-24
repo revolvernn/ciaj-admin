@@ -5,6 +5,7 @@ import com.ciaj.comm.validate.AliyunGroup;
 import com.ciaj.comm.validate.LocalGroup;
 import com.ciaj.comm.validate.QcloudGroup;
 import com.ciaj.comm.validate.QiniuGroup;
+import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotBlank;
@@ -17,6 +18,7 @@ import java.io.Serializable;
  * @Date: 2019/2/20 15:21
  * @Description:
  */
+@Data
 public class CloudStorageConfig implements Serializable {
 	private static final long serialVersionUID = 3492572823723502561L;
 
@@ -119,213 +121,11 @@ public class CloudStorageConfig implements Serializable {
 	@NotBlank(message = "腾讯云所属地区不能为空", groups = QcloudGroup.class)
 	private String qcloudRegion;
 
-
-	public String getLocalFilePrefix() {
-		return localFilePrefix == null ? "" : localFilePrefix.trim();
-	}
-
-	public void setLocalFilePrefix(String localFilePrefix) {
-		this.localFilePrefix = localFilePrefix;
-	}
-
-	public String getLocalFilePath() {
-		return localFilePath;
-	}
-
-	public void setLocalFilePath(String localFilePath) {
-		this.localFilePath = localFilePath;
-	}
-
-	public String getLocalFileMapping() {
-		return localFileMapping;
-	}
-
-	public void setLocalFileMapping(String localFileMapping) {
-		this.localFileMapping = localFileMapping;
-	}
-
 	public Boolean isFileCompress() {
 		return "true".equalsIgnoreCase(fileCompress) ? true : false;
 	}
 
-
 	public Float getFloatQuality() {
 		return Float.parseFloat(fileQuality);
-	}
-
-	public String getFileCompress() {
-		return fileCompress;
-	}
-
-	public void setFileCompress(String fileCompress) {
-		this.fileCompress = fileCompress;
-	}
-
-	public String getFileQuality() {
-		return fileQuality;
-	}
-
-	public void setFileQuality(String fileQuality) {
-		this.fileQuality = fileQuality;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public String getQiniuDomain() {
-		return qiniuDomain;
-	}
-
-	public void setQiniuDomain(String qiniuDomain) {
-		this.qiniuDomain = qiniuDomain;
-	}
-
-	public String getQiniuAccessKey() {
-		return qiniuAccessKey;
-	}
-
-	public void setQiniuAccessKey(String qiniuAccessKey) {
-		this.qiniuAccessKey = qiniuAccessKey;
-	}
-
-	public String getQiniuSecretKey() {
-		return qiniuSecretKey;
-	}
-
-	public void setQiniuSecretKey(String qiniuSecretKey) {
-		this.qiniuSecretKey = qiniuSecretKey;
-	}
-
-	public String getQiniuBucketName() {
-		return qiniuBucketName;
-	}
-
-	public void setQiniuBucketName(String qiniuBucketName) {
-		this.qiniuBucketName = qiniuBucketName;
-	}
-
-	public String getQiniuPrefix() {
-		return qiniuPrefix;
-	}
-
-	public void setQiniuPrefix(String qiniuPrefix) {
-		this.qiniuPrefix = qiniuPrefix;
-	}
-
-	public String getAliyunDomain() {
-		return aliyunDomain;
-	}
-
-	public void setAliyunDomain(String aliyunDomain) {
-		this.aliyunDomain = aliyunDomain;
-	}
-
-	public String getAliyunPrefix() {
-		return aliyunPrefix;
-	}
-
-	public void setAliyunPrefix(String aliyunPrefix) {
-		this.aliyunPrefix = aliyunPrefix;
-	}
-
-	public String getAliyunEndPoint() {
-		return aliyunEndPoint;
-	}
-
-	public void setAliyunEndPoint(String aliyunEndPoint) {
-		this.aliyunEndPoint = aliyunEndPoint;
-	}
-
-	public String getAliyunAccessKeyId() {
-		return aliyunAccessKeyId;
-	}
-
-	public void setAliyunAccessKeyId(String aliyunAccessKeyId) {
-		this.aliyunAccessKeyId = aliyunAccessKeyId;
-	}
-
-	public String getAliyunAccessKeySecret() {
-		return aliyunAccessKeySecret;
-	}
-
-	public void setAliyunAccessKeySecret(String aliyunAccessKeySecret) {
-		this.aliyunAccessKeySecret = aliyunAccessKeySecret;
-	}
-
-	public String getAliyunBucketName() {
-		return aliyunBucketName;
-	}
-
-	public void setAliyunBucketName(String aliyunBucketName) {
-		this.aliyunBucketName = aliyunBucketName;
-	}
-
-	public String getQcloudDomain() {
-		return qcloudDomain;
-	}
-
-	public void setQcloudDomain(String qcloudDomain) {
-		this.qcloudDomain = qcloudDomain;
-	}
-
-	public String getQcloudPrefix() {
-		return qcloudPrefix;
-	}
-
-	public void setQcloudPrefix(String qcloudPrefix) {
-		this.qcloudPrefix = qcloudPrefix;
-	}
-
-	public Integer getQcloudAppId() {
-		return qcloudAppId;
-	}
-
-	public void setQcloudAppId(Integer qcloudAppId) {
-		this.qcloudAppId = qcloudAppId;
-	}
-
-	public String getQcloudSecretId() {
-		return qcloudSecretId;
-	}
-
-	public void setQcloudSecretId(String qcloudSecretId) {
-		this.qcloudSecretId = qcloudSecretId;
-	}
-
-	public String getQcloudSecretKey() {
-		return qcloudSecretKey;
-	}
-
-	public void setQcloudSecretKey(String qcloudSecretKey) {
-		this.qcloudSecretKey = qcloudSecretKey;
-	}
-
-	public String getQcloudBucketName() {
-		return qcloudBucketName;
-	}
-
-	public void setQcloudBucketName(String qcloudBucketName) {
-		this.qcloudBucketName = qcloudBucketName;
-	}
-
-	public String getQcloudRegion() {
-		return qcloudRegion;
-	}
-
-	public void setQcloudRegion(String qcloudRegion) {
-		this.qcloudRegion = qcloudRegion;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 }

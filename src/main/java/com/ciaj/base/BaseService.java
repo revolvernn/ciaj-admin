@@ -11,7 +11,8 @@ import java.util.List;
  * @Description:
  */
 public interface BaseService<PO, DTO extends BaseEntity, VO extends VOEntity> extends Mapper<PO, DTO, VO> {
-
+	void insertOrUpdatePre(PO record, String opt);
+	void insertOrUpdatePre(List<PO> records, String opt);
 	/**
 	 * T TO D
 	 *
@@ -53,10 +54,10 @@ public interface BaseService<PO, DTO extends BaseEntity, VO extends VOEntity> ex
 
 	/**
 	 *
-	 * @param dtos DTO
+	 * @param pos PO
 	 * @return int
 	 */
-	int insertDtos(List<DTO> dtos);
+	int insertPOs(List<PO> pos);
 
 	/**
 	 * 返回DTO

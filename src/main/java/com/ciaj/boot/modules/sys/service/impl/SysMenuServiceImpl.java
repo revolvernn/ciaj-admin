@@ -1,5 +1,6 @@
 package com.ciaj.boot.modules.sys.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.ciaj.base.AbstractService;
 import com.ciaj.boot.component.config.shiro.ShiroUser;
 import com.ciaj.boot.modules.sys.entity.dto.SysMenuDto;
@@ -24,6 +25,7 @@ import java.util.Set;
  * @Description: www.ciaj.com service  实现
  */
 @Service
+@DS("mydb")
 public class SysMenuServiceImpl extends AbstractService<SysMenuPo, SysMenuDto, SysMenuVo> implements SysMenuService {
 
     @Autowired

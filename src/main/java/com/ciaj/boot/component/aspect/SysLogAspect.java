@@ -1,6 +1,7 @@
 package com.ciaj.boot.component.aspect;
 
 import com.alibaba.fastjson.JSON;
+import com.ciaj.base.AbstractBase;
 import com.ciaj.boot.component.config.shiro.ShiroUser;
 import com.ciaj.boot.modules.sys.entity.po.SysLogPo;
 import com.ciaj.boot.modules.sys.service.SysLogService;
@@ -19,6 +20,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -35,6 +37,8 @@ import java.util.List;
 @Log4j2
 public class SysLogAspect {
 
+	@Value("${log.isInsert}")
+	private Boolean isInsert ;
 	@Autowired
 	private SysLogService sysLogService;
 
@@ -107,7 +111,8 @@ public class SysLogAspect {
 				sysLogPo.setUsername(username);
 			} catch (Exception e) {
 			}
-			if (operationLog.isInsert()) {
+			if (operationLog.isInsert() && isInsert) {
+				sysLogService.insertOrUpdatePre(sysLogPo, AbstractBase.INSERT);
 				sysLogService.insert(sysLogPo);
 			}
 			if (log.isDebugEnabled()) {

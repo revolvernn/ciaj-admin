@@ -216,7 +216,7 @@
         <include refid="cust_query_condition_sql"/>
     </select>
 
-    <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.sys.entity.dto.${tableClass.shortClassName}Dto" extends="BaseResultMap">
+    <resultMap id="DTOResultMap" type="${dtoPo}.${tableClass.shortClassName}Dto" extends="BaseResultMap">
     </resultMap>
 
     <select id="selectDTOList" resultMap="DTOResultMap" parameterType="${voQm}.${tableClass.shortClassName}Vo">

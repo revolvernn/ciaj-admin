@@ -96,6 +96,7 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 	public ResponseEntity add(PO t) {
 		//
 		ValidatorUtils.validateEntity(t, AddValidGroup.class);
+		insertOrUpdatePre(t, INSERT);
 		baseService.insert(t);
 
 		return ResponseEntity.success("添加成功");
@@ -110,8 +111,9 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 	public ResponseEntity add(DTO d) {
 		//
 		ValidatorUtils.validateEntity(d, AddValidGroup.class);
-
-		baseService.insertSelective(dtoToPo(d));
+		PO po = dtoToPo(d);
+		insertOrUpdatePre(po, INSERT);
+		baseService.insertSelective(po);
 		return ResponseEntity.success("添加成功");
 	}
 
@@ -122,7 +124,9 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 	 * @return
 	 */
 	public ResponseEntity adds(List<DTO> ds) {
-		baseService.insertDtos(ds);
+		for (DTO d : ds) {
+			add(d);
+		}
 		return ResponseEntity.success("添加成功");
 	}
 
@@ -157,7 +161,7 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 	 */
 	public ResponseEntity update(PO t) {
 		ValidatorUtils.validateEntity(t, UpdateValidGroup.class);
-
+		insertOrUpdatePre(t, UPDATE);
 		baseService.updateByPrimaryKey(t);
 		return ResponseEntity.success("更新成功");
 	}
@@ -174,6 +178,7 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 		if (!checkUpdateOrDeleteDefaultData(oldVersion)) {
 			super.updateFieldByPO(VERSION, oldVersion + 1, t);
 		}
+		insertOrUpdatePre(t, UPDATE);
 		baseService.updateByPrimaryKeySelectiveAndVersion(t, oldVersion);
 		return ResponseEntity.success("更新成功");
 	}
@@ -219,7 +224,7 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 			PO entity = (PO) super.poClass.newInstance();
 			super.insertFieldByPO(ID, id, entity);
 			super.insertFieldByPO(DEL_FLAG, DefaultConstant.FLAG_Y, entity);
-
+			insertOrUpdatePre(entity, UPDATE);
 			baseService.updateByPrimaryKeySelective(entity);
 		} catch (InstantiationException e) {
 			log.error(e.getMessage(), e);
@@ -241,7 +246,6 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 			PO entity = (PO) super.poClass.newInstance();
 			super.updateFieldByPO(ID, id, entity);
 			super.updateFieldByPO(DEL_FLAG, DefaultConstant.FLAG_Y, entity);
-
 			this.updateByVersion(entity, oldVersion);
 		} catch (InstantiationException e) {
 			log.error(e.getMessage(), e);
@@ -286,7 +290,7 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 	}
 
 	/**
-	 * 软删除，
+	 * 物理删除，
 	 *
 	 * @param ids
 	 * @return

@@ -1,5 +1,6 @@
 package com.ciaj.boot.modules.sys.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.ciaj.base.AbstractService;
 import com.ciaj.boot.modules.sys.entity.dto.SysDeptDto;
 import com.ciaj.boot.modules.sys.entity.po.SysAreaPo;
@@ -24,6 +25,7 @@ import java.util.List;
  * @Description: www.ciaj.com service  实现
  */
 @Service
+@DS("mydb")
 public class SysUserServiceImpl extends AbstractService<SysUserPo, SysUserDto, SysUserVo> implements SysUserService {
 
     @Autowired

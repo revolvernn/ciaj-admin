@@ -1,5 +1,6 @@
 package com.ciaj.boot.modules.sys.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.ciaj.base.AbstractService;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.ciaj.boot.modules.sys.entity.dto.SysOssDto;
  * @Description: www.ciaj.com service  实现
  */
 @Service
+@DS("mydb")
 public class SysOssServiceImpl extends AbstractService<SysOssPo, SysOssDto, SysOssVo> implements SysOssService {
 
     @Autowired
