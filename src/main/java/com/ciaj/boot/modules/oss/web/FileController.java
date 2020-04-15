@@ -1,5 +1,6 @@
 package com.ciaj.boot.modules.oss.web;
 
+import com.ciaj.base.AbstractBase;
 import com.ciaj.boot.modules.sys.entity.po.SysOssPo;
 import com.ciaj.boot.modules.sys.service.SysOssService;
 import com.ciaj.boot.modules.oss.cloud.OSSFactory;
@@ -54,6 +55,7 @@ public class FileController {
         ossEntity.setUrl(url);
         ossEntity.setSource(OSSFactory.getType());
         ossEntity.setType(FileTypeUtil.getFileType(url));
+        sysOssService.insertOrUpdatePre(ossEntity, AbstractBase.INSERT);
         sysOssService.insertDTO(ossEntity);
         return ResponseEntity.success("上传成功").put(url);
     }
