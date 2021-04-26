@@ -34,7 +34,7 @@
 
 
         <shiro.version>1.4.0</shiro.version>
-        <comm.io.version>2.5</comm.io.version>
+        <comm.io.version>2.7</comm.io.version>
         <lombok.version>1.18.6</lombok.version>
 
 
