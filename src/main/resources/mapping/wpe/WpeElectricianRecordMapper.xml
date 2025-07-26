@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ciaj.boot.modules.wpe.mapper.WpeElectricianRecordMapper">
+    <!--
+        Author: Ciaj.
+        Date: 2025-07-25 22:28:35
+        Description: www.ciaj.com gen mapper.xml
+    -->
+    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
+
+    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <id column="user_id" property="userId" jdbcType="VARCHAR" />
+        <id column="project_name" property="projectName" jdbcType="VARCHAR" />
+        <id column="addr" property="addr" jdbcType="VARCHAR" />
+        <id column="workday" property="workday" jdbcType="TIMESTAMP" />
+        <id column="work_start" property="workStart" jdbcType="TIMESTAMP" />
+        <id column="work_end" property="workEnd" jdbcType="TIMESTAMP" />
+        <id column="remark" property="remark" jdbcType="VARCHAR" />
+        <id column="status" property="status" jdbcType="CHAR" />
+        <id column="create_at" property="createAt" jdbcType="VARCHAR" />
+        <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
+        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <id column="del_flag" property="delFlag" jdbcType="CHAR" />
+        <id column="version" property="version" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,user_id,project_name,addr,workday,work_start,work_end,remark,status,create_at,create_time,update_at,update_time,del_flag,version
+    </sql>
+    <sql id="Base_Alias_Column_List">
+        m.id,m.user_id,m.project_name,m.addr,m.workday,m.work_start,m.work_end,m.remark,m.status,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
+    </sql>
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM wpe_electrician_record
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <delete id="delete" parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo">
+        DELETE FROM wpe_electrician_record
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null">
+                    AND id = #{id}
+                </if>
+                <if test="userId != null">
+                    AND user_id = #{userId}
+                </if>
+                <if test="projectName != null">
+                    AND project_name = #{projectName}
+                </if>
+                <if test="addr != null">
+                    AND addr = #{addr}
+                </if>
+                <if test="workday != null">
+                    AND workday = #{workday}
+                </if>
+                <if test="workStart != null">
+                    AND work_start = #{workStart}
+                </if>
+                <if test="workEnd != null">
+                    AND work_end = #{workEnd}
+                </if>
+                <if test="remark != null">
+                    AND remark = #{remark}
+                </if>
+                <if test="status != null">
+                    AND status = #{status}
+                </if>
+                <if test="createAt != null">
+                    AND create_at = #{createAt}
+                </if>
+                <if test="createTime != null">
+                    AND create_time = #{createTime}
+                </if>
+                <if test="updateAt != null">
+                    AND update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null">
+                    AND update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null">
+                    AND del_flag = #{delFlag}
+                </if>
+                <if test="version != null">
+                    AND version = #{version}
+                </if>
+            </trim>
+        </where>
+    </delete>
+    <insert id="insert"  parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo">
+        <selectKey keyProperty="id" order="BEFORE"  resultType="String">
+            SELECT REPLACE(uuid(),'-','') FROM DUAL
+        </selectKey>
+        INSERT INTO wpe_electrician_record
+        (id,user_id,project_name,addr,workday,work_start,work_end,remark,status,create_at,create_time,update_at,update_time,del_flag,version)
+        VALUES
+        (#{id,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{projectName,jdbcType=VARCHAR},#{addr,jdbcType=VARCHAR},#{workday,jdbcType=TIMESTAMP},#{workStart,jdbcType=TIMESTAMP},#{workEnd,jdbcType=TIMESTAMP},#{remark,jdbcType=VARCHAR},#{status,jdbcType=CHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo">
+        <selectKey keyProperty="id" order="BEFORE" resultType="String">
+            SELECT REPLACE(UUID(),'-','') FROM DUAL
+        </selectKey>
+        INSERT INTO wpe_electrician_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="projectName != null">
+                project_name,
+            </if>
+            <if test="addr != null">
+                addr,
+            </if>
+            <if test="workday != null">
+                workday,
+            </if>
+            <if test="workStart != null">
+                work_start,
+            </if>
+            <if test="workEnd != null">
+                work_end,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createAt != null">
+                create_at,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateAt != null">
+                update_at,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="projectName != null">
+                #{projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="addr != null">
+                #{addr,jdbcType=VARCHAR},
+            </if>
+            <if test="workday != null">
+                #{workday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="workStart != null">
+                #{workStart,jdbcType=TIMESTAMP},
+            </if>
+            <if test="workEnd != null">
+                #{workEnd,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=CHAR},
+            </if>
+            <if test="createAt != null">
+                #{createAt,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null">
+                #{updateAt,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=CHAR},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey"  parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo">
+        UPDATE wpe_electrician_record
+        <set>
+            user_id = #{userId},
+            project_name = #{projectName},
+            addr = #{addr},
+            workday = #{workday},
+            work_start = #{workStart},
+            work_end = #{workEnd},
+            remark = #{remark},
+            status = #{status},
+            create_at = #{createAt},
+            create_time = #{createTime},
+            update_at = #{updateAt},
+            update_time = #{updateTime},
+            del_flag = #{delFlag},
+            version = #{version},
+        </set>
+         WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyAndVersion">
+        UPDATE wpe_electrician_record
+        <set>
+            user_id = #{record.userId},
+            project_name = #{record.projectName},
+            addr = #{record.addr},
+            workday = #{record.workday},
+            work_start = #{record.workStart},
+            work_end = #{record.workEnd},
+            remark = #{record.remark},
+            status = #{record.status},
+            create_at = #{record.createAt},
+            create_time = #{record.createTime},
+            update_at = #{record.updateAt},
+            update_time = #{record.updateTime},
+            del_flag = #{record.delFlag},
+            version = #{record.version},
+        </set>
+            WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+    </update>
+    <update id="updateByPrimaryKeySelective"  parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo">
+        UPDATE wpe_electrician_record
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="projectName != null">
+                project_name = #{projectName},
+            </if>
+            <if test="addr != null">
+                addr = #{addr},
+            </if>
+            <if test="workday != null">
+                workday = #{workday},
+            </if>
+            <if test="workStart != null">
+                work_start = #{workStart},
+            </if>
+            <if test="workEnd != null">
+                work_end = #{workEnd},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="createAt != null">
+                create_at = #{createAt},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateAt != null">
+                update_at = #{updateAt},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeySelectiveAndVersion">
+        UPDATE wpe_electrician_record
+        <set>
+            <if test="record.userId != null">
+                user_id = #{record.userId},
+            </if>
+            <if test="record.projectName != null">
+                project_name = #{record.projectName},
+            </if>
+            <if test="record.addr != null">
+                addr = #{record.addr},
+            </if>
+            <if test="record.workday != null">
+                workday = #{record.workday},
+            </if>
+            <if test="record.workStart != null">
+                work_start = #{record.workStart},
+            </if>
+            <if test="record.workEnd != null">
+                work_end = #{record.workEnd},
+            </if>
+            <if test="record.remark != null">
+                remark = #{record.remark},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status},
+            </if>
+            <if test="record.createAt != null">
+                create_at = #{record.createAt},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime},
+            </if>
+            <if test="record.updateAt != null">
+                update_at = #{record.updateAt},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime},
+            </if>
+            <if test="record.delFlag != null">
+                del_flag = #{record.delFlag},
+            </if>
+            <if test="record.version != null">
+                version = #{record.version},
+            </if>
+        </set>
+            WHERE id = #{record.id,jdbcType=VARCHAR}  and version = #{oldVersion}
+    </update>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM wpe_electrician_record
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="selectListByKeys" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM wpe_electrician_record
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                and  id in
+                <foreach collection="keys" separator="," open="(" close=")" item="item">
+                    #{item}
+                </foreach>
+            </trim>
+        </where>
+    </select>
+
+    <sql id="base_query_condition_sql">
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null">
+                    AND m.id = #{id}
+                </if>
+                <if test="userId != null">
+                    AND m.user_id = #{userId}
+                </if>
+                <if test="projectName != null">
+                    AND m.project_name = #{projectName}
+                </if>
+                <if test="addr != null">
+                    AND m.addr = #{addr}
+                </if>
+                <if test="workday != null">
+                    AND m.workday = #{workday}
+                </if>
+                <if test="workStart != null">
+                    AND m.work_start = #{workStart}
+                </if>
+                <if test="workEnd != null">
+                    AND m.work_end = #{workEnd}
+                </if>
+                <if test="remark != null">
+                    AND m.remark = #{remark}
+                </if>
+                <if test="status != null">
+                    AND m.status = #{status}
+                </if>
+                <if test="createAt != null">
+                    AND m.create_at = #{createAt}
+                </if>
+                <if test="createTime != null">
+                    AND m.create_time = #{createTime}
+                </if>
+                <if test="updateAt != null">
+                    AND m.update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null">
+                    AND m.update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null">
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="version != null">
+                    AND m.version = #{version}
+                </if>
+            </trim>
+        </where>
+    </sql>
+    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM wpe_electrician_record m
+        <include refid="base_query_condition_sql"/>
+    </select>
+
+    <select id="select" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM wpe_electrician_record m
+        <include refid="base_query_condition_sql"/>
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM wpe_electrician_record m
+        <include refid="base_query_condition_sql"/>
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.wpe.entity.vo.WpeElectricianRecordVo">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>
+        FROM wpe_electrician_record m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+
+    <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.wpe.entity.dto.WpeElectricianRecordDto" extends="BaseResultMap">
+    </resultMap>
+
+    <select id="selectDTOList" resultMap="DTOResultMap" parameterType="com.ciaj.boot.modules.wpe.entity.vo.WpeElectricianRecordVo">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>
+        FROM wpe_electrician_record m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+    <resultMap id="DTOMultiTableResultMap" type="com.ciaj.boot.modules.wpe.entity.dto.WpeElectricianRecordDto" extends="BaseResultMap">
+        <association property="user" javaType="com.ciaj.boot.modules.sys.entity.dto.SysUserDto">
+            <id property="id" column="user_id"/>
+            <result property="username" column="u_username"/>
+            <result property="nickname" column="u_nickname"/>
+        </association>
+    </resultMap>
+    <select id="selectDTOListMultiTable"
+            resultMap="DTOMultiTableResultMap">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>
+        ,u.username as 'u_username'
+        ,u.nickname as 'u_nickname'
+        FROM wpe_electrician_record m
+        LEFT JOIN sys_user u on m.user_id = u.id
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <include refid="query_condition_sql"/>
+                <!--  keyword   -->
+                <if test="keyword != null and keyword != ''">
+                    and (m.project_name like CONCAT('%',#{keyword},'%')
+                    or m.id like CONCAT('%',#{keyword},'%')
+                    or m.addr like CONCAT('%',#{keyword},'%')
+                    or m.remark like CONCAT('%',#{keyword},'%')
+                    or u.username like CONCAT('%',#{keyword},'%')
+                    or u.nickname like CONCAT('%',#{keyword},'%')
+                    or u.dept_names like CONCAT('%',#{keyword},'%')
+                    or u.nickname like CONCAT('%',#{keyword},'%')
+                    or u.mobile like CONCAT('%',#{keyword},'%')
+                    )
+                </if>
+            </trim>
+        </where>
+    </select>
+    <sql id="query_condition_sql">
+        <if test="id != null  and id != ''">
+            AND m.id = #{id}
+        </if>
+        <if test="userId != null  and userId != ''">
+            AND m.user_id = #{userId}
+        </if>
+        <if test="projectName != null  and projectName != ''">
+            AND m.project_name = #{projectName}
+        </if>
+        <if test="addr != null  and addr != ''">
+            AND m.addr = #{addr}
+        </if>
+        <if test="workday != null ">
+            AND m.workday = #{workday}
+        </if>
+        <if test="workStart != null ">
+            AND m.work_start = #{workStart}
+        </if>
+        <if test="workEnd != null ">
+            AND m.work_end = #{workEnd}
+        </if>
+        <if test="remark != null  and remark != ''">
+            AND m.remark = #{remark}
+        </if>
+        <if test="status != null  and status != ''">
+            AND m.status = #{status}
+        </if>
+        <if test="createAt != null  and createAt != ''">
+            AND m.create_at = #{createAt}
+        </if>
+        <if test="createTime != null ">
+            AND m.create_time = #{createTime}
+        </if>
+        <if test="updateAt != null  and updateAt != ''">
+            AND m.update_at = #{updateAt}
+        </if>
+        <if test="updateTime != null ">
+            AND m.update_time = #{updateTime}
+        </if>
+        <if test="delFlag != null  and delFlag != ''">
+            AND m.del_flag = #{delFlag}
+        </if>
+        <if test="version != null ">
+            AND m.version = #{version}
+        </if>
+        <!--  keyword   -->
+        <if test="keyword != null and keyword != ''">
+        </if>
+    </sql>
+    <sql id="cust_query_condition_sql">
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null  and id != ''">
+                    AND m.id = #{id}
+                </if>
+                <if test="userId != null  and userId != ''">
+                    AND m.user_id = #{userId}
+                </if>
+                <if test="projectName != null  and projectName != ''">
+                    AND m.project_name = #{projectName}
+                </if>
+                <if test="addr != null  and addr != ''">
+                    AND m.addr = #{addr}
+                </if>
+                <if test="workday != null ">
+                    AND m.workday = #{workday}
+                </if>
+                <if test="workStart != null ">
+                    AND m.work_start = #{workStart}
+                </if>
+                <if test="workEnd != null ">
+                    AND m.work_end = #{workEnd}
+                </if>
+                <if test="remark != null  and remark != ''">
+                    AND m.remark = #{remark}
+                </if>
+                <if test="status != null  and status != ''">
+                    AND m.status = #{status}
+                </if>
+                <if test="createAt != null  and createAt != ''">
+                    AND m.create_at = #{createAt}
+                </if>
+                <if test="createTime != null ">
+                    AND m.create_time = #{createTime}
+                </if>
+                <if test="updateAt != null  and updateAt != ''">
+                    AND m.update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null ">
+                    AND m.update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null  and delFlag != ''">
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="version != null ">
+                    AND m.version = #{version}
+                </if>
+                <!--  keyword   -->
+                <if test="keyword != null and keyword != ''">
+                </if>
+            </trim>
+        </where>
+    </sql>
+</mapper>
