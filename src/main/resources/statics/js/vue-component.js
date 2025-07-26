@@ -75,12 +75,130 @@ let myDictSelectT = Vue.extend({
         }
     },
     template: [
-        '<el-select value=""  :disabled="disabled" filterable clearable v-model="model" v-on:focus="handleFocus($event)" v-on:handleBlur="handleBlur($event)" v-on:change="emitChange" v-on:input="emitInput"  placeholder="请选择">',
+        '<el-select value="" :disabled="disabled" filterable clearable v-model="model" v-on:focus="handleFocus($event)" v-on:handleBlur="handleBlur($event)" v-on:change="emitChange" v-on:input="emitInput"  placeholder="请选择">',
         '<el-option v-if="isShowIcon"  v-for="item in options" :label="item.name" :disabled="item.disabled" :value="item.code" :key="item.code"">',
             '<span style="float: left">{{ item.name }}</span>',
             '<span style="float: right; color: #8492a6; font-size: 13px"> <i :class="item.code"></i></span>',
         '</el-option>',
         '<el-option  v-else v-for="item in options" :label="item.name" :disabled="item.disabled" :value="item.code" :key="item.code""></el-option>',
+        '</el-select>'
+    ].join('')
+});
+let mySearchSelectT = Vue.extend({
+    name: 'my-search-select',
+    props: {
+        value: '',
+        icon: {default: false},
+        searchUrl: {
+            default: null
+        },
+        searchFieldName: {
+            default: null
+        },
+        labelFieldName: {
+            default: null
+        },
+        rightLabelFieldName: {
+            default: null
+        },
+        labelFieldValue: {
+            default: null
+        },
+        disabled: {
+            default: false
+        },
+        loading: {
+            default: false
+        }
+    },
+    data() {
+        return {
+            isShowIcon: {default: false},
+            model: '',
+            options: []
+        }
+    },
+    created (){
+        this.loadData('');
+    },
+    mounted() {
+    },
+    methods: {
+        handleFocus(event) {
+            this.$emit('focus', event);
+        },
+        handleBlur(event) {
+            this.$emit('blur', event);
+        },
+        emitChange(val) {
+            this.$emit('change', val);
+        },
+        emitInput(val) {
+            this.$emit('input', val);
+        },
+        remoteMethod(query) {
+            let that = this;
+            if (query !== '' && that.searchUrl !== '') {
+                that.loading = true;
+                setTimeout(() => {
+                    that.loading = false;
+                    that.loadData(query);
+                }, 200);
+            } else {
+                that.options = [];
+            }
+        },
+        loadData(query) {
+            let that = this;
+            if (that.searchUrl === undefined || that.searchUrl === '' || that.searchUrl === null ||
+                that.searchFieldName === undefined || that.searchFieldName === '' || that.searchFieldName === null
+            ) {
+                that.options = [];
+                return;
+            }
+            if(that.icon &&  that.icon==='true'){
+                that.isShowIcon = true;
+            }
+            const queryForm = new Map();
+            queryForm.set(that.searchFieldName,query);
+            queryForm.set(that.labelFieldValue,that.model);
+            const queryObj = Object.fromEntries(queryForm);
+            let os = [];
+            httpUtil.syncGet({url: that.searchUrl, data: queryObj}, function (r) {
+                if (r.code == 0) {
+                    os = r.data.list;
+                    os.forEach(function (v, index, arr) {
+                        if (v.locked == 'Y') {
+                            v.disabled = true;
+                        }
+                        v.name = v[that.labelFieldName];
+                        v.code = v[that.labelFieldValue];
+                        v.rightLabelFieldName = '';
+                        if(that.rightLabelFieldName){
+                            v.rightLabelFieldName = v[that.rightLabelFieldName] || '';
+                        }
+
+                    });
+                    that.options = os;
+                }
+            });
+        }
+    },
+    watch: {
+        value(val) {
+            this.model = val;
+        }
+    },
+    template: [
+        '<el-select value="" :loading="loading" :disabled="disabled" remote reserve-keyword filterable clearable v-model="model" v-on:focus="handleFocus($event)" v-on:handleBlur="handleBlur($event)" v-on:change="emitChange" v-on:input="emitInput" :remote-method="remoteMethod"   placeholder="请输入关键词">',
+            '<el-option v-if="isShowIcon"  v-for="item in options" :label="item.name" :disabled="item.disabled" :value="item.code" :key="item.code"">',
+                '<span style="float: left">{{ item.name }}</span>',
+                '<span style="float: right; color: #8492a6; font-size: 13px"> <i :class="item.code"></i></span>',
+            '</el-option>',
+            '<el-option  v-else v-for="item in options" :label="item.name" :disabled="item.disabled" :value="item.code" :key="item.code"">' +
+                '<span style="float: left">{{ item.name }}</span>',
+                '<span style="float: right; color: #8492a6; font-size: 13px"> {{item.rightLabelFieldName}}</span>',
+            '</el-option>',
         '</el-select>'
     ].join('')
 });

@@ -733,6 +733,8 @@
                 <!--  keyword   -->
                 <if test="keyword != null and keyword != ''">
                     and (m.account like CONCAT('%',#{keyword},'%')
+                    or m.id like CONCAT('%',#{keyword},'%')
+                    or m.username like CONCAT('%',#{keyword},'%')
                     or m.nickname like CONCAT('%',#{keyword},'%')
                     or m.dept_names like CONCAT('%',#{keyword},'%')
                     or m.nickname like CONCAT('%',#{keyword},'%')
@@ -753,6 +755,8 @@
                 <!--  keyword   -->
                 <if test="keyword != null and keyword != ''">
                     and (m.account like CONCAT('%',#{keyword},'%')
+                    or m.id like CONCAT('%',#{keyword},'%')
+                    or m.username like CONCAT('%',#{keyword},'%')
                     or m.nickname like CONCAT('%',#{keyword},'%')
                     or m.dept_names like CONCAT('%',#{keyword},'%')
                     or m.nickname like CONCAT('%',#{keyword},'%')

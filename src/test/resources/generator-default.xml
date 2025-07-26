@@ -13,7 +13,7 @@
     <!--配置属性文件-->
     <!--<properties resource="generator-init.properties"/>-->
     <properties
-            url="file:///I:/github-obj/ciaj-admin/src/test/resources/generator-init.properties"/>
+            url="file:///Users/ciaj/Desktop/0719/ciaj-admin/src/test/resources/generator-init-we.properties"/>
     <!-- 在MBG工作的时候，需要额外加载的依赖包
        location属性指明加载jar/zip包的全路径
    <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />

@@ -3,7 +3,7 @@ server:
     uri-encoding: UTF-8
     max-threads: 2000
     min-spare-threads: 30
-  port: 1211
+  port: 8080
   servlet:
     context-path: /
 
@@ -36,14 +36,14 @@ spring:
       strict: false
       datasource:
         mydb:
-          url: jdbc:mysql:///boot_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+          url: jdbc:mysql:///boot_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
           username: root
-          password: root
+          password: ciaj
           # old com.mysql.jdbc.Driver   new
           driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     database: 5
-    host: 127.0.0.1
+    host: 192.168.31.99
     port: 6379
     password:      # 密码（默认为空）
     timeout: 6000ms  # 连接超时时长（毫秒）

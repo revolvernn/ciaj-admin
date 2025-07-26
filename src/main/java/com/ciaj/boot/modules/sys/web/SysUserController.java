@@ -71,15 +71,17 @@ public class SysUserController extends AbstractController<SysUserPo, SysUserDto,
 			@ApiImplicitParam(name = "pageSize", value = "每页记录数：默认每页十条", dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
+			@ApiImplicitParam(name = "id", value = "id", paramType = "query"),
 			@ApiImplicitParam(name = "locked", value = "状态", paramType = "query")
 	})
 	@OperationLog(operation = "系统用户-管理", content = "获取系统用户列表")
 	@RequiresPermissions("sys:user:list")
 	@GetMapping("/list")
-	public ResponseEntity<Page<SysUserDto>> list(String keyword, String locked) {
+	public ResponseEntity<Page<SysUserDto>> list(String keyword, String locked, String id) {
 		SysUserVo entity = new SysUserVo();
 		entity.setKeyword(keyword);
 		entity.setLocked(locked);
+		entity.setId(id);
 		return super.listDTOPage(entity);
 	}
 
