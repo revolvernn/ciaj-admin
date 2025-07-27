@@ -1,5 +1,6 @@
 Vue.component('myPagination', myPaginationT);
 Vue.component('myTable', myTableT);
+Vue.component('myBtn', myBtnT);
 
 let ${jsName}app = new Vue({
     el: '<#noparse>#</#noparse>${jsName}app',
@@ -45,7 +46,7 @@ let ${jsName}app = new Vue({
             page: {},
             addOrUpdateForm: {
                 title: '新增',
-                ${jsName}FormLabelWidth: '80px',
+                ${jsName}FormLabelWidth: '200px',
                 ${jsName}FormVisible: false,
                 pickerOptions: {
                     disabledDate(time) {

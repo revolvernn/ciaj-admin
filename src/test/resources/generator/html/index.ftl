@@ -11,14 +11,14 @@
             <el-form-item>
                 <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
                 <el-button @click="myQueryReset">重置</el-button>
-                <el-button type="primary" @click="myAdd">新增</el-button>
+                <my-btn auth="${jsModule}:${jsName}:add" type="primary" @click="myAdd" label="新增"/>
             </el-form-item>
         </el-form>
         <my-table :columns="tableColumns" :page="page" :table-loading="tableLoading"
                   v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
         </my-table>
         <el-dialog :close-on-click-modal="false" :title="addOrUpdateForm.title"
-                   :visible.sync="addOrUpdateForm.${jsName}FormVisible" width="400px">
+                   :visible.sync="addOrUpdateForm.${jsName}FormVisible">
             <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.${jsName}">
                 <!--
 				<el-form-item label="示例" prop="demo" :label-width="addOrUpdateForm.${jsName}FormLabelWidth" required>
