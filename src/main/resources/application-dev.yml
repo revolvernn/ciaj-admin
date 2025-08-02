@@ -36,9 +36,9 @@ spring:
       strict: false
       datasource:
         mydb:
-          url: jdbc:mysql:///boot_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+          url: jdbc:mysql://192.168.31.99:3306/boot_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
           username: root
-          password: ciaj
+          password: SamkabUBOsu9QgkE/tLUjbF8mvgCQdg4
           # old com.mysql.jdbc.Driver   new
           driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
