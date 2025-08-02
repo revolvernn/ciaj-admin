@@ -9,4 +9,19 @@ import com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo;
  */
 public class WpeElectricianRecordVo extends WpeElectricianRecordPo {
 
+
+    /**
+     * 年月
+     */
+    private String  month;
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+
 }

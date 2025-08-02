@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ciaj.boot.modules.wpe.mapper.WpeProjectMapper">
+    <!--
+        Author: Ciaj.
+        Date: 2025-07-27 09:31:59
+        Description: www.ciaj.com gen mapper.xml
+    -->
+    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
+
+    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.wpe.entity.po.WpeProjectPo" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <id column="project_name" property="projectName" jdbcType="VARCHAR" />
+        <id column="addr" property="addr" jdbcType="VARCHAR" />
+        <id column="remark" property="remark" jdbcType="VARCHAR" />
+        <id column="house_type" property="houseType" jdbcType="VARCHAR" />
+        <id column="decoration_type" property="decorationType" jdbcType="VARCHAR" />
+        <id column="create_at" property="createAt" jdbcType="VARCHAR" />
+        <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
+        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <id column="del_flag" property="delFlag" jdbcType="CHAR" />
+        <id column="version" property="version" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,project_name,addr,remark,house_type,decoration_type,create_at,create_time,update_at,update_time,del_flag,version
+    </sql>
+    <sql id="Base_Alias_Column_List">
+        m.id,m.project_name,m.addr,m.remark,m.house_type,m.decoration_type,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
+    </sql>
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM wpe_project
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <delete id="delete" parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeProjectPo">
+        DELETE FROM wpe_project
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null">
+                    AND id = #{id}
+                </if>
+                <if test="projectName != null">
+                    AND project_name = #{projectName}
+                </if>
+                <if test="addr != null">
+                    AND addr = #{addr}
+                </if>
+                <if test="remark != null">
+                    AND remark = #{remark}
+                </if>
+                <if test="houseType != null">
+                    AND house_type = #{houseType}
+                </if>
+                <if test="decorationType != null">
+                    AND decoration_type = #{decorationType}
+                </if>
+                <if test="createAt != null">
+                    AND create_at = #{createAt}
+                </if>
+                <if test="createTime != null">
+                    AND create_time = #{createTime}
+                </if>
+                <if test="updateAt != null">
+                    AND update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null">
+                    AND update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null">
+                    AND del_flag = #{delFlag}
+                </if>
+                <if test="version != null">
+                    AND version = #{version}
+                </if>
+            </trim>
+        </where>
+    </delete>
+    <insert id="insert"  parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeProjectPo">
+        <selectKey keyProperty="id" order="BEFORE"  resultType="String">
+            SELECT REPLACE(uuid(),'-','') FROM DUAL
+        </selectKey>
+        INSERT INTO wpe_project
+        (id,project_name,addr,remark,house_type,decoration_type,create_at,create_time,update_at,update_time,del_flag,version)
+        VALUES
+        (#{id,jdbcType=VARCHAR},#{projectName,jdbcType=VARCHAR},#{addr,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{houseType,jdbcType=VARCHAR},#{decorationType,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeProjectPo">
+        <selectKey keyProperty="id" order="BEFORE" resultType="String">
+            SELECT REPLACE(UUID(),'-','') FROM DUAL
+        </selectKey>
+        INSERT INTO wpe_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="projectName != null">
+                project_name,
+            </if>
+            <if test="addr != null">
+                addr,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="houseType != null">
+                house_type,
+            </if>
+            <if test="decorationType != null">
+                decoration_type,
+            </if>
+            <if test="createAt != null">
+                create_at,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateAt != null">
+                update_at,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="projectName != null">
+                #{projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="addr != null">
+                #{addr,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="houseType != null">
+                #{houseType,jdbcType=VARCHAR},
+            </if>
+            <if test="decorationType != null">
+                #{decorationType,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null">
+                #{createAt,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null">
+                #{updateAt,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=CHAR},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey"  parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeProjectPo">
+        UPDATE wpe_project
+        <set>
+            project_name = #{projectName},
+            addr = #{addr},
+            remark = #{remark},
+            house_type = #{houseType},
+            decoration_type = #{decorationType},
+            create_at = #{createAt},
+            create_time = #{createTime},
+            update_at = #{updateAt},
+            update_time = #{updateTime},
+            del_flag = #{delFlag},
+            version = #{version},
+        </set>
+         WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyAndVersion">
+        UPDATE wpe_project
+        <set>
+            project_name = #{record.projectName},
+            addr = #{record.addr},
+            remark = #{record.remark},
+            house_type = #{record.houseType},
+            decoration_type = #{record.decorationType},
+            create_at = #{record.createAt},
+            create_time = #{record.createTime},
+            update_at = #{record.updateAt},
+            update_time = #{record.updateTime},
+            del_flag = #{record.delFlag},
+            version = #{record.version},
+        </set>
+            WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+    </update>
+    <update id="updateByPrimaryKeySelective"  parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeProjectPo">
+        UPDATE wpe_project
+        <set>
+            <if test="projectName != null">
+                project_name = #{projectName},
+            </if>
+            <if test="addr != null">
+                addr = #{addr},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="houseType != null">
+                house_type = #{houseType},
+            </if>
+            <if test="decorationType != null">
+                decoration_type = #{decorationType},
+            </if>
+            <if test="createAt != null">
+                create_at = #{createAt},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateAt != null">
+                update_at = #{updateAt},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeySelectiveAndVersion">
+        UPDATE wpe_project
+        <set>
+            <if test="record.projectName != null">
+                project_name = #{record.projectName},
+            </if>
+            <if test="record.addr != null">
+                addr = #{record.addr},
+            </if>
+            <if test="record.remark != null">
+                remark = #{record.remark},
+            </if>
+            <if test="record.houseType != null">
+                house_type = #{record.houseType},
+            </if>
+            <if test="record.decorationType != null">
+                decoration_type = #{record.decorationType},
+            </if>
+            <if test="record.createAt != null">
+                create_at = #{record.createAt},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime},
+            </if>
+            <if test="record.updateAt != null">
+                update_at = #{record.updateAt},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime},
+            </if>
+            <if test="record.delFlag != null">
+                del_flag = #{record.delFlag},
+            </if>
+            <if test="record.version != null">
+                version = #{record.version},
+            </if>
+        </set>
+            WHERE id = #{record.id,jdbcType=VARCHAR}  and version = #{oldVersion}
+    </update>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM wpe_project
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="selectListByKeys" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM wpe_project
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                and  id in
+                <foreach collection="keys" separator="," open="(" close=")" item="item">
+                    #{item}
+                </foreach>
+            </trim>
+        </where>
+    </select>
+
+    <sql id="base_query_condition_sql">
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null">
+                    AND m.id = #{id}
+                </if>
+                <if test="projectName != null">
+                    AND m.project_name = #{projectName}
+                </if>
+                <if test="addr != null">
+                    AND m.addr = #{addr}
+                </if>
+                <if test="remark != null">
+                    AND m.remark = #{remark}
+                </if>
+                <if test="houseType != null">
+                    AND m.house_type = #{houseType}
+                </if>
+                <if test="decorationType != null">
+                    AND m.decoration_type = #{decorationType}
+                </if>
+                <if test="createAt != null">
+                    AND m.create_at = #{createAt}
+                </if>
+                <if test="createTime != null">
+                    AND m.create_time = #{createTime}
+                </if>
+                <if test="updateAt != null">
+                    AND m.update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null">
+                    AND m.update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null">
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="version != null">
+                    AND m.version = #{version}
+                </if>
+            </trim>
+        </where>
+    </sql>
+    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeProjectPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM wpe_project m
+        <include refid="base_query_condition_sql"/>
+    </select>
+
+    <select id="select" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeProjectPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM wpe_project m
+        <include refid="base_query_condition_sql"/>
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeProjectPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM wpe_project m
+        <include refid="base_query_condition_sql"/>
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.wpe.entity.vo.WpeProjectVo">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>
+        FROM wpe_project m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+
+    <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.wpe.entity.dto.WpeProjectDto" extends="BaseResultMap">
+    </resultMap>
+
+    <select id="selectDTOList" resultMap="DTOResultMap" parameterType="com.ciaj.boot.modules.wpe.entity.vo.WpeProjectVo">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>
+        FROM wpe_project m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+    <sql id="cust_query_condition_sql">
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null  and id != ''">
+                    AND m.id = #{id}
+                </if>
+                <if test="projectName != null  and projectName != ''">
+                    AND m.project_name = #{projectName}
+                </if>
+                <if test="addr != null  and addr != ''">
+                    AND m.addr = #{addr}
+                </if>
+                <if test="remark != null  and remark != ''">
+                    AND m.remark = #{remark}
+                </if>
+                <if test="houseType != null  and houseType != ''">
+                    AND m.house_type = #{houseType}
+                </if>
+                <if test="decorationType != null  and decorationType != ''">
+                    AND m.decoration_type = #{decorationType}
+                </if>
+                <if test="createAt != null  and createAt != ''">
+                    AND m.create_at = #{createAt}
+                </if>
+                <if test="createTime != null ">
+                    AND m.create_time = #{createTime}
+                </if>
+                <if test="updateAt != null  and updateAt != ''">
+                    AND m.update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null ">
+                    AND m.update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null  and delFlag != ''">
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="version != null ">
+                    AND m.version = #{version}
+                </if>
+                <!--  keyword   -->
+                <if test="keyword != null and keyword != ''">
+                    and (m.project_name like CONCAT('%',#{keyword},'%')
+                    or m.id like CONCAT('%',#{keyword},'%')
+                    or m.addr like CONCAT('%',#{keyword},'%')
+                    or m.remark like CONCAT('%',#{keyword},'%')
+                    )
+                </if>
+            </trim>
+        </where>
+    </sql>
+</mapper>

@@ -1,56 +1,46 @@
 Vue.component('myPagination', myPaginationT);
 Vue.component('myTable', myTableT);
 Vue.component('myDictSelect', myDictSelectT);
-Vue.component('mySearchSelect', mySearchSelectT);
 Vue.component('myBtn', myBtnT);
 
-let electricianRecordapp = new Vue({
-    el: '#electricianRecordapp',
+let projectapp = new Vue({
+    el: '#projectapp',
     data() {
         return {
             queryForm: {
                 pageEnabled: true,
                 pageNo: 1,
                 pageSize: 10,
-                keyword: null,
-                userId: null,
-                projectId: null,
-                status: null
+                houseType: null,
+                decorationType: null,
+                keyword: null
             },
             tableColumns: [
                 {
-                    name: 'user.username',
-                    label: '用户'
+                    name: 'id',
+                    label: '主键'
                 },
                 {
-                    name: 'project.projectName',
-                    label: '工程名称'
+                    name: 'projectName',
+                    label: '工程项目名称'
                 },
                 {
-                    name: 'project.addr',
+                    name: 'addr',
                     label: '地址'
-                },
-                {
-                    name: 'workday',
-                    label: '工作日',
-                    date: 'yyyy-MM-dd'
-                },
-                {
-                    name: 'workStart',
-                    label: '工作开始时间'
-                },
-                {
-                    name: 'workEnd',
-                    label: '工作日结束时间'
                 },
                 {
                     name: 'remark',
                     label: '备注'
                 },
                 {
-                    name: 'status',
-                    dict: 'status',
-                    label: '工作状态'
+                    name: 'houseType',
+                    dict: 'houseType',
+                    label: '项目户型'
+                },
+                {
+                    name: 'decorationType',
+                    dict: 'decorationType',
+                    label: '装修类型'
                 },
                 {
                     name: 'createTime',
@@ -65,14 +55,14 @@ let electricianRecordapp = new Vue({
                     width: '180px',
                     buttons: [
                         {
-                            auth:'sys:electricianRecord:update',
+                            auth:'sys:project:update',
                             label: '修改',
                             icon: 'el-icon-edit',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
-                            auth:'sys:electricianRecord:delFlag',
+                            auth:'sys:project:delFlag',
                             label: '删除',
                             icon: 'el-icon-delete',
                             click: this.myDel,
@@ -85,21 +75,20 @@ let electricianRecordapp = new Vue({
             page: {},
             addOrUpdateForm: {
                 title: '新增',
-                electricianRecordFormLabelWidth: '200px',
-                electricianRecordFormVisible: false,
+                projectFormLabelWidth: '200px',
+                projectFormVisible: false,
                 pickerOptions: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
                     }
                 },
-                electricianRecord:{
-                    userId: null,
-                    projectId: null,
-                    workday: null,
-                    workStart: null,
-                    workEnd: null,
+                project:{
+                    id: null,
+                    projectName: null,
+                    addr: null,
                     remark: null,
-                    status: 'Y'
+                    houseType: null,
+                    decorationType: null
                 }
             },
             rules: {
@@ -138,26 +127,25 @@ let electricianRecordapp = new Vue({
         myAdd() {
             let that = this;
             that.addOrUpdateForm.title = '新增';
-            that.addOrUpdateForm.electricianRecordFormVisible = true;
-            that.addOrUpdateForm.electricianRecord = {
-                                             userId: null,
-                                             projectId: null,
-                                             workday: null,
-                                             workStart: null,
-                                             workEnd: null,
+            that.addOrUpdateForm.projectFormVisible = true;
+            that.addOrUpdateForm.project = {
+                                             id: null,
+                                             projectName: null,
+                                             addr: null,
                                              remark: null,
-                                             status: null
+                                             houseType: null,
+                                             decorationType: null
                                          }
             that.resetForm('addOrUpdateFormRef');
         },
         myUpdate(index, row) {
             let that = this;
             that.addOrUpdateForm.title = '修改';
-            that.addOrUpdateForm.electricianRecordFormVisible = true;
+            that.addOrUpdateForm.projectFormVisible = true;
             that.resetForm('addOrUpdateFormRef');
-            httpUtil.get({url: "wpe/electrician/record/getById/" + row.id}, function (result) {
+            httpUtil.get({url: "wpe/project/getById/" + row.id}, function (result) {
                   if (result.code == 0) {
-                      that.addOrUpdateForm.electricianRecord = result.data;
+                      that.addOrUpdateForm.project = result.data;
                   }
             });
         },
@@ -165,11 +153,11 @@ let electricianRecordapp = new Vue({
             let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
-                    let url = that.addOrUpdateForm.electricianRecord.id == null ? "wpe/electrician/record/add" : "wpe/electrician/record/update";
-                    let type = that.addOrUpdateForm.electricianRecord.id == null ? "POST" : "PUT";
-                    httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.electricianRecord)}, function (r) {
+                    let url = that.addOrUpdateForm.project.id == null ? "wpe/project/add" : "wpe/project/update";
+                    let type = that.addOrUpdateForm.project.id == null ? "POST" : "PUT";
+                    httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.project)}, function (r) {
                         that.myQuery();
-                        that.addOrUpdateForm.electricianRecordFormVisible = false;
+                        that.addOrUpdateForm.projectFormVisible = false;
                         alertMsg(that, r);
                     });
                 }
@@ -182,7 +170,7 @@ let electricianRecordapp = new Vue({
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                httpUtil.del({url: "wpe/electrician/record/delFlag/" + row.id}, function (r) {
+                httpUtil.del({url: "wpe/project/delFlag/" + row.id}, function (r) {
                     that.myQuery();
                     alertMsg(that, r);
                 });
@@ -190,7 +178,7 @@ let electricianRecordapp = new Vue({
         },
         loadData() {
             let that = this;
-            httpUtil.get({url: "wpe/electrician/record/list", data: that.queryForm}, function (result) {
+            httpUtil.get({url: "wpe/project/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data;
                 }

@@ -1,10 +1,12 @@
 package com.ciaj.boot.modules.wpe.service;
 
 import com.ciaj.base.BaseService;
+import com.ciaj.boot.modules.wpe.entity.dto.WpeElectricianRecordDto;
 import com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo;
 import com.ciaj.boot.modules.wpe.entity.vo.WpeElectricianRecordVo;
-import com.ciaj.boot.modules.wpe.entity.dto.WpeElectricianRecordDto;
 import com.ciaj.comm.utils.Page;
+
+import java.util.Map;
 
 /**
  * @Author: Ciaj.
@@ -20,8 +22,10 @@ public interface WpeElectricianRecordService extends BaseService<WpeElectricianR
      * @param id
      * @return
      */
-    public WpeElectricianRecordDto selectById(String id);
+    WpeElectricianRecordDto selectById(String id);
 
     @Override
     Page<WpeElectricianRecordDto> selectDTOPage(WpeElectricianRecordPo entity);
+
+    Page<Map<String, Object>> statisticsPage(WpeElectricianRecordVo entity);
 }

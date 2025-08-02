@@ -1,0 +1,62 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header"/>
+<body>
+<div id="projectapp" v-cloak>
+    <div>
+        <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
+            <el-form-item label="关键字" prop="keyword">
+                <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+            </el-form-item>
+            <el-form-item label="项目户型" prop="houseType">
+                <my-dict-select v-model="queryForm.houseType" type="houseType"></my-dict-select>
+            </el-form-item>
+            <el-form-item label="装修类型" prop="decorationType">
+                <my-dict-select v-model="queryForm.decorationType" type="decorationType"></my-dict-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
+                <el-button @click="myQueryReset">重置</el-button>
+                <my-btn auth="wpe:project:add" type="primary" @click="myAdd" label="新增"/>
+            </el-form-item>
+        </el-form>
+        <my-table :columns="tableColumns" :page="page" :table-loading="tableLoading"
+                  v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
+        </my-table>
+        <el-dialog :close-on-click-modal="false" :title="addOrUpdateForm.title"
+                   :visible.sync="addOrUpdateForm.projectFormVisible" >
+            <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.project">
+                <el-form-item label="工程项目名称" prop="projectName"
+                              :label-width="addOrUpdateForm.projectFormLabelWidth" required>
+                    <el-input v-model="addOrUpdateForm.project.projectName" autocomplete="off"
+                              placeholder="工程项目名称"></el-input>
+                </el-form-item>
+                <el-form-item label="地址" prop="addr"
+                              :label-width="addOrUpdateForm.projectFormLabelWidth" required>
+                    <el-input v-model="addOrUpdateForm.project.addr" autocomplete="off"
+                              placeholder="地址"></el-input>
+                </el-form-item>
+                <el-form-item label="备注" prop="remark"
+                              :label-width="addOrUpdateForm.projectFormLabelWidth">
+                    <el-input v-model="addOrUpdateForm.project.remark" autocomplete="off"
+                              placeholder="备注"></el-input>
+                </el-form-item>
+                <el-form-item label="项目户型" prop="houseType"
+                              :label-width="addOrUpdateForm.projectFormLabelWidth" required>
+                    <my-dict-select v-model="addOrUpdateForm.project.houseType" type="houseType"></my-dict-select>
+                </el-form-item>
+                <el-form-item label="装修类型" prop="decorationType"
+                              :label-width="addOrUpdateForm.projectFormLabelWidth" required>
+                    <my-dict-select v-model="addOrUpdateForm.project.decorationType" type="decorationType"></my-dict-select>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="addOrUpdateForm.projectFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+<script src="/statics/js/modules/wpe/project.js"></script>
+</body>
+</html>

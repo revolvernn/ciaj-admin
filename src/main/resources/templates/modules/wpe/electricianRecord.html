@@ -11,10 +11,30 @@
             <el-form-item label="工作状态" prop="status">
                 <my-dict-select v-model="queryForm.status" type="status"></my-dict-select>
             </el-form-item>
+            <el-form-item label="用户" prop="userId">
+                <my-search-select v-model="queryForm.userId"
+                                  search-url="/sys/user/list"
+                                  search-param="roleCode-wpe"
+                                  search-field-name="keyword"
+                                  label-field-name="username"
+                                  label-field-value="id"
+                                  right-label-field-name="deptNames"
+                />
+            </el-form-item>
+            <el-form-item label="项目" prop="projectId">
+                <my-search-select v-model="queryForm.projectId"
+                                  search-url="/wpe/project/list"
+                                  search-field-name="keyword"
+                                  label-field-name="projectName"
+                                  label-field-value="id"
+                                  right-label-field-name="addr"
+                />
+            </el-form-item>
+
             <el-form-item>
                 <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
                 <el-button @click="myQueryReset">重置</el-button>
-                <el-button type="primary" @click="myAdd">新增</el-button>
+                <my-btn auth="wpe:electrician:record:add" type="primary" @click="myAdd" label="新增"/>
             </el-form-item>
         </el-form>
         <my-table :columns="tableColumns" :page="page" :table-loading="tableLoading"
@@ -34,27 +54,28 @@
                                       :label-width="addOrUpdateForm.electricianRecordFormLabelWidth" required>
                           <my-search-select v-model="addOrUpdateForm.electricianRecord.userId"
                                             search-url="/sys/user/list"
+                                            search-param="roleCode-wpe"
                                             search-field-name="keyword"
                                             label-field-name="username"
                                             label-field-value="id"
                                             right-label-field-name="deptNames"
                           />
                         </el-form-item>
-                        <el-form-item label="工程名称" prop="projectName"
-                                      :label-width="addOrUpdateForm.electricianRecordFormLabelWidth">
-                            <el-input v-model="addOrUpdateForm.electricianRecord.projectName" autocomplete="off"
-                                      placeholder="工程名称"></el-input>
-                        </el-form-item>
-                        <el-form-item label="地址" prop="addr"
-                                      :label-width="addOrUpdateForm.electricianRecordFormLabelWidth">
-                            <el-input v-model="addOrUpdateForm.electricianRecord.addr" autocomplete="off"
-                                      placeholder="地址"></el-input>
+                        <el-form-item label="工程" prop="projectId"
+                                      :label-width="addOrUpdateForm.electricianRecordFormLabelWidth" required>
+                            <my-search-select v-model="addOrUpdateForm.electricianRecord.projectId"
+                                              search-url="/wpe/project/list"
+                                              search-field-name="keyword"
+                                              label-field-name="projectName"
+                                              label-field-value="id"
+                                              right-label-field-name="addr"
+                            />
                         </el-form-item>
                         <el-form-item label="工作日" prop="workday"
-                                      :label-width="addOrUpdateForm.electricianRecordFormLabelWidth">
-                            <el-date-picker value-format="yyyy-MM-dd HH:mm:ss"
+                                      :label-width="addOrUpdateForm.electricianRecordFormLabelWidth" required>
+                            <el-date-picker value-format="yyyy-MM-dd"
                                     v-model="addOrUpdateForm.electricianRecord.workday"
-                                    type="datetime"
+                                    type="date"
                                     placeholder="选择工作日">
                             </el-date-picker>
                         </el-form-item>
@@ -62,22 +83,20 @@
                                       :label-width="addOrUpdateForm.electricianRecordFormLabelWidth">
                             <el-date-picker value-format="yyyy-MM-dd HH:mm:ss"
                                     v-model="addOrUpdateForm.electricianRecord.workStart"
-                                    type="datetime"
-                                    placeholder="选择工作开始时间"/>
+                                    type="datetime" default-time="09:00:00" placeholder="选择工作开始时间"/>
                         </el-form-item>
                         <el-form-item label="工作日结束时间" prop="workEnd"
                                       :label-width="addOrUpdateForm.electricianRecordFormLabelWidth">
                             <el-date-picker value-format="yyyy-MM-dd HH:mm:ss"
                                     v-model="addOrUpdateForm.electricianRecord.workEnd"
-                                    type="datetime"
-                                    placeholder="工作日结束时间"/>
+                                    type="datetime" default-time="18:00:00" placeholder="工作日结束时间"/>
                         </el-form-item>
                         <el-form-item label="备注" prop="remark"
                                       :label-width="addOrUpdateForm.electricianRecordFormLabelWidth">
                             <el-input v-model="addOrUpdateForm.electricianRecord.remark" autocomplete="off"
                                       placeholder="备注"></el-input>
                         </el-form-item>
-                        <el-form-item label="工作状态" prop="status" :label-width="addOrUpdateForm.electricianRecordFormLabelWidth">
+                        <el-form-item label="工作状态" prop="status" :label-width="addOrUpdateForm.electricianRecordFormLabelWidth" required>
                             <my-dict-select v-model="addOrUpdateForm.electricianRecord.status" type="status"></my-dict-select>
                         </el-form-item>
             </el-form>

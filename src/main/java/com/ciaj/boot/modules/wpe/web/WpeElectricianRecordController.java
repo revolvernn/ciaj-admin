@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * @Author: Ciaj.
  * @Date: 2025-07-25 22:28:35
@@ -60,16 +62,51 @@ public class WpeElectricianRecordController extends AbstractController<WpeElectr
         @ApiImplicitParam(name = "pageSize", value = "每页记录数：默认每页十条", dataType = "int", paramType = "query"),
         @ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
         @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
+        @ApiImplicitParam(name = "userId", value = "用户ID", paramType = "query"),
+        @ApiImplicitParam(name = "projectId", value = "项目ID", paramType = "query"),
             @ApiImplicitParam(name = "status", value = "状态", paramType = "query")
     })
     @OperationLog(operation = "水电工程记录-管理", content = "获取水电工程记录列表")
     @RequiresPermissions("wpe:electrician:record:list")
     @GetMapping("/list")
-    public ResponseEntity<Page<WpeElectricianRecordDto>> list(String keyword,String status) {
+    public ResponseEntity<Page<WpeElectricianRecordDto>> list(String keyword,String userId,String projectId,String status) {
         WpeElectricianRecordVo entity = new WpeElectricianRecordVo();
         entity.setKeyword(keyword);
         entity.setStatus(status);
+        entity.setUserId(userId);
+        entity.setProjectId(projectId);
         return super.listDTOPage(entity);
+    }
+
+
+    /**
+     * 列表
+     *
+     * @return
+     */
+    @ApiOperation("获取水电工程记录列表")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "orderBy", value = "排序：xxx-desc,xxx-asc,xxx ", paramType = "query"),
+        @ApiImplicitParam(name = "orderByEnabled", value = "是否开启排序:true/false 默认-false", dataType = "Boolean", paramType = "query"),
+        @ApiImplicitParam(name = "pageEnabled", value = "是否开启分页:true/false 默认-false", dataType = "Boolean", paramType = "query"),
+        @ApiImplicitParam(name = "pageSize", value = "每页记录数：默认每页十条", dataType = "int", paramType = "query"),
+        @ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
+        @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
+        @ApiImplicitParam(name = "userId", value = "用户ID", paramType = "query"),
+        @ApiImplicitParam(name = "projectId", value = "项目ID", paramType = "query"),
+            @ApiImplicitParam(name = "month", value = "年月", paramType = "query")
+    })
+    @OperationLog(operation = "水电工程记录-管理", content = "获取水电工程记录统计列表")
+    @RequiresPermissions("wpe:electrician:record:statistics")
+    @GetMapping("/statistics")
+    public ResponseEntity<Page<Map<String, Object>>> statistics(String keyword, String userId, String projectId, String month) {
+        WpeElectricianRecordVo entity = new WpeElectricianRecordVo();
+        entity.setKeyword(keyword);
+        entity.setUserId(userId);
+        entity.setProjectId(projectId);
+        entity.setMonth(month);
+        entity.setDelFlag("N");
+        return new ResponseEntity<>("查询成功").put(wpeElectricianRecordService.statisticsPage(entity));
     }
 
     /**

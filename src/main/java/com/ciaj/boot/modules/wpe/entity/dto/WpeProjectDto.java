@@ -1,36 +1,16 @@
 package com.ciaj.boot.modules.wpe.entity.dto;
 
-import com.ciaj.boot.modules.sys.entity.dto.SysUserDto;
-import com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo;
+import com.ciaj.boot.modules.wpe.entity.po.WpeProjectPo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @Author: Ciaj.
- * @Date: 2025-07-25 22:28:35
+ * @Date: 2025-07-27 09:31:59
  * @Description: www.ciaj.com gen DTO
  */
-@ApiModel(value = "WpeElectricianRecord")
-public class WpeElectricianRecordDto extends WpeElectricianRecordPo {
-
-    /**
-     * 记录用户
-     */
-    private SysUserDto user;
-
-    /**
-     * 记录项目
-     */
-    private WpeProjectDto project;
-
-
-    public void setUser(SysUserDto user) {
-        this.user = user;
-    }
-
-    public SysUserDto getUser() {
-        return user;
-    }
+@ApiModel(value = "WpeProject")
+public class WpeProjectDto extends WpeProjectPo {
 
     //@javax.validation.constraints.NotBlank(message = "")
     @ApiModelProperty("主键")
@@ -39,33 +19,15 @@ public class WpeElectricianRecordDto extends WpeElectricianRecordPo {
     }
 
     //@javax.validation.constraints.NotBlank(message = "")
-    @ApiModelProperty("用户ID")
-    public java.lang.String getUserId() {
-        return super.getUserId();
+    @ApiModelProperty("工程项目名称")
+    public java.lang.String getProjectName() {
+        return super.getProjectName();
     }
 
     //@javax.validation.constraints.NotBlank(message = "")
-    @ApiModelProperty("工程项目ID")
-    public java.lang.String getProjectId() {
-        return super.getProjectId();
-    }
-
-    //@javax.validation.constraints.NotBlank(message = "")
-    @ApiModelProperty("工作日")
-    public java.util.Date getWorkday() {
-        return super.getWorkday();
-    }
-
-    //@javax.validation.constraints.NotBlank(message = "")
-    @ApiModelProperty("工作开始时间")
-    public java.util.Date getWorkStart() {
-        return super.getWorkStart();
-    }
-
-    //@javax.validation.constraints.NotBlank(message = "")
-    @ApiModelProperty("工作日结束时间")
-    public java.util.Date getWorkEnd() {
-        return super.getWorkEnd();
+    @ApiModelProperty("地址")
+    public java.lang.String getAddr() {
+        return super.getAddr();
     }
 
     //@javax.validation.constraints.NotBlank(message = "")
@@ -75,9 +37,15 @@ public class WpeElectricianRecordDto extends WpeElectricianRecordPo {
     }
 
     //@javax.validation.constraints.NotBlank(message = "")
-    @ApiModelProperty("工作状态")
-    public java.lang.String getStatus() {
-        return super.getStatus();
+    @ApiModelProperty("项目户型")
+    public java.lang.String getHouseType() {
+        return super.getHouseType();
+    }
+
+    //@javax.validation.constraints.NotBlank(message = "")
+    @ApiModelProperty("装修类型")
+    public java.lang.String getDecorationType() {
+        return super.getDecorationType();
     }
 
     //@javax.validation.constraints.NotBlank(message = "")
@@ -116,11 +84,4 @@ public class WpeElectricianRecordDto extends WpeElectricianRecordPo {
         return super.getVersion();
     }
 
-    public WpeProjectDto getProject() {
-        return project;
-    }
-
-    public void setProject(WpeProjectDto project) {
-        this.project = project;
-    }
 }
