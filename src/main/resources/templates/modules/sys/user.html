@@ -62,7 +62,7 @@
                               v-on:currentpagechange="currentpagechange"></my-table>
                     <el-dialog :close-on-click-modal="false" :title="addOrUpdateForm.title"
                                :visible.sync="addOrUpdateForm.userFormVisible"
-                               width="400px">
+                               >
                         <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.user">
                             <el-upload
                                     class="avatar-uploader"

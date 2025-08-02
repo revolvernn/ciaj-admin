@@ -9,4 +9,16 @@ import com.ciaj.boot.modules.sys.entity.po.SysUserPo;
  */
 public class SysUserVo extends SysUserPo {
 
+    /**
+     * 角色编码
+     */
+    private String roleCode;
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
 }

@@ -100,7 +100,7 @@ let deptapp = new Vue({
             page: {},
             addOrUpdateForm: {
                 title: '新增',
-                deptFormLabelWidth: '80px',
+                deptFormLabelWidth: '200px',
                 deptFormVisible: false,
                 dept:{
                     name: null,

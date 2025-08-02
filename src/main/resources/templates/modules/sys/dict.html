@@ -40,7 +40,7 @@
                               v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
                     </my-table>
                     <el-dialog :close-on-click-modal="false":title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.dictFormVisible"
-                               width="400px">
+                               >
                         <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.dict">
                             <el-form-item label="字典名称" prop="name" :label-width="addOrUpdateForm.dictFormLabelWidth"
                                           required>

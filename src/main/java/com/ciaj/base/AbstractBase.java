@@ -13,6 +13,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Ciaj.
@@ -150,6 +151,31 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 	 * @return
 	 */
 	public Page<DTO> wrapPageDTO(com.github.pagehelper.Page p, List<DTO> list) {
+		if (p == null) {
+			Page page = new Page(list, list.size(), list.size(), 1, false);
+			if (PageUtils.isOrderBy()) {
+				page.setOrderByEnabled(true);
+				page.setOrderBy(PageUtils.getPageFromThreadLocal().getOrderBy());
+			}
+			return page;
+		} else {
+			Page page = PageUtils.getPageFromThreadLocal();
+			page.setCurrPage(p.getPageNum());
+			page.setPageSize(p.getPageSize());
+			page.setTotalPage(p.getPages());
+			page.setTotalCount(p.getTotal());
+			page.setList(list);
+			return page;
+		}
+	}
+	/**
+	 * 包装分页数据
+	 *
+	 * @param p
+	 * @param list
+	 * @return
+	 */
+	public Page<Map<String,Object>> wrapPageMap(com.github.pagehelper.Page p, List<Map<String,Object>> list) {
 		if (p == null) {
 			Page page = new Page(list, list.size(), list.size(), 1, false);
 			if (PageUtils.isOrderBy()) {

@@ -17,7 +17,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -72,16 +71,18 @@ public class SysUserController extends AbstractController<SysUserPo, SysUserDto,
 			@ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
 			@ApiImplicitParam(name = "id", value = "id", paramType = "query"),
-			@ApiImplicitParam(name = "locked", value = "状态", paramType = "query")
+			@ApiImplicitParam(name = "locked", value = "状态", paramType = "query"),
+			@ApiImplicitParam(name = "roleCode", value = "角色编码", paramType = "query")
 	})
 	@OperationLog(operation = "系统用户-管理", content = "获取系统用户列表")
 	@RequiresPermissions("sys:user:list")
 	@GetMapping("/list")
-	public ResponseEntity<Page<SysUserDto>> list(String keyword, String locked, String id) {
+	public ResponseEntity<Page<SysUserDto>> list(String keyword, String id, String locked, String roleCode) {
 		SysUserVo entity = new SysUserVo();
 		entity.setKeyword(keyword);
 		entity.setLocked(locked);
 		entity.setId(id);
+		entity.setRoleCode(roleCode);
 		return super.listDTOPage(entity);
 	}
 

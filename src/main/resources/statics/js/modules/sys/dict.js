@@ -98,7 +98,7 @@ let dictapp = new Vue({
             page: {},
             addOrUpdateForm: {
                 title: '新增',
-                dictFormLabelWidth: '80px',
+                dictFormLabelWidth: '200px',
                 dictFormVisible: false,
                 parentIds: [],
                 dict: {

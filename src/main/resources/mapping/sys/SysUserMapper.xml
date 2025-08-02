@@ -745,6 +745,9 @@
                     or d.name like CONCAT('%',#{keyword},'%')
                     )
                 </if>
+                <if test="roleCode != null and roleCode != ''">
+                    and  EXISTS (SELECT 1 FROM sys_role  r JOIN sys_user_role_rel urr on r.id=urr.role_id where urr.user_id= m.id and r.`code`=#{roleCode} )
+                </if>
             </trim>
         </where>
     </select>

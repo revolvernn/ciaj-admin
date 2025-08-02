@@ -86,7 +86,7 @@ let areaapp = new Vue({
             page: {},
             addOrUpdateForm: {
                 title: '新增',
-                areaFormLabelWidth: '80px',
+                areaFormLabelWidth: '200px',
                 areaFormVisible: false,
                 area: {
                     name: null,

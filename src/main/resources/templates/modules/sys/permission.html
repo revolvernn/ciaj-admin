@@ -42,7 +42,7 @@
                     </my-table>
                     <el-dialog :close-on-click-modal="false" :title="addOrUpdateForm.title"
                                :visible.sync="addOrUpdateForm.permissionFormVisible"
-                               width="400px">
+                               >
                         <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.permission">
                             <el-form-item label="权限名" prop="name"
                                           :label-width="addOrUpdateForm.permissionFormLabelWidth" required>

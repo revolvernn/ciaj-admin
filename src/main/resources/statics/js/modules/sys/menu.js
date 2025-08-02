@@ -97,7 +97,7 @@ let menuapp = new Vue({
             page: {},
             addOrUpdateForm: {
                 title: '新增',
-                menuFormLabelWidth: '80px',
+                menuFormLabelWidth: '200px',
                 menuFormVisible: false,
                 pickerOptions: {
                     disabledDate(time) {

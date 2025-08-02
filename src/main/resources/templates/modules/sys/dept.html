@@ -43,7 +43,7 @@
                               v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
                     </my-table>
                     <el-dialog :close-on-click-modal="false":title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.deptFormVisible"
-                               width="400px">
+                               >
                         <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.dept">
                             <el-form-item label="部门名称" prop="name" :label-width="addOrUpdateForm.deptFormLabelWidth">
                                 <el-input v-model="addOrUpdateForm.dept.name" autocomplete="off"

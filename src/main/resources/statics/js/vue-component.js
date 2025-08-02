@@ -80,7 +80,7 @@ let myDictSelectT = Vue.extend({
             '<span style="float: left">{{ item.name }}</span>',
             '<span style="float: right; color: #8492a6; font-size: 13px"> <i :class="item.code"></i></span>',
         '</el-option>',
-        '<el-option  v-else v-for="item in options" :label="item.name" :disabled="item.disabled" :value="item.code" :key="item.code""></el-option>',
+        '<el-option v-else v-for="item in options" :label="item.name" :disabled="item.disabled" :value="item.code" :key="item.code""></el-option>',
         '</el-select>'
     ].join('')
 });
@@ -88,8 +88,10 @@ let mySearchSelectT = Vue.extend({
     name: 'my-search-select',
     props: {
         value: '',
-        icon: {default: false},
         searchUrl: {
+            default: null
+        },
+        searchParam: {
             default: null
         },
         searchFieldName: {
@@ -113,7 +115,6 @@ let mySearchSelectT = Vue.extend({
     },
     data() {
         return {
-            isShowIcon: {default: false},
             model: '',
             options: []
         }
@@ -150,18 +151,23 @@ let mySearchSelectT = Vue.extend({
         },
         loadData(query) {
             let that = this;
+            that.options = [];
             if (that.searchUrl === undefined || that.searchUrl === '' || that.searchUrl === null ||
                 that.searchFieldName === undefined || that.searchFieldName === '' || that.searchFieldName === null
             ) {
-                that.options = [];
                 return;
-            }
-            if(that.icon &&  that.icon==='true'){
-                that.isShowIcon = true;
             }
             const queryForm = new Map();
             queryForm.set(that.searchFieldName,query);
             queryForm.set(that.labelFieldValue,that.model);
+            if(that.searchParam){
+              let  p  = that.searchParam;
+              let ps =  p.split(",");
+              ps.forEach(function (v){
+                 let pps = v.split("-");
+                  queryForm.set(pps[0],pps[1]);
+              })
+            }
             const queryObj = Object.fromEntries(queryForm);
             let os = [];
             httpUtil.syncGet({url: that.searchUrl, data: queryObj}, function (r) {
@@ -191,11 +197,7 @@ let mySearchSelectT = Vue.extend({
     },
     template: [
         '<el-select value="" :loading="loading" :disabled="disabled" remote reserve-keyword filterable clearable v-model="model" v-on:focus="handleFocus($event)" v-on:handleBlur="handleBlur($event)" v-on:change="emitChange" v-on:input="emitInput" :remote-method="remoteMethod"   placeholder="请输入关键词">',
-            '<el-option v-if="isShowIcon"  v-for="item in options" :label="item.name" :disabled="item.disabled" :value="item.code" :key="item.code"">',
-                '<span style="float: left">{{ item.name }}</span>',
-                '<span style="float: right; color: #8492a6; font-size: 13px"> <i :class="item.code"></i></span>',
-            '</el-option>',
-            '<el-option  v-else v-for="item in options" :label="item.name" :disabled="item.disabled" :value="item.code" :key="item.code"">' +
+            '<el-option v-for="item in options" :label="item.name" :disabled="item.disabled" :value="item.code" :key="item.code"">' +
                 '<span style="float: left">{{ item.name }}</span>',
                 '<span style="float: right; color: #8492a6; font-size: 13px"> {{item.rightLabelFieldName}}</span>',
             '</el-option>',
@@ -517,6 +519,7 @@ let myTableT = Vue.extend({
     template: [
         '<div>',
         '<el-table :default-sort="defaultSort" @sort-change="sortChange"  border stripe size="small" style="width: 100%" :data="page.list">',
+        '<el-table-column  type="index"  width="50"></el-table-column>',
         ' <el-table-column type="expand" v-if="page.expand">',
         '   <template slot-scope="props">',
         '       <el-form label-position="left" inline class="my-table-expand">',

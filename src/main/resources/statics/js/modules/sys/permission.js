@@ -83,7 +83,7 @@ let permissionapp = new Vue({
             addOrUpdateForm: {
                 title: '新增',
                 menuModel: [],
-                permissionFormLabelWidth: '80px',
+                permissionFormLabelWidth: '200px',
                 cascaderModel: [],
                 permissionFormVisible: false,
                 pickerOptions: {

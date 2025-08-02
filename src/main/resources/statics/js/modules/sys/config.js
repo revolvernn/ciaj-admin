@@ -67,7 +67,7 @@ let configapp = new Vue({
             page: {},
             addOrUpdateForm: {
                 title: '新增',
-                configFormLabelWidth: '80px',
+                configFormLabelWidth: '200px',
                 configFormVisible: false,
                 config:{
                     configKey: null,

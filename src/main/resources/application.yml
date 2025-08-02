@@ -51,7 +51,7 @@ pagehelper:
 
 
 log:
-  isInsert: false
+  isInsert: true
 shiro:
   hash-algorithm-name: md5
   hash-iterations: 1024

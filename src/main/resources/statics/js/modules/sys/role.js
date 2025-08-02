@@ -86,7 +86,7 @@ new Vue({
             page: {},
             addOrUpdateForm: {
                 title: '新增',
-                roleFormLabelWidth: '80px',
+                roleFormLabelWidth: '200px',
                 roleFormVisible: false,
                 privilegesVisible: false,
                 pickerOptions: {

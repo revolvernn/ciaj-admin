@@ -135,7 +135,7 @@ let userapp = new Vue({
                 deptModel: [],
                 title: '新增',
                 roleDialogTitle: '新增',
-                userFormLabelWidth: '80px',
+                userFormLabelWidth: '200px',
                 userFormVisible: false,
                 roleVisible: false,
                 pickerOptions: {
