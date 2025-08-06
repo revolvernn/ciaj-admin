@@ -76,7 +76,7 @@ public class MybatisRedisCache implements Cache {
 			if (multiTableMappers != null) {
 				for (Class<? extends Mapper> multiTableMapper : multiTableMappers) {
 					redisTemplate.opsForHash().put(getPrefix() + multiTableMapper.getCanonicalName(), cacheKey, "");
-					log.info("Put query result to redis id：{}", getPrefix() + multiTableMapper.getCanonicalName());
+					log.info("Put query result to redis multiTableMapper id：{}", getPrefix() + multiTableMapper.getCanonicalName());
 				}
 			}
 			log.info("Put query result to redis id：{}，cacheKey：{}", getPrefix() + id, cacheKey);

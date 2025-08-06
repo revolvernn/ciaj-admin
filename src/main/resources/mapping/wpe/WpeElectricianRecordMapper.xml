@@ -439,10 +439,10 @@
             resultMap="DTOMultiTableResultMap">
         SELECT
         <include refid="Base_Alias_Column_List"/>
-        ,u.username as 'u_username'
-        ,u.nickname as 'u_nickname'
-        ,p.project_name as 'p_projectname'
-        ,p.addr as 'p_addr'
+        ,u.username as "u_username"
+        ,u.nickname as "u_nickname"
+        ,p.project_name as "p_projectname"
+        ,p.addr as "p_addr"
         FROM wpe_electrician_record m
         LEFT JOIN sys_user u on m.user_id = u.id
         LEFT JOIN wpe_project p on m.project_id = p.id
@@ -466,43 +466,45 @@
             </trim>
         </where>
     </select>
-    <select id="selectListStatistics" resultType="map">
-        SELECT
-        m.user_id as 'userId'
-        ,m.project_id as 'projectId'
-        ,DATE_FORMAT( m.workday, '%Y-%m' ) as 'month'
-        ,GROUP_CONCAT(DATE_FORMAT( m.workday, '%Y-%m-%d' ) ORDER BY m.workday SEPARATOR ',')  as 'workdays'
-        ,COUNT(DATE_FORMAT( m.workday, '%Y-%m' )) 'total'
-        ,u.username as 'username'
-        ,u.nickname as 'nickname'
-        ,p.project_name as 'projectName'
-        ,p.addr as 'addr'
-        FROM wpe_electrician_record m
-        LEFT JOIN sys_user u on m.user_id = u.id
-        LEFT JOIN wpe_project p on m.project_id = p.id
-        <where>
-            <trim prefix="" prefixOverrides="and" suffix="">
-                <include refid="query_condition_sql"/>
-                <if test="month != null  and month != ''">
-                    AND DATE_FORMAT( m.workday, '%Y-%m' ) = #{month}
-                </if>
-                <!--  keyword   -->
-                <if test="keyword != null and keyword != ''">
-                    and (m.project_id like CONCAT('%',#{keyword},'%')
-                    or m.id like CONCAT('%',#{keyword},'%')
-                    or m.remark like CONCAT('%',#{keyword},'%')
-                    or u.username like CONCAT('%',#{keyword},'%')
-                    or u.nickname like CONCAT('%',#{keyword},'%')
-                    or u.dept_names like CONCAT('%',#{keyword},'%')
-                    or u.nickname like CONCAT('%',#{keyword},'%')
-                    or u.mobile like CONCAT('%',#{keyword},'%')
-                    or p.project_name like CONCAT('%',#{keyword},'%')
-                    or p.addr like CONCAT('%',#{keyword},'%')
-                    )
-                </if>
-                GROUP BY DATE_FORMAT(m.workday,'%Y-%m'), m.user_id,m.project_id
-            </trim>
-        </where>
+    <select id="selectListStatisticsMultiTable" resultType="map">
+        select  * from (
+            SELECT
+            m.user_id as "userId"
+            ,m.project_id as "projectId"
+            ,DATE_FORMAT( m.workday, '%Y-%m' ) as "workMonth"
+            ,GROUP_CONCAT(DATE_FORMAT( m.workday, '%Y-%m-%d' ) ORDER BY m.workday SEPARATOR ',')  as "workdays"
+            ,COUNT(DATE_FORMAT( m.workday, '%Y-%m' )) "total"
+            ,u.username as "username"
+            ,u.nickname as "nickname"
+            ,p.project_name as "projectName"
+            ,p.addr as "addr"
+            FROM wpe_electrician_record m
+            LEFT JOIN sys_user u on m.user_id = u.id
+            LEFT JOIN wpe_project p on m.project_id = p.id
+            <where>
+                <trim prefix="" prefixOverrides="and" suffix="">
+                    <include refid="query_condition_sql"/>
+                    <if test="workMonth != null  and workMonth != ''">
+                        AND DATE_FORMAT( m.workday, '%Y-%m' ) = #{workMonth}
+                    </if>
+                    <!--  keyword   -->
+                    <if test="keyword != null and keyword != ''">
+                        and (m.project_id like CONCAT('%',#{keyword},'%')
+                        or m.id like CONCAT('%',#{keyword},'%')
+                        or m.remark like CONCAT('%',#{keyword},'%')
+                        or u.username like CONCAT('%',#{keyword},'%')
+                        or u.nickname like CONCAT('%',#{keyword},'%')
+                        or u.dept_names like CONCAT('%',#{keyword},'%')
+                        or u.nickname like CONCAT('%',#{keyword},'%')
+                        or u.mobile like CONCAT('%',#{keyword},'%')
+                        or p.project_name like CONCAT('%',#{keyword},'%')
+                        or p.addr like CONCAT('%',#{keyword},'%')
+                        )
+                    </if>
+                    GROUP BY DATE_FORMAT(m.workday,'%Y-%m'), m.user_id,m.project_id
+                </trim>
+            </where>
+        ) t
     </select>
     <sql id="query_condition_sql">
         <if test="id != null  and id != ''">

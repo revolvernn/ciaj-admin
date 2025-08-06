@@ -74,7 +74,7 @@ public class WpeElectricianRecordServiceImpl extends AbstractService<WpeElectric
     @Override
     public Page<Map<String, Object>> statisticsPage(WpeElectricianRecordVo entity) {
         com.github.pagehelper.Page p = PageUtils.startPageAndOrderBy();
-        List<Map<String, Object>> maps = wpeElectricianRecordMapper.selectListStatistics(entity);
+        List<Map<String, Object>> maps = wpeElectricianRecordMapper.selectListStatisticsMultiTable(entity);
         return super.wrapPageMap(p, maps);
     }
 }

@@ -9,19 +9,20 @@ let electricianRecordStatisticsapp = new Vue({
     data() {
         return {
             queryForm: {
-                // orderBy: 'workday-asc',
+                orderBy: 'workMonth-asc',
+                orderByEnabled: true,
                 pageEnabled: true,
                 pageNo: 1,
                 pageSize: 10,
                 keyword: null,
                 userId: null,
                 projectId: null,
-                month: null
+                workMonth: null
             },
             tableColumns: [
                 {
-                    name: 'month',
-                    label: '年月'
+                    name: 'workMonth',
+                    label: '工作年月'
                 },
                 {
                     name: 'total',
@@ -78,7 +79,16 @@ let electricianRecordStatisticsapp = new Vue({
     methods: {
         exportStatistics() {
             let that = this;
-            httpUtil.fileDownload(that, {url: "wpe/electrician/record/statistics/export",data: that.queryForm});
+            let data =  {
+                orderBy: 'workMonth-asc',
+                orderByEnabled: true,
+                pageEnabled: false,
+                keyword: that.queryForm.keyword,
+                userId: that.queryForm.userId,
+                projectId: that.queryForm.projectId,
+                workMonth: that.queryForm.workMonth
+            }
+            httpUtil.fileDownload(that, {url: "wpe/electrician/record/statistics/export",data: data});
         },
         resetForm(formName) {
             try {

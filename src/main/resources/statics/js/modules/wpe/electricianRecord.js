@@ -9,7 +9,8 @@ let electricianRecordapp = new Vue({
     data() {
         return {
             queryForm: {
-                orderBy: 'workday-asc',
+                orderBy: 'update_at-asc',
+                orderByEnabled: true,
                 pageEnabled: true,
                 pageNo: 1,
                 pageSize: 10,

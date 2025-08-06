@@ -11,7 +11,7 @@
             <el-form-item>
                 <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
                 <el-button @click="myQueryReset">重置</el-button>
-                <my-btn auth="${jsModule}:${jsName}:add" type="primary" @click="myAdd" label="新增"/>
+                <my-btn label="新增" type="primary" icon="el-icon-circle-plus" @click="myAdd" auth="${jsModule}:${jsName}:add"/>
             </el-form-item>
         </el-form>
         <my-table :columns="tableColumns" :page="page" :table-loading="tableLoading"

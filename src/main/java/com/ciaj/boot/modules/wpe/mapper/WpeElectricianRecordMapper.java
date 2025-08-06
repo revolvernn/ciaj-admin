@@ -31,5 +31,5 @@ public interface WpeElectricianRecordMapper extends Mapper<WpeElectricianRecordP
      * @return
      */
     @MultiTableJoins(mappers = {SysUserMapper.class, WpeProjectMapper.class})
-    List<Map<String, Object>> selectListStatistics(WpeElectricianRecordVo entity);
+    List<Map<String, Object>> selectListStatisticsMultiTable(WpeElectricianRecordVo entity);
 }

@@ -100,17 +100,17 @@ public class WpeElectricianRecordController extends AbstractController<WpeElectr
         @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
         @ApiImplicitParam(name = "userId", value = "用户ID", paramType = "query"),
         @ApiImplicitParam(name = "projectId", value = "项目ID", paramType = "query"),
-            @ApiImplicitParam(name = "month", value = "年月", paramType = "query")
+            @ApiImplicitParam(name = "workMonth", value = "工作年月", paramType = "query")
     })
     @OperationLog(operation = "水电工程记录-管理", content = "获取水电工程记录统计列表")
     @RequiresPermissions("wpe:electrician:record:statistics")
     @GetMapping("/statistics")
-    public ResponseEntity<Page<Map<String, Object>>> statistics(String keyword, String userId, String projectId, String month) {
+    public ResponseEntity<Page<Map<String, Object>>> statistics(String keyword, String userId, String projectId, String workMonth) {
         WpeElectricianRecordVo entity = new WpeElectricianRecordVo();
         entity.setKeyword(keyword);
         entity.setUserId(userId);
         entity.setProjectId(projectId);
-        entity.setMonth(month);
+        entity.setWorkMonth(workMonth);
         entity.setDelFlag("N");
         return new ResponseEntity<>("查询成功").put(wpeElectricianRecordService.statisticsPage(entity));
     }
@@ -130,16 +130,16 @@ public class WpeElectricianRecordController extends AbstractController<WpeElectr
             @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
             @ApiImplicitParam(name = "userId", value = "用户ID", paramType = "query"),
             @ApiImplicitParam(name = "projectId", value = "项目ID", paramType = "query"),
-            @ApiImplicitParam(name = "month", value = "年月", paramType = "query")
+            @ApiImplicitParam(name = "workMonth", value = "年月", paramType = "query")
     })
     @RequiresPermissions("wpe:electrician:record:statistics:export")
     @GetMapping("/statistics/export")
-    public void export(String keyword, String userId, String projectId, String month,HttpServletResponse response, HttpServletRequest request) {
+    public void export(String keyword, String userId, String projectId, String workMonth,HttpServletResponse response, HttpServletRequest request) {
         WpeElectricianRecordVo entity = new WpeElectricianRecordVo();
         entity.setKeyword(keyword);
         entity.setUserId(userId);
         entity.setProjectId(projectId);
-        entity.setMonth(month);
+        entity.setWorkMonth(workMonth);
         entity.setDelFlag("N");
         Page<Map<String, Object>> mapPage = wpeElectricianRecordService.statisticsPage(entity);
         List<Map<String, Object>> data = mapPage.getList();
