@@ -9,6 +9,7 @@ let electricianRecordStatisticsapp = new Vue({
     data() {
         return {
             queryForm: {
+                // orderBy: 'workday-asc',
                 pageEnabled: true,
                 pageNo: 1,
                 pageSize: 10,
@@ -19,12 +20,16 @@ let electricianRecordStatisticsapp = new Vue({
             },
             tableColumns: [
                 {
-                    name: 'workday',
-                    label: '工作年月'
+                    name: 'month',
+                    label: '年月'
                 },
                 {
-                    name: 'username',
-                    label: '用户'
+                    name: 'total',
+                    label: '工作天数'
+                },
+                {
+                    name: 'workdays',
+                    label: '年月工作日'
                 },
                 {
                     name: 'projectName',
@@ -35,8 +40,8 @@ let electricianRecordStatisticsapp = new Vue({
                     label: '地址'
                 },
                 {
-                    name: 'total',
-                    label: '工作天数'
+                    name: 'username',
+                    label: '用户'
                 }
                 // ,
                 // {
@@ -71,6 +76,10 @@ let electricianRecordStatisticsapp = new Vue({
         this.loadData();
     },
     methods: {
+        exportStatistics() {
+            let that = this;
+            httpUtil.fileDownload(that, {url: "wpe/electrician/record/statistics/export",data: that.queryForm});
+        },
         resetForm(formName) {
             try {
                 this.$refs[formName].resetFields();

@@ -1,6 +1,7 @@
 package com.ciaj.boot.modules.wpe.web;
 
 import com.ciaj.base.AbstractController;
+import com.ciaj.boot.modules.sys.entity.po.SysUserPo;
 import com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo;
 import com.ciaj.boot.modules.wpe.entity.vo.WpeElectricianRecordVo;
 import com.ciaj.boot.modules.wpe.entity.dto.WpeElectricianRecordDto;
@@ -8,14 +9,19 @@ import com.ciaj.boot.modules.wpe.service.WpeElectricianRecordService;
 import com.ciaj.comm.ResponseEntity;
 import com.ciaj.comm.annotation.OperationLog;
 import com.ciaj.comm.constant.ParamTypeEnum;
+import com.ciaj.comm.utils.ExcelUtil;
 import io.swagger.annotations.*;
 import com.ciaj.comm.annotation.Resubmit;
 import com.ciaj.comm.utils.Page;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -108,6 +114,41 @@ public class WpeElectricianRecordController extends AbstractController<WpeElectr
         entity.setDelFlag("N");
         return new ResponseEntity<>("查询成功").put(wpeElectricianRecordService.statisticsPage(entity));
     }
+
+    /**
+     * 导出记录
+     *
+     * @return
+     */
+    @ApiOperation("水电工程记录列表导出")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "orderBy", value = "排序：xxx-desc,xxx-asc,xxx ", paramType = "query"),
+            @ApiImplicitParam(name = "orderByEnabled", value = "是否开启排序:true/false 默认-false", dataType = "Boolean", paramType = "query"),
+            @ApiImplicitParam(name = "pageEnabled", value = "是否开启分页:true/false 默认-false", dataType = "Boolean", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页记录数：默认每页十条", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
+            @ApiImplicitParam(name = "userId", value = "用户ID", paramType = "query"),
+            @ApiImplicitParam(name = "projectId", value = "项目ID", paramType = "query"),
+            @ApiImplicitParam(name = "month", value = "年月", paramType = "query")
+    })
+    @RequiresPermissions("wpe:electrician:record:statistics:export")
+    @GetMapping("/statistics/export")
+    public void export(String keyword, String userId, String projectId, String month,HttpServletResponse response, HttpServletRequest request) {
+        WpeElectricianRecordVo entity = new WpeElectricianRecordVo();
+        entity.setKeyword(keyword);
+        entity.setUserId(userId);
+        entity.setProjectId(projectId);
+        entity.setMonth(month);
+        entity.setDelFlag("N");
+        Page<Map<String, Object>> mapPage = wpeElectricianRecordService.statisticsPage(entity);
+        List<Map<String, Object>> data = mapPage.getList();
+        new ExcelUtil().build("水电项目导出",
+                new String[]{"month", "workdays","total","projectName","addr", "username"},
+                new String[]{"月份","月份工作日","总天数","项目","地址", "用户名"},
+                data).exportExcel(request, response);
+    }
+
 
     /**
      * 添加

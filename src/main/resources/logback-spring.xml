@@ -22,7 +22,7 @@
         </rollingPolicy>
         <!--日志文件最大的大小-->
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>10MB</MaxFileSize>     
+            <MaxFileSize>10MB</MaxFileSize>
         </triggeringPolicy>
     </appender>
     <appender name="D" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -57,7 +57,7 @@
     </appender>
     <!--<logger name="org" level="info"/>-->
     <!--<logger name="com" level="info"/>-->
-    <logger name="com.ciaj.boot.modules" level="DEBUG" />
+    <logger name="com.ciaj" level="DEBUG" />
     <root level="info">
         <appender-ref ref="stdout"/>
         <appender-ref ref="R"/>

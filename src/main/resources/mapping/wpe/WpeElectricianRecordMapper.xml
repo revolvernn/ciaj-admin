@@ -470,7 +470,8 @@
         SELECT
         m.user_id as 'userId'
         ,m.project_id as 'projectId'
-        ,DATE_FORMAT( m.workday, '%Y-%m' ) as 'workday'
+        ,DATE_FORMAT( m.workday, '%Y-%m' ) as 'month'
+        ,GROUP_CONCAT(DATE_FORMAT( m.workday, '%Y-%m-%d' ) ORDER BY m.workday SEPARATOR ',')  as 'workdays'
         ,COUNT(DATE_FORMAT( m.workday, '%Y-%m' )) 'total'
         ,u.username as 'username'
         ,u.nickname as 'nickname'
