@@ -1,21 +1,29 @@
 package com.ciaj.comm.utils;
 
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
-
 /**
  * @Author: Ciaj.
  * @Date: 2019/2/25 15:34
  * @Description:
  */
+@Slf4j
 public class CalendarUtils extends DateUtils {
 
 	private static final ThreadLocal<SimpleDateFormat> threadLocal = new ThreadLocal<SimpleDateFormat>();
 	private static final Calendar calendar = Calendar.getInstance();
 	private static final Object object = new Object();
+	public final static List<String> FORMATS = Lists.newArrayList("yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyyMMdd-HHmmss", "yyyy-MM-dd","yyyyMMdd","yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd", "MM-dd", "HH:mm:ss",
+			"yyyy-MM");
 
 	/**
 	 * 毫秒转化时分秒毫秒
@@ -268,6 +276,7 @@ public class CalendarUtils extends DateUtils {
 						dateTmp = null;
 					}
 				} catch (Exception e) {
+					log.error(e.getMessage(),e);
 				}
 			}
 			if (dateTmp != null) {
@@ -306,6 +315,7 @@ public class CalendarUtils extends DateUtils {
 			try {
 				myDate = getDateFormat(pattern).parse(date);
 			} catch (Exception e) {
+				log.error(e.getMessage(),e);
 			}
 		}
 		return myDate;
@@ -339,6 +349,7 @@ public class CalendarUtils extends DateUtils {
 			try {
 				dateString = getDateFormat(pattern).format(date);
 			} catch (Exception e) {
+				log.error(e.getMessage(),e);
 			}
 		}
 		return dateString;
@@ -806,8 +817,8 @@ public class CalendarUtils extends DateUtils {
 	 */
 	public static int getIntervalDays(Date date, Date otherDate) {
 		int num = -1;
-		Date dateTmp = CalendarUtils.StringToDate(CalendarUtils.getDate(date), DateStyle.YYYY_MM_DD);
-		Date otherDateTmp = CalendarUtils.StringToDate(CalendarUtils.getDate(otherDate), DateStyle.YYYY_MM_DD);
+		Date dateTmp = StringToDate(getDate(date), DateStyle.YYYY_MM_DD);
+		Date otherDateTmp = StringToDate(getDate(otherDate), DateStyle.YYYY_MM_DD);
 		if (dateTmp != null && otherDateTmp != null) {
 			long time = Math.abs(dateTmp.getTime() - otherDateTmp.getTime());
 			num = (int) (time / (24 * 60 * 60 * 1000));
@@ -879,8 +890,9 @@ public class CalendarUtils extends DateUtils {
 		if (displayAll.length > 0) {
 			if (!displayAll[0]) {
 				if (year == 0) {
-					if (result.indexOf("MM") > 0)
+					if (result.indexOf("MM") > 0){
 						result = result.substring(result.indexOf("MM"));
+					}
 				}
 				if (month == 0) {
 					result = (result.indexOf("MM") > 0 ? result.substring(0, result.indexOf("MM")) : result) + (result.indexOf("dd") > 0 ? result.substring(result.indexOf("dd")) : result);
@@ -895,8 +907,9 @@ public class CalendarUtils extends DateUtils {
 					result = result.indexOf("mm") > 0 ? result.substring(0, result.indexOf("mm")) : result + (result.indexOf("ss") > 0 ? result.substring(result.indexOf("ss")) : result);
 				}
 				if (second == 0) {
-					if (result.indexOf("ss") > 0)
+					if (result.indexOf("ss") > 0) {
 						result = result.substring(0, result.indexOf("ss"));
+					}
 				}
 			}
 		}
@@ -1060,4 +1073,46 @@ public class CalendarUtils extends DateUtils {
 		calendar.set(Calendar.DAY_OF_YEAR, 1);
 		return calendar.getTime();
 	}
+
+	/**
+	 *  将LocalDateTime转Date
+	 *
+	 * @author Amadeus
+	 * @param localDateTime :
+	 * @return java.util.Date
+	 * @date 2021/1/24 10:55
+	 */
+	public  static  Date localDateTimeToDate(LocalDateTime localDateTime){
+		ZoneId zoneId = ZoneId.systemDefault();
+		ZonedDateTime zdt = localDateTime.atZone(zoneId);
+		try{
+			Date date = Date.from(zdt.toInstant());
+			return date;
+		}catch (Exception e){
+			log.error("LocalDateTimeToDate转换错误",e);
+			return null;
+		}
+	}
+
+	/**
+	 *  Date转LocalDateTime
+	 *
+	 * @author Amadeus
+	 * @param date :
+	 * @return java.time.LocalDateTime
+	 * @date 2021/1/24 10:57
+	 */
+	public  static  LocalDateTime dateToLocalDateTime(Date date){
+		Instant instant = date.toInstant();
+		ZoneId zoneId = ZoneId.systemDefault();
+		try{
+			LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
+			return localDateTime;
+		}catch (Exception e){
+			log.error("DateToLocalDateTime转换错误");
+			return null;
+		}
+	}
+
+
 }
