@@ -45,7 +45,7 @@ public class RedisSessionDAO extends EnterpriseCacheSessionDAO {
 		if (session == null) {
 			String key = getKey(sessionId.toString());
 			if (log.isDebugEnabled()) {
-				log.debug("RedisSessionDAO doReadSession get session is null Key: {}", key);
+				// log.debug("RedisSessionDAO doReadSession get session is null Key: {}", key);
 			}
 			byte[] bytes = (byte[]) redisTemplate.opsForValue().get(key);
 			if (bytes != null && bytes.length > 0) {
@@ -61,7 +61,7 @@ public class RedisSessionDAO extends EnterpriseCacheSessionDAO {
 		super.doUpdate(session);
 		String key = getKey(session.getId().toString());
 		if (log.isDebugEnabled()) {
-			log.debug("RedisSessionDAO doUpdate set session Key: {}", key);
+			// log.debug("RedisSessionDAO doUpdate set session Key: {}", key);
 		}
 		redisTemplate.opsForValue().set(key, sessionToByte(session));
 	}

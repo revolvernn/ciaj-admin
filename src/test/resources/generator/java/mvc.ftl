@@ -15,6 +15,9 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import com.ciaj.comm.utils.ExcelUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 <#assign dateTime = .now>
 /**
@@ -38,6 +41,7 @@ public class ${tableClass.shortClassName}Controller extends AbstractController<$
      *
      * @return
      */
+    @Override
     @ApiOperation("根据ID获取${mvcDesc}")
     @ApiImplicitParam(name = "id", value = "${mvcDesc}ID", required = true, dataType = "string", paramType = "path")
     @OperationLog(operation = "${mvcDesc}-管理", content = "根据ID获取${mvcDesc}")
@@ -71,12 +75,53 @@ public class ${tableClass.shortClassName}Controller extends AbstractController<$
     }
 
     /**
+     * 列表导出
+     *
+     * @return
+     */
+    @ApiOperation("${mvcDesc}列表导出")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "orderBy", value = "排序：xxx-desc,xxx-asc,xxx ", paramType = "query"),
+        @ApiImplicitParam(name = "orderByEnabled", value = "是否开启排序:true/false 默认-false", dataType = "Boolean", paramType = "query"),
+        @ApiImplicitParam(name = "pageEnabled", value = "是否开启分页:true/false 默认-false", dataType = "Boolean", paramType = "query"),
+        @ApiImplicitParam(name = "pageSize", value = "每页记录数：默认每页十条", dataType = "int", paramType = "query"),
+        @ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
+        @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query")
+    })
+    @OperationLog(operation = "${mvcDesc}-管理", content = "${mvcDesc}列表导出")
+    @RequiresPermissions("${permission}:list:export")
+    @GetMapping("/list/export")
+    public void listExport(String keyword, HttpServletResponse response, HttpServletRequest request) {
+        ${tableClass.shortClassName}Vo entity = new ${tableClass.shortClassName}Vo();
+        entity.setKeyword(keyword);
+            WpeElectricianRecordVo entity = new WpeElectricianRecordVo();
+            entity.setKeyword(keyword);
+            entity.setDelFlag("N");
+            //
+            Page<WpeProjectDto> page = ${tableClass.variableName}Service.selectDTOPage(entity);
+            List<${tableClass.shortClassName}Dto> data = page.getList();
+            //
+            new ExcelUtil().build("${mvcDesc}导出",
+            new String[]{
+            <#if tableClass.allFields??>
+                <#list tableClass.allFields as field>"${field.fieldName}"<#if (field_index + 1) < tableClass.allFields?size>,</#if></#list>
+            </#if>
+            },
+            new String[]{
+            <#if tableClass.allFields??>
+                <#list tableClass.allFields as field>"<#if field.remarks??>${field.remarks}"<#if (field_index + 1) < tableClass.allFields?size>,</#if></#if></#list>
+            </#if>
+            }, data).exportExcel(request, response);
+    }
+
+    /**
      * 添加
      *
      * @param entity
      *
      * @return
      */
+    @Override
     @Resubmit
     @ApiOperation(value = "添加${mvcDesc}", produces = "application/json;charset=UTF-8")
     @OperationLog(operation = "${mvcDesc}-管理", content = "添加${mvcDesc}")
@@ -93,6 +138,7 @@ public class ${tableClass.shortClassName}Controller extends AbstractController<$
      *
      * @return
      */
+    @Override
     @Resubmit
     @ApiOperation(value = "更新${mvcDesc}", produces = "application/json;charset=UTF-8")
     @OperationLog(operation = "${mvcDesc}-管理", content = "添加${mvcDesc}")
@@ -109,6 +155,7 @@ public class ${tableClass.shortClassName}Controller extends AbstractController<$
      *
      * @return
      */
+    @Override
     @Resubmit(ParamTypeEnum.url)
     @ApiOperation("根据ID删除${mvcDesc}")
     @ApiImplicitParam(name = "id", value = "${mvcDesc}ID", required = true, dataType = "string", paramType = "path")
@@ -118,5 +165,4 @@ public class ${tableClass.shortClassName}Controller extends AbstractController<$
     public ResponseEntity deleteFlag(@PathVariable("id") String id) {
         return super.deleteFlag(id);
     }
-
 }

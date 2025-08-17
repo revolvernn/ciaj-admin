@@ -12,9 +12,10 @@
                 <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
                 <el-button @click="myQueryReset">重置</el-button>
                 <my-btn label="新增" type="primary" icon="el-icon-circle-plus" @click="myAdd" auth="${jsModule}:${jsName}:add"/>
+                <my-btn type="info" label="导出" @click="listExport" icon="el-icon-download" auth="${jsModule}:${jsName}:list:export"></my-btn>
             </el-form-item>
         </el-form>
-        <my-table :columns="tableColumns" :page="page" :table-loading="tableLoading"
+        <my-table :columns="tableColumns" :page="page" :table-loading="tableLoading" @sortChange="sortchange" :default-sort="defaultSort"
                   v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
         </my-table>
         <el-dialog :close-on-click-modal="false" :title="addOrUpdateForm.title"

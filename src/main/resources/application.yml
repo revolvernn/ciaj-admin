@@ -31,7 +31,7 @@ mybatis:
   mapper-locations: classpath:mapping/**/*.xml
   type-aliases-package: com.ciaj.boot.modules.*.entity
   configuration:
-    cache-enabled: true
+    cache-enabled: false
 
 mapper:
   mappers:

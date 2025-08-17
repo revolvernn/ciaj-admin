@@ -42,7 +42,7 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 
 		V v = (V) redisTemplate.opsForValue().get(getKey(key));
 		if (log.isDebugEnabled()) {
-			log.debug("ShiroRedisCache get Key: {},V：{}", key, v);
+			//log.debug("ShiroRedisCache get Key: {},V：{}", key, v);
 		}
 		return v;
 	}
@@ -50,7 +50,7 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 	@Override
 	public V put(K key, V value) throws CacheException {
 		if (log.isDebugEnabled()) {
-			log.debug("ShiroRedisCache put Key: {}, value: {}", key, value);
+			// log.debug("ShiroRedisCache put Key: {}, value: {}", key, value);
 		}
 
 		if (key == null || value == null) {

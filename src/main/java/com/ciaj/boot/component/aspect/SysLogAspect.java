@@ -23,7 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -79,8 +82,8 @@ public class SysLogAspect {
             sysLogPo.setTime(time);
             OperationLog operationLog = method.getAnnotation(OperationLog.class);
             if (operationLog == null) {
-				return;
-			}
+                return;
+            }
             //注解上的描述
             sysLogPo.setOperation(operationLog.operation());
             sysLogPo.setDescription(operationLog.content());
@@ -102,7 +105,8 @@ public class SysLogAspect {
                     sysLogPo.setOperation(LogTypeEnum.ERROR.name());
                     sysLogPo.setParams(ExceptionsUtils.getStackTraceAsString(e));
                 } else {
-                    String params = JSONUtils.obj2json(Arrays.asList(args));
+                    List<Object> list = getArgsList(args);
+                    String params = JSONUtils.obj2json(list);
                     sysLogPo.setParams(JSON.parse(params).toString());
                 }
             }
@@ -125,6 +129,18 @@ public class SysLogAspect {
         }
     }
 
+    private List<Object> getArgsList(Object[] args) {
+        List<Object> list = new ArrayList();
+        for (int i = 0; i < args.length; i++) {
+            Object arg = args[i];
+            if (arg instanceof HttpServletResponse || arg instanceof HttpServletRequest) {
+            } else {
+                list.add(arg);
+            }
+        }
+        return list;
+    }
+
 
     /**
      * 异常通知方法只在连接点方法出现异常后才会执行，否则不执行。在异常通知方法中可以获取连接点方法出现的异常。在切面类中异常通知方法
@@ -136,7 +152,7 @@ public class SysLogAspect {
     @AfterThrowing(pointcut = "logPointCut()", throwing = "e")
     public void afterThrowing(JoinPoint point, Throwable e) {
         String methodName = point.getSignature().getName();
-        List<Object> args = Arrays.asList(point.getArgs());
+        List<Object> args = getArgsList(point.getArgs());
         log.info("===========afterThrowing连接点方法为：{},参数为：{},异常为：{}", methodName, args, e);
     }
 }

@@ -1,12 +1,16 @@
 Vue.component('myPagination', myPaginationT);
 Vue.component('myTable', myTableT);
 Vue.component('myBtn', myBtnT);
+Vue.component('myDictSelect', myDictSelectT);
+Vue.component('mySearchSelect', mySearchSelectT);
 
 let ${jsName}app = new Vue({
     el: '<#noparse>#</#noparse>${jsName}app',
     data() {
         return {
+            defaultSort: {prop: 'createTime', order: 'descending'},
             queryForm: {
+                orderByEnabled: true,
                 pageEnabled: true,
                 pageNo: 1,
                 pageSize: 10,
@@ -20,6 +24,12 @@ let ${jsName}app = new Vue({
                     label: '<#if field.remarks??>${field.remarks}</#if>'
                 },
             </#list>
+                //{
+                //    name: 'updateTime',
+                //    sortable: 'custom',
+                //    sortBy: 'm.update_time',
+                //    label: '更新时间'
+                //},
             </#if>
                 {
                     label: '操作',
@@ -69,6 +79,11 @@ let ${jsName}app = new Vue({
         this.loadData();
     },
     methods: {
+        sortchange(val) {
+            let that = this;
+            that.queryForm.orderBy = val.sortBy;
+            that.myQuery();
+        },
         resetForm(formName) {
             try {
                 this.$refs[formName].resetFields();
@@ -148,8 +163,19 @@ let ${jsName}app = new Vue({
             httpUtil.get({url: "${mvcUrl}/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data;
+                    that.page.expand = true;
                 }
             });
+        },
+        listExport() {
+            let that = this;
+            let data =  {
+                orderBy: that.queryForm.orderBy,
+                orderByEnabled: true,
+                pageEnabled: false,
+                keyword: that.queryForm.keyword
+            }
+            httpUtil.fileDownload(that, {url: "${mvcUrl}/list/export",data: data});
         }
     }
 });

@@ -571,7 +571,7 @@ let myTableT = Vue.extend({
         '<div v-if="item.icon" v-html="getIcon(scope.row,item.name)"></div>',
         '</template>',
         '</el-table-column>',
-        '<el-table-column v-else-if="item.date" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">',
+        '<el-table-column v-else-if="item.date" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :sort-by="item.sortBy" :sortable="item.sortable?item.sortable:false">',
         '<template slot-scope="scope"> {{getDateFormat(scope.row,item.name,item.date)}}</template>',
         '</el-table-column>',
         '<el-table-column show-overflow-tooltip v-else :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :fixed="item.fixed" :sort-by="item.sortBy" :sortable="item.sortable?item.sortable:false">',
