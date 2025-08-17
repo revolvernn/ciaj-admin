@@ -8,8 +8,14 @@
             <el-form-item label="关键字" prop="keyword">
                 <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
             </el-form-item>
-            <el-form-item label="月份" prop="workMonth">
-                <el-date-picker v-model="queryForm.workMonth" value-format="yyyy-MM" type="month" placeholder="选择月份"></el-date-picker>
+            <el-form-item label="统计类型" prop="type">
+                <my-dict-select v-model="queryForm.type" type="statType"></my-dict-select>
+            </el-form-item>
+            <el-form-item v-show="queryForm.type === '1' || queryForm.type === '2'" label="周期" prop="period">
+                <el-date-picker  v-model="queryForm.period" value-format="yyyy-MM" type="month" placeholder="选择月份"></el-date-picker>
+            </el-form-item>
+            <el-form-item  v-show="queryForm.type === '3' || queryForm.type === '4'"  label="周期" prop="period">
+                <el-date-picker  v-model="queryForm.period" value-format="yyyy" type="year" placeholder="选择年"></el-date-picker>
             </el-form-item>
             <el-form-item label="用户" prop="userId">
                 <my-search-select v-model="queryForm.userId"
@@ -37,7 +43,7 @@
                 <my-btn type="info" label="导出" @click="exportStatistics" icon="el-icon-download" auth="wpe:electrician:record:statistics:export"></my-btn>
             </el-form-item>
         </el-form>
-        <my-table :columns="tableColumns" :page="page" :table-loading="tableLoading"
+        <my-table :columns="tableColumns" :page="page" :table-loading="tableLoading"   @sortChange="sortchange" :default-sort="defaultSort"
                   v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
         </my-table>
     </div>

@@ -8,8 +8,9 @@ let electricianRecordapp = new Vue({
     el: '#electricianRecordapp',
     data() {
         return {
+            defaultSort: {prop: 'workday', order: 'descending'},
             queryForm: {
-                orderBy: 'update_at-asc',
+                //orderBy: 'm.update_time-desc',
                 orderByEnabled: true,
                 pageEnabled: true,
                 pageNo: 1,
@@ -33,9 +34,12 @@ let electricianRecordapp = new Vue({
                     label: '地址'
                 },
                 {
+                    width: '140',
                     name: 'workday',
-                    label: '工作日',
-                    date: 'yyyy-MM-dd'
+                    date: 'yyyy-MM-dd',
+                    sortable: 'custom',
+                    sortBy: 'm.workday',
+                    label: '工作日'
                 },
                 {
                     name: 'workStart',
@@ -55,11 +59,21 @@ let electricianRecordapp = new Vue({
                     label: '工作状态'
                 },
                 {
+                    name: 'labourCost',
+                    label: '工价'
+                },
+                {
                     name: 'createTime',
+                    sortable: 'custom',
+                    width: '140',
+                    sortBy: 'm.create_time',
                     label: '创建时间'
                 },
                 {
                     name: 'updateTime',
+                    sortable: 'custom',
+                    width: '140',
+                    sortBy: 'm.update_time',
                     label: '更新时间'
                 },
                 {
@@ -101,7 +115,8 @@ let electricianRecordapp = new Vue({
                     workStart: null,
                     workEnd: null,
                     remark: null,
-                    status: 'Y'
+                    status: 'Y',
+                    labourCost: 150
                 }
             },
             rules: {
@@ -113,6 +128,11 @@ let electricianRecordapp = new Vue({
         this.loadData();
     },
     methods: {
+        sortchange(val) {
+            let that = this;
+            that.queryForm.orderBy = val.sortBy;
+            that.myQuery();
+        },
         resetForm(formName) {
             try {
                 this.$refs[formName].resetFields();
@@ -148,7 +168,8 @@ let electricianRecordapp = new Vue({
                                              workStart: null,
                                              workEnd: null,
                                              remark: null,
-                                             status: null
+                                             status: null,
+                                             labour_cost: null
                                          }
             that.resetForm('addOrUpdateFormRef');
         },
@@ -195,8 +216,22 @@ let electricianRecordapp = new Vue({
             httpUtil.get({url: "wpe/electrician/record/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data;
+                    that.page.expand = true;
                 }
             });
+        },
+        listExport() {
+            let that = this;
+            let data =  {
+                orderBy: that.queryForm.orderBy,
+                orderByEnabled: true,
+                pageEnabled: false,
+                keyword: that.queryForm.keyword,
+                userId: that.queryForm.userId,
+                projectId: that.queryForm.projectId,
+                status: that.queryForm.status
+            }
+            httpUtil.fileDownload(that, {url: "wpe/electrician/record/list/export",data: data});
         }
     }
 });

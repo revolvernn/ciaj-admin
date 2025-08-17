@@ -8,8 +8,9 @@ let electricianRecordStatisticsapp = new Vue({
     el: '#electricianRecordStatisticsapp',
     data() {
         return {
+            defaultSort: {prop: 'period', order: 'descending'},
             queryForm: {
-                orderBy: 'workMonth-asc',
+                orderBy: 'period-desc',
                 orderByEnabled: true,
                 pageEnabled: true,
                 pageNo: 1,
@@ -17,16 +18,27 @@ let electricianRecordStatisticsapp = new Vue({
                 keyword: null,
                 userId: null,
                 projectId: null,
-                workMonth: null
+                period: null,
+                type: '1'
             },
             tableColumns: [
                 {
-                    name: 'workMonth',
-                    label: '工作年月'
+                    sortable: 'custom',
+                    sortBy: 'period',
+                    name: 'period',
+                    label: '周期'
                 },
                 {
                     name: 'total',
                     label: '工作天数'
+                },
+                {
+                    name: 'projectNum',
+                    label: '项目数'
+                },
+                {
+                    name: 'totalLabourCost',
+                    label: '总工价'
                 },
                 {
                     name: 'workdays',
@@ -35,10 +47,6 @@ let electricianRecordStatisticsapp = new Vue({
                 {
                     name: 'projectName',
                     label: '工程名称'
-                },
-                {
-                    name: 'addr',
-                    label: '地址'
                 },
                 {
                     name: 'username',
@@ -77,16 +85,22 @@ let electricianRecordStatisticsapp = new Vue({
         this.loadData();
     },
     methods: {
+        sortchange(val) {
+            let that = this;
+            that.queryForm.orderBy = val.sortBy;
+            that.myQuery();
+        },
         exportStatistics() {
             let that = this;
             let data =  {
-                orderBy: 'workMonth-asc',
+                orderBy: that.queryForm.orderBy,
                 orderByEnabled: true,
                 pageEnabled: false,
                 keyword: that.queryForm.keyword,
                 userId: that.queryForm.userId,
                 projectId: that.queryForm.projectId,
-                workMonth: that.queryForm.workMonth
+                period: that.queryForm.period,
+                type: that.queryForm.type
             }
             httpUtil.fileDownload(that, {url: "wpe/electrician/record/statistics/export",data: data});
         },
@@ -119,8 +133,15 @@ let electricianRecordStatisticsapp = new Vue({
             httpUtil.get({url: "wpe/electrician/record/statistics", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data;
+                    that.page.expand = true;
                 }
             });
+        }
+    }
+    , watch: {
+        'queryForm.type'(val) {
+            let that = this;
+             that.queryForm.period = null;
         }
     }
 });

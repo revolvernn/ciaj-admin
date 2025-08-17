@@ -19,6 +19,7 @@
         <id column="work_end" property="workEnd" jdbcType="TIMESTAMP" />
         <id column="remark" property="remark" jdbcType="VARCHAR" />
         <id column="status" property="status" jdbcType="CHAR" />
+        <id column="labour_cost" property="labourCost" jdbcType="DECIMAL" />
         <id column="create_at" property="createAt" jdbcType="VARCHAR" />
         <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
@@ -27,10 +28,10 @@
         <id column="version" property="version" jdbcType="INTEGER" />
     </resultMap>
     <sql id="Base_Column_List">
-        id,user_id,project_id,workday,work_start,work_end,remark,status,create_at,create_time,update_at,update_time,del_flag,version
+        id,user_id,project_id,workday,work_start,work_end,remark,status,labour_cost,create_at,create_time,update_at,update_time,del_flag,version
     </sql>
     <sql id="Base_Alias_Column_List">
-        m.id,m.user_id,m.project_id,m.workday,m.work_start,m.work_end,m.remark,m.status,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
+        m.id,m.user_id,m.project_id,m.workday,m.work_start,m.work_end,m.remark,m.status,m.labour_cost,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
     </sql>
     <delete id="deleteByPrimaryKey">
         DELETE FROM wpe_electrician_record
@@ -64,6 +65,9 @@
                 <if test="status != null">
                     AND status = #{status}
                 </if>
+                <if test="labourCost != null">
+                    AND labour_cost = #{labourCost}
+                </if>
                 <if test="createAt != null">
                     AND create_at = #{createAt}
                 </if>
@@ -90,9 +94,9 @@
             SELECT REPLACE(uuid(),'-','') FROM DUAL
         </selectKey>
         INSERT INTO wpe_electrician_record
-        (id,user_id,project_id,workday,work_start,work_end,remark,status,create_at,create_time,update_at,update_time,del_flag,version)
+        (id,user_id,project_id,workday,work_start,work_end,remark,status,labour_cost,create_at,create_time,update_at,update_time,del_flag,version)
         VALUES
-        (#{id,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{projectId,jdbcType=VARCHAR},#{workday,jdbcType=TIMESTAMP},#{workStart,jdbcType=TIMESTAMP},#{workEnd,jdbcType=TIMESTAMP},#{remark,jdbcType=VARCHAR},#{status,jdbcType=CHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
+        (#{id,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{projectId,jdbcType=VARCHAR},#{workday,jdbcType=TIMESTAMP},#{workStart,jdbcType=TIMESTAMP},#{workEnd,jdbcType=TIMESTAMP},#{remark,jdbcType=VARCHAR},#{status,jdbcType=CHAR},#{labourCost,jdbcType=DECIMAL},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo">
         <selectKey keyProperty="id" order="BEFORE" resultType="String">
@@ -123,6 +127,9 @@
             </if>
             <if test="status != null">
                 status,
+            </if>
+            <if test="labourCost != null">
+                labour_cost,
             </if>
             <if test="createAt != null">
                 create_at,
@@ -168,6 +175,9 @@
             <if test="status != null">
                 #{status,jdbcType=CHAR},
             </if>
+            <if test="labourCost != null">
+                #{labourCost,jdbcType=DECIMAL},
+            </if>
             <if test="createAt != null">
                 #{createAt,jdbcType=VARCHAR},
             </if>
@@ -199,6 +209,7 @@
             work_end = #{workEnd},
             remark = #{remark},
             status = #{status},
+            labour_cost = #{labourCost},
             create_at = #{createAt},
             create_time = #{createTime},
             update_at = #{updateAt},
@@ -218,6 +229,7 @@
             work_end = #{record.workEnd},
             remark = #{record.remark},
             status = #{record.status},
+            labour_cost = #{record.labourCost},
             create_at = #{record.createAt},
             create_time = #{record.createTime},
             update_at = #{record.updateAt},
@@ -250,6 +262,9 @@
             </if>
             <if test="status != null">
                 status = #{status},
+            </if>
+            <if test="labourCost != null">
+                labour_cost = #{labourCost},
             </if>
             <if test="createAt != null">
                 create_at = #{createAt},
@@ -295,6 +310,9 @@
             </if>
             <if test="record.status != null">
                 status = #{record.status},
+            </if>
+            <if test="record.labourCost != null">
+                labour_cost = #{record.labourCost},
             </if>
             <if test="record.createAt != null">
                 create_at = #{record.createAt},
@@ -436,7 +454,7 @@
         </association>
     </resultMap>
     <select id="selectDTOListMultiTable"
-            resultMap="DTOMultiTableResultMap">
+            resultMap="DTOMultiTableResultMap"  parameterType="com.ciaj.boot.modules.wpe.entity.vo.WpeElectricianRecordVo">
         SELECT
         <include refid="Base_Alias_Column_List"/>
         ,u.username as "u_username"
@@ -466,26 +484,36 @@
             </trim>
         </where>
     </select>
-    <select id="selectListStatisticsMultiTable" resultType="map">
+    <select id="selectListStatisticsMultiTable" resultType="map"  parameterType="com.ciaj.boot.modules.wpe.entity.vo.WpeElectricianRecordVo">
         select  * from (
             SELECT
             m.user_id as "userId"
-            ,m.project_id as "projectId"
-            ,DATE_FORMAT( m.workday, '%Y-%m' ) as "workMonth"
-            ,GROUP_CONCAT(DATE_FORMAT( m.workday, '%Y-%m-%d' ) ORDER BY m.workday SEPARATOR ',')  as "workdays"
-            ,COUNT(DATE_FORMAT( m.workday, '%Y-%m' )) "total"
+            ,SUM(m.labour_cost) as "totalLabourCost"
+            ,COUNT(m.id) "total"
+            ,COUNT(DISTINCT p.id) "projectNum"
             ,u.username as "username"
             ,u.nickname as "nickname"
-            ,p.project_name as "projectName"
-            ,p.addr as "addr"
+            ,GROUP_CONCAT(DATE_FORMAT( m.workday, '%Y-%m-%d' ) ORDER BY m.workday SEPARATOR ',')  as "workdays"
+            <include refid="type_condition_sql"/>
             FROM wpe_electrician_record m
             LEFT JOIN sys_user u on m.user_id = u.id
             LEFT JOIN wpe_project p on m.project_id = p.id
             <where>
                 <trim prefix="" prefixOverrides="and" suffix="">
                     <include refid="query_condition_sql"/>
-                    <if test="workMonth != null  and workMonth != ''">
-                        AND DATE_FORMAT( m.workday, '%Y-%m' ) = #{workMonth}
+                    <if test="period != null  and period != ''">
+                        <if test="type != null and type == '1'.toString()">
+                            AND DATE_FORMAT( m.workday, '%Y-%m' ) = #{period}
+                        </if>
+                        <if test="type != null and  type == '2'.toString()">
+                            AND DATE_FORMAT( m.workday, '%Y-%m' ) = #{period}
+                        </if>
+                        <if test="type != null and type == '3'.toString()">
+                            AND DATE_FORMAT( m.workday, '%Y' ) = #{period}
+                        </if>
+                        <if test="type != null and type == '4'.toString()">
+                            AND DATE_FORMAT( m.workday, '%Y' ) = #{period}
+                        </if>
                     </if>
                     <!--  keyword   -->
                     <if test="keyword != null and keyword != ''">
@@ -501,11 +529,45 @@
                         or p.addr like CONCAT('%',#{keyword},'%')
                         )
                     </if>
-                    GROUP BY DATE_FORMAT(m.workday,'%Y-%m'), m.user_id,m.project_id
+                    <include refid="type_group_condition_sql"/>
                 </trim>
             </where>
         ) t
     </select>
+    <sql id="type_group_condition_sql">
+        <if test="type != null and type == '1'.toString()">
+            GROUP BY DATE_FORMAT(m.workday,'%Y-%m'), m.user_id,m.project_id
+        </if>
+        <if test="type != null and type == '2'.toString()">
+            GROUP BY DATE_FORMAT(m.workday,'%Y-%m'), m.user_id
+        </if>
+        <if test="type != null and type == '3'.toString()">
+            GROUP BY DATE_FORMAT(m.workday,'%Y'), m.user_id,m.project_id
+        </if>
+        <if test="type != null and type == '4'.toString()">
+            GROUP BY DATE_FORMAT(m.workday,'%Y'), m.user_id
+        </if>
+    </sql>
+    <sql id="type_condition_sql">
+        <if test="type != null and type== '1'.toString()">
+            ,m.project_id as "projectId"
+            ,DATE_FORMAT( m.workday, '%Y-%m' ) as "period"
+            ,CONCAT(p.addr,'-',p.project_name) as "projectName"
+        </if>
+        <if test="type != null and type == '2'.toString()">
+            ,DATE_FORMAT( m.workday, '%Y-%m' ) as "period"
+            ,GROUP_CONCAT(DISTINCT CONCAT(p.addr,'-',p.project_name) SEPARATOR ',')  as "projectName"
+        </if>
+        <if test="type != null and type == '3'.toString()">
+            ,m.project_id as "projectId"
+            ,DATE_FORMAT( m.workday, '%Y' ) as "period"
+            ,CONCAT(p.addr,'-',p.project_name) as "projectName"
+        </if>
+        <if test="type != null and type == '4'.toString()">
+            ,DATE_FORMAT( m.workday, '%Y' ) as "period"
+            ,GROUP_CONCAT(DISTINCT CONCAT(p.addr,'-',p.project_name) SEPARATOR ',')  as "projectName"
+        </if>
+    </sql>
     <sql id="query_condition_sql">
         <if test="id != null  and id != ''">
             AND m.id = #{id}
@@ -530,6 +592,9 @@
         </if>
         <if test="status != null  and status != ''">
             AND m.status = #{status}
+        </if>
+        <if test="labourCost != null">
+            AND m.labour_cost = #{labourCost}
         </if>
         <if test="createAt != null  and createAt != ''">
             AND m.create_at = #{createAt}
@@ -579,6 +644,9 @@
                 </if>
                 <if test="status != null  and status != ''">
                     AND m.status = #{status}
+                </if>
+                <if test="labourCost != null">
+                    AND m.labour_cost = #{labourCost}
                 </if>
                 <if test="createAt != null  and createAt != ''">
                     AND m.create_at = #{createAt}

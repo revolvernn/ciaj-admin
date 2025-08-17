@@ -9,6 +9,7 @@ CREATE TABLE `boot_db`.`wpe_electrician_record` (
   `work_end` datetime DEFAULT NULL COMMENT '工作日结束时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `status` char(1) DEFAULT NULL COMMENT '工作状态',
+  `labour_cost` decimal(10,2) DEFAULT '0.00' COMMENT '工价',
   `create_at` varchar(32) DEFAULT NULL COMMENT '创建人',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_at` varchar(32) DEFAULT NULL COMMENT '更新人',

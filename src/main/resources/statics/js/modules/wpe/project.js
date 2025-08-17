@@ -7,7 +7,9 @@ let projectapp = new Vue({
     el: '#projectapp',
     data() {
         return {
+            defaultSort: {prop: 'createTime', order: 'descending'},
             queryForm: {
+                orderByEnabled: true,
                 pageEnabled: true,
                 pageNo: 1,
                 pageSize: 10,
@@ -44,10 +46,16 @@ let projectapp = new Vue({
                 },
                 {
                     name: 'createTime',
+                    sortable: 'custom',
+                    width: '140',
+                    sortBy: 'm.create_time',
                     label: '创建时间'
                 },
                 {
                     name: 'updateTime',
+                    sortable: 'custom',
+                    width: '140',
+                    sortBy: 'm.update_time',
                     label: '更新时间'
                 },
                 {
@@ -100,6 +108,11 @@ let projectapp = new Vue({
         this.loadData();
     },
     methods: {
+        sortchange(val) {
+            let that = this;
+            that.queryForm.orderBy = val.sortBy;
+            that.myQuery();
+        },
         resetForm(formName) {
             try {
                 this.$refs[formName].resetFields();
@@ -181,8 +194,21 @@ let projectapp = new Vue({
             httpUtil.get({url: "wpe/project/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data;
+                    that.page.expand = true;
                 }
             });
+        },
+        listExport() {
+            let that = this;
+            let data =  {
+                orderBy: that.queryForm.orderBy,
+                orderByEnabled: true,
+                pageEnabled: false,
+                keyword: that.queryForm.keyword,
+                houseType: that.queryForm.houseType,
+                decorationType: that.queryForm.decorationType
+            }
+            httpUtil.fileDownload(that, {url: "wpe/project/list/export",data: data});
         }
     }
 });

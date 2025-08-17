@@ -1,9 +1,12 @@
 package com.ciaj.boot.modules.wpe.entity.dto;
 
+import com.ciaj.boot.component.serializer.DecimalFormat;
 import com.ciaj.boot.modules.sys.entity.dto.SysUserDto;
 import com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.math.BigDecimal;
 
 /**
  * @Author: Ciaj.
@@ -78,6 +81,13 @@ public class WpeElectricianRecordDto extends WpeElectricianRecordPo {
     @ApiModelProperty("工作状态")
     public java.lang.String getStatus() {
         return super.getStatus();
+    }
+
+    @DecimalFormat
+    //@javax.validation.constraints.NotBlank(message = "")
+    @ApiModelProperty("工价")
+    public BigDecimal getLabourCost() {
+        return super.getLabourCost();
     }
 
     //@javax.validation.constraints.NotBlank(message = "")

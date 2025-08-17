@@ -6,6 +6,7 @@ import com.ciaj.base.Mapper;
 import com.ciaj.boot.modules.wpe.entity.vo.WpeElectricianRecordVo;
 import com.ciaj.boot.modules.wpe.entity.dto.WpeElectricianRecordDto;
 import com.ciaj.comm.annotation.MultiTableJoins;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
