@@ -5,15 +5,19 @@
 <div id="${jsName}app" v-cloak>
     <div>
         <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
-            <el-form-item label="关键字" prop="keyword">
-                <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
-                <el-button @click="myQueryReset">重置</el-button>
-                <my-btn label="新增" type="primary" icon="el-icon-circle-plus" @click="myAdd" auth="${jsModule}:${jsName}:add"/>
-                <my-btn type="info" label="导出" @click="listExport" icon="el-icon-download" auth="${jsModule}:${jsName}:list:export"></my-btn>
-            </el-form-item>
+            <el-row type="flex" class="row-bg">
+                <el-form-item label="关键字" prop="keyword">
+                    <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+                </el-form-item>
+            </el-row>
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-form-item>
+                    <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
+                    <el-button @click="myQueryReset">重置</el-button>
+                    <my-btn label="新增" type="primary" icon="el-icon-circle-plus" @click="myAdd" auth="${jsModule}:${jsName}:add"/>
+                    <my-btn type="info" label="导出" @click="listExport" icon="el-icon-download" auth="${jsModule}:${jsName}:list:export"></my-btn>
+                </el-form-item>
+            </el-row>
         </el-form>
         <my-table :columns="tableColumns" :page="page" :table-loading="tableLoading" @sortChange="sortchange" :default-sort="defaultSort"
                   v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
