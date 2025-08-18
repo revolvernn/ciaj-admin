@@ -39,6 +39,10 @@ let logapp = new Vue({
                     label: '用户操作'
                 },
                 {
+                    name: 'url',
+                    label: '请求URL'
+                },
+                {
                     name: 'method',
                     label: '请求方法'
                 },
@@ -115,7 +119,7 @@ let logapp = new Vue({
             let that = this;
             that.rowDialogVisible = true;
             let b ={};
-            b.p = row.params|| '';
+            b.p = row.params || '-------无参数-------';
             that.rowParams = b.p.replace(/\,/g,',<br/>').replace(/\)/g,')<br/>');
         },
         myDel(index, row) {

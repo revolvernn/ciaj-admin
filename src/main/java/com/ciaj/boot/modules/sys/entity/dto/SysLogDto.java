@@ -55,6 +55,12 @@ public class SysLogDto extends SysLogPo {
     }
 
     //@javax.validation.constraints.NotBlank(message = "")
+    @ApiModelProperty("请求URL")
+    public java.lang.String getUrl() {
+        return super.getUrl();
+    }
+
+    //@javax.validation.constraints.NotBlank(message = "")
     @ApiModelProperty("备注")
     public java.lang.String getDescription() {
         return super.getDescription();

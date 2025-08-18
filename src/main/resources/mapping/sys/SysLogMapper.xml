@@ -18,6 +18,7 @@
         <id column="time" property="time" jdbcType="BIGINT" />
         <id column="operation" property="operation" jdbcType="VARCHAR" />
         <id column="method" property="method" jdbcType="VARCHAR" />
+        <id column="url" property="url" jdbcType="VARCHAR" />
         <id column="description" property="description" jdbcType="VARCHAR" />
         <id column="create_at" property="createAt" jdbcType="VARCHAR" />
         <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -28,10 +29,10 @@
         <id column="params" property="params" jdbcType="LONGVARCHAR" />
     </resultMap>
     <sql id="Base_Column_List">
-        id,type,username,ip,time,operation,method,description,create_at,create_time,update_at,update_time,del_flag,version,params
+        id,type,username,ip,time,operation,method,url,description,create_at,create_time,update_at,update_time,del_flag,version,params
     </sql>
     <sql id="Base_Alias_Column_List">
-        m.id,m.type,m.username,m.ip,m.time,m.operation,m.method,m.description,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version,m.params
+        m.id,m.type,m.username,m.ip,m.time,m.operation,m.method,m.url,m.description,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version,m.params
     </sql>
     <delete id="deleteByPrimaryKey">
         DELETE FROM sys_log
@@ -61,6 +62,9 @@
                 </if>
                 <if test="method != null">
                     AND method = #{method}
+                </if>
+                <if test="url != null">
+                    AND url = #{url}
                 </if>
                 <if test="description != null">
                     AND description = #{description}
@@ -94,9 +98,9 @@
             SELECT REPLACE(uuid(),'-','') FROM DUAL
         </selectKey>
         INSERT INTO sys_log
-        (id,type,username,ip,time,operation,method,description,create_at,create_time,update_at,update_time,del_flag,version,params)
+        (id,type,username,ip,time,operation,method,url,description,create_at,create_time,update_at,update_time,del_flag,version,params)
         VALUES
-        (#{id,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{ip,jdbcType=VARCHAR},#{time,jdbcType=BIGINT},#{operation,jdbcType=VARCHAR},#{method,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER},#{params,jdbcType=LONGVARCHAR})
+        (#{id,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{ip,jdbcType=VARCHAR},#{time,jdbcType=BIGINT},#{operation,jdbcType=VARCHAR},#{method,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER},#{params,jdbcType=LONGVARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.ciaj.boot.modules.sys.entity.po.SysLogPo">
         <selectKey keyProperty="id" order="BEFORE" resultType="String">
@@ -124,6 +128,9 @@
             </if>
             <if test="method != null">
                 method,
+            </if>
+            <if test="url != null">
+                url,
             </if>
             <if test="description != null">
                 description,
@@ -172,6 +179,9 @@
             <if test="method != null">
                 #{method,jdbcType=VARCHAR},
             </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
             <if test="description != null">
                 #{description,jdbcType=VARCHAR},
             </if>
@@ -208,6 +218,7 @@
             time = #{time},
             operation = #{operation},
             method = #{method},
+            url = #{url},
             description = #{description},
             create_at = #{createAt},
             create_time = #{createTime},
@@ -227,6 +238,7 @@
             time = #{record.time},
             operation = #{record.operation},
             method = #{record.method},
+            url = #{record.url},
             description = #{record.description},
             create_at = #{record.createAt},
             create_time = #{record.createTime},
@@ -257,6 +269,9 @@
             </if>
             <if test="method != null">
                 method = #{method},
+            </if>
+            <if test="url != null">
+                url = #{url},
             </if>
             <if test="description != null">
                 description = #{description},
@@ -302,6 +317,9 @@
             </if>
             <if test="record.method != null">
                 method = #{record.method},
+            </if>
+            <if test="record.url != null">
+                url = #{record.url},
             </if>
             <if test="record.description != null">
                 description = #{record.description},
@@ -371,6 +389,9 @@
             </if>
             <if test="method != null">
                 AND m.method = #{method}
+            </if>
+            <if test="url != null">
+                AND m.url = #{url}
             </if>
             <if test="description != null">
                 AND m.description = #{description}
@@ -461,6 +482,9 @@
                 <if test="method != null  and method != ''">
                     and m.method like CONCAT('%',#{method},'%')
                 </if>
+                <if test="url != null  and url != ''">
+                    and m.url like CONCAT('%',#{url},'%')
+                </if>
                 <if test="params != null  and params != ''">
                     and m.params like CONCAT('%',#{params},'%')
                 </if>
@@ -487,7 +511,12 @@
                 </if>
                 <!--  keyword   -->
                 <if test="keyword != null and keyword != ''">
-                    and m.operation like CONCAT('%',#{keyword},'%')
+                    and ( m.operation like CONCAT('%',#{keyword},'%')
+                        or m.url like CONCAT('%',#{keyword},'%')
+                        or m.method like CONCAT('%',#{keyword},'%')
+                        or m.username like CONCAT('%',#{keyword},'%')
+                        or m.params like CONCAT('%',#{keyword},'%')
+                    )
                 </if>
             </trim>
         </where>

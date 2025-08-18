@@ -22,6 +22,8 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -84,6 +86,11 @@ public class SysLogAspect {
             if (operationLog == null) {
                 return;
             }
+            // 获取RequestAttributes
+            RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+            // 从获取RequestAttributes中获取HttpServletRequest的信息
+            HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+            sysLogPo.setUrl(request.getRequestURL().toString());
             //注解上的描述
             sysLogPo.setOperation(operationLog.operation());
             sysLogPo.setDescription(operationLog.content());

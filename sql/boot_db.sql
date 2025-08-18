@@ -3904,6 +3904,7 @@ CREATE TABLE `sys_log` (
   `time` bigint(20) DEFAULT NULL COMMENT '请求时长(毫秒)',
   `operation` varchar(255) DEFAULT NULL COMMENT '用户操作',
   `method` varchar(2000) DEFAULT NULL COMMENT '请求方法',
+  `url` varchar(2000) DEFAULT NULL COMMENT '请求URL',
   `params` mediumtext COMMENT '请求参数',
   `description` varchar(100) DEFAULT NULL COMMENT '备注',
   `create_at` varchar(32) DEFAULT NULL COMMENT '创建人',
