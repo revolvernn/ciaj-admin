@@ -86,10 +86,9 @@ public class SysLogAspect {
             if (operationLog == null) {
                 return;
             }
-            // 获取RequestAttributes
-            RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-            // 从获取RequestAttributes中获取HttpServletRequest的信息
-            HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+
+            HttpServletRequest request = RequestUtils.getRequest();
+
             sysLogPo.setUrl(request.getRequestURL().toString());
             //注解上的描述
             sysLogPo.setOperation(operationLog.operation());
@@ -102,7 +101,7 @@ public class SysLogAspect {
             sysLogPo.setMethod(className + "." + methodName);
 
             //设置IP地址
-            sysLogPo.setIp(RequestUtils.getRemoteAddr());
+            sysLogPo.setIp(RequestUtils.getRemoteAddr(request));
             //请求的参数
             Object[] args = joinPoint.getArgs();
 

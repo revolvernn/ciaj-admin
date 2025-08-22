@@ -41,19 +41,19 @@ public class WpeElectricianRecordDto extends WpeElectricianRecordPo {
         return super.getId();
     }
 
-    //@javax.validation.constraints.NotBlank(message = "")
+    @javax.validation.constraints.NotBlank(message = "用户ID不能为空")
     @ApiModelProperty("用户ID")
     public java.lang.String getUserId() {
         return super.getUserId();
     }
 
-    //@javax.validation.constraints.NotBlank(message = "")
+    @javax.validation.constraints.NotBlank(message = "工程项目ID不能为空")
     @ApiModelProperty("工程项目ID")
     public java.lang.String getProjectId() {
         return super.getProjectId();
     }
 
-    //@javax.validation.constraints.NotBlank(message = "")
+    @javax.validation.constraints.NotNull(message = "工作日不能为空")
     @ApiModelProperty("工作日")
     public java.util.Date getWorkday() {
         return super.getWorkday();
@@ -77,14 +77,14 @@ public class WpeElectricianRecordDto extends WpeElectricianRecordPo {
         return super.getRemark();
     }
 
-    //@javax.validation.constraints.NotBlank(message = "")
+    @javax.validation.constraints.NotBlank(message = "工作状态不能为空")
     @ApiModelProperty("工作状态")
     public java.lang.String getStatus() {
         return super.getStatus();
     }
 
     @DecimalFormat
-    //@javax.validation.constraints.NotBlank(message = "")
+    @javax.validation.constraints.NotNull(message = "工价不能为空")
     @ApiModelProperty("工价")
     public BigDecimal getLabourCost() {
         return super.getLabourCost();

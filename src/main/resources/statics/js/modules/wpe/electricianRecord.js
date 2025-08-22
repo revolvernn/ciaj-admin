@@ -120,7 +120,11 @@ let electricianRecordapp = new Vue({
                 }
             },
             rules: {
-                //username: [{required: true, message: '必填', trigger: 'blur'}]
+                userId: [{required: true, message: '请选择用户', trigger: 'blur'}],
+                projectId: [{required: true, message: '请选择工程', trigger: 'blur'}],
+                workday: [{required: true, message: '请选择工作日', trigger: 'blur'}],
+                status: [{required: true, message: '请选择工作状态', trigger: 'blur'}],
+                labourCost: [{required: true, message: '请填写工价', trigger: 'blur'}]
             }
         }
     },
@@ -168,8 +172,8 @@ let electricianRecordapp = new Vue({
                                              workStart: null,
                                              workEnd: null,
                                              remark: null,
-                                             status: null,
-                                             labour_cost: null
+                                             status: 'Y',
+                                             labourCost: 150
                                          }
             that.resetForm('addOrUpdateFormRef');
         },

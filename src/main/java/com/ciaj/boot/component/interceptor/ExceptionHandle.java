@@ -4,12 +4,18 @@ import com.ciaj.comm.ResponseEntity;
 import com.ciaj.comm.annotation.OperationLog;
 import com.ciaj.comm.constant.LogTypeEnum;
 import com.ciaj.comm.exception.BsRException;
+import com.ciaj.comm.utils.StringUtil;
 import lombok.extern.log4j.Log4j2;
 import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author: Ciaj.
@@ -50,5 +56,21 @@ public class ExceptionHandle {
 	public ResponseEntity handleException(Exception e) {
 		log.error(e.getMessage(), e);
 		return ResponseEntity.error();
+	}
+
+	@OperationLog(operation = "系统-异常", content = "表单验证异常", type = LogTypeEnum.ERROR)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+
+		List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+		log.error(e.getMessage(), e);
+		List<String> msgs = new ArrayList<>();
+		fieldErrors.forEach(fieldError->{
+			fieldError.getDefaultMessage();
+			msgs.add(fieldError.getField()+":"+fieldError.getDefaultMessage());
+		});
+		String msg = StringUtil.getJoinString(",",msgs);
+		log.error("表单验证失败：{}",msg);
+		return ResponseEntity.error(501, msg);
 	}
 }

@@ -18,13 +18,13 @@ public class WpeProjectDto extends WpeProjectPo {
         return super.getId();
     }
 
-    //@javax.validation.constraints.NotBlank(message = "")
+    @javax.validation.constraints.NotBlank(message = "工程项目名称不能为空")
     @ApiModelProperty("工程项目名称")
     public java.lang.String getProjectName() {
         return super.getProjectName();
     }
 
-    //@javax.validation.constraints.NotBlank(message = "")
+    @javax.validation.constraints.NotBlank(message = "地址不能为空")
     @ApiModelProperty("地址")
     public java.lang.String getAddr() {
         return super.getAddr();
@@ -36,13 +36,13 @@ public class WpeProjectDto extends WpeProjectPo {
         return super.getRemark();
     }
 
-    //@javax.validation.constraints.NotBlank(message = "")
+    @javax.validation.constraints.NotBlank(message = "项目户型不能为空")
     @ApiModelProperty("项目户型")
     public java.lang.String getHouseType() {
         return super.getHouseType();
     }
 
-    //@javax.validation.constraints.NotBlank(message = "")
+    @javax.validation.constraints.NotBlank(message = "装修类型不能为空")
     @ApiModelProperty("装修类型")
     public java.lang.String getDecorationType() {
         return super.getDecorationType();
