@@ -38,7 +38,7 @@
                 <my-btn type="info" label="导出" @click="listExport" icon="el-icon-download" auth="wpe:electrician:record:list:export"></my-btn>
             </el-form-item>
         </el-form>
-        <my-table :columns="tableColumns" :page="page" :table-loading="tableLoading"  @sortChange="sortchange" :default-sort="defaultSort"
+        <my-table show-summary :columns="tableColumns" :page="page" :table-loading="tableLoading"  @sortChange="sortchange" :default-sort="defaultSort"
                   v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
         </my-table>
         <el-dialog :close-on-click-modal="false" :title="addOrUpdateForm.title"

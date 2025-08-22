@@ -1,5 +1,5 @@
 # 指定基础镜像
-FROM openjdk:8-jdk-alpine
+FROM openjdk:8-jre-slim
 # 维护者信息
 MAINTAINER ciaj. <595009116@qq.com>
 
@@ -10,7 +10,7 @@ ENV JAVA_OPTS="-Djava.awt.headless=true"
 # 用于指定持久化目录
 VOLUME /tmp
 
-RUN apk add --update ttf-dejavu fontconfig && rm -rf /var/cache/apk/*
+#RUN apk add --update ttf-dejavu fontconfig && rm -rf /var/cache/apk/*
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # 将本地文件添加到容器中

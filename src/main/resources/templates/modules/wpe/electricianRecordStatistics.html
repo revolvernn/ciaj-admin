@@ -43,7 +43,7 @@
                 <my-btn type="info" label="导出" @click="exportStatistics" icon="el-icon-download" auth="wpe:electrician:record:statistics:export"></my-btn>
             </el-form-item>
         </el-form>
-        <my-table :columns="tableColumns" :page="page" :table-loading="tableLoading"   @sortChange="sortchange" :default-sort="defaultSort"
+        <my-table :columns="tableColumns" :page="page" show-summary :table-loading="tableLoading"   @sortChange="sortchange" :default-sort="defaultSort"
                   v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
         </my-table>
     </div>
