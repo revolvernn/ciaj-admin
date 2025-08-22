@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -131,7 +132,7 @@ public class WpeProjectController extends AbstractController<WpeProjectPo, WpePr
     @OperationLog(operation = "水电工程项目-管理", content = "添加水电工程项目")
     @RequiresPermissions("wpe:project:add")
     @PostMapping("add")
-    public ResponseEntity add(@RequestBody WpeProjectDto entity) {
+    public ResponseEntity add(@RequestBody @Valid WpeProjectDto entity) {
         return super.add(entity);
     }
 
@@ -148,7 +149,7 @@ public class WpeProjectController extends AbstractController<WpeProjectPo, WpePr
     @OperationLog(operation = "水电工程项目-管理", content = "添加水电工程项目")
     @RequiresPermissions("wpe:project:update")
     @PutMapping("update")
-    public ResponseEntity update(@RequestBody WpeProjectDto entity) {
+    public ResponseEntity update(@RequestBody @Valid WpeProjectDto entity) {
         return super.update(entity);
     }
 

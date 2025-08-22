@@ -101,7 +101,7 @@
                             <my-dict-select v-model="addOrUpdateForm.electricianRecord.status" type="status"></my-dict-select>
                         </el-form-item>
                         <el-form-item label="工价" prop="labourCost" :label-width="addOrUpdateForm.electricianRecordFormLabelWidth" required>
-                            <el-input-number v-model="addOrUpdateForm.electricianRecord.labourCost" :precision="2" :step="0.1" :min="0"></el-input-number>
+                            <el-input-number controls-position="right" v-model="addOrUpdateForm.electricianRecord.labourCost" :precision="2" :step="0.1" :min="0"></el-input-number>
                         </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">

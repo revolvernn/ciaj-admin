@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -205,7 +206,7 @@ public class WpeElectricianRecordController extends AbstractController<WpeElectr
     @OperationLog(operation = "水电工程记录-管理", content = "添加水电工程记录")
     @RequiresPermissions("wpe:electrician:record:add")
     @PostMapping("add")
-    public ResponseEntity add(@RequestBody WpeElectricianRecordDto entity) {
+    public ResponseEntity add(@RequestBody @Valid WpeElectricianRecordDto entity) {
         return super.add(entity);
     }
 
@@ -221,7 +222,7 @@ public class WpeElectricianRecordController extends AbstractController<WpeElectr
     @OperationLog(operation = "水电工程记录-管理", content = "添加水电工程记录")
     @RequiresPermissions("wpe:electrician:record:update")
     @PutMapping("update")
-    public ResponseEntity update(@RequestBody WpeElectricianRecordDto entity) {
+    public ResponseEntity update(@RequestBody  @Valid WpeElectricianRecordDto entity) {
         return super.update(entity);
     }
 
