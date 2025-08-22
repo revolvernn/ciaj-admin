@@ -60,7 +60,7 @@ public class ExceptionHandle {
 
 	@OperationLog(operation = "系统-异常", content = "表单验证异常", type = LogTypeEnum.ERROR)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity handleException(MethodArgumentNotValidException e) {
+	public ResponseEntity handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 
 		List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
 		log.error(e.getMessage(), e);
