@@ -371,6 +371,9 @@ let myTableT = Vue.extend({
         showPage: {
             default: true
         },
+        showSummary: {
+            default: false
+        },
         defaultSort: {
             default: function () {
                 return {}
@@ -433,6 +436,10 @@ let myTableT = Vue.extend({
                     this.$emit('sortchange', val);
                 }
             }
+        },
+        //排序
+        getSummaries(val) {
+            this.$emit('getsummaries', val);
         },
         // 页面大小改变重新查询数据
         pagesizechange(val) {
@@ -518,7 +525,7 @@ let myTableT = Vue.extend({
     },
     template: [
         '<div>',
-        '<el-table :default-sort="defaultSort" @sort-change="sortChange"  border stripe size="small" style="width: 100%" :data="page.list">',
+        '<el-table :default-sort="defaultSort" :show-summary="showSummary" @summary-method="getSummaries" @sort-change="sortChange"  border stripe size="small" style="width: 100%" :data="page.list">',
         '<el-table-column  type="index"  width="50"></el-table-column>',
         ' <el-table-column type="expand" v-if="page.expand">',
         '   <template slot-scope="props">',
