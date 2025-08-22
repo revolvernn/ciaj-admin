@@ -58,7 +58,7 @@ public class ExceptionHandle {
 		return ResponseEntity.error();
 	}
 
-	@OperationLog(operation = "系统-异常", content = "系统异常", type = LogTypeEnum.ERROR)
+	@OperationLog(operation = "系统-异常", content = "表单验证异常", type = LogTypeEnum.ERROR)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity handleException(MethodArgumentNotValidException e) {
 
