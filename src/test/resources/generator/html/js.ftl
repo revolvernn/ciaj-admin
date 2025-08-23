@@ -138,8 +138,10 @@ let ${jsName}app = new Vue({
                     let url = that.addOrUpdateForm.${jsName}.id == null ? "${mvcUrl}/add" : "${mvcUrl}/update";
                     let type = that.addOrUpdateForm.${jsName}.id == null ? "POST" : "PUT";
                     httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.${jsName})}, function (r) {
-                        that.myQuery();
-                        that.addOrUpdateForm.${jsName}FormVisible = false;
+                        if (result.code == 0) {
+                            that.myQuery();
+                            that.addOrUpdateForm.${jsName}FormVisible = false;
+                        }
                         alertMsg(that, r);
                     });
                 }
