@@ -71,6 +71,6 @@ public class ExceptionHandle {
 		});
 		String msg = StringUtil.getJoinString(",",msgs);
 		log.error("表单验证失败：{}",msg);
-		return ResponseEntity.error(501, msg);
+		return ResponseEntity.error(-1, msg);
 	}
 }
