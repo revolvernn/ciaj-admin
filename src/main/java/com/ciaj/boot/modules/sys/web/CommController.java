@@ -24,6 +24,8 @@ import com.ciaj.comm.utils.*;
 import com.ciaj.comm.validate.ValidatorUtils;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
@@ -48,6 +50,7 @@ import java.util.Map;
  * @Date: 2018/6/19 14:27
  * @Description:
  */
+@Api(tags = "系统-公共配置")
 @Controller
 public class CommController {
 
@@ -70,9 +73,10 @@ public class CommController {
 	 * @param codes
 	 * @return
 	 */
+	@ApiOperation(value = "权限检查")
 	@ResponseBody
 	@RequiresUser
-	@GetMapping("/check/permissions")
+	@GetMapping("check/permissions")
 	protected ResponseEntity checkPermissions(@RequestParam("codes") String codes) {
 
 		Map<String, Boolean> map = new HashMap<>();
@@ -94,6 +98,7 @@ public class CommController {
 	 * @param response
 	 * @throws IOException
 	 */
+	@ApiOperation(value = "获取验证码")
 	@GetMapping("captcha.jpg")
 	public void captcha(HttpServletResponse response) throws IOException {
 		response.setHeader("Cache-Control", "no-store, no-cache");
@@ -117,9 +122,10 @@ public class CommController {
 	 * @return
 	 */
 	@Resubmit
+	@ApiOperation(value = "用户登录", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统-登录", content = "用户登录")
 	@ResponseBody
-	@PostMapping("/sys/login")
+	@PostMapping("sys/login")
 	public ResponseEntity<TokenEntity> login(@RequestBody LoginForm loginForm) {
 		ValidatorUtils.validateEntity(loginForm);
 		Boolean loginFlag = false;
@@ -129,7 +135,9 @@ public class CommController {
 				break;
 			}
 		}
-		if (!loginFlag) throw new BsRException("登录方式不正确");
+		if (!loginFlag) {
+			throw new BsRException("登录方式不正确");
+		}
 
 		if (DefaultConstant.LoginClient.pc.name().equalsIgnoreCase(loginForm.getLoginClient())) {
 			String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
@@ -163,16 +171,21 @@ public class CommController {
 	 * @return
 	 */
 	@Resubmit
+	@ApiOperation(value = "用户注册", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统-注册", content = "用户注册")
 	@ResponseBody
-	@PostMapping("/sys/register")
+	@PostMapping("sys/register")
 	public ResponseEntity register(@RequestBody LoginForm loginForm) {
-		if (StringUtil.isBlank(loginForm.getAccount())) throw new BsRException("手机号不能为空");
+		if (StringUtil.isBlank(loginForm.getAccount())) {
+			throw new BsRException("手机号不能为空");
+		}
 		final PasswordEntity p = PasswordUtil.getPassword(loginForm.getPassword());
 		SysUserPo sysUser = new SysUserPo();
 		sysUser.setAccount(loginForm.getAccount());
 		final List<SysUserPo> select = sysUserService.select(sysUser);
-		if (CollectionUtil.isNotEmpty(select)) throw new BsRException("账号已经存在");
+		if (CollectionUtil.isNotEmpty(select)) {
+			throw new BsRException("账号已经存在");
+		}
 
 		sysUser.setUsername(sysUser.getAccount());
 		sysUser.setNickname(sysUser.getAccount());
@@ -193,10 +206,11 @@ public class CommController {
 	 *
 	 * @return
 	 */
+	@ApiOperation(value = "获取导航菜单")
 	@OperationLog(operation = "系统-导航", content = "获取导航菜单")
 	@RequiresUser
 	@ResponseBody
-	@GetMapping("/sys/menu/nav")
+	@GetMapping("sys/menu/nav")
 	public ResponseEntity<SysMenuPo> nav() {
 		List<SysMenuPo> list = sysMenuService.selectNav();
 		return ResponseEntity.success().put(list);
@@ -210,11 +224,14 @@ public class CommController {
 	 * @return
 	 */
 	@Resubmit
-	@OperationLog(operation = "系统-注册", content = "PC注册方法")
+	@ApiOperation(value = "PC端注册", produces = "application/json;charset=UTF-8")
+	@OperationLog(operation = "系统-注册", content = "PC端注册")
 	@ResponseBody
-	@PostMapping("/sys/pc/register")
+	@PostMapping("sys/pc/register")
 	public ResponseEntity pcRegister(@RequestBody SysUserDto entity) {
-		if (StringUtil.isBlank(entity.getMobile())) throw new BsRException("手机号不能为空");
+		if (StringUtil.isBlank(entity.getMobile())) {
+			throw new BsRException("手机号不能为空");
+		}
 
 		SysUserPo q = new SysUserPo();
 		q.setUsername(entity.getUsername());
@@ -245,10 +262,11 @@ public class CommController {
 	 *
 	 * @return
 	 */
+	@ApiOperation(value = "获取当前登录用户")
 	@OperationLog(operation = "系统-用户", content = "获取当前登录用户")
 	@RequiresUser
 	@ResponseBody
-	@GetMapping("/sys/user/info")
+	@GetMapping("sys/user/info")
 	public ResponseEntity userInfo() {
 		final ShiroUser loginUser = CommUtil.getLoginUser();
 		return ResponseEntity.success().put(loginUser);
@@ -260,10 +278,11 @@ public class CommController {
 	 *
 	 * @return
 	 */
+	@ApiOperation(value = "更新当前登录用户角色")
 	@OperationLog(operation = "系统-用户", content = "更新当前登录用户角色")
 	@RequiresUser
 	@ResponseBody
-	@PostMapping("/sys/user/role/change")
+	@PostMapping("sys/user/role/change")
 	public ResponseEntity roleChange(@RequestParam(value = "roleId", required = true) String roleId) {
 		ShiroUser shiroUser = shiroService.updateShiroUser(roleId);
 		return ResponseEntity.success().put(shiroUser);
@@ -276,11 +295,12 @@ public class CommController {
 	 * @param newPassword
 	 * @return
 	 */
+	@ApiOperation(value = "密码修改")
 	@Resubmit
 	@OperationLog(operation = "系统-用户", content = "密码修改")
 	@RequiresUser
 	@ResponseBody
-	@PostMapping("/sys/user/password")
+	@PostMapping("sys/user/password")
 	public ResponseEntity updatePassword(String password, String newPassword) {
 		if (StringUtil.isBlank(password) || StringUtil.isBlank(newPassword)) {
 			return ResponseEntity.error("密码不能为空");
@@ -316,11 +336,12 @@ public class CommController {
 	 * @param newPassword
 	 * @return
 	 */
+	@ApiOperation(value = "用户密码修改")
 	@Resubmit
 	@OperationLog(operation = "系统-用户", content = "用户密码修改")
 	@ResponseBody
 	@RequiresPermissions("sys:user:password:update")
-	@PostMapping("/sys/user/password/update")
+	@PostMapping("sys/user/password/update")
 	public ResponseEntity updateUserPassword(String userId, String newPassword) {
 		if (StringUtil.isBlank(newPassword)) {
 			return ResponseEntity.error("密码不能为空");
@@ -349,8 +370,9 @@ public class CommController {
 	 *
 	 * @return
 	 */
+	@ApiOperation(value = "导出用户")
 	@RequiresUser
-	@GetMapping("/sys/export/users")
+	@GetMapping("sys/export/users")
 	public void export(HttpServletResponse response, HttpServletRequest request) {
 		List<SysUserPo> sysUserPos = sysUserService.selectAll(null);
 		new ExcelUtil().build("用户", new String[]{"id", "account", "username"}, new String[]{"id", "账号", "用户名"}, sysUserPos).exportExcel(request, response);
@@ -362,9 +384,10 @@ public class CommController {
 	 *
 	 * @return
 	 */
+	@ApiOperation(value = "系统表结构统计")
 	@ResponseBody
 	@RequiresUser
-	@GetMapping("/sys/table/status")
+	@GetMapping("sys/table/status")
 	public ResponseEntity<List<Map<String, Object>>> tableStatus() {
 		List<Map<String, Object>> tables = sysCommService.selectTableStatus();
 		return new ResponseEntity<List<Map<String, Object>>>().put(tables);
@@ -376,8 +399,9 @@ public class CommController {
 	 *
 	 * @return
 	 */
+	@ApiOperation(value = "退出登录")
 	@OperationLog(operation = "系统-登出", content = "退出登录")
-	@GetMapping("/sys/logout")
+	@GetMapping("sys/logout")
 	public String logout() {
 		ShiroUtils.logout();
 		return "redirect:login.html";

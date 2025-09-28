@@ -219,6 +219,12 @@ let dictapp = new Vue({
             let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
+                    const loading = that.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
                     let url = that.addOrUpdateForm.dict.id == null ? "sys/dict/add" : "sys/dict/update";
                     let type = that.addOrUpdateForm.dict.id == null ? "POST" : "PUT";
                     httpUtil.post({
@@ -226,10 +232,13 @@ let dictapp = new Vue({
                         type: type,
                         data: JSON.stringify(that.addOrUpdateForm.dict)
                     }, function (r) {
-                        localStorageExports.remove(T.local_key.dict_key_prefix + that.addOrUpdateForm.dict.type);
-                        that.myQuery();
-                        that.initTree();
-                        that.addOrUpdateForm.dictFormVisible = false;
+                        loading.close();
+                        if(r.code == 0) {
+                            localStorageExports.remove(T.local_key.dict_key_prefix + that.addOrUpdateForm.dict.type);
+                            that.myQuery();
+                            that.initTree();
+                            that.addOrUpdateForm.dictFormVisible = false;
+                        }
                         alertMsg(that, r)
                     });
                 }
@@ -245,6 +254,7 @@ let dictapp = new Vue({
                 httpUtil.del({url: "sys/dict/delFlag/" + row.id}, function (r) {
                     that.myQuery();
                     that.initTree();
+                    localStorageExports.remove(T.local_key.dict_key_prefix + row.type);
                     alertMsg(that, r)
                 });
             });

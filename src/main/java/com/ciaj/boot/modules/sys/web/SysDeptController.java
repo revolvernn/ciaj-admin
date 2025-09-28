@@ -46,11 +46,12 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
 	 * @param id
 	 * @return
 	 */
-	@ApiOperation("根据ID获取系统部门")
+	@Override
+    @ApiOperation("根据ID获取系统部门")
 	@ApiImplicitParam(name = "id", value = "系统部门ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统部门-管理", content = "根据ID获取系统部门")
 	@RequiresPermissions("sys:dept:getById")
-	@GetMapping("/getById/{id}")
+	@GetMapping("getById/{id}")
 	public ResponseEntity<SysDeptDto> getById(@PathVariable("id") String id) {
 		return new ResponseEntity<SysDeptDto>().put(sysDeptService.selectById(id));
 	}
@@ -73,7 +74,7 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
 	})
 	@OperationLog(operation = "系统部门-管理", content = "获取系统部门列表")
 	@RequiresPermissions("sys:dept:list")
-	@GetMapping("/list")
+	@GetMapping("list")
 	public ResponseEntity<Page<SysDeptDto>> list(String keyword, String parentId, String areaId) {
 		SysDeptVo entity = new SysDeptVo();
 		entity.setKeyword(keyword);
@@ -88,6 +89,7 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "添加系统部门", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统部门-管理", content = "添加系统部门")
@@ -104,6 +106,7 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "更新系统部门", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统部门-管理", content = "添加系统部门")
@@ -125,12 +128,13 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
 	 * @param id
 	 * @return
 	 */
+	@Override
 	@Resubmit(ParamTypeEnum.url)
 	@ApiOperation("根据ID删除系统部门")
 	@ApiImplicitParam(name = "id", value = "系统部门ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统部门-管理", content = "根据ID删除系统部门")
 	@RequiresPermissions("sys:dept:delFlag")
-	@DeleteMapping("/delFlag/{id}")
+	@DeleteMapping("delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
 		SysDeptPo sysDeptPo = sysDeptService.selectByPrimaryKey(id);
 		ResponseEntity responseEntity = super.deleteFlagVersion(id, sysDeptPo.getVersion());
@@ -180,7 +184,9 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
 		List<SysDeptPo> list = sysDeptService.select(q);
 		//同一父级下不能有相同的CODE
 		if (CollectionUtil.isNotEmpty(list)) {
-			if (entity.getId() == null) throw new BsRException("同一组部门名称不能重复");
+			if (entity.getId() == null) {
+				throw new BsRException("同一组部门名称不能重复");
+			}
 			for (SysDeptPo s : list) {
 				if (!s.getId().equals(entity.getId())) {
 					throw new BsRException("同一组部门名称不能重复");

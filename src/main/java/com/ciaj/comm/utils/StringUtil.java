@@ -117,6 +117,76 @@ public class StringUtil extends StringUtils {
 		}
 		return "";
 	}
+	/**
+	 * 拼接字符串
+	 *
+	 * @param separator 拼接参数：-、/、\、*
+	 * @param strs      要拼接的参数
+	 * @return String
+	 */
+	public static String getJoinString(String... strs) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < strs.length; i++) {
+			if (StringUtils.isNotBlank(strs[i])) {
+				sb.append(strs[i]);
+			}
+		}
+		String join = sb.toString();
+		if (StringUtils.isNotBlank(join)) {
+			return join;
+		}
+		return "";
+	}
+
+	/**
+	 * 拼接字符串
+	 *
+	 * @param separator 拼接参数：-、/、\、*
+	 * @param strs      要拼接的参数
+	 * @return String
+	 */
+	public static String getJoinString(String separator, String[] ... strs) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < strs.length; i++) {
+			for (int i1 = 0; i1 < strs[i].length; i1++) {
+				if (StringUtils.isNotBlank(strs[i][i1])) {
+					sb.append(strs[i][i1]).append(separator);
+				}
+			}
+		}
+		String join = sb.toString();
+		if (StringUtils.isNotBlank(join)) {
+			return join.substring(0, join.length() - 1);
+		}
+		return "";
+	}
+
+	/**
+	 * 拼接字符串
+	 *
+	 * @param separator 拼接参数：-、/、\、*
+	 * @param str      要拼接的参数
+	 * @param strs      要拼接的参数
+	 * @return String
+	 */
+	public static String getJoinString(String separator,String [] str, String... strs) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < str.length; i++) {
+			if (StringUtils.isNotBlank(str[i])) {
+				sb.append(str[i]).append(separator);
+			}
+		}
+		for (int i = 0; i < strs.length; i++) {
+			if (StringUtils.isNotBlank(strs[i])) {
+				sb.append(strs[i]).append(separator);
+			}
+		}
+		String join = sb.toString().replaceAll(separator+separator,separator);
+		if (StringUtils.isNotBlank(join)) {
+			return join.substring(0, join.length() - 1);
+		}
+		return "";
+	}
 
 	/**
 	 * 拼接字符串

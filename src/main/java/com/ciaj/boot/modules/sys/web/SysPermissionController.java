@@ -49,11 +49,12 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 	 * @param id
 	 * @return
 	 */
-	@ApiOperation("根据ID获取系统权限")
+	@Override
+    @ApiOperation("根据ID获取系统权限")
 	@ApiImplicitParam(name = "id", value = "系统权限ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统权限-管理", content = "根据ID获取系统权限")
 	@RequiresPermissions("sys:permission:getById")
-	@GetMapping("/getById/{id}")
+	@GetMapping("getById/{id}")
 	public ResponseEntity<SysPermissionDto> getById(@PathVariable("id") String id) {
 		return new ResponseEntity<SysPermissionDto>().put(sysPermissionService.getById(id));
 	}
@@ -76,7 +77,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 	})
 	@OperationLog(operation = "系统权限-管理", content = "获取系统权限列表")
 	@RequiresPermissions("sys:permission:list")
-	@GetMapping("/list")
+	@GetMapping("list")
 	public ResponseEntity<Page<SysPermissionDto>> list(String keyword, String type, String parentId) {
 		SysPermissionVo entity = new SysPermissionVo();
 		entity.setKeyword(keyword);
@@ -91,6 +92,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "添加系统权限", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统权限-管理", content = "添加系统权限")
@@ -107,6 +109,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "更新系统权限", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统权限-管理", content = "添加系统权限")
@@ -130,12 +133,13 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 	 * @param id
 	 * @return
 	 */
+	@Override
 	@Resubmit(ParamTypeEnum.url)
 	@ApiOperation("根据ID删除系统权限")
 	@ApiImplicitParam(name = "id", value = "系统权限ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统权限-管理", content = "根据ID删除系统权限")
 	@RequiresPermissions("sys:permission:delFlag")
-	@DeleteMapping("/delFlag/{id}")
+	@DeleteMapping("delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
 		SysRolePermissionRelPo query = new SysRolePermissionRelPo();
 		query.setPermissionId(id);
@@ -179,14 +183,18 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 		List<SysPermissionPo> sysPermissions = sysPermissionService.select(q);
 		//同一父级下不能有相同的NAME
 		if (CollectionUtil.isNotEmpty(sysPermissions)) {
-			if (entity.getId() == null) throw new BsRException("同一组权限名称不能重复");
+			if (entity.getId() == null) {
+				throw new BsRException("同一组权限名称不能重复");
+			}
 			for (SysPermissionPo sysPermission : sysPermissions) {
 				if (!sysPermission.getId().equals(entity.getId())) {
 					throw new BsRException("同一组权限名称不能重复");
 				}
 			}
 		}
-		if (StringUtils.isBlank(entity.getPermissionCode())) return;
+		if (StringUtils.isBlank(entity.getPermissionCode())) {
+			return;
+		}
 		q = new SysPermissionVo();
 		q.setDelFlag(DefaultConstant.FLAG_N);
 		q.setPermissionCode(entity.getPermissionCode());
@@ -194,7 +202,9 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
 		sysPermissions = sysPermissionService.select(q);
 		//同一父级下不能有相同的NAME
 		if (CollectionUtil.isNotEmpty(sysPermissions)) {
-			if (entity.getId() == null) throw new BsRException("同一组权限码不能重复");
+			if (entity.getId() == null) {
+				throw new BsRException("同一组权限码不能重复");
+			}
 			for (SysPermissionPo sysPermission : sysPermissions) {
 				if (!sysPermission.getId().equals(entity.getId())) {
 					throw new BsRException("同一组权限码不能重复");

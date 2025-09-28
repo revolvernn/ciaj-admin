@@ -718,10 +718,10 @@
     <select id="selectDTOListMultiTable" resultMap="DTOMultiTableResultMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysUserVo">
         SELECT
         <include refid="Base_Alias_Column_List"/>
-        ,d.name as 'd_name'
-        ,ap.name as 'ap_name'
-        ,ac.name as 'ac_name'
-        ,ad.name as 'ad_name'
+        ,d.name as "d_name"
+        ,ap.name as "ap_name"
+        ,ac.name as "ac_name"
+        ,ad.name as "ad_name"
         FROM sys_user m
         LEFT JOIN sys_dept d on m.dept_id = d.id
         left join sys_area ap on m.province=ap.id and ap.type ='province'

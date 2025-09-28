@@ -161,10 +161,17 @@ let configapp = new Vue({
             let that = this;
             that.$refs['ossFormRef'].validate((valid) => {
                 if (valid) {
+                    const loading = that.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
                     httpUtil.post({
                         url: "sys/oss/config/save",
                         data: JSON.stringify(that.ossForm.config)
                     }, function (r) {
+                        loading.close();
                         alertMsg(that, r)
                         if (r.code == 0) {
                             that.myQuery();
@@ -201,11 +208,20 @@ let configapp = new Vue({
             let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
+                    const loading = that.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
                     let url = that.addOrUpdateForm.config.id == null ? "sys/config/add" : "sys/config/update";
                     let type = that.addOrUpdateForm.config.id == null ? "POST" : "PUT";
                     httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.config)}, function (r) {
-                        that.myQuery();
-                        that.addOrUpdateForm.configFormVisible = false;
+                        loading.close();
+                        if(r.code == 0) {
+                            that.myQuery();
+                            that.addOrUpdateForm.configFormVisible = false;
+                        }
                         alertMsg(that, r)
                     });
                 }

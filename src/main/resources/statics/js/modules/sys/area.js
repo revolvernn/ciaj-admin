@@ -211,6 +211,12 @@ let areaapp = new Vue({
             let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
+                    const loading = that.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
                     let url = that.addOrUpdateForm.area.id == null ? "sys/area/add" : "sys/area/update";
                     let type = that.addOrUpdateForm.area.id == null ? "POST" : "PUT";
                     httpUtil.post({
@@ -218,9 +224,12 @@ let areaapp = new Vue({
                         type: type,
                         data: JSON.stringify(that.addOrUpdateForm.area)
                     }, function (r) {
-                        that.myQuery();
-                        that.initTree();
-                        that.addOrUpdateForm.areaFormVisible = false;
+                        loading.close();
+                        if(r.code == 0) {
+                            that.myQuery();
+                            that.initTree();
+                            that.addOrUpdateForm.areaFormVisible = false;
+                        }
                         alertMsg(that, r)
                     });
                 }

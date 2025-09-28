@@ -198,7 +198,9 @@ let mySearchSelectT = Vue.extend({
     template: [
         '<el-select value="" :loading="loading" :disabled="disabled" remote reserve-keyword filterable clearable v-model="model" v-on:focus="handleFocus($event)" v-on:handleBlur="handleBlur($event)" v-on:change="emitChange" v-on:input="emitInput" :remote-method="remoteMethod"   placeholder="请输入关键词">',
             '<el-option v-for="item in options" :label="item.name" :disabled="item.disabled" :value="item.code" :key="item.code"">' +
-                '<span style="float: left">{{ item.name }}</span>',
+                '<el-tooltip className="item" effect="dark" :content="item.name" placement="right">',
+                    '<span style="float: left">{{ item.name }}</span>',
+                '</el-tooltip>',
                 '<span style="float: right; color: #8492a6; font-size: 13px"> {{item.rightLabelFieldName}}</span>',
             '</el-option>',
         '</el-select>'

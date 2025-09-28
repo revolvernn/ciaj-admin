@@ -38,11 +38,12 @@ public class SysConfigController extends AbstractController<SysConfigPo, SysConf
 	 * @param id
 	 * @return
 	 */
-	@ApiOperation("根据ID获取配置")
+	@Override
+    @ApiOperation("根据ID获取配置")
 	@ApiImplicitParam(name = "id", value = "配置ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统-配置", content = "根据ID获取配置")
 	@RequiresPermissions("sys:config:getById")
-	@GetMapping("/getById/{id}")
+	@GetMapping("getById/{id}")
 	public ResponseEntity<SysConfigDto> getById(@PathVariable("id") String id) {
 		return super.getById(id);
 	}
@@ -64,7 +65,7 @@ public class SysConfigController extends AbstractController<SysConfigPo, SysConf
 	})
 	@OperationLog(operation = "系统-配置", content = "获取配置列表")
 	@RequiresPermissions("sys:config:list")
-	@GetMapping("/list")
+	@GetMapping("list")
 	public ResponseEntity<Page<SysConfigDto>> list(String keyword, String status) {
 		SysConfigVo entity = new SysConfigVo();
 		entity.setKeyword(keyword);
@@ -78,6 +79,7 @@ public class SysConfigController extends AbstractController<SysConfigPo, SysConf
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "添加配置")
 	@OperationLog(operation = "系统-配置", content = "添加配置")
@@ -93,6 +95,7 @@ public class SysConfigController extends AbstractController<SysConfigPo, SysConf
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation("修改配置")
 	@OperationLog(operation = "系统-配置", content = "修改配置")
@@ -108,12 +111,13 @@ public class SysConfigController extends AbstractController<SysConfigPo, SysConf
 	 * @param id
 	 * @return
 	 */
+	@Override
 	@Resubmit(ParamTypeEnum.url)
 	@ApiOperation("根据ID删除配置")
 	@ApiImplicitParam(name = "id", value = "配置ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统-配置", content = "删除配置")
 	@RequiresPermissions("sys:config:delFlag")
-	@DeleteMapping("/delFlag/{id}")
+	@DeleteMapping("delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
 		SysConfigPo sysConfigPo = sysConfigService.selectByPrimaryKey(id);
 		return super.deleteFlagVersion(id, sysConfigPo.getVersion());

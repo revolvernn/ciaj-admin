@@ -107,7 +107,7 @@
                          @click="userInfoClick"  size="medium">
                 欢迎： {{loginUser.username}} <span v-if="loginUser.role">@{{loginUser.role.name}}</span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item  v-if="loginUser.roles" v-for="role in loginUser.roles" :command="role.id">{{role.name}}
+                    <el-dropdown-item  v-if="loginUser.roles" v-for="role in loginUser.roles" :command="role.id">切换角色： {{role.name}}
                     </el-dropdown-item>
                     <el-dropdown-item command="command:update:password" divided>修改密码</el-dropdown-item>
                     <el-dropdown-item command="command:logout" divided>退出系统</el-dropdown-item>

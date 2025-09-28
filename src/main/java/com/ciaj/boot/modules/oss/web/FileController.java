@@ -1,13 +1,16 @@
 package com.ciaj.boot.modules.oss.web;
 
 import com.ciaj.base.AbstractBase;
+import com.ciaj.boot.modules.oss.cloud.OSSFactory;
 import com.ciaj.boot.modules.sys.entity.po.SysOssPo;
 import com.ciaj.boot.modules.sys.service.SysOssService;
-import com.ciaj.boot.modules.oss.cloud.OSSFactory;
 import com.ciaj.comm.ResponseEntity;
+import com.ciaj.comm.annotation.OperationLog;
 import com.ciaj.comm.exception.BsRException;
 import com.ciaj.comm.utils.FileTypeUtil;
 import com.ciaj.comm.utils.ResponseUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +31,7 @@ import java.io.IOException;
  * @Date: 2019/2/20 16:06
  * @Description: oss 上传文件
  */
+@Api(tags = "OSS文件-管理")
 @Controller
 @RequestMapping("oss")
 public class FileController {
@@ -38,9 +42,11 @@ public class FileController {
     /**
      * 上传文件
      */
+    @ApiOperation("上传文件")
+    @OperationLog(operation = "OSS文件-管理", content = "上传文件")
     @ResponseBody
     @RequestMapping("/upload")
-    @RequiresPermissions("sys:oss:all")
+    @RequiresPermissions("oss:upload")
     public ResponseEntity upload(@RequestParam("file") MultipartFile file,@RequestParam(defaultValue = "upload") String prefix) throws Exception {
         if (file.isEmpty()) {
             throw new BsRException("上传文件不能为空");
@@ -63,8 +69,10 @@ public class FileController {
     /**
      * TODO 未完善文件下载
      */
+    @ApiOperation("下载文件")
+    @OperationLog(operation = "OSS文件-管理", content = "下载文件")
     @RequestMapping("/download")
-    @RequiresPermissions("sys:oss:all")
+    @RequiresPermissions("oss:download")
     public void download(@RequestParam("url") String url) {
         OSSFactory.build().download(url);
     }
@@ -77,6 +85,8 @@ public class FileController {
      * @param response
      * @return
      */
+    @ApiOperation("访问文件")
+    @OperationLog(operation = "OSS文件-管理", content = "访问文件")
     @RequestMapping(value = {"/file/**"}, method = RequestMethod.GET)
     public void fileget(HttpServletRequest request, HttpServletResponse response) {
         String requestURI = request.getRequestURI();

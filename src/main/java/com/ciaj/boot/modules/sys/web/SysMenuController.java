@@ -44,11 +44,12 @@ public class SysMenuController extends AbstractController<SysMenuPo, SysMenuDto,
 	 * @param id
 	 * @return
 	 */
-	@ApiOperation("根据ID获取系统菜单")
+	@Override
+    @ApiOperation("根据ID获取系统菜单")
 	@ApiImplicitParam(name = "id", value = "系统菜单ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统菜单-管理", content = "根据ID获取系统菜单")
 	@RequiresPermissions("sys:menu:getById")
-	@GetMapping("/getById/{id}")
+	@GetMapping("getById/{id}")
 	public ResponseEntity<SysMenuDto> getById(@PathVariable("id") String id) {
 		return super.getById(id);
 	}
@@ -73,7 +74,7 @@ public class SysMenuController extends AbstractController<SysMenuPo, SysMenuDto,
 	})
 	@OperationLog(operation = "系统菜单-管理", content = "获取系统菜单列表")
 	@RequiresPermissions("sys:menu:list")
-	@GetMapping("/list")
+	@GetMapping("list")
 	public ResponseEntity<Page<SysMenuDto>> list(String keyword, String parentName, String parentId, String type, String enabled) {
 		SysMenuVo entity = new SysMenuVo();
 		entity.setKeyword(keyword);
@@ -89,6 +90,7 @@ public class SysMenuController extends AbstractController<SysMenuPo, SysMenuDto,
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "添加系统菜单", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统菜单-管理", content = "添加系统菜单")
@@ -105,6 +107,7 @@ public class SysMenuController extends AbstractController<SysMenuPo, SysMenuDto,
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "更新系统菜单", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统菜单-管理", content = "添加系统菜单")
@@ -128,12 +131,13 @@ public class SysMenuController extends AbstractController<SysMenuPo, SysMenuDto,
 	 * @param id
 	 * @return
 	 */
+	@Override
 	@Resubmit(ParamTypeEnum.url)
 	@ApiOperation("根据ID删除系统菜单")
 	@ApiImplicitParam(name = "id", value = "系统菜单ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统菜单-管理", content = "根据ID删除系统菜单")
 	@RequiresPermissions("sys:menu:delFlag")
-	@DeleteMapping("/delFlag/{id}")
+	@DeleteMapping("delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
 		SysMenuPo sysMenuPo = sysMenuService.selectByPrimaryKey(id);
 		ResponseEntity responseEntity = super.deleteFlagVersion(id, sysMenuPo.getVersion());

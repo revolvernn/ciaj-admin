@@ -14,8 +14,8 @@
                 <el-form-item>
                     <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
                     <el-button @click="myQueryReset">重置</el-button>
-                    <my-btn label="新增" type="primary" icon="el-icon-circle-plus" @click="myAdd" auth="${jsModule}:${jsName}:add"/>
-                    <my-btn type="info" label="导出" @click="listExport" icon="el-icon-download" auth="${jsModule}:${jsName}:list:export"></my-btn>
+                    <my-btn label="新增" type="primary" icon="el-icon-circle-plus" @click="myAdd" auth="${permission}:add"></my-btn>
+                    <my-btn label="导出" type="info" icon="el-icon-download" @click="listExport"  auth="${permission}:list:export"></my-btn>
                 </el-form-item>
             </el-row>
         </el-form>

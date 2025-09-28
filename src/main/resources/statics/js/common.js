@@ -628,7 +628,7 @@ window.dictUtil = {
         let local_dict_key_type = T.local_key.dict_key_prefix + type;
         let dicts = [];
         let dictArr = localStorageExports.get(local_dict_key_type);
-        if (dictArr != null && dictArr != undefined) {
+        if (dictArr != null && dictArr != undefined  && dictArr.length > 0) {
             return dictArr;
         } else {
             dicts = this.getDicts({type: type});
@@ -645,7 +645,7 @@ window.dictUtil = {
         let local_dict_key_type = T.local_key.dict_key_prefix + type;
         let name = code;
         let dictArr = localStorageExports.get(local_dict_key_type);
-        if (dictArr != null) {
+        if (dictArr != null && dictArr.length > 0) {
             dictArr.forEach(function (v, index, arr) {
                 if (v.code == code) {
                     name = v.name;
@@ -673,12 +673,14 @@ window.dictUtil = {
         let dicts = [];
         param.orderBy = 'sequence-asc';
         httpUtil.syncGet({url: baseURL + 'sys/dict/list', data: param}, function (r) {
-            dicts = r.data.list;
-            dicts.forEach(function (v, index, arr) {
-                if (v.enabled == 'N') {
-                    v.disabled = true;
-                }
-            });
+            if(r.code ==0 && r.data.list && r.data.list.length>0){
+                dicts = r.data.list;
+                dicts.forEach(function (v, index, arr) {
+                    if (v.enabled == 'N') {
+                        v.disabled = true;
+                    }
+                });
+            }
         })
         return dicts;
     }

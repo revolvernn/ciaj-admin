@@ -278,6 +278,12 @@ let userapp = new Vue({
         },
         saveUserRole() {
             let that = this;
+            const loading = that.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            });
             let roles = that.addOrUpdateForm.userRole.roles;
             let datas = roles.length == 0 ? [{userId: that.addOrUpdateForm.userRole.userId}] : [];
             for (let v in roles) {
@@ -290,7 +296,10 @@ let userapp = new Vue({
                 url: 'sys/user/role/rel/adds',
                 data: JSON.stringify(datas)
             }, function (r) {
-                that.addOrUpdateForm.roleVisible = false;
+                loading.close();
+                if(r.code == 0){
+                    that.addOrUpdateForm.roleVisible = false;
+                }
                 alertMsg(that, r)
             });
         },
@@ -379,6 +388,12 @@ let userapp = new Vue({
             let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
+                    const loading = that.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
                     let url = that.addOrUpdateForm.user.id == null ? "/sys/pc/register" : "sys/user/update";
                     let type = that.addOrUpdateForm.user.id == null ? "POST" : "PUT";
                     httpUtil.post({
@@ -386,8 +401,11 @@ let userapp = new Vue({
                         type: type,
                         data: JSON.stringify(that.addOrUpdateForm.user)
                     }, function (r) {
-                        that.myQuery();
-                        that.addOrUpdateForm.userFormVisible = false;
+                        loading.close();
+                        if(r.code == 0){
+                            that.addOrUpdateForm.userFormVisible = false;
+                            that.myQuery();
+                        }
                         alertMsg(that, r)
                     });
                 }
@@ -417,12 +435,19 @@ let userapp = new Vue({
             let that = this;
             that.$refs['passwordFormRef'].validate((valid) => {
                 if (valid) {
+                    const loading = that.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
                     let data = "userId=" + that.pd.passwordForm.id + "&newPassword=" + that.pd.passwordForm.newPassword;
                     httpUtil.post({
                         url: "sys/user/password/update",
                         data: data,
                         contentType: AjaxContentType.URL
                     }, function (result) {
+                        loading.close();
                         if (result.code == 0) {
                             that.$message({message: "修改成功", type: 'success'});
                             that.pd.dialogVisible = false;

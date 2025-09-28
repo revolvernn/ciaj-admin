@@ -53,7 +53,7 @@ public class SysRolePermissionRelController extends AbstractController<SysRolePe
 	})
 	@OperationLog(operation = "系统角色权限关联-管理", content = "获取系统角色权限关联列表")
 	@RequiresPermissions("sys:role:permission:rel:list")
-	@GetMapping("/list")
+	@GetMapping("list")
 	public ResponseEntity<Page<SysRolePermissionRelDto>> list(String keyword,String roleId,String permissionId) {
 		SysRolePermissionRelVo entity = new SysRolePermissionRelVo();
 		entity.setKeyword(keyword);
@@ -68,7 +68,8 @@ public class SysRolePermissionRelController extends AbstractController<SysRolePe
 	 * @param entity
 	 * @return
 	 */
-	@Resubmit
+	@Override
+    @Resubmit
 	@ApiOperation(value = "分配角色-权限", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统角色权限关联-管理", content = "分配角色-权限")
 	@RequiresPermissions("sys:role:permission:rel:adds")

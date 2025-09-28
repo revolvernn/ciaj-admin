@@ -44,11 +44,12 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 	 * @param id
 	 * @return
 	 */
-	@ApiOperation("根据ID获取区域")
+	@Override
+    @ApiOperation("根据ID获取区域")
 	@ApiImplicitParam(name = "id", value = "区域ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统-区域", content = "根据ID获取区域")
 	@RequiresPermissions("sys:area:getById")
-	@GetMapping("/getById/{id}")
+	@GetMapping("getById/{id}")
 	public ResponseEntity<SysAreaDto> getById(@PathVariable("id") String id) {
 		return super.getById(id);
 	}
@@ -73,7 +74,7 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 	})
 	@OperationLog(operation = "系统-区域", content = "获取区域列表")
 	@RequiresPermissions("sys:area:list")
-	@GetMapping("/list")
+	@GetMapping("list")
 	public ResponseEntity<Page<SysAreaDto>> list(String keyword, String type, Integer level, String parentId) {
 		SysAreaVo entity = new SysAreaVo();
 		entity.setParentId(parentId);
@@ -89,6 +90,7 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "添加区域", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统-区域", content = "添加区域")
@@ -105,6 +107,7 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation("更新区域")
 	@OperationLog(operation = "系统-区域", content = "更新区域")
@@ -133,7 +136,9 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 		List<SysAreaPo> list = sysAreaService.select(q);
 		//同一父级下不能有相同的CODE
 		if (CollectionUtil.isNotEmpty(list)) {
-			if (entity.getId() == null) throw new BsRException("同一组区域编码不能重复");
+			if (entity.getId() == null) {
+				throw new BsRException("同一组区域编码不能重复");
+			}
 			for (SysAreaPo p : list) {
 				if (!p.getId().equals(entity.getId())) {
 					throw new BsRException("同一组区域编码不能重复");
@@ -147,7 +152,9 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 		list = sysAreaService.select(q);
 		//同一父级下不能有相同的CODE
 		if (CollectionUtil.isNotEmpty(list)) {
-			if (entity.getId() == null) throw new BsRException("同一组区域名称不能重复");
+			if (entity.getId() == null) {
+				throw new BsRException("同一组区域名称不能重复");
+			}
 			for (SysAreaPo p : list) {
 				if (!p.getId().equals(entity.getId())) {
 					throw new BsRException("同一组区域名称不能重复");
@@ -182,7 +189,8 @@ public class SysAreaController extends AbstractController<SysAreaPo, SysAreaDto,
 	 * @param id
 	 * @return
 	 */
-	@Resubmit(ParamTypeEnum.url)
+	@Override
+    @Resubmit(ParamTypeEnum.url)
 	@ApiOperation("根据ID删除区域")
 	@ApiImplicitParam(name = "id", value = "区域ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统-区域", content = "根据ID删除区域")

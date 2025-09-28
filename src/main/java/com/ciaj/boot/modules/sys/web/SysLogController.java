@@ -37,11 +37,12 @@ public class SysLogController extends AbstractController<SysLogPo, SysLogDto, Sy
      *
      * @return
      */
+    @Override
     @ApiOperation("根据ID获取系统日志")
     @ApiImplicitParam(name = "id", value = "系统日志ID", required = true, dataType = "string", paramType = "path")
     @OperationLog(operation = "系统日志-管理", content = "根据ID获取系统日志")
     @RequiresPermissions("sys:log:getById")
-    @GetMapping("/getById/{id}")
+    @GetMapping("getById/{id}")
     public ResponseEntity<SysLogDto> getById(@PathVariable("id") String id) {
         return super.getById(id);
     }
@@ -63,7 +64,7 @@ public class SysLogController extends AbstractController<SysLogPo, SysLogDto, Sy
     })
     @OperationLog(operation = "系统日志-管理", content = "获取系统日志列表")
     @RequiresPermissions("sys:log:list")
-    @GetMapping("/list")
+    @GetMapping("list")
     public ResponseEntity<Page<SysLogDto>> list(String keyword,String type) {
         SysLogVo entity = new SysLogVo();
         entity.setKeyword(keyword);
@@ -78,6 +79,7 @@ public class SysLogController extends AbstractController<SysLogPo, SysLogDto, Sy
      *
      * @return
      */
+    @Override
     @Resubmit
     @ApiOperation(value = "添加系统日志", produces = "application/json;charset=UTF-8")
     @OperationLog(operation = "系统日志-管理", content = "添加系统日志")
@@ -94,6 +96,7 @@ public class SysLogController extends AbstractController<SysLogPo, SysLogDto, Sy
      *
      * @return
      */
+    @Override
     @Resubmit
     @ApiOperation(value = "更新系统日志", produces = "application/json;charset=UTF-8")
     @OperationLog(operation = "系统日志-管理", content = "添加系统日志")
@@ -110,12 +113,13 @@ public class SysLogController extends AbstractController<SysLogPo, SysLogDto, Sy
      *
      * @return
      */
+    @Override
     @Resubmit(ParamTypeEnum.url)
     @ApiOperation("根据ID删除系统日志")
     @ApiImplicitParam(name = "id", value = "系统日志ID", required = true, dataType = "string", paramType = "path")
     @OperationLog(operation = "系统日志-管理", content = "根据ID删除系统日志")
     @RequiresPermissions("sys:log:delFlag")
-    @DeleteMapping("/delFlag/{id}")
+    @DeleteMapping("delFlag/{id}")
     public ResponseEntity deleteFlag(@PathVariable("id") String id) {
         return super.deleteFlag(id);
     }

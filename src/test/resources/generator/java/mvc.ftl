@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import com.ciaj.comm.utils.ExcelUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 <#assign dateTime = .now>
 /**
@@ -46,7 +47,7 @@ public class ${tableClass.shortClassName}Controller extends AbstractController<$
     @ApiImplicitParam(name = "id", value = "${mvcDesc}ID", required = true, dataType = "string", paramType = "path")
     @OperationLog(operation = "${mvcDesc}-管理", content = "根据ID获取${mvcDesc}")
     @RequiresPermissions("${permission}:getById")
-    @GetMapping("/getById/{id}")
+    @GetMapping("getById/{id}")
     public ResponseEntity<${tableClass.shortClassName}Dto> getById(@PathVariable("id") String id) {
         return super.getById(id);
     }
@@ -67,7 +68,7 @@ public class ${tableClass.shortClassName}Controller extends AbstractController<$
     })
     @OperationLog(operation = "${mvcDesc}-管理", content = "获取${mvcDesc}列表")
     @RequiresPermissions("${permission}:list")
-    @GetMapping("/list")
+    @GetMapping("list")
     public ResponseEntity<Page<${tableClass.shortClassName}Dto>> list(String keyword) {
         ${tableClass.shortClassName}Vo entity = new ${tableClass.shortClassName}Vo();
         entity.setKeyword(keyword);
@@ -90,28 +91,26 @@ public class ${tableClass.shortClassName}Controller extends AbstractController<$
     })
     @OperationLog(operation = "${mvcDesc}-管理", content = "${mvcDesc}列表导出")
     @RequiresPermissions("${permission}:list:export")
-    @GetMapping("/list/export")
+    @GetMapping("list/export")
     public void listExport(String keyword, HttpServletResponse response, HttpServletRequest request) {
         ${tableClass.shortClassName}Vo entity = new ${tableClass.shortClassName}Vo();
         entity.setKeyword(keyword);
-            WpeElectricianRecordVo entity = new WpeElectricianRecordVo();
-            entity.setKeyword(keyword);
-            entity.setDelFlag("N");
-            //
-            Page<WpeProjectDto> page = ${tableClass.variableName}Service.selectDTOPage(entity);
-            List<${tableClass.shortClassName}Dto> data = page.getList();
-            //
-            new ExcelUtil().build("${mvcDesc}导出",
-            new String[]{
-            <#if tableClass.allFields??>
-                <#list tableClass.allFields as field>"${field.fieldName}"<#if (field_index + 1) < tableClass.allFields?size>,</#if></#list>
-            </#if>
-            },
-            new String[]{
-            <#if tableClass.allFields??>
-                <#list tableClass.allFields as field>"<#if field.remarks??>${field.remarks}"<#if (field_index + 1) < tableClass.allFields?size>,</#if></#if></#list>
-            </#if>
-            }, data).exportExcel(request, response);
+        entity.setDelFlag("N");
+        //
+        Page<${tableClass.shortClassName}Dto> page = ${tableClass.variableName}Service.selectDTOPage(entity);
+        List<${tableClass.shortClassName}Dto> data = page.getList();
+        //
+        new ExcelUtil().build("${mvcDesc}导出",
+        new String[]{
+        <#if tableClass.allFields??>
+            <#list tableClass.allFields as field>"${field.fieldName}"<#if (field_index + 1) < tableClass.allFields?size>,</#if></#list>
+        </#if>
+        },
+        new String[]{
+        <#if tableClass.allFields??>
+            <#list tableClass.allFields as field>"<#if field.remarks??>${field.remarks}"<#if (field_index + 1) < tableClass.allFields?size>,</#if></#if></#list>
+        </#if>
+        }, data).exportExcel(request, response);
     }
 
     /**
@@ -161,7 +160,7 @@ public class ${tableClass.shortClassName}Controller extends AbstractController<$
     @ApiImplicitParam(name = "id", value = "${mvcDesc}ID", required = true, dataType = "string", paramType = "path")
     @OperationLog(operation = "${mvcDesc}-管理", content = "根据ID删除${mvcDesc}")
     @RequiresPermissions("${permission}:delFlag")
-    @DeleteMapping("/delFlag/{id}")
+    @DeleteMapping("delFlag/{id}")
     public ResponseEntity deleteFlag(@PathVariable("id") String id) {
         return super.deleteFlag(id);
     }

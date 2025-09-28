@@ -230,6 +230,12 @@ let permissionapp = new Vue({
             let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
+                    const loading = that.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
                     let url = that.addOrUpdateForm.permission.id == null ? "sys/permission/add" : "sys/permission/update";
                     let type = that.addOrUpdateForm.permission.id == null ? "POST" : "PUT";
                     httpUtil.post({
@@ -237,9 +243,12 @@ let permissionapp = new Vue({
                         type: type,
                         data: JSON.stringify(that.addOrUpdateForm.permission)
                     }, function (r) {
-                        that.myQuery();
-                        that.initTree();
-                        that.addOrUpdateForm.permissionFormVisible = false;
+                        loading.close();
+                        if(r.code == 0) {
+                            that.myQuery();
+                            that.initTree();
+                            that.addOrUpdateForm.permissionFormVisible = false;
+                        }
                         alertMsg(that, r)
                     });
                 }

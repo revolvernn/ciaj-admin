@@ -176,11 +176,12 @@ new Vue({
                 data.permissionId = privilegeIds[v];
                 datas.push(data)
             }
-            httpUtil.post({
-                url: 'sys/role/permission/rel/adds',
-                data: JSON.stringify(datas)
-            }, function (r) {
-                that.addOrUpdateForm.privilegesVisible = false;
+            const loading = that.$loading({ lock: true, text: 'Loading', spinner: 'el-icon-loading', background: 'rgba(0, 0, 0, 0.7)'});
+            httpUtil.post({url: 'sys/role/permission/rel/adds', data: JSON.stringify(datas) }, function (r) {
+                loading.close();
+                if(r.code == 0) {
+                    that.addOrUpdateForm.privilegesVisible = false;
+                }
                 alertMsg(that, r)
             });
         },
@@ -233,6 +234,12 @@ new Vue({
             let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
+                    const loading = that.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
                     let url = that.addOrUpdateForm.role.id == null ? "sys/role/add" : "sys/role/update";
                     let type = that.addOrUpdateForm.role.id == null ? "POST" : "PUT";
                     httpUtil.post({
@@ -240,8 +247,11 @@ new Vue({
                         type: type,
                         data: JSON.stringify(that.addOrUpdateForm.role)
                     }, function (r) {
-                        that.myQuery();
-                        that.addOrUpdateForm.roleFormVisible = false;
+                        loading.close();
+                        if(r.code == 0) {
+                            that.myQuery();
+                            that.addOrUpdateForm.roleFormVisible = false;
+                        }
                         alertMsg(that, r)
                     });
                 }

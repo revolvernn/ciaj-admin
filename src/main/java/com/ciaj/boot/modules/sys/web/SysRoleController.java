@@ -51,11 +51,12 @@ public class SysRoleController extends AbstractController<SysRolePo, SysRoleDto,
 	 * @param id
 	 * @return
 	 */
-	@ApiOperation("根据ID获取系统角色")
+	@Override
+    @ApiOperation("根据ID获取系统角色")
 	@ApiImplicitParam(name = "id", value = "系统角色ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统角色-管理", content = "根据ID获取系统角色")
 	@RequiresPermissions("sys:role:getById")
-	@GetMapping("/getById/{id}")
+	@GetMapping("getById/{id}")
 	public ResponseEntity<SysRoleDto> getById(@PathVariable("id") String id) {
 		return super.getById(id);
 	}
@@ -78,7 +79,7 @@ public class SysRoleController extends AbstractController<SysRolePo, SysRoleDto,
 	})
 	@OperationLog(operation = "系统角色-管理", content = "获取系统角色列表")
 	@RequiresPermissions("sys:role:list")
-	@GetMapping("/list")
+	@GetMapping("list")
 	public ResponseEntity<Page<SysRoleDto>> list(String keyword, String type, String available) {
 		SysRoleVo entity = new SysRoleVo();
 		entity.setKeyword(keyword);
@@ -93,6 +94,7 @@ public class SysRoleController extends AbstractController<SysRolePo, SysRoleDto,
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "添加系统角色", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统角色-管理", content = "添加系统角色")
@@ -108,6 +110,7 @@ public class SysRoleController extends AbstractController<SysRolePo, SysRoleDto,
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "更新系统角色", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统角色-管理", content = "添加系统角色")
@@ -123,12 +126,13 @@ public class SysRoleController extends AbstractController<SysRolePo, SysRoleDto,
 	 * @param id
 	 * @return
 	 */
+	@Override
 	@Resubmit(ParamTypeEnum.url)
 	@ApiOperation("根据ID删除系统角色")
 	@ApiImplicitParam(name = "id", value = "系统角色ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统角色-管理", content = "根据ID删除系统角色")
 	@RequiresPermissions("sys:role:delFlag")
-	@DeleteMapping("/delFlag/{id}")
+	@DeleteMapping("delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
 		SysUserRoleRelPo query = new SysUserRoleRelPo();
 		query.setRoleId(id);
@@ -151,7 +155,7 @@ public class SysRoleController extends AbstractController<SysRolePo, SysRoleDto,
 	@ApiImplicitParam(name = "id", value = "系统角色ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统角色-管理", content = "根据ID清空角色关联用户及权限数据")
 	@RequiresPermissions("sys:role:clearRoleRel")
-	@DeleteMapping("/clearRoleRel/{id}")
+	@DeleteMapping("clearRoleRel/{id}")
 	public ResponseEntity clearRoleRel(@PathVariable("id") String id) {
 		SysUserRoleRelPo userRoleRel = new SysUserRoleRelPo();
 		userRoleRel.setRoleId(id);

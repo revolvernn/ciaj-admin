@@ -29,7 +29,7 @@ body{
      text-align: center;
  }
 .el-form .el-input, .el-form .el-input-number{
-    width:85%;
+    width:100%;
 }
 .el-form .el-select,.el-form .el-cascader{
     width:100%;

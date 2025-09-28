@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -44,11 +45,13 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 	 * @param id
 	 * @return
 	 */
+	@Override
 	@ApiOperation("根据ID获取系统字典")
 	@ApiImplicitParam(name = "id", value = "系统字典ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统字典-管理", content = "根据ID获取系统字典", isInsert = false)
-	@RequiresPermissions("sys:dict:getById")
-	@GetMapping("/getById/{id}")
+	//@RequiresPermissions("sys:dict:getById")
+	@RequiresUser
+	@GetMapping("getById/{id}")
 	public ResponseEntity<SysDictDto> getById(@PathVariable("id") String id) {
 		return super.getById(id);
 	}
@@ -72,8 +75,9 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 			@ApiImplicitParam(name = "code", value = "字典CODE", paramType = "query")
 	})
 	@OperationLog(operation = "系统字典-管理", content = "获取系统字典列表", isInsert = false)
-	@RequiresPermissions("sys:dict:list")
-	@GetMapping("/list")
+	@RequiresUser
+	//@RequiresPermissions("sys:dict:list")
+	@GetMapping("list")
 	public ResponseEntity<Page<SysDictDto>> list(String keyword, String type, String parentId, String name, String code) {
 		SysDictVo entity = new SysDictVo();
 		entity.setKeyword(keyword);
@@ -90,6 +94,7 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "添加系统字典", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统字典-管理", content = "添加系统字典")
@@ -106,6 +111,7 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "更新系统字典", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统字典-管理", content = "添加系统字典")
@@ -127,12 +133,13 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 	 * @param id
 	 * @return
 	 */
+	@Override
 	@Resubmit(ParamTypeEnum.url)
 	@ApiOperation("根据ID删除系统字典")
 	@ApiImplicitParam(name = "id", value = "系统字典ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统字典-管理", content = "根据ID删除系统字典")
 	@RequiresPermissions("sys:dict:delFlag")
-	@DeleteMapping("/delFlag/{id}")
+	@DeleteMapping("delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
 		SysDictPo sysDictPo = sysDictService.selectByPrimaryKey(id);
 		ResponseEntity responseEntity = super.deleteFlagVersion(id, sysDictPo.getVersion());
@@ -175,7 +182,9 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 		List<SysDictPo> sysDicts = sysDictService.select(q);
 		//同一父级下不能有相同的CODE
 		if (CollectionUtil.isNotEmpty(sysDicts)) {
-			if (entity.getId() == null) throw new BsRException("同一组字典编码不能重复");
+			if (entity.getId() == null) {
+				throw new BsRException("同一组字典编码不能重复");
+			}
 			for (SysDictPo sysDict : sysDicts) {
 				if (!sysDict.getId().equals(entity.getId())) {
 					throw new BsRException("同一组字典编码不能重复");
@@ -189,7 +198,9 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
 		sysDicts = sysDictService.select(q);
 		//同一父级下不能有相同的CODE
 		if (CollectionUtil.isNotEmpty(sysDicts)) {
-			if (entity.getId() == null) throw new BsRException("同一组字典名称不能重复");
+			if (entity.getId() == null) {
+				throw new BsRException("同一组字典名称不能重复");
+			}
 			for (SysDictPo sysDict : sysDicts) {
 				if (!sysDict.getId().equals(entity.getId())) {
 					throw new BsRException("同一组字典名称不能重复");

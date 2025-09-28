@@ -30,66 +30,78 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 
 	//*************************select***************************************
 
+	@Override
 	public Page<PO> selectPOPage(PO entity) {
 		com.github.pagehelper.Page p = PageUtils.startPageAndOrderBy();
 		List<PO> list = select(entity);
 		return wrapPOPage(p, list);
 	}
 
+	@Override
 	public Page<DTO> selectDTOPage(PO entity) {
 		com.github.pagehelper.Page p = PageUtils.startPageAndOrderBy();
 		List<PO> list = select(entity);
 		return wrapDTOPage(p, list);
 	}
 
+	@Override
 	public Page<PO> selectPOPage(VO entity) {
 		com.github.pagehelper.Page p = PageUtils.startPageAndOrderBy();
 		List<PO> list = selectList(entity);
 		return wrapPOPage(p, list);
 	}
 
+	@Override
 	public Page<DTO> selectDTOPage(VO entity) {
 		com.github.pagehelper.Page p = PageUtils.startPageAndOrderBy();
 		List<PO> list = selectList(entity);
 		return wrapDTOPage(p, list);
 	}
 
+	@Override
 	public Page<VO> selectVoPage(VO entity) {
 		com.github.pagehelper.Page p = PageUtils.startPageAndOrderBy();
 		List<PO> list = selectList(entity);
 		return wrapVoPage(p, list);
 	}
 
+	@Override
 	public List<DTO> selectDTOList(VO entity) {
 		List<PO> list = selectList(entity);
 		return posToDtos(list);
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<PO> selectAll(PO entity) {
 		return mapper.selectAll(entity);
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public PO selectByPrimaryKey(Object key) {
 		return mapper.selectByPrimaryKey(key);
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<PO> select(PO record) {
 		return mapper.select(record);
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<PO> selectList(VO q) {
 		return mapper.selectList(q);
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public PO selectOne(PO record) {
 		return mapper.selectOne(record);
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<PO> selectListByKeys(Object[] keys) {
 		return mapper.selectListByKeys(keys);
@@ -97,23 +109,27 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 
 	//*************************select***************************************
 	//*************************insert***************************************
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public int insert(PO record) {
 		return mapper.insert(record);
 	}
 
+	@Override
 	public DTO insertDTO(PO entity) {
 		insert(entity);
 		return poToDto(entity);
 	}
 
 
+	@Override
 	public PO insertPO(PO entity) {
 		insert(entity);
 		return entity;
 	}
 
 
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public int insertPOs(List<PO> pos) {
 		int i = 0;
@@ -124,16 +140,19 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 		return i;
 	}
 
+	@Override
 	public DTO insertSelectiveDTO(PO entity) {
 		insert(entity);
 		return poToDto(entity);
 	}
 
+	@Override
 	public PO insertSelectivePO(PO entity) {
 		insert(entity);
 		return entity;
 	}
 
+	@Override
 	public int insertSelective(PO record) {
 		return mapper.insertSelective(record);
 	}
@@ -141,57 +160,73 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 	//*************************insert***************************************
 	//*************************update***************************************
 
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public int updateByPrimaryKey(PO record) {
 		return mapper.updateByPrimaryKey(record);
 	}
 
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public int updateByPrimaryKeyAndVersion(PO record, int oldVersion) {
 		int i = mapper.updateByPrimaryKeyAndVersion(record, oldVersion);
-		if (i == 0) throw new BsRException("更新失败，数据被占用或数据不存在");
+		if (i == 0) {
+			throw new BsRException("更新失败，数据被占用或数据不存在");
+		}
 		return i;
 	}
 
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public int updateByPrimaryKeySelective(PO record) {
 		int i = mapper.updateByPrimaryKeySelective(record);
-		if (i == 0) throw new BsRException("更新失败，数据被占用或数据不存在");
+		if (i == 0) {
+			throw new BsRException("更新失败，数据被占用或数据不存在");
+		}
 		return i;
 	}
 
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public int updateByPrimaryKeySelectiveAndVersion(PO record, int oldVersion) {
 		int i = mapper.updateByPrimaryKeySelectiveAndVersion(record, oldVersion);
-		if (i == 0) throw new BsRException("更新失败，数据被占用或数据不存在");
+		if (i == 0) {
+			throw new BsRException("更新失败，数据被占用或数据不存在");
+		}
 		return i;
 	}
 
+	@Override
 	public PO updateByPrimaryKeyPO(PO record) {
 		updateByPrimaryKey(record);
 		return record;
 	}
 
+	@Override
 	public DTO updateByPrimaryKeyDTO(PO record) {
 		updateByPrimaryKey(record);
 		return poToDto(record);
 	}
 
+	@Override
 	public PO updateByPrimaryKeySelectivePO(PO record) {
 		updateByPrimaryKeySelective(record);
 		return record;
 	}
 
+	@Override
 	public PO updateByPrimaryKeySelectiveAndVersionPO(PO record, Integer oldVersion) {
 		updateByPrimaryKeySelectiveAndVersion(record, oldVersion);
 		return record;
 	}
 
+	@Override
 	public DTO updateByPrimaryKeySelectiveDTO(PO record) {
 		updateByPrimaryKeySelective(record);
 		return poToDto(record);
 	}
 
+	@Override
 	public DTO updateByPrimaryKeySelectiveAndVersionDTO(PO record, Integer oldVersion) {
 		updateByPrimaryKeySelectiveAndVersion(record, oldVersion);
 		return poToDto(record);
@@ -199,18 +234,21 @@ public abstract class AbstractService<PO, DTO extends BaseEntity, VO extends VOE
 
 	//*************************delete***************************************
 
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public int deleteByPrimaryKey(Object key) {
 		int i = mapper.deleteByPrimaryKey(key);
 		return i;
 	}
 
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public int delete(PO record) {
 		int i = mapper.delete(record);
 		return i;
 	}
 
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public int deleteByPrimaryKeys(List<Object> keys) {
 		int i = 0;

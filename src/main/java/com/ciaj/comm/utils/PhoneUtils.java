@@ -49,16 +49,18 @@ public class PhoneUtils {
 	 * @param <T>       对象
 	 */
 	public static <T> void hidePhone(String fieldName, T record) {
-		if (record == null || StringUtils.isEmpty(fieldName)) return;
+		if (record == null || StringUtils.isEmpty(fieldName)) {
+			return;
+		}
 		if (record instanceof Map) {
 			Map map = (Map) record;
 			map.put(fieldName, hidePhone(map.get(fieldName).toString()));
 		} else {
 			try {
-				List<Class<?>> superClass = getSuperClass(record.getClass());
+				List<Class<?>> superClass = FieldUtil.getSuperClass(record.getClass());
 				Field field = null;
 				for (Class<?> aClass : superClass) {
-					field = getClassField(fieldName, aClass);
+					field = FieldUtil.getClassField(fieldName, aClass);
 					if (field != null) {
 						break;
 					}
@@ -95,49 +97,13 @@ public class PhoneUtils {
 	 * @param <T>       对象
 	 */
 	public static <T> void hidePhones(String fieldName, List<T> records) {
-		if (CollectionUtils.isEmpty(records) || StringUtils.isEmpty(fieldName)) return;
+		if (CollectionUtils.isEmpty(records) || StringUtils.isEmpty(fieldName)) {
+			return;
+		}
 		for (T record : records) {
 			hidePhone(fieldName, record);
 		}
 	}
 
-	private static Field getField(String fieldName, Class record) {
-		Field field = null;
-		try {
-			field = record.getSuperclass().getDeclaredField(fieldName);
-			if (field == null) {
-				field = record.getDeclaredField(fieldName);
-			}
-		} catch (NoSuchFieldException e) {
-			log.error(e.getMessage(),e);
-		}
-		return field;
-	}
-
-	private static Field getClassField(String fieldName, Class record) {
-		try {
-		 	return record.getDeclaredField(fieldName);
-		} catch (NoSuchFieldException e) {
-			log.error(e.getMessage(),e);
-		}
-		return null;
-	}
-
-	/**
-	 * 获取这个类的所有父类
-	 *
-	 * @param clazz
-	 * @return
-	 */
-	public static List<Class<?>> getSuperClass(Class<?> clazz) {
-		List<Class<?>> clazzs = new ArrayList<Class<?>>();
-		clazzs.add(clazz);
-		Class<?> suCl = clazz.getSuperclass();
-		while (suCl != null) {
-			clazzs.add(suCl);
-			suCl = suCl.getSuperclass();
-		}
-		return clazzs;
-	}
 
 }

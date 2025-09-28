@@ -48,11 +48,12 @@ public class SysUserController extends AbstractController<SysUserPo, SysUserDto,
 	 * @param id
 	 * @return
 	 */
+	@Override
 	@ApiOperation("根据ID获取系统用户")
 	@ApiImplicitParam(name = "id", value = "系统用户ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统用户-管理", content = "根据ID获取系统用户")
 	@RequiresPermissions("sys:user:getById")
-	@GetMapping("/getById/{id}")
+	@GetMapping("getById/{id}")
 	public ResponseEntity<SysUserDto> getById(@PathVariable("id") String id) {
 		return new ResponseEntity<SysUserDto>().put(sysUserService.selectById(id));
 	}
@@ -92,6 +93,7 @@ public class SysUserController extends AbstractController<SysUserPo, SysUserDto,
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "添加系统用户", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统用户-管理", content = "添加系统用户")
@@ -108,6 +110,7 @@ public class SysUserController extends AbstractController<SysUserPo, SysUserDto,
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "更新用户", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统用户-管理", content = "添加系统用户")
@@ -144,12 +147,13 @@ public class SysUserController extends AbstractController<SysUserPo, SysUserDto,
 	 * @param id
 	 * @return
 	 */
+	@Override
 	@Resubmit(ParamTypeEnum.url)
 	@ApiOperation("根据ID删除系统用户")
 	@ApiImplicitParam(name = "id", value = "系统用户ID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统用户-管理", content = "根据ID删除系统用户")
 	@RequiresPermissions("sys:user:delFlag")
-	@DeleteMapping("/delFlag/{id}")
+	@DeleteMapping("delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
 		SysUserPo sysUserPo = sysUserService.selectByPrimaryKey(id);
 		return super.deleteFlagVersion(id, sysUserPo.getVersion());

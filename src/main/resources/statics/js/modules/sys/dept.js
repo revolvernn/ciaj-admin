@@ -261,12 +261,21 @@ let deptapp = new Vue({
             let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
+                    const loading = that.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
                     let url = that.addOrUpdateForm.dept.id == null ? "sys/dept/add" : "sys/dept/update";
                     let type = that.addOrUpdateForm.dept.id == null ? "POST" : "PUT";
                     httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.dept)}, function (r) {
-                        that.myQuery();
-                        that.initTree();
-                        that.addOrUpdateForm.deptFormVisible = false;
+                        loading.close();
+                        if(r.code == 0) {
+                            that.myQuery();
+                            that.initTree();
+                            that.addOrUpdateForm.deptFormVisible = false;
+                        }
                         alertMsg(that, r);
                     });
                 }

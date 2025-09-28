@@ -176,6 +176,7 @@ public interface BaseService<PO, DTO extends BaseEntity, VO extends VOEntity> ex
 	 * @param entity VO
 	 * @return List<DTO>
 	 */
-	List<DTO> selectDTOList(VO entity);
+    @Override
+    List<DTO> selectDTOList(VO entity);
 
 }

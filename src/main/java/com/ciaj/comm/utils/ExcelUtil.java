@@ -165,8 +165,7 @@ public class ExcelUtil {
     private Object invokeMethod(Object owner, String fieldname) throws Exception {
         String methodName = "get" + StringUtil.underlineToHumpUpperCase(fieldname);
         Class<?> ownerClass = owner.getClass();
-        Method method = ownerClass.getMethod(methodName);
-        Object invoke = method.invoke(owner);
+        Object invoke = ownerClass.getMethod(methodName).invoke(owner);
         String value = "";
         if (invoke == null) {
             return value;
@@ -174,15 +173,7 @@ public class ExcelUtil {
         value = invoke.toString();
 
         if (invoke instanceof BigDecimal) {
-            DecimalFormat d = method.getAnnotation(DecimalFormat.class);
-            if (d == null) {
-                Class<?> superclass = ownerClass.getSuperclass();
-                if (superclass != null) {
-                    Method superclassMethod = superclass.getMethod(methodName);
-                    d = superclassMethod.getAnnotation(DecimalFormat.class);
-                }
-            }
-
+            DecimalFormat d = FieldUtil.getClassFirstAnnotation(ownerClass, methodName, DecimalFormat.class);
             if (d != null) {
                 BigDecimal b = (BigDecimal) invoke;
                 BigDecimal bigDecimal = new BigDecimal(b.toString()).setScale(d.scale(), d.roundingMode());
@@ -191,14 +182,7 @@ public class ExcelUtil {
 
         } else if (invoke instanceof Date) {
             Date date = (Date) invoke;
-            DateTimeFormat d = method.getAnnotation(DateTimeFormat.class);
-            if (d == null) {
-                Class<?> superclass = ownerClass.getSuperclass();
-                if (superclass != null) {
-                    Method superclassMethod = superclass.getMethod(methodName);
-                    d = superclassMethod.getAnnotation(DateTimeFormat.class);
-                }
-            }
+            DateTimeFormat d = FieldUtil.getClassFirstAnnotation(ownerClass, methodName, DateTimeFormat.class);
             value = CalendarUtils.format(date, d != null ? d.pattern() : CalendarUtils.DATE_TIME_PATTERN);
         }
 

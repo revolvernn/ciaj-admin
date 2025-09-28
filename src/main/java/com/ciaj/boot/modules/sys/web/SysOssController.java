@@ -111,11 +111,12 @@ public class SysOssController extends AbstractController<SysOssPo, SysOssDto, Sy
 	 * @param id
 	 * @return
 	 */
-	@ApiOperation("根据ID获取系统OSS")
+	@Override
+    @ApiOperation("根据ID获取系统OSS")
 	@ApiImplicitParam(name = "id", value = "系统OSSID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统OSS-管理", content = "根据ID获取系统OSS")
 	@RequiresPermissions("sys:oss:getById")
-	@GetMapping("/getById/{id}")
+	@GetMapping("getById/{id}")
 	public ResponseEntity<SysOssDto> getById(@PathVariable("id") String id) {
 		return super.getById(id);
 	}
@@ -137,7 +138,7 @@ public class SysOssController extends AbstractController<SysOssPo, SysOssDto, Sy
 	})
 	@OperationLog(operation = "系统OSS-管理", content = "获取系统OSS列表")
 	@RequiresPermissions("sys:oss:list")
-	@GetMapping("/list")
+	@GetMapping("list")
 	public ResponseEntity<Page<SysOssDto>> list(String type, String keyword) {
 		SysOssVo entity = new SysOssVo();
 		entity.setKeyword(keyword);
@@ -151,6 +152,7 @@ public class SysOssController extends AbstractController<SysOssPo, SysOssDto, Sy
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "添加系统OSS", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统OSS-管理", content = "添加系统OSS")
@@ -166,6 +168,7 @@ public class SysOssController extends AbstractController<SysOssPo, SysOssDto, Sy
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	@Resubmit
 	@ApiOperation(value = "更新系统OSS", produces = "application/json;charset=UTF-8")
 	@OperationLog(operation = "系统OSS-管理", content = "添加系统OSS")
@@ -181,12 +184,13 @@ public class SysOssController extends AbstractController<SysOssPo, SysOssDto, Sy
 	 * @param id
 	 * @return
 	 */
+	@Override
 	@Resubmit(ParamTypeEnum.url)
 	@ApiOperation("根据ID删除系统OSS")
 	@ApiImplicitParam(name = "id", value = "系统OSSID", required = true, dataType = "string", paramType = "path")
 	@OperationLog(operation = "系统OSS-管理", content = "根据ID删除系统OSS")
 	@RequiresPermissions("sys:oss:delFlag")
-	@DeleteMapping("/delFlag/{id}")
+	@DeleteMapping("delFlag/{id}")
 	public ResponseEntity deleteFlag(@PathVariable("id") String id) {
 		return super.deleteFlag(id);
 	}
