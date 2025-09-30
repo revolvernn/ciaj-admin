@@ -11,6 +11,7 @@ import com.ciaj.boot.modules.wpe.entity.vo.WpeElectricianRecordVo;
 import com.ciaj.boot.modules.wpe.mapper.WpeElectricianRecordMapper;
 import com.ciaj.boot.modules.wpe.service.WpeElectricianRecordService;
 import com.ciaj.boot.modules.wpe.service.WpeProjectService;
+import com.ciaj.comm.utils.AssertUtil;
 import com.ciaj.comm.utils.Page;
 import com.ciaj.comm.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,8 @@ public class WpeElectricianRecordServiceImpl extends AbstractService<WpeElectric
         WpeElectricianRecordVo n = new WpeElectricianRecordVo();
         n.setId(id);
         List<WpeElectricianRecordDto> wpeElectricianRecordDtos = wpeElectricianRecordMapper.selectDTOList(n);
+
+        AssertUtil.notEmpty(wpeElectricianRecordDtos, "根据ID未查询到数据: " + id);
         WpeElectricianRecordDto wpeElectricianRecordDto = wpeElectricianRecordDtos.get(0);
         //
         SysUserDto sysUserDto = sysUserService.selectById(wpeElectricianRecordDto.getUserId());

@@ -5,43 +5,46 @@
 <div id="electricianRecordStatisticsapp" v-cloak>
     <div>
         <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
-            <el-form-item label="关键字" prop="keyword">
-                <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
-            </el-form-item>
-            <el-form-item label="统计类型" prop="type">
-                <my-dict-select v-model="queryForm.type" type="statType"></my-dict-select>
-            </el-form-item>
-            <el-form-item v-show="queryForm.type === '1' || queryForm.type === '2'" label="周期" prop="period">
-                <el-date-picker  v-model="queryForm.period" value-format="yyyy-MM" type="month" placeholder="选择月份"></el-date-picker>
-            </el-form-item>
-            <el-form-item  v-show="queryForm.type === '3' || queryForm.type === '4'"  label="周期" prop="period">
-                <el-date-picker  v-model="queryForm.period" value-format="yyyy" type="year" placeholder="选择年"></el-date-picker>
-            </el-form-item>
-            <el-form-item label="用户" prop="userId">
-                <my-search-select v-model="queryForm.userId"
-                                  search-url="/sys/user/list"
-                                  search-param="roleCode-wpe"
-                                  search-field-name="keyword"
-                                  label-field-name="username"
-                                  label-field-value="id"
-                                  right-label-field-name="deptNames"
-                />
-            </el-form-item>
-            <el-form-item label="项目" prop="projectId">
-                <my-search-select v-model="queryForm.projectId"
-                                  search-url="/wpe/project/list"
-                                  search-field-name="keyword"
-                                  label-field-name="projectName"
-                                  label-field-value="id"
-                                  right-label-field-name="addr"
-                />
-            </el-form-item>
-
-            <el-form-item>
-                <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
-                <el-button @click="myQueryReset">重置</el-button>
-                <my-btn type="info" label="导出" @click="exportStatistics" icon="el-icon-download" auth="wpe:electrician:record:statistics:export"></my-btn>
-            </el-form-item>
+            <el-row type="flex" class="row-bg">
+                <el-form-item label="关键字" prop="keyword">
+                    <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+                </el-form-item>
+                <el-form-item label="统计类型" prop="type">
+                    <my-dict-select v-model="queryForm.type" type="statType"></my-dict-select>
+                </el-form-item>
+                <el-form-item v-show="queryForm.type === '1' || queryForm.type === '2'" label="周期" prop="period">
+                    <el-date-picker  v-model="queryForm.period" value-format="yyyy-MM" type="month" placeholder="选择月份"></el-date-picker>
+                </el-form-item>
+                <el-form-item  v-show="queryForm.type === '3' || queryForm.type === '4'"  label="周期" prop="period">
+                    <el-date-picker  v-model="queryForm.period" value-format="yyyy" type="year" placeholder="选择年"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="用户" prop="userId">
+                    <my-search-select v-model="queryForm.userId"
+                                      search-url="/sys/user/list"
+                                      search-param="roleCode-wpe"
+                                      search-field-name="keyword"
+                                      label-field-name="username"
+                                      label-field-value="id"
+                                      right-label-field-name="deptNames"
+                    />
+                </el-form-item>
+                <el-form-item label="项目" prop="projectId">
+                    <my-search-select v-model="queryForm.projectId"
+                                      search-url="/wpe/project/list"
+                                      search-field-name="keyword"
+                                      label-field-name="projectName"
+                                      label-field-value="id"
+                                      right-label-field-name="addr"
+                    />
+                </el-form-item>
+            </el-row>
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-form-item>
+                    <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
+                    <el-button @click="myQueryReset">重置</el-button>
+                    <my-btn type="info" label="导出" @click="exportStatistics" icon="el-icon-download" auth="wpe:electrician:record:statistics:export"></my-btn>
+                </el-form-item>
+            </el-row>
         </el-form>
         <my-table :columns="tableColumns" :page="page" show-summary :table-loading="tableLoading"   @sortChange="sortchange" :default-sort="defaultSort"
                   v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">

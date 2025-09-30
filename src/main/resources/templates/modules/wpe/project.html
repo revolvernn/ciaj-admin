@@ -5,21 +5,25 @@
 <div id="projectapp" v-cloak>
     <div>
         <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
-            <el-form-item label="关键字" prop="keyword">
-                <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
-            </el-form-item>
-            <el-form-item label="项目户型" prop="houseType">
-                <my-dict-select v-model="queryForm.houseType" type="houseType"></my-dict-select>
-            </el-form-item>
-            <el-form-item label="装修类型" prop="decorationType">
-                <my-dict-select v-model="queryForm.decorationType" type="decorationType"></my-dict-select>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
-                <el-button @click="myQueryReset">重置</el-button>
-                <my-btn type="primary" label="新增" @click="myAdd" icon="el-icon-circle-plus" auth="wpe:project:add"></my-btn>
-                <my-btn type="info" label="导出" @click="listExport" icon="el-icon-download" auth="wpe:project:list:export"></my-btn>
-            </el-form-item>
+            <el-row type="flex" class="row-bg">
+                <el-form-item label="关键字" prop="keyword">
+                    <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+                </el-form-item>
+                <el-form-item label="项目户型" prop="houseType">
+                    <my-dict-select v-model="queryForm.houseType" type="houseType"></my-dict-select>
+                </el-form-item>
+                <el-form-item label="装修类型" prop="decorationType">
+                    <my-dict-select v-model="queryForm.decorationType" type="decorationType"></my-dict-select>
+                </el-form-item>
+            </el-row>
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-form-item>
+                    <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
+                    <el-button @click="myQueryReset">重置</el-button>
+                    <my-btn type="primary" label="新增" @click="myAdd" icon="el-icon-circle-plus" auth="wpe:project:add"></my-btn>
+                    <my-btn type="info" label="导出" @click="listExport" icon="el-icon-download" auth="wpe:project:list:export"></my-btn>
+                </el-form-item>
+            </el-row>
         </el-form>
         <my-table :columns="tableColumns" :page="page" :table-loading="tableLoading"   @sortChange="sortchange" :default-sort="defaultSort"
                   v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
@@ -34,12 +38,12 @@
                 </el-form-item>
                 <el-form-item label="地址" prop="addr"
                               :label-width="addOrUpdateForm.projectFormLabelWidth" required>
-                    <el-input v-model="addOrUpdateForm.project.addr" autocomplete="off"
+                    <el-input type="textarea" :row="2"  v-model="addOrUpdateForm.project.addr" autocomplete="off"
                               placeholder="地址"></el-input>
                 </el-form-item>
                 <el-form-item label="备注" prop="remark"
                               :label-width="addOrUpdateForm.projectFormLabelWidth">
-                    <el-input v-model="addOrUpdateForm.project.remark" autocomplete="off"
+                    <el-input type="textarea" :row="2"  v-model="addOrUpdateForm.project.remark" autocomplete="off"
                               placeholder="备注"></el-input>
                 </el-form-item>
                 <el-form-item label="项目户型" prop="houseType"

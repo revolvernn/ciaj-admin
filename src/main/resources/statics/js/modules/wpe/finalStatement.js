@@ -1,25 +1,31 @@
 Vue.component('myPagination', myPaginationT);
 Vue.component('myTable', myTableT);
+Vue.component('myBtn', myBtnT);
 Vue.component('myDictSelect', myDictSelectT);
 Vue.component('mySearchSelect', mySearchSelectT);
-Vue.component('myBtn', myBtnT);
 
-let electricianRecordapp = new Vue({
-    el: '#electricianRecordapp',
+let finalStatementapp = new Vue({
+    el: '#finalStatementapp',
     data() {
         return {
-            defaultSort: {prop: 'workday', order: 'descending'},
+            defaultSort: {prop: 'createTime', order: 'descending'},
             queryForm: {
-                //orderBy: 'm.update_time-desc',
                 orderByEnabled: true,
                 pageEnabled: true,
                 pageNo: 1,
                 pageSize: 10,
                 keyword: null,
-                userId: null,
-                projectId: null,
-                status: null,
-                workType: null
+                userId: null
+            },
+            stat: {
+                final:{
+                    type: 'final',
+                    money: 100
+                },
+                record: {
+                    type: 'record',
+                    money: 300
+                }
             },
             tableColumns: [
                 {
@@ -27,56 +33,18 @@ let electricianRecordapp = new Vue({
                     label: '用户'
                 },
                 {
-                    name: 'project.projectName',
-                    label: '工程名称'
-                },
-                {
-                    name: 'project.houseType',
-                    dict: 'houseType',
-                    label: '项目户型'
-                },
-                {
-                    name: 'project.decorationType',
-                    dict: 'decorationType',
-                    label: '装修类型'
-                },
-                {
-                    name: 'project.addr',
-                    label: '地址'
-                },
-                {
-                    width: '140',
-                    name: 'workday',
-                    date: 'yyyy-MM-dd',
                     sortable: 'custom',
                     sortBy: 'm.workday',
-                    label: '工作日'
+                    name: 'day',
+                    label: '结算日'
                 },
                 {
-                    name: 'workStart',
-                    label: '工作开始时间'
-                },
-                {
-                    name: 'workEnd',
-                    label: '工作日结束时间'
+                    name: 'money',
+                    label: '款项金额'
                 },
                 {
                     name: 'remark',
                     label: '备注'
-                },
-                {
-                    name: 'status',
-                    dict: 'status',
-                    label: '工作状态'
-                },
-                {
-                    name: 'workType',
-                    dict: 'workType',
-                    label: '工作方式'
-                },
-                {
-                    name: 'labourCost',
-                    label: '工价'
                 },
                 {
                     name: 'createTime',
@@ -97,14 +65,14 @@ let electricianRecordapp = new Vue({
                     width: '180px',
                     buttons: [
                         {
-                            auth:'wpe:electrician:record:update',
+                            auth:'sys:final:statement:update',
                             label: '修改',
                             icon: 'el-icon-edit',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
-                            auth:'wpe:electrician:record:delFlag',
+                            auth:'sys:final:statement:delFlag',
                             label: '删除',
                             icon: 'el-icon-delete',
                             click: this.myDel,
@@ -117,37 +85,30 @@ let electricianRecordapp = new Vue({
             page: {},
             addOrUpdateForm: {
                 title: '新增',
-                electricianRecordFormLabelWidth: '200px',
-                electricianRecordFormVisible: false,
+                finalStatementFormLabelWidth: '200px',
+                finalStatementFormVisible: false,
                 pickerOptions: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
                     }
                 },
-                electricianRecord:{
+                finalStatement:{
                     userId: null,
-                    projectId: null,
-                    workday: null,
-                    workStart: null,
-                    workEnd: null,
-                    remark: null,
-                    status: 'Y',
-                    workType: null,
-                    labourCost: 150
+                    day: null,
+                    money: null,
+                    remark: null
                 }
             },
             rules: {
                 userId: [{required: true, message: '请选择用户', trigger: 'blur'}],
-                projectId: [{required: true, message: '请选择工程', trigger: 'blur'}],
-                workday: [{required: true, message: '请选择工作日', trigger: 'blur'}],
-                status: [{required: true, message: '请选择工作状态', trigger: 'blur'}],
-                workType: [{required: true, message: '请选择工作方式', trigger: 'blur'}],
-                labourCost: [{required: true, message: '请填写工价', trigger: 'blur'}]
+                day: [{required: true, message: '请选择结算日', trigger: 'blur'}],
+                money: [{required: true, message: '请填写款项金额', trigger: 'blur'}]
             }
         }
     },
     created: function () {
         this.loadData();
+        this.loadStat();
     },
     methods: {
         sortchange(val) {
@@ -182,28 +143,23 @@ let electricianRecordapp = new Vue({
         myAdd() {
             let that = this;
             that.addOrUpdateForm.title = '新增';
-            that.addOrUpdateForm.electricianRecordFormVisible = true;
-            that.addOrUpdateForm.electricianRecord = {
+            that.addOrUpdateForm.finalStatementFormVisible = true;
+            that.addOrUpdateForm.finalStatement = {
                                              userId: null,
-                                             projectId: null,
-                                             workday: null,
-                                             workStart: null,
-                                             workEnd: null,
-                                             remark: null,
-                                             status: 'Y',
-                                             worktype: null,
-                                             labourCost: 150
+                                             day: null,
+                                             money: null,
+                                             remark: null
                                          }
             that.resetForm('addOrUpdateFormRef');
         },
         myUpdate(index, row) {
             let that = this;
             that.addOrUpdateForm.title = '修改';
-            that.addOrUpdateForm.electricianRecordFormVisible = true;
+            that.addOrUpdateForm.finalStatementFormVisible = true;
             that.resetForm('addOrUpdateFormRef');
-            httpUtil.get({url: "wpe/electrician/record/getById/" + row.id}, function (result) {
+            httpUtil.get({url: "wpe/final/statement/getById/" + row.id}, function (result) {
                   if (result.code == 0) {
-                      that.addOrUpdateForm.electricianRecord = result.data;
+                      that.addOrUpdateForm.finalStatement = result.data;
                   }
             });
         },
@@ -217,13 +173,13 @@ let electricianRecordapp = new Vue({
                         spinner: 'el-icon-loading',
                         background: 'rgba(0, 0, 0, 0.7)'
                     });
-                    let url = that.addOrUpdateForm.electricianRecord.id == null ? "wpe/electrician/record/add" : "wpe/electrician/record/update";
-                    let type = that.addOrUpdateForm.electricianRecord.id == null ? "POST" : "PUT";
-                    httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.electricianRecord)}, function (r) {
+                    let url = that.addOrUpdateForm.finalStatement.id == null ? "wpe/final/statement/add" : "wpe/final/statement/update";
+                    let type = that.addOrUpdateForm.finalStatement.id == null ? "POST" : "PUT";
+                    httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.finalStatement)}, function (r) {
                         loading.close();
-                        if (r.code == 0){
+                        if (r.code == 0) {
                             that.myQuery();
-                            that.addOrUpdateForm.electricianRecordFormVisible = false;
+                            that.addOrUpdateForm.finalStatementFormVisible = false;
                         }
                         alertMsg(that, r);
                     });
@@ -237,7 +193,7 @@ let electricianRecordapp = new Vue({
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                httpUtil.del({url: "wpe/electrician/record/delFlag/" + row.id}, function (r) {
+                httpUtil.del({url: "wpe/final/statement/delFlag/" + row.id}, function (r) {
                     that.myQuery();
                     alertMsg(that, r);
                 });
@@ -245,11 +201,25 @@ let electricianRecordapp = new Vue({
         },
         loadData() {
             let that = this;
-            httpUtil.get({url: "wpe/electrician/record/list", data: that.queryForm}, function (result) {
+            httpUtil.get({url: "wpe/final/statement/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data;
                     that.page.expand = true;
                 }
+            });
+        },
+        loadStat() {
+            let that = this;
+            httpUtil.get({url: "wpe/final/statement/stat", data: that.queryForm}, function (result) {
+                if (result.code == 0 && result.data) {
+                        result.data.forEach(function (v) {
+                            if (v.type === 'final') {
+                                that.stat.final.money = v.money;
+                            }else {
+                                that.stat.record.money = v.money;
+                            }
+                        });
+                    }
             });
         },
         listExport() {
@@ -259,12 +229,9 @@ let electricianRecordapp = new Vue({
                 orderByEnabled: true,
                 pageEnabled: false,
                 keyword: that.queryForm.keyword,
-                userId: that.queryForm.userId,
-                projectId: that.queryForm.projectId,
-                status: that.queryForm.status,
-                workType: that.queryForm.worktype
+                userId: that.queryForm.userId
             }
-            httpUtil.fileDownload(that, {url: "wpe/electrician/record/list/export",data: data});
+            httpUtil.fileDownload(that, {url: "wpe/final/statement/list/export",data: data});
         }
     }
 });

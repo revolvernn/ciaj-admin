@@ -1,6 +1,5 @@
 package com.ciaj.boot.component.config;
 
-import com.ciaj.boot.modules.sys.entity.po.SysPermissionPo;
 import com.ciaj.comm.utils.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -15,7 +15,7 @@ public class WpeElectricianRecordVo extends WpeElectricianRecordPo {
     private String  period;
 
     /**
-     * 统计类型：1/按月统计，2/按月统计项目数，3/按年统计，4/按年统计项目数
+     * 统计类型：1/按月统计用户项目数据，2/按月统计用户数据，3/按年统计用户项目数据，4/按年统计用户数据
      */
     private String  type;
 

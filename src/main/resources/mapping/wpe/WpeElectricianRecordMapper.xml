@@ -19,6 +19,7 @@
         <id column="work_end" property="workEnd" jdbcType="TIMESTAMP" />
         <id column="remark" property="remark" jdbcType="VARCHAR" />
         <id column="status" property="status" jdbcType="CHAR" />
+        <id column="work_type" property="workType" jdbcType="VARCHAR" />
         <id column="labour_cost" property="labourCost" jdbcType="DECIMAL" />
         <id column="create_at" property="createAt" jdbcType="VARCHAR" />
         <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -28,10 +29,10 @@
         <id column="version" property="version" jdbcType="INTEGER" />
     </resultMap>
     <sql id="Base_Column_List">
-        id,user_id,project_id,workday,work_start,work_end,remark,status,labour_cost,create_at,create_time,update_at,update_time,del_flag,version
+        id,user_id,project_id,workday,work_start,work_end,remark,status,work_type,labour_cost,create_at,create_time,update_at,update_time,del_flag,version
     </sql>
     <sql id="Base_Alias_Column_List">
-        m.id,m.user_id,m.project_id,m.workday,m.work_start,m.work_end,m.remark,m.status,m.labour_cost,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
+        m.id,m.user_id,m.project_id,m.workday,m.work_start,m.work_end,m.remark,m.status,m.work_type,m.labour_cost,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
     </sql>
     <delete id="deleteByPrimaryKey">
         DELETE FROM wpe_electrician_record
@@ -65,6 +66,9 @@
                 <if test="status != null">
                     AND status = #{status}
                 </if>
+                <if test="workType != null">
+                    AND work_type = #{workType}
+                </if>
                 <if test="labourCost != null">
                     AND labour_cost = #{labourCost}
                 </if>
@@ -94,9 +98,9 @@
             SELECT REPLACE(uuid(),'-','') FROM DUAL
         </selectKey>
         INSERT INTO wpe_electrician_record
-        (id,user_id,project_id,workday,work_start,work_end,remark,status,labour_cost,create_at,create_time,update_at,update_time,del_flag,version)
+        (id,user_id,project_id,workday,work_start,work_end,remark,status,work_type,labour_cost,create_at,create_time,update_at,update_time,del_flag,version)
         VALUES
-        (#{id,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{projectId,jdbcType=VARCHAR},#{workday,jdbcType=TIMESTAMP},#{workStart,jdbcType=TIMESTAMP},#{workEnd,jdbcType=TIMESTAMP},#{remark,jdbcType=VARCHAR},#{status,jdbcType=CHAR},#{labourCost,jdbcType=DECIMAL},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
+        (#{id,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{projectId,jdbcType=VARCHAR},#{workday,jdbcType=TIMESTAMP},#{workStart,jdbcType=TIMESTAMP},#{workEnd,jdbcType=TIMESTAMP},#{remark,jdbcType=VARCHAR},#{status,jdbcType=CHAR},#{workType,jdbcType=VARCHAR},#{labourCost,jdbcType=DECIMAL},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo">
         <selectKey keyProperty="id" order="BEFORE" resultType="String">
@@ -127,6 +131,9 @@
             </if>
             <if test="status != null">
                 status,
+            </if>
+            <if test="workType != null">
+                work_type,
             </if>
             <if test="labourCost != null">
                 labour_cost,
@@ -175,6 +182,9 @@
             <if test="status != null">
                 #{status,jdbcType=CHAR},
             </if>
+            <if test="workType != null">
+                #{workType,jdbcType=VARCHAR},
+            </if>
             <if test="labourCost != null">
                 #{labourCost,jdbcType=DECIMAL},
             </if>
@@ -209,6 +219,7 @@
             work_end = #{workEnd},
             remark = #{remark},
             status = #{status},
+            work_type = #{workType},
             labour_cost = #{labourCost},
             create_at = #{createAt},
             create_time = #{createTime},
@@ -229,6 +240,7 @@
             work_end = #{record.workEnd},
             remark = #{record.remark},
             status = #{record.status},
+            work_type = #{record.workType},
             labour_cost = #{record.labourCost},
             create_at = #{record.createAt},
             create_time = #{record.createTime},
@@ -262,6 +274,9 @@
             </if>
             <if test="status != null">
                 status = #{status},
+            </if>
+            <if test="workType != null">
+                work_type = #{workType},
             </if>
             <if test="labourCost != null">
                 labour_cost = #{labourCost},
@@ -310,6 +325,9 @@
             </if>
             <if test="record.status != null">
                 status = #{record.status},
+            </if>
+            <if test="record.workType != null">
+                work_type = #{record.workType},
             </if>
             <if test="record.labourCost != null">
                 labour_cost = #{record.labourCost},
@@ -383,6 +401,9 @@
                 <if test="status != null">
                     AND m.status = #{status}
                 </if>
+                <if test="workType != null">
+                    AND m.work_type = #{workType}
+                </if>
                 <if test="createAt != null">
                     AND m.create_at = #{createAt}
                 </if>
@@ -450,6 +471,8 @@
         <association property="project" javaType="com.ciaj.boot.modules.wpe.entity.dto.WpeProjectDto">
             <id property="id" column="user_id"/>
             <result property="projectName" column="p_projectname"/>
+            <result property="houseType" column="house_type"/>
+            <result property="decorationType" column="decoration_type"/>
             <result property="addr" column="p_addr"/>
         </association>
     </resultMap>
@@ -460,6 +483,8 @@
         ,u.username as "u_username"
         ,u.nickname as "u_nickname"
         ,p.project_name as "p_projectname"
+        ,p.house_type as "house_type"
+        ,p.decoration_type as "decoration_type"
         ,p.addr as "p_addr"
         FROM wpe_electrician_record m
         LEFT JOIN sys_user u on m.user_id = u.id
@@ -593,6 +618,9 @@
         <if test="status != null  and status != ''">
             AND m.status = #{status}
         </if>
+        <if test="workType != null  and workType != ''">
+            AND m.work_type = #{workType}
+        </if>
         <if test="labourCost != null">
             AND m.labour_cost = #{labourCost}
         </if>
@@ -644,6 +672,9 @@
                 </if>
                 <if test="status != null  and status != ''">
                     AND m.status = #{status}
+                </if>
+                <if test="workType != null  and workType != ''">
+                    AND m.work_type = #{workType}
                 </if>
                 <if test="labourCost != null">
                     AND m.labour_cost = #{labourCost}

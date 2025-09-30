@@ -63,14 +63,14 @@ let projectapp = new Vue({
                     width: '180px',
                     buttons: [
                         {
-                            auth:'sys:project:update',
+                            auth:'wpe:project:update',
                             label: '修改',
                             icon: 'el-icon-edit',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
-                            auth:'sys:project:delFlag',
+                            auth:'wpe:project:delFlag',
                             label: '删除',
                             icon: 'el-icon-delete',
                             click: this.myDel,
@@ -169,11 +169,20 @@ let projectapp = new Vue({
             let that = this;
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
+                    const loading = that.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
                     let url = that.addOrUpdateForm.project.id == null ? "wpe/project/add" : "wpe/project/update";
                     let type = that.addOrUpdateForm.project.id == null ? "POST" : "PUT";
                     httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.project)}, function (r) {
-                        that.myQuery();
-                        that.addOrUpdateForm.projectFormVisible = false;
+                        loading.close();
+                        if (r.code == 0){
+                            that.myQuery();
+                            that.addOrUpdateForm.projectFormVisible = false;
+                        }
                         alertMsg(that, r);
                     });
                 }

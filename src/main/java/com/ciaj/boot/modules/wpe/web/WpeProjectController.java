@@ -48,7 +48,7 @@ public class WpeProjectController extends AbstractController<WpeProjectPo, WpePr
     @ApiImplicitParam(name = "id", value = "水电工程项目ID", required = true, dataType = "string", paramType = "path")
     @OperationLog(operation = "水电工程项目-管理", content = "根据ID获取水电工程项目")
     @RequiresPermissions("wpe:project:getById")
-    @GetMapping("/getById/{id}")
+    @GetMapping("getById/{id}")
     public ResponseEntity<WpeProjectDto> getById(@PathVariable("id") String id) {
         return super.getById(id);
     }
@@ -72,7 +72,7 @@ public class WpeProjectController extends AbstractController<WpeProjectPo, WpePr
     })
     @OperationLog(operation = "水电工程项目-管理", content = "获取水电工程项目列表")
     @RequiresPermissions("wpe:project:list")
-    @GetMapping("/list")
+    @GetMapping("list")
     public ResponseEntity<Page<WpeProjectDto>> list(String keyword, String houseType, String decorationType, String projectId) {
         WpeProjectVo entity = new WpeProjectVo();
         entity.setId(projectId);
@@ -100,7 +100,7 @@ public class WpeProjectController extends AbstractController<WpeProjectPo, WpePr
     })
     @OperationLog(operation = "水电工程项目-管理", content = "获取水电工程项目列表")
     @RequiresPermissions("wpe:project:list:export")
-    @GetMapping("/list/export")
+    @GetMapping("list/export")
     public void listExport(String keyword, String houseType, String decorationType, String projectId, HttpServletResponse response, HttpServletRequest request) {
         WpeProjectVo entity = new WpeProjectVo();
         entity.setId(projectId);
@@ -166,7 +166,7 @@ public class WpeProjectController extends AbstractController<WpeProjectPo, WpePr
     @ApiImplicitParam(name = "id", value = "水电工程项目ID", required = true, dataType = "string", paramType = "path")
     @OperationLog(operation = "水电工程项目-管理", content = "根据ID删除水电工程项目")
     @RequiresPermissions("wpe:project:delFlag")
-    @DeleteMapping("/delFlag/{id}")
+    @DeleteMapping("delFlag/{id}")
     public ResponseEntity deleteFlag(@PathVariable("id") String id) {
         return super.deleteFlag(id);
     }

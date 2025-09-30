@@ -1,0 +1,75 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header"/>
+<body>
+<div id="finalStatementapp" v-cloak>
+    <div>
+        <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
+            <el-row type="flex" class="row-bg">
+                <el-form-item label="关键字" prop="keyword">
+                    <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+                </el-form-item>
+                <el-form-item label="用户" prop="userId">
+                    <my-search-select v-model="queryForm.userId"
+                                      search-url="/sys/user/list"
+                                      search-param="roleCode-wpe,orderBy-create_time desc,orderByEnabled-true"
+                                      search-field-name="keyword"
+                                      label-field-name="username"
+                                      label-field-value="id"
+                                      right-label-field-name="deptNames"
+                    />
+                </el-form-item>
+            </el-row>
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-form-item>
+                    <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
+                    <el-button @click="myQueryReset">重置</el-button>
+                    <my-btn label="新增" type="primary" icon="el-icon-circle-plus" @click="myAdd" auth="wpe:final:statement:add"></my-btn>
+                    <my-btn label="导出" type="info" icon="el-icon-download" @click="listExport" auth="wpe:final:statement:list:export"></my-btn>
+                    <el-button plain @click="loadStat">总金额：{{stat.record.money}}  元 | 已结算：{{stat.final.money}}  元 | 未结算：{{stat.record.money - stat.final.money}}  元</el-button>
+                </el-form-item>
+            </el-row>
+        </el-form>
+        <my-table show-summary :columns="tableColumns" :page="page" :table-loading="tableLoading" @sortChange="sortchange" :default-sort="defaultSort"
+                  v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
+        </my-table>
+        <el-dialog :close-on-click-modal="false" :title="addOrUpdateForm.title"
+                   :visible.sync="addOrUpdateForm.finalStatementFormVisible">
+            <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.finalStatement">
+                <el-form-item label="用户" prop="userId"
+                              :label-width="addOrUpdateForm.finalStatementFormLabelWidth" required>
+                    <my-search-select v-model="addOrUpdateForm.finalStatement.userId"
+                                      search-url="/sys/user/list"
+                                      search-param="roleCode-wpe,orderBy-create_time desc,orderByEnabled-true"
+                                      search-field-name="keyword"
+                                      label-field-name="username"
+                                      label-field-value="id"
+                                      right-label-field-name="deptNames"
+                    />
+                </el-form-item>
+                <el-form-item label="结算日" prop="day"
+                              :label-width="addOrUpdateForm.finalStatementFormLabelWidth" required>
+                    <el-date-picker value-format="yyyy-MM-dd HH:mm:ss"
+                                    v-model="addOrUpdateForm.finalStatement.day"
+                                    type="datetime" default-time="09:00:00" placeholder="选择结算日"/>
+                </el-form-item>
+                <el-form-item label="款项金额" prop="money"
+                              :label-width="addOrUpdateForm.finalStatementFormLabelWidth" required>
+                    <el-input-number controls-position="right" v-model="addOrUpdateForm.finalStatement.money" :precision="2" :step="0.1" :min="0"></el-input-number>
+                </el-form-item>
+                <el-form-item label="备注" prop="remark"
+                              :label-width="addOrUpdateForm.finalStatementFormLabelWidth">
+                    <el-input type="textarea" :row="2"  v-model="addOrUpdateForm.finalStatement.remark" autocomplete="off"
+                              placeholder="备注"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="addOrUpdateForm.finalStatementFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+<script src="/statics/js/modules/wpe/finalStatement.js"></script>
+</body>
+</html>

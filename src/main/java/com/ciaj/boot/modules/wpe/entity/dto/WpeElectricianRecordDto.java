@@ -83,6 +83,12 @@ public class WpeElectricianRecordDto extends WpeElectricianRecordPo {
         return super.getStatus();
     }
 
+    @javax.validation.constraints.NotBlank(message = "工作方式不能为空")
+    @ApiModelProperty("工作方式")
+    public java.lang.String getWorkType() {
+        return super.getWorkType();
+    }
+
     @DecimalFormat
     @javax.validation.constraints.NotNull(message = "工价不能为空")
     @ApiModelProperty("工价")
