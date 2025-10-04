@@ -16,6 +16,7 @@ public class ${tableClass.shortClassName}Dto extends ${tableClass.shortClassName
 <#if tableClass.allFields??>
 <#list tableClass.allFields as field>
     //@javax.validation.constraints.NotBlank(message = "")
+    @Override
     @ApiModelProperty("<#if field.remarks??>${field.remarks}</#if>")
     public ${field.fullTypeName} get${field.fieldName?cap_first}() {
         return super.get${field.fieldName?cap_first}();

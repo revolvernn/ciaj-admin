@@ -7,6 +7,31 @@ window.T = {
     },
     local_storage_age: 24 * 60 * 60 * 1000  // 一天
     ,
+    /**
+     * 格式化金额
+     * @param num
+     * @param currency
+     * @param locales
+     * @returns {string|*}
+     */
+    numberFormat: function(num, currency, locales) {
+        if(!num){
+            return num;
+        }
+        const formatter = new Intl.NumberFormat(locales || 'zh-cn', { style: 'currency', currency: currency || 'cny'});
+        var value = formatter.format(num);
+        value = value.toString();
+        var rs = value.indexOf('.');
+        if(rs < 0){
+            rs = value.length;
+            value += '.';
+        }
+        while (value.length <= rs + 2){
+            value += '0';
+        }
+        return value;
+    }
+    ,
     getBtnAuthCodes: function (tableColumns) {
         let btns = tableColumns[tableColumns.length - 1].buttons;
         let codes = [];

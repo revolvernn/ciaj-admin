@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ciaj.boot.modules.sys.mapper.SysCommMapper">
 
-   <select id="selectTableStatus" resultType="map">
-       show table status
-   </select>
+<!--   <select id="selectTableStatus" resultType="map">-->
+<!--       show table status-->
+<!--   </select>-->
 </mapper>

@@ -467,6 +467,14 @@ let myTableT = Vue.extend({
             value = dictUtil.getNameByTypeAndCode(type, this.getDeepValue(row,rowKey));
             return value;
         },
+        getCny(row, rowKey, currency, locales) {
+            let value = '' ;
+            value = this.getDeepValue(row,rowKey);
+            if(value !== '' && value){
+                value = T.numberFormat(value, currency, locales);
+            }
+            return value;
+        },
         getImage (row, rowKey) {
             let value = this.getDeepValue(row,rowKey);
             if(!value){
@@ -564,6 +572,9 @@ let myTableT = Vue.extend({
         '</el-table-column>',
         '<el-table-column v-else-if="item.dict" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width"  :fixed="item.fixed">',
         '<template slot-scope="scope"> {{getDictLabel(item.dict, scope.row, item.name)}}</template>',
+        '</el-table-column>',
+        '<el-table-column v-else-if="item.cny" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width"  :fixed="item.fixed">',
+        '<template slot-scope="scope"> {{getCny(scope.row, item.name, item.cny, item.locales)}}</template>',
         '</el-table-column>',
         '<el-table-column v-else-if="item.html" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width"  :fixed="item.fixed">',
         '<template slot-scope="scope">',
