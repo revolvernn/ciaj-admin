@@ -6,7 +6,6 @@ import com.ciaj.boot.component.config.shiro.ShiroUser;
 import com.ciaj.boot.modules.sys.entity.po.SysLogPo;
 import com.ciaj.boot.modules.sys.service.SysLogService;
 import com.ciaj.comm.annotation.OperationLog;
-import com.ciaj.comm.constant.LogTypeEnum;
 import com.ciaj.comm.utils.CommUtil;
 import com.ciaj.comm.utils.ExceptionsUtils;
 import com.ciaj.comm.utils.JSONUtils;
@@ -21,9 +20,13 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.HandlerExecutionChain;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +49,11 @@ public class SysLogAspect {
     private Boolean isInsert;
     @Autowired
     private SysLogService sysLogService;
+
+
+    @Autowired
+    private ApplicationContext context;
+
 
     @Pointcut("@annotation(com.ciaj.comm.annotation.OperationLog)")
     public void logPointCut() {
@@ -80,35 +88,42 @@ public class SysLogAspect {
         try {
             MethodSignature signature = (MethodSignature) joinPoint.getSignature();
             Method method = signature.getMethod();
-            SysLogPo sysLogPo = new SysLogPo();
-            sysLogPo.setTime(time);
             OperationLog operationLog = method.getAnnotation(OperationLog.class);
             if (operationLog == null) {
                 return;
             }
-
+            SysLogPo sysLogPo = new SysLogPo();
+            sysLogPo.setTime(time);
+            //
             HttpServletRequest request = RequestUtils.getRequest();
-
             sysLogPo.setUrl(request.getRequestURL().toString());
+            //设置IP地址
+            sysLogPo.setIp(RequestUtils.getRemoteAddr(request));
             //注解上的描述
             sysLogPo.setOperation(operationLog.operation());
             sysLogPo.setDescription(operationLog.content());
             sysLogPo.setType(operationLog.type().name());
-
             //请求的 类名、方法名
             String className = joinPoint.getTarget().getClass().getName();
             String methodName = signature.getName();
             sysLogPo.setMethod(className + "." + methodName);
-
-            //设置IP地址
-            sysLogPo.setIp(RequestUtils.getRemoteAddr(request));
             //请求的参数
             Object[] args = joinPoint.getArgs();
-
             if (args != null && args.length > 0) {
                 if (args[0] instanceof Throwable) {
+                    RequestMappingHandlerMapping bean = context.getBean(RequestMappingHandlerMapping.class);
+                    HandlerExecutionChain handler = bean.getHandler(request);
+                    HandlerMethod handlerMethod = (HandlerMethod) handler.getHandler();
+                    //
+                    Method method1 = handlerMethod.getMethod();
+                    OperationLog operationLog1 = method1.getAnnotation(OperationLog.class);
+                    if (operationLog1 != null) {
+                        sysLogPo.setMethod(handlerMethod.getBeanType().getName() + "." + method1.getName());
+                        sysLogPo.setOperation(operationLog1.operation());
+                        sysLogPo.setDescription(operationLog1.content());
+                    }
+
                     Throwable e = (Throwable) args[0];
-                    sysLogPo.setOperation(LogTypeEnum.ERROR.name());
                     sysLogPo.setParams(ExceptionsUtils.getStackTraceAsString(e));
                 } else {
                     List<Object> list = getArgsList(args);
