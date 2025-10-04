@@ -20,12 +20,13 @@ let finalStatementapp = new Vue({
             stat: {
                 final:{
                     type: 'final',
-                    money: 100
+                    money: ''
                 },
                 record: {
                     type: 'record',
-                    money: 300
-                }
+                    money: ''
+                },
+                total: ''
             },
             tableColumns: [
                 {
@@ -40,6 +41,7 @@ let finalStatementapp = new Vue({
                 },
                 {
                     name: 'money',
+                    cny: 'cny',
                     label: '款项金额'
                 },
                 {
@@ -212,14 +214,19 @@ let finalStatementapp = new Vue({
             let that = this;
             httpUtil.get({url: "wpe/final/statement/stat", data: that.queryForm}, function (result) {
                 if (result.code == 0 && result.data) {
-                        result.data.forEach(function (v) {
-                            if (v.type === 'final') {
-                                that.stat.final.money = v.money;
-                            }else {
-                                that.stat.record.money = v.money;
-                            }
-                        });
-                    }
+                    let final = 0;
+                    let record = 0;
+                    result.data.forEach(function (v) {
+                        if (v.type === 'final') {
+                            final = v.money;
+                            that.stat.final.money = T.numberFormat(v.money);
+                        }else {
+                            record = v.money;
+                            that.stat.record.money = T.numberFormat(v.money);
+                        }
+                    });
+                    that.stat.total = T.numberFormat(record - final);
+                }
             });
         },
         listExport() {

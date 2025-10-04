@@ -8,9 +8,9 @@ let electricianRecordStatisticsapp = new Vue({
     el: '#electricianRecordStatisticsapp',
     data() {
         return {
-            defaultSort: {prop: 'period', order: 'descending'},
+            defaultSort: {prop: 'minWorkday', order: 'descending'},
             queryForm: {
-                orderBy: 'period-desc',
+                orderBy: 'minWorkday-desc',
                 orderByEnabled: true,
                 pageEnabled: true,
                 pageNo: 1,
@@ -22,6 +22,21 @@ let electricianRecordStatisticsapp = new Vue({
                 type: '1'
             },
             tableColumns: [
+                {
+                    name: 'username',
+                    label: '用户'
+                },
+                {
+                    name: 'projectName',
+                    label: '工程名称'
+                },
+                {
+                    sortable: 'custom',
+                    sortBy: 'minWorkday',
+                    name: 'minWorkday',
+                    date: 'yyyy-MM-dd',
+                    label: '开始日期'
+                },
                 {
                     sortable: 'custom',
                     sortBy: 'period',
@@ -38,6 +53,7 @@ let electricianRecordStatisticsapp = new Vue({
                 },
                 {
                     name: 'totalLabourCost',
+                    cny: 'cny',
                     label: '总工价'
                 },
                 {
@@ -45,40 +61,16 @@ let electricianRecordStatisticsapp = new Vue({
                     label: '年月工作日'
                 },
                 {
-                    name: 'projectName',
-                    label: '工程名称'
+                    name: 'workdayDs',
+                    label: '工作日明细1'
                 },
                 {
-                    name: 'username',
-                    label: '用户'
+                    name: 'workdayDDs',
+                    label: '工作日明细2'
                 }
-                // ,
-                // {
-                //     label: '操作',
-                //     width: '180px',
-                //     buttons: [
-                //         {
-                //             auth:'sys:electricianRecord:update',
-                //             label: '修改',
-                //             icon: 'el-icon-edit',
-                //             click: this.myUpdate,
-                //             type: 'success'
-                //         },
-                //         {
-                //             auth:'sys:electricianRecord:delFlag',
-                //             label: '删除',
-                //             icon: 'el-icon-delete',
-                //             click: this.myDel,
-                //             type: 'danger'
-                //         }
-                //     ]
-                // }
             ],
-            tableLoading: false,
-            page: {},
-            rules: {
-                //username: [{required: true, message: '必填', trigger: 'blur'}]
-            }
+            tableLoading: true,
+            page: {}
         }
     },
     created: function () {

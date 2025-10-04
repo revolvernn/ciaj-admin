@@ -1,5 +1,6 @@
 package com.ciaj.boot.modules.wpe.mapper;
 
+import com.ciaj.boot.modules.sys.mapper.SysDictMapper;
 import com.ciaj.boot.modules.sys.mapper.SysUserMapper;
 import com.ciaj.boot.modules.wpe.entity.po.WpeElectricianRecordPo;
 import com.ciaj.base.Mapper;
@@ -7,6 +8,7 @@ import com.ciaj.boot.modules.wpe.entity.vo.WpeElectricianRecordVo;
 import com.ciaj.boot.modules.wpe.entity.dto.WpeElectricianRecordDto;
 import com.ciaj.comm.annotation.MultiTableJoins;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.plugin.Intercepts;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,6 @@ public interface WpeElectricianRecordMapper extends Mapper<WpeElectricianRecordP
      * @param entity
      * @return
      */
-    @MultiTableJoins(mappers = {SysUserMapper.class, WpeProjectMapper.class})
+    @MultiTableJoins(mappers = {SysUserMapper.class, WpeProjectMapper.class, SysDictMapper.class})
     List<Map<String, Object>> selectListStatisticsMultiTable(WpeElectricianRecordVo entity);
 }

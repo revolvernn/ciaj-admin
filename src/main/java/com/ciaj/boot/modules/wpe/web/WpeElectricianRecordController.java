@@ -195,8 +195,8 @@ public class WpeElectricianRecordController extends AbstractController<WpeElectr
         Page<Map<String, Object>> mapPage = wpeElectricianRecordService.statisticsPage(entity);
         List<Map<String, Object>> data = mapPage.getList();
         new ExcelUtil().build(StatType.getMsg(type),
-                new String[]{"period", "total", "totalLabourCost", "workdays", "projectName", "projectNum", "username"},
-                new String[]{"周期", "总天数", "总工价", "工作日", "项目", "项目数", "用户名"},
+                new String[]{"projectName", "period", "total", "totalLabourCost", "workdays", "workdayDs", "workdayDDs", "projectNum", "username"},
+                new String[]{"项目", "月份", "总天数", "总工价", "工作日", "工作日明细1", "工作日明细2", "项目数", "用户名"},
                 data).exportExcel(request, response);
     }
 

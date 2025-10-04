@@ -54,6 +54,19 @@ let electricianRecordapp = new Vue({
                 },
                 {
                     name: 'workStart',
+                    label: '工作小时',
+                    formatter:(row)=>{
+                        if(row.workStart && row.workEnd){
+                            const start = new Date(row.workStart);
+                            const end = new Date(row.workEnd);
+                            return (end - start) / (1000 * 60 * 60);
+                        }else {
+                            return "";
+                        }
+                    }
+                },
+                {
+                    name: 'workStart',
                     label: '工作开始时间'
                 },
                 {
@@ -76,6 +89,7 @@ let electricianRecordapp = new Vue({
                 },
                 {
                     name: 'labourCost',
+                    cny: 'cny',
                     label: '工价'
                 },
                 {
@@ -113,7 +127,7 @@ let electricianRecordapp = new Vue({
                     ]
                 }
             ],
-            tableLoading: false,
+            tableLoading: true,
             page: {},
             addOrUpdateForm: {
                 title: '新增',

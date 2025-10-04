@@ -518,11 +518,15 @@
             ,COUNT(DISTINCT p.id) "projectNum"
             ,u.username as "username"
             ,u.nickname as "nickname"
-            ,GROUP_CONCAT(DATE_FORMAT( m.workday, '%Y-%m-%d' ) ORDER BY m.workday SEPARATOR ',')  as "workdays"
+            ,MIN(DATE_FORMAT(m.workday, '%Y-%m-%d' )) "minWorkday"
+            ,GROUP_CONCAT(DATE_FORMAT(m.workday, '%Y-%m-%d' ) ORDER BY m.workday SEPARATOR ',')  as "workdays"
+            ,GROUP_CONCAT(CONCAT(DATE_FORMAT(m.workday, '%Y-%m-%d' ),'-', d.name) ORDER BY m.workday SEPARATOR ',')  as "workdayDs"
+            ,GROUP_CONCAT(CONCAT(DATE_FORMAT(m.workday, '%Y-%m-%d' ),'-', d.name,'-',TIMESTAMPDIFF(HOUR,work_start,m.work_end)) ORDER BY m.workday SEPARATOR ',')  as "workdayDDs"
             <include refid="type_condition_sql"/>
             FROM wpe_electrician_record m
             LEFT JOIN sys_user u on m.user_id = u.id
             LEFT JOIN wpe_project p on m.project_id = p.id
+            LEFT JOIN sys_dict d on d.code=m.work_type and d.type="workType"
             <where>
                 <trim prefix="" prefixOverrides="and" suffix="">
                     <include refid="query_condition_sql"/>
