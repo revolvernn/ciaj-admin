@@ -439,9 +439,44 @@ let myTableT = Vue.extend({
                 }
             }
         },
-        //排序
-        getSummaries(val) {
-            this.$emit('getsummaries', val);
+        //汇总
+        summaries(param) {
+            let that = this;
+            const { columns, data } = param;
+            const sums = [];
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = '汇总';
+                    return;
+                }
+                const values = data.map(item => Number(item[column.property]));
+                //
+                let currColumn = that.columns.filter(f => f.name === column.property)[0];
+                //
+                if (!values.every(value => isNaN(value)) && currColumn.sum) {
+                    sums[index] = values.reduce((prev, curr) => {
+                        const value = Number(curr);
+                        if (!isNaN(value)) {
+                            return prev + curr;
+                        } else {
+                            return prev;
+                        }
+                    }, 0);
+                    switch (currColumn.sum){
+                        case 'cny':
+                            sums[index] =  T.numberFormat(sums[index]);
+                            break;
+                        case 'custom':
+                            //
+                            break
+                        default:
+                    }
+
+                } else {
+                    sums[index] = '';
+                }
+            });
+            return sums;
         },
         // 页面大小改变重新查询数据
         pagesizechange(val) {
@@ -535,7 +570,7 @@ let myTableT = Vue.extend({
     },
     template: [
         '<div>',
-        '<el-table :default-sort="defaultSort" :show-summary="showSummary" @summary-method="getSummaries" @sort-change="sortChange"  border stripe size="small" style="width: 100%" :data="page.list">',
+        '<el-table :default-sort="defaultSort" :show-summary="showSummary" :summary-method="summaries" @sort-change="sortChange"  border stripe size="small" style="width: 100%" :data="page.list">',
         '<el-table-column  type="index"  width="50"></el-table-column>',
         ' <el-table-column type="expand" v-if="page.expand">',
         '   <template slot-scope="props">',

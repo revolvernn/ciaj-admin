@@ -35,7 +35,9 @@ public class ResubmitInterceptor extends HandlerInterceptorAdapter {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
 			Method method = handlerMethod.getMethod();
 			Resubmit annotation = method.getAnnotation(Resubmit.class);
-			if (annotation != null && isResubmit(annotation, request)) throw new BsRException("请勿重复提交");
+			if (annotation != null && isResubmit(annotation, request)) {
+				throw new BsRException("请勿重复提交");
+			}
 		}
 		return super.preHandle(request, response, handler);
 	}
@@ -61,7 +63,9 @@ public class ResubmitInterceptor extends HandlerInterceptorAdapter {
 	 */
 	private boolean isResubmit(Resubmit annotation, HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
-		if (session == null) return false;
+		if (session == null) {
+			return false;
+		}
 		try {
 			String params = "";
 			switch (annotation.value()) {
