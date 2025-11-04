@@ -90,6 +90,7 @@ let electricianRecordapp = new Vue({
                 {
                     name: 'labourCost',
                     cny: 'cny',
+                    sum: 'cny',
                     label: '工价'
                 },
                 {

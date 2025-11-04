@@ -26,7 +26,7 @@
                     <el-button @click="myQueryReset">重置</el-button>
                     <my-btn label="新增" type="primary" icon="el-icon-circle-plus" @click="myAdd" auth="wpe:final:statement:add"></my-btn>
                     <my-btn label="导出" type="info" icon="el-icon-download" @click="listExport" auth="wpe:final:statement:list:export"></my-btn>
-                    <el-button plain @click="loadStat">总金额：{{stat.record.money}}  元 | 已结算：{{stat.final.money}}  元 | 未结算：{{stat.total}}  元</el-button>
+                    <el-button plain @click="loadStat(false)">总金额：{{stat.record.money}}  元 | 已结算：{{stat.final.money}}  元 | 未结算：{{stat.total}}  元</el-button>
                 </el-form-item>
             </el-row>
         </el-form>

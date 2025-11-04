@@ -8,7 +8,7 @@ let finalStatementapp = new Vue({
     el: '#finalStatementapp',
     data() {
         return {
-            defaultSort: {prop: 'createTime', order: 'descending'},
+            defaultSort: {prop: 'day', order: 'descending'},
             queryForm: {
                 orderByEnabled: true,
                 pageEnabled: true,
@@ -35,13 +35,14 @@ let finalStatementapp = new Vue({
                 },
                 {
                     sortable: 'custom',
-                    sortBy: 'm.workday',
+                    sortBy: 'm.day',
                     name: 'day',
                     label: '结算日'
                 },
                 {
                     name: 'money',
                     cny: 'cny',
+                    sum: 'cny',
                     label: '款项金额'
                 },
                 {
@@ -110,7 +111,7 @@ let finalStatementapp = new Vue({
     },
     created: function () {
         this.loadData();
-        this.loadStat();
+        this.loadStat(true);
     },
     methods: {
         sortchange(val) {
@@ -210,7 +211,7 @@ let finalStatementapp = new Vue({
                 }
             });
         },
-        loadStat() {
+        loadStat(isInit) {
             let that = this;
             httpUtil.get({url: "wpe/final/statement/stat", data: that.queryForm}, function (result) {
                 if (result.code == 0 && result.data) {
@@ -226,7 +227,11 @@ let finalStatementapp = new Vue({
                         }
                     });
                     that.stat.total = T.numberFormat(record - final);
+                    if(!isInit){
+                        that.$message({type: 'success', message: '加载成功'});
+                    }
                 }
+
             });
         },
         listExport() {

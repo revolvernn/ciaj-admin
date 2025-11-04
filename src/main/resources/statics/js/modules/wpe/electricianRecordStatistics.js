@@ -45,7 +45,7 @@ let electricianRecordStatisticsapp = new Vue({
                 },
                 {
                     name: 'total',
-                    label: '工作天数'
+                    label: '天数'
                 },
                 {
                     name: 'projectNum',
@@ -54,19 +54,20 @@ let electricianRecordStatisticsapp = new Vue({
                 {
                     name: 'totalLabourCost',
                     cny: 'cny',
-                    label: '总工价'
+                    sum: 'cny',
+                    label: '工价'
                 },
                 {
                     name: 'workdays',
-                    label: '年月工作日'
+                    label: '日期'
                 },
                 {
                     name: 'workdayDs',
-                    label: '工作日明细1'
+                    label: '日期明细1'
                 },
                 {
                     name: 'workdayDDs',
-                    label: '工作日明细2'
+                    label: '日期明细2'
                 }
             ],
             tableLoading: true,
