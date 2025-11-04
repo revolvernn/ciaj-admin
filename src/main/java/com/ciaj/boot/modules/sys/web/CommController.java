@@ -147,8 +147,7 @@ public class CommController {
 		}
 		try {
 			Subject subject = ShiroUtils.getSubject();
-			UsernamePasswordToken token = new UsernamePasswordToken(loginForm.getAccount(), loginForm.getPassword());
-			token.setRememberMe(loginForm.getRememberMe());
+			UsernamePasswordToken token = new UsernamePasswordToken(loginForm.getAccount(), loginForm.getPassword(), loginForm.getRememberMe());
 			subject.login(token);
 		} catch (UnknownAccountException e) {
 			return ResponseEntity.error(e.getMessage());

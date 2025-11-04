@@ -547,6 +547,67 @@
             </trim>
         </where>
     </sql>
+    <sql id="cust_multi_table_query_condition_sql">
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null  and id != ''">
+                    AND m.id = #{id}
+                </if>
+                <if test="name != null  and name != ''">
+                    AND m.name LIKE CONCAT('%',#{name},'%')
+                </if>
+                <if test="code != null  and code != ''">
+                    AND m.code LIKE CONCAT('%',#{code},'%')
+                </if>
+                <if test="areaId != null  and areaId != ''">
+                    AND (m.area_id = #{areaId} or a.parent_ids LIKE CONCAT('%',#{areaId},'%'))
+                </if>
+                <if test="level != null ">
+                    AND m.level = #{level}
+                </if>
+                <if test="type != null  and type != ''">
+                    AND m.type = #{type}
+                </if>
+                <if test="parentId != null  and parentId != ''">
+                    AND m.parent_id = #{parentId}
+                </if>
+                <if test="parentIds != null  and parentIds != ''">
+                    AND m.parent_ids LIKE CONCAT('%',#{parentIds},'%')
+                </if>
+                <if test="sequence != null ">
+                    AND m.sequence = #{sequence}
+                </if>
+                <if test="enabled != null  and enabled != ''">
+                    AND m.enabled = #{enabled}
+                </if>
+                <if test="description != null  and description != ''">
+                    AND m.description = #{description}
+                </if>
+                <if test="createAt != null  and createAt != ''">
+                    AND m.create_at = #{createAt}
+                </if>
+                <if test="createTime != null ">
+                    AND m.create_time = #{createTime}
+                </if>
+                <if test="updateAt != null  and updateAt != ''">
+                    AND m.update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null ">
+                    AND m.update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null  and delFlag != ''">
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="version != null ">
+                    AND m.version = #{version}
+                </if>
+                <!--  keyword   -->
+                <if test="keyword != null and keyword != ''">
+                    AND m.name like CONCAT('%',#{keyword},'%')
+                </if>
+            </trim>
+        </where>
+    </sql>
 
     <resultMap id="DTOResultJoinMap" type="com.ciaj.boot.modules.sys.entity.dto.SysDeptDto" extends="DTOResultMap">
         <association property="sysArea" javaType="com.ciaj.boot.modules.sys.entity.dto.SysAreaDto">
@@ -558,8 +619,8 @@
 
     <select id="selectDTOListMultiTable" resultMap="DTOResultJoinMap" parameterType="com.ciaj.boot.modules.sys.entity.vo.SysDeptVo">
         SELECT
-        <include refid="Base_Alias_Column_List"/>,a.name as area_name,a.parent_ids as area_parent_ids
-        from sys_dept m left  join sys_area a on m.area_id = a.id
-        <include refid="cust_query_condition_sql"/>
+        <include refid="Base_Alias_Column_List"/>,a.area_name,a.parent_ids as area_parent_ids
+        from sys_dept m left  join view_sys_area a on m.area_id = a.id
+        <include refid="cust_multi_table_query_condition_sql"/>
     </select>
 </mapper>

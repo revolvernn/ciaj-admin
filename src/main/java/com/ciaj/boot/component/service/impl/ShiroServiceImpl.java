@@ -48,6 +48,24 @@ public class ShiroServiceImpl implements ShiroService {
     }
 
     @Override
+    public ShiroUser selectShiroUserByAccount(String account) {
+
+        SysUserPo user = new SysUserPo();
+        user.setAccount(account);
+        //
+        final SysUserPo sysUser = sysUserService.selectOne(user);
+        ShiroUser shiroUser = new ShiroUser();
+        BeanUtils.copyProperties(sysUser, shiroUser);
+        final List<SysRolePo> sysRoles = sysRoleService.selectRolesByUserId(sysUser.getId());
+        if (CollectionUtil.isNotEmpty(sysRoles)) {
+            shiroUser.setRoles(sysRoles);
+            shiroUser.setRole(sysRoles.get(0));
+            shiroUser.setPermissions(sysPermissionService.selectPermissionsByRoleId(shiroUser.getRole().getId()));
+        }
+        return shiroUser;
+    }
+
+    @Override
     public ShiroUser updateShiroUser(String roleId) {
         ShiroUser loginUser = CommUtil.getLoginUser();
         final SysRolePo sysRole = sysRoleService.selectByPrimaryKey(roleId);

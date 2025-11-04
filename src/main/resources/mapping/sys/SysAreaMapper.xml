@@ -27,6 +27,24 @@
         <id column="del_flag" property="delFlag" jdbcType="CHAR" />
         <id column="version" property="version" jdbcType="INTEGER" />
     </resultMap>
+    <resultMap id="BaseResultDtoMap" type="com.ciaj.boot.modules.sys.entity.dto.SysAreaDto" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <id column="name" property="name" jdbcType="VARCHAR" />
+        <id column="code" property="code" jdbcType="VARCHAR" />
+        <id column="area_name" property="areaName" jdbcType="VARCHAR" />
+        <id column="parent_id" property="parentId" jdbcType="VARCHAR" />
+        <id column="parent_ids" property="parentIds" jdbcType="VARCHAR" />
+        <id column="type" property="type" jdbcType="VARCHAR" />
+        <id column="level" property="level" jdbcType="INTEGER" />
+        <id column="sequence" property="sequence" jdbcType="INTEGER" />
+        <id column="enabled" property="enabled" jdbcType="CHAR" />
+        <id column="create_at" property="createAt" jdbcType="VARCHAR" />
+        <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
+        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <id column="del_flag" property="delFlag" jdbcType="CHAR" />
+        <id column="version" property="version" jdbcType="INTEGER" />
+    </resultMap>
     <sql id="Base_Column_List">
         id,name,code,parent_id,parent_ids,type,level,sequence,enabled,create_at,create_time,update_at,update_time,del_flag,version
     </sql>
@@ -445,6 +463,51 @@
         <include refid="Base_Alias_Column_List"/>
         FROM sys_area m
         <include refid="cust_query_condition_sql"/>
+    </select>
+    <select id="selectRecursiveListById" resultMap="DTOResultMap">
+        WITH RECURSIVE cte AS (
+            SELECT t.* FROM sys_area t WHERE t.id = #{id}
+            UNION ALL
+            SELECT a.* FROM sys_area a INNER JOIN cte c ON c.parent_id = a.id
+        )
+        SELECT * FROM cte c ORDER BY c.level
+    </select>
+    <select id="selectRecursiveListByIds" resultMap="DTOResultMap">
+        WITH RECURSIVE cte AS (
+            SELECT t.* FROM sys_area t
+            <where>
+                <trim prefix="" prefixOverrides="and" suffix="">
+                    and t.id in
+                    <foreach collection="ids" separator="," open="(" close=")" item="item">
+                        #{item}
+                    </foreach>
+                </trim>
+            </where>
+            UNION ALL
+            SELECT a.* FROM sys_area a INNER JOIN cte c ON c.parent_id = a.id
+        )
+        SELECT * FROM cte c ORDER BY c.level
+    </select>
+    <select id="selectListViewById" resultMap="BaseResultDtoMap">
+        select * from view_sys_area v
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+            <if test="id != null  and id != ''">
+                AND m.id = #{id}
+            </if>
+            </trim>
+        </where>
+    </select>
+    <select id="selectListViewByIds" resultMap="BaseResultDtoMap">
+        select v.id,v.name, v.area_name, v.level, v.enabled from view_sys_area v
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                and t.id in
+                <foreach collection="ids" separator="," open="(" close=")" item="item">
+                    #{item}
+                </foreach>
+            </trim>
+        </where>
     </select>
     <sql id="cust_query_condition_sql">
         <where>

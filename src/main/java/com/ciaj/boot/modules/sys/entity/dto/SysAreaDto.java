@@ -12,6 +12,16 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "SysArea")
 public class SysAreaDto extends SysAreaPo {
 
+    private String areaName;
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
     //@javax.validation.constraints.NotBlank(message = "")
     @Override
     @ApiModelProperty("主键")

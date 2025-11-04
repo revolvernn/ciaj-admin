@@ -76,7 +76,8 @@ public class AdminShiroRealm extends AuthorizingRealm {
         if (sysUser == null) {
             throw new UnknownAccountException("账号不存在");
         }
-        if (DefaultConstant.FLAG_Y.equals(sysUser.getLocked())) { //账户冻结
+        //账户冻结
+        if (DefaultConstant.FLAG_Y.equals(sysUser.getLocked())) {
             throw new LockedAccountException("账号已被锁定,请联系管理员");
         }
         SysAuthPo authQuery = new SysAuthPo();
@@ -84,7 +85,9 @@ public class AdminShiroRealm extends AuthorizingRealm {
         authQuery.setUserId(sysUser.getId());
         List<SysAuthPo> auths = sysAuthService.select(authQuery);
 
-        if (CollectionUtils.isEmpty(auths)) throw new BsRException("账号或密码不正确");
+        if (CollectionUtils.isEmpty(auths)) {
+            throw new BsRException("账号或密码不正确");
+        }
 
         SysAuthPo sysAuth = auths.get(0);
 
@@ -94,7 +97,7 @@ public class AdminShiroRealm extends AuthorizingRealm {
                 ByteSource.Util.bytes(sysAuth.getSalt()),//salt=username+salt
                 getName()  //realm name
         );
-        ShiroUser loginUser = shiroService.selectShiroUser(sysUser.getId());
+        ShiroUser loginUser = shiroService.selectShiroUser(sysAuth.getUserId());
         SecurityUtils.getSubject().getSession().setAttribute(DefaultConstant.LOGIN_USER, loginUser);
         return authenticationInfo;
     }

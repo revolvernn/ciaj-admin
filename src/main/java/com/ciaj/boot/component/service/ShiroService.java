@@ -17,6 +17,14 @@ public interface ShiroService {
      * @return
      */
     public ShiroUser selectShiroUser(String userId);
+    /**
+     * 查询权限用户
+     *
+     * @param account
+     *
+     * @return
+     */
+    public ShiroUser selectShiroUserByAccount(String account) ;
 
     /**
      * 更新当前用户角色
