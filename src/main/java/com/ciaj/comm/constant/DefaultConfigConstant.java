@@ -14,6 +14,10 @@ public class DefaultConfigConstant {
 	 * 文件类型，后台不可修改
 	 */
 	public final static String DEFAULT_FILE_TYPE_CONFIG_KEY = "DEFAULT_FILE_TYPE_CONFIG_KEY";
+	/**
+	 * 日志过滤，后台不可修改
+	 */
+	public final static String LOG_FILTER = "LOG_FILTER";
 
 	/**
 	 * 默认数据版本0为不可修改

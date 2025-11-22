@@ -4,12 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.ciaj.base.AbstractBase;
 import com.ciaj.boot.component.config.shiro.ShiroUser;
 import com.ciaj.boot.modules.sys.entity.po.SysLogPo;
+import com.ciaj.boot.modules.sys.service.SysConfigService;
 import com.ciaj.boot.modules.sys.service.SysLogService;
 import com.ciaj.comm.annotation.OperationLog;
+import com.ciaj.comm.constant.DefaultConfigConstant;
 import com.ciaj.comm.utils.CommUtil;
 import com.ciaj.comm.utils.ExceptionsUtils;
 import com.ciaj.comm.utils.JSONUtils;
 import com.ciaj.comm.utils.RequestUtils;
+import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -30,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -50,6 +54,8 @@ public class SysLogAspect {
 
     @Autowired
     private ApplicationContext context;
+    @Autowired
+    private SysConfigService sysConfigService;
 
 
     @Pointcut("@annotation(com.ciaj.comm.annotation.OperationLog)")
@@ -89,11 +95,20 @@ public class SysLogAspect {
             if (operationLog == null) {
                 return;
             }
+
+            LogFilter logFilter = sysConfigService.getConfigObject(DefaultConfigConstant.LOG_FILTER, LogFilter.class);
+
+
             SysLogPo sysLogPo = new SysLogPo();
             sysLogPo.setTime(time);
             //
             HttpServletRequest request = RequestUtils.getRequest();
             sysLogPo.setUrl(request.getRequestURL().toString());
+            boolean filter = logFilter.filter(sysLogPo.getUrl(), operationLog.content());
+            if (filter) {
+                log.debug("===========日志过滤：{} : {} ; {} : {}", sysLogPo.getUrl(), logFilter.getUrl(), logFilter.getDesc(), operationLog.content());
+                return;
+            }
             //设置IP地址
             sysLogPo.setIp(RequestUtils.getRemoteAddr(request));
             //注解上的描述
@@ -172,5 +187,20 @@ public class SysLogAspect {
         String methodName = point.getSignature().getName();
         List<Object> args = getArgsList(point.getArgs());
         log.info("===========afterThrowing连接点方法为：{},参数为：{},异常为：{}", methodName, args, e);
+    }
+
+    @Data
+    public static class LogFilter {
+        private String url;
+        private String desc;
+
+        public boolean filter(String reqUrl, String desc) {
+            return url == null ?
+                    (desc == null ? false
+                            : (Arrays.stream(desc.split(";")).anyMatch(f -> desc.contains(f))))
+                    : (Arrays.stream(url.split(";")).anyMatch(f -> reqUrl.contains(f))
+                    || (desc == null ? false
+                    : (Arrays.stream(desc.split(";")).anyMatch(f -> desc.contains(f)))));
+        }
     }
 }
