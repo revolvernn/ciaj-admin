@@ -4,56 +4,50 @@
 <head th:include="header">
 <body>
 <div id="ossapp" v-cloak>
-    <el-container style="border: 1px solid #eee">
-        <el-container style="max-height: 790px;">
-            <el-main>
-                <div>
-                    <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
-                        <el-row type="flex" class="row-bg">
-                            <el-form-item label="关键字" prop="keyword">
-                                <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
-                            </el-form-item>
-                            <el-form-item label="类型" prop="type">
-                                <my-dict-select v-model="queryForm.type" type="upload_file_type"></my-dict-select>
-                            </el-form-item>
-                        </el-row>
-                        <el-row type="flex" class="row-bg" justify="center">
-                            <el-form-item>
-                                <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
-                                <el-button @click="myQueryReset">重置</el-button>
-                                <my-btn type="primary" label="文件上传" @click="uploadFormVisible=true"
-                                        auth="sys:oss:all"></my-btn>
-                            </el-form-item>
-                        </el-row>
-                    </el-form>
-                    <my-table @sortChange="sortchange" :default-sort="defaultSort" :columns="tableColumns" :page="page"
-                              v-on:pagesizechange="pagesizechange"
-                              v-on:currentpagechange="currentpagechange">
-                    </my-table>
-                    <el-dialog :close-on-click-modal="false"title="文件上传" :visible.sync="uploadFormVisible" width="600px">
-                        <el-upload
-                                class="upload-demo"
-                                action="/oss/upload"
-                                :on-success="uploadSuccess"
-                                list-type="picture">
-                            <el-button size="small" type="primary">点击上传</el-button>
-                        </el-upload>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button @click="uploadFormVisible = false">关闭</el-button>
-                        </div>
-                    </el-dialog>
-                    <el-dialog :close-on-click-modal="false"title="预览" :visible.sync="rowView.viewPreVisible" width="600px">
-                        <el-card :body-style="{ padding: '0px' }">
-                            <img v-if="rowView.type=='image' && rowView.url" :src="rowView.url" class="image">
-                            <div style="padding: 14px;word-break: break-all;">
-                                <a :href="rowView.url" target="_blank">{{rowView.url}}</a>
-                            </div>
-                        </el-card>
-                    </el-dialog>
+    <div>
+        <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
+            <el-row type="flex" class="row-bg">
+                <el-form-item label="关键字" prop="keyword">
+                    <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+                </el-form-item>
+                <el-form-item label="类型" prop="type">
+                    <my-dict-select v-model="queryForm.type" type="upload_file_type"></my-dict-select>
+                </el-form-item>
+            </el-row>
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-form-item>
+                    <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
+                    <el-button @click="myQueryReset">重置</el-button>
+                    <my-btn type="primary" label="文件上传" @click="uploadFormVisible=true"
+                            auth="sys:oss:all"></my-btn>
+                </el-form-item>
+            </el-row>
+        </el-form>
+        <my-table @sortChange="sortchange" :default-sort="defaultSort" :columns="tableColumns" :page="page"
+                  v-on:pagesizechange="pagesizechange"
+                  v-on:currentpagechange="currentpagechange">
+        </my-table>
+        <el-dialog :close-on-click-modal="false"title="文件上传" :visible.sync="uploadFormVisible" width="600px">
+            <el-upload
+                    class="upload-demo"
+                    action="/oss/upload"
+                    :on-success="uploadSuccess"
+                    list-type="picture">
+                <el-button size="small" type="primary">点击上传</el-button>
+            </el-upload>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="uploadFormVisible = false">关闭</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog :close-on-click-modal="false"title="预览" :visible.sync="rowView.viewPreVisible" width="600px">
+            <el-card :body-style="{ padding: '0px' }">
+                <img v-if="rowView.type=='image' && rowView.url" :src="rowView.url" class="image">
+                <div style="padding: 14px;word-break: break-all;">
+                    <a :href="rowView.url" target="_blank">{{rowView.url}}</a>
                 </div>
-            </el-main>
-        </el-container>
-    </el-container>
+            </el-card>
+        </el-dialog>
+    </div>
 </div>
 <script src="/statics/js/modules/sys/oss.js"></script>
 <style>

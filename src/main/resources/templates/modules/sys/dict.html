@@ -5,7 +5,7 @@
 <body>
 <div id="dictapp" v-cloak>
     <el-container style="border: 1px solid #eee">
-        <el-aside width="200px" style="max-height: 775px;background-color: rgb(238, 241, 246);border: 1px solid rgb(238, 238, 238);">
+        <el-aside width="200px" style="max-height: 790px;background-color: rgb(238, 241, 246);border: 1px solid rgb(238, 238, 238);">
             <el-input placeholder="输入关键字进行过滤" v-model="filterText">
                 <el-button slot="append" icon="el-icon-refresh" @click="initTree"></el-button>
             </el-input>
@@ -13,7 +13,7 @@
                      default-expand-all :filter-node-method="filterNode" ref="dictTree">
             </el-tree>
         </el-aside>
-        <el-container style="max-height: 790px;">
+        <el-container>
             <el-main>
                 <div>
                     <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">

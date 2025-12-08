@@ -78,7 +78,7 @@ let logapp = new Vue({
                     ]
                 }
             ],
-            tableLoading: false,
+            tableLoading: true,
             page: {}
         }
     },

@@ -4,41 +4,35 @@
 <head th:include="header"/>
 <body>
 <div id="logapp" v-cloak>
-    <el-container style="border: 1px solid #eee">
-        <el-container style="max-height: 790px;">
-            <el-main>
-                <div>
-                    <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
-                        <el-row type="flex" class="row-bg">
-                            <el-form-item label="关键字" prop="keyword">
-                                <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
-                            </el-form-item>
-                            <el-form-item label="类型" prop="type">
-                                <my-dict-select v-model="queryForm.type" type="log_type"></my-dict-select>
-                            </el-form-item>
-                        </el-row>
-                        <el-row type="flex" class="row-bg" justify="center">
-                            <el-form-item>
-                                <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
-                                <el-button @click="myQueryReset">重置</el-button>
-                            </el-form-item>
-                        </el-row>
-                    </el-form>
-                    <my-table :columns="tableColumns" @sortChange="sortchange" :default-sort="defaultSort" :page="page"
-                              v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
-                    </my-table>
-                </div>
-                <el-dialog
-                        title="提示"
-                        :visible.sync="rowDialogVisible"
-                        width="50%"
-                        @before-close="rowDialogVisible = false" style="word-break: break-all;">
-                    <span v-html="rowParams"></span>
-                    <span slot="footer" class="dialog-footer"></span>
-                </el-dialog>
-            </el-main>
-        </el-container>
-    </el-container>
+    <div>
+        <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
+            <el-row type="flex" class="row-bg">
+                <el-form-item label="关键字" prop="keyword">
+                    <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+                </el-form-item>
+                <el-form-item label="类型" prop="type">
+                    <my-dict-select v-model="queryForm.type" type="log_type"></my-dict-select>
+                </el-form-item>
+            </el-row>
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-form-item>
+                    <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
+                    <el-button @click="myQueryReset">重置</el-button>
+                </el-form-item>
+            </el-row>
+        </el-form>
+        <my-table :columns="tableColumns" @sortChange="sortchange" :table-loading="tableLoading" :default-sort="defaultSort" :page="page"
+                  v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
+        </my-table>
+    </div>
+    <el-dialog
+            title="提示"
+            :visible.sync="rowDialogVisible"
+            width="50%"
+            @before-close="rowDialogVisible = false" style="word-break: break-all;">
+        <span v-html="rowParams"></span>
+        <span slot="footer" class="dialog-footer"></span>
+    </el-dialog>
 </div>
 <script src="/statics/js/modules/sys/log.js"></script>
 </body>
