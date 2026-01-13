@@ -4,7 +4,7 @@ Navicat MySQL Data Transfer
 Source Server         : ciaj.
 Source Server Version : 50723
 Source Host           : ciaj.
-Source Database       : family_db
+Source Database       : boot_db
 
 Target Server Type    : MYSQL
 Target Server Version : 50723
@@ -12,9 +12,9 @@ File Encoding         : 65001
 
 Date: 2019-05-30 17:01:03
 */
-DROP DATABASE IF EXISTS `family_db`;
-CREATE DATABASE  IF NOT EXISTS `family_db` CHARACTER SET utf8mb4 /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
-USE `family_db`;
+DROP DATABASE IF EXISTS `boot_db`;
+CREATE DATABASE  IF NOT EXISTS `boot_db` CHARACTER SET utf8mb4 /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+USE `boot_db`;
 
 SET FOREIGN_KEY_CHECKS=0;
 
