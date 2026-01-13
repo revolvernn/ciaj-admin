@@ -93,15 +93,10 @@ public class FileController {
         System.out.println(requestURI);
         String path = requestURI.substring(10);
         String contentType = null;
-        byte[] data = null;
         try {
-            data = OSSFactory.build().download(path);
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        }
-        try {
+            byte[] data = OSSFactory.build().download(path);
             ResponseUtils.renderinputStream(response, new ByteArrayInputStream(data), contentType);
-        } catch (IOException e) {
+        } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
     }
