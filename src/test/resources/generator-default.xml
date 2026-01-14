@@ -13,7 +13,7 @@
     <!--配置属性文件-->
     <!--<properties resource="generator-init.properties"/>-->
     <properties
-            url="file:///Users/ciaj/Desktop/0719/ciaj-admin/src/test/resources/generator-init-we.properties"/>
+            url="file:///F:/cgit/cgithub/wpe/ciaj-admin/src/test/resources/generator-init-my.properties"/>
     <!-- 在MBG工作的时候，需要额外加载的依赖包
        location属性指明加载jar/zip包的全路径
    <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />
@@ -191,6 +191,7 @@
             <property name="jsModule" value="${html.jsModule}"/>
             <property name="jsName" value="${html.jsName}"/>
             <property name="fileName" value="${html.jsName}.html"/>
+            <property name="permission" value="${mvc.permission}"/>
             <!--默认值是下面这个，可以不配置-->
             <property name="templateFormatter" value="${templateFormatter}"/>
         </plugin>
@@ -205,6 +206,7 @@
             <property name="mvcUrl" value="${mvc.requestMapping}"/>
             <property name="jsName" value="${html.jsName}"/>
             <property name="fileName" value="${html.jsName}.js"/>
+            <property name="permission" value="${mvc.permission}"/>
             <!--默认值是下面这个，可以不配置-->
             <property name="templateFormatter" value="${templateFormatter}"/>
         </plugin>
