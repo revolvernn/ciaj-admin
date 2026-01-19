@@ -40,7 +40,9 @@ public class SysMenuServiceImpl extends AbstractService<SysMenuPo, SysMenuDto, S
             return sysMenuMapper.select(q);
         } else {
             List<SysMenuPo> sysMenus = sysMenuMapper.selectNavMultiTable(loginUser.getId(), loginUser.getRole() == null ? null : loginUser.getRole().getId());
-            if (CollectionUtil.isEmpty(sysMenus)) return null;
+            if (CollectionUtil.isEmpty(sysMenus)) {
+                return null;
+            }
             Set<String> ids = new HashSet<>();
             for (SysMenuPo sysMenu : sysMenus) {
                 ids.add(sysMenu.getId());
