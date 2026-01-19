@@ -14,6 +14,7 @@ import com.ciaj.comm.annotation.OperationLog;
 import com.ciaj.comm.annotation.Resubmit;
 import com.ciaj.comm.constant.ParamTypeEnum;
 import com.ciaj.comm.exception.BsRException;
+import com.ciaj.comm.utils.AssertUtil;
 import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.Page;
 import io.swagger.annotations.Api;
@@ -137,9 +138,8 @@ public class SysRoleController extends AbstractController<SysRolePo, SysRoleDto,
 		SysUserRoleRelPo query = new SysUserRoleRelPo();
 		query.setRoleId(id);
 		List<SysUserRoleRelPo> select = sysUserRoleRelService.select(query);
-		if (CollectionUtil.isNotEmpty(select)) {
-			throw new BsRException("角色已绑定用户，不能删除。");
-		}
+		AssertUtil.isEmpty(select,"角色已绑定用户，不能删除。");
+
 		SysRolePo sysRolePo = sysRoleService.selectByPrimaryKey(id);
 		return super.deleteFlagVersion(id, sysRolePo.getVersion());
 	}
