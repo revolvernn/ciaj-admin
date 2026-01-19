@@ -1,10 +1,11 @@
 Vue.component('myPagination', myPaginationT);
 Vue.component('myTable', myTableT);
-Vue.component('myDictSelect', myDictSelectT);
 Vue.component('myBtn', myBtnT);
+Vue.component('myDictSelect', myDictSelectT);
+Vue.component('mySearchSelect', mySearchSelectT);
 
-let projectapp = new Vue({
-    el: '#projectapp',
+let familyMemberapp = new Vue({
+    el: '#familyMemberapp',
     data() {
         return {
             defaultSort: {prop: 'createTime', order: 'descending'},
@@ -13,49 +14,27 @@ let projectapp = new Vue({
                 pageEnabled: true,
                 pageNo: 1,
                 pageSize: 10,
-                houseType: null,
-                decorationType: null,
                 keyword: null
             },
             tableColumns: [
                 {
-                    name: 'id',
-                    label: '主键'
+                    name: 'familyId',
+                    label: '家庭ID'
                 },
                 {
-                    name: 'projectName',
-                    label: '工程项目名称'
+                    name: 'userId',
+                    label: '用户ID'
                 },
                 {
-                    name: 'addr',
-                    label: '地址'
-                },
-                {
-                    name: 'remark',
-                    label: '备注'
-                },
-                {
-                    name: 'houseType',
-                    dict: 'houseType',
-                    label: '项目户型'
-                },
-                {
-                    name: 'decorationType',
-                    dict: 'decorationType',
-                    label: '装修类型'
+                    name: 'type',
+                    label: '成员类型'
                 },
                 {
                     name: 'createTime',
-                    sortable: 'custom',
-                    width: '140',
-                    sortBy: 'm.create_time',
                     label: '创建时间'
                 },
                 {
                     name: 'updateTime',
-                    sortable: 'custom',
-                    width: '140',
-                    sortBy: 'm.update_time',
                     label: '更新时间'
                 },
                 {
@@ -63,14 +42,14 @@ let projectapp = new Vue({
                     width: '180px',
                     buttons: [
                         {
-                            auth:'wpe:project:update',
+                            auth:'my:family:member:update',
                             label: '修改',
                             icon: 'el-icon-edit',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
-                            auth:'wpe:project:delFlag',
+                            auth:'my:family:member:delFlag',
                             label: '删除',
                             icon: 'el-icon-delete',
                             click: this.myDel,
@@ -83,27 +62,21 @@ let projectapp = new Vue({
             page: {},
             addOrUpdateForm: {
                 title: '新增',
-                projectFormLabelWidth: '200px',
-                projectFormVisible: false,
+                familyMemberFormLabelWidth: '200px',
+                familyMemberFormVisible: false,
                 pickerOptions: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
                     }
                 },
-                project:{
-                    id: null,
-                    projectName: null,
-                    addr: null,
-                    remark: null,
-                    houseType: null,
-                    decorationType: null
+                familyMember:{
+                    familyId: null,
+                    userId: null,
+                    type: null
                 }
             },
             rules: {
-                projectName: [{required: true, message: '请填写工程项目名称', trigger: 'blur'}],
-                addr: [{required: true, message: '请填写地址', trigger: 'blur'}],
-                houseType: [{required: true, message: '请选择项目户型', trigger: 'blur'}],
-                decorationType: [{required: true, message: '请选择装修类型', trigger: 'blur'}]
+                //username: [{required: true, message: '必填', trigger: 'blur'}]
             }
         }
     },
@@ -143,25 +116,22 @@ let projectapp = new Vue({
         myAdd() {
             let that = this;
             that.addOrUpdateForm.title = '新增';
-            that.addOrUpdateForm.projectFormVisible = true;
-            that.addOrUpdateForm.project = {
-                                             id: null,
-                                             projectName: null,
-                                             addr: null,
-                                             remark: null,
-                                             houseType: null,
-                                             decorationType: null
+            that.addOrUpdateForm.familyMemberFormVisible = true;
+            that.addOrUpdateForm.familyMember = {
+                                             familyId: null,
+                                             userId: null,
+                                             type: null
                                          }
             that.resetForm('addOrUpdateFormRef');
         },
         myUpdate(index, row) {
             let that = this;
             that.addOrUpdateForm.title = '修改';
-            that.addOrUpdateForm.projectFormVisible = true;
+            that.addOrUpdateForm.familyMemberFormVisible = true;
             that.resetForm('addOrUpdateFormRef');
-            httpUtil.get({url: "wpe/project/getById/" + row.id}, function (result) {
+            httpUtil.get({url: "my/family/member/getById/" + row.id}, function (result) {
                   if (result.code == 0) {
-                      that.addOrUpdateForm.project = result.data;
+                      that.addOrUpdateForm.familyMember = result.data;
                   }
             });
         },
@@ -170,18 +140,18 @@ let projectapp = new Vue({
             that.$refs['addOrUpdateFormRef'].validate((valid) => {
                 if (valid) {
                     const loading = that.$loading({
-                        lock: true,
-                        text: 'Loading',
-                        spinner: 'el-icon-loading',
-                        background: 'rgba(0, 0, 0, 0.7)'
+                                            lock: true,
+                                            text: 'Loading',
+                                            spinner: 'el-icon-loading',
+                                            background: 'rgba(0, 0, 0, 0.7)'
                     });
-                    let url = that.addOrUpdateForm.project.id == null ? "wpe/project/add" : "wpe/project/update";
-                    let type = that.addOrUpdateForm.project.id == null ? "POST" : "PUT";
-                    httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.project)}, function (r) {
+                    let url = that.addOrUpdateForm.familyMember.id == null ? "my/family/member/add" : "my/family/member/update";
+                    let type = that.addOrUpdateForm.familyMember.id == null ? "POST" : "PUT";
+                    httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.familyMember)}, function (r) {
                         loading.close();
-                        if (r.code == 0){
+                        if (r.code == 0) {
                             that.myQuery();
-                            that.addOrUpdateForm.projectFormVisible = false;
+                            that.addOrUpdateForm.familyMemberFormVisible = false;
                         }
                         alertMsg(that, r);
                     });
@@ -195,7 +165,7 @@ let projectapp = new Vue({
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                httpUtil.del({url: "wpe/project/delFlag/" + row.id}, function (r) {
+                httpUtil.del({url: "my/family/member/delFlag/" + row.id}, function (r) {
                     that.myQuery();
                     alertMsg(that, r);
                 });
@@ -203,7 +173,7 @@ let projectapp = new Vue({
         },
         loadData() {
             let that = this;
-            httpUtil.get({url: "wpe/project/list", data: that.queryForm}, function (result) {
+            httpUtil.get({url: "my/family/member/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data;
                     that.page.expand = true;
@@ -216,11 +186,9 @@ let projectapp = new Vue({
                 orderBy: that.queryForm.orderBy,
                 orderByEnabled: true,
                 pageEnabled: false,
-                keyword: that.queryForm.keyword,
-                houseType: that.queryForm.houseType,
-                decorationType: that.queryForm.decorationType
+                keyword: that.queryForm.keyword
             }
-            httpUtil.fileDownload(that, {url: "wpe/project/list/export",data: data});
+            httpUtil.fileDownload(that, {url: "my/family/member/list/export",data: data});
         }
     }
 });

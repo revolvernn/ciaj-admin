@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ciaj.boot.modules.my.mapper.MyFamilyMapper">
+    <!--
+        Author: Ciaj.
+        Date: 2026-01-14 16:21:01
+        Description: www.ciaj.com gen mapper.xml
+    -->
+    <cache eviction="LRU" flushInterval="60000" readOnly="true" size="1560" type="com.ciaj.boot.component.config.redis.MybatisRedisCache"></cache>
+
+    <resultMap id="BaseResultMap" type="com.ciaj.boot.modules.my.entity.po.MyFamilyPo" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <id column="name" property="name" jdbcType="VARCHAR" />
+        <id column="code" property="code" jdbcType="VARCHAR" />
+        <id column="enabled" property="enabled" jdbcType="CHAR" />
+        <id column="area_id" property="areaId" jdbcType="VARCHAR" />
+        <id column="addr" property="addr" jdbcType="VARCHAR" />
+        <id column="description" property="description" jdbcType="VARCHAR" />
+        <id column="create_at" property="createAt" jdbcType="VARCHAR" />
+        <id column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <id column="update_at" property="updateAt" jdbcType="VARCHAR" />
+        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <id column="del_flag" property="delFlag" jdbcType="CHAR" />
+        <id column="version" property="version" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,name,code,enabled,area_id,addr,description,create_at,create_time,update_at,update_time,del_flag,version
+    </sql>
+    <sql id="Base_Alias_Column_List">
+        m.id,m.name,m.code,m.enabled,m.area_id,m.addr,m.description,m.create_at,m.create_time,m.update_at,m.update_time,m.del_flag,m.version
+    </sql>
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM my_family
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <delete id="delete" parameterType="com.ciaj.boot.modules.my.entity.po.MyFamilyPo">
+        DELETE FROM my_family
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null">
+                    AND id = #{id}
+                </if>
+                <if test="name != null">
+                    AND name = #{name}
+                </if>
+                <if test="code != null">
+                    AND code = #{code}
+                </if>
+                <if test="enabled != null">
+                    AND enabled = #{enabled}
+                </if>
+                <if test="areaId != null">
+                    AND area_id = #{areaId}
+                </if>
+                <if test="addr != null">
+                    AND addr = #{addr}
+                </if>
+                <if test="description != null">
+                    AND description = #{description}
+                </if>
+                <if test="createAt != null">
+                    AND create_at = #{createAt}
+                </if>
+                <if test="createTime != null">
+                    AND create_time = #{createTime}
+                </if>
+                <if test="updateAt != null">
+                    AND update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null">
+                    AND update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null">
+                    AND del_flag = #{delFlag}
+                </if>
+                <if test="version != null">
+                    AND version = #{version}
+                </if>
+            </trim>
+        </where>
+    </delete>
+    <insert id="insert"  parameterType="com.ciaj.boot.modules.my.entity.po.MyFamilyPo">
+        <selectKey keyProperty="id" order="BEFORE"  resultType="String">
+            SELECT REPLACE(uuid(),'-','') FROM DUAL
+        </selectKey>
+        INSERT INTO my_family
+        (id,name,code,enabled,area_id,addr,description,create_at,create_time,update_at,update_time,del_flag,version)
+        VALUES
+        (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{enabled,jdbcType=CHAR},#{areaId,jdbcType=VARCHAR},#{addr,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateAt,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=CHAR},#{version,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.ciaj.boot.modules.my.entity.po.MyFamilyPo">
+        <selectKey keyProperty="id" order="BEFORE" resultType="String">
+            SELECT REPLACE(UUID(),'-','') FROM DUAL
+        </selectKey>
+        INSERT INTO my_family
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+            <if test="enabled != null">
+                enabled,
+            </if>
+            <if test="areaId != null">
+                area_id,
+            </if>
+            <if test="addr != null">
+                addr,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="createAt != null">
+                create_at,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateAt != null">
+                update_at,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="enabled != null">
+                #{enabled,jdbcType=CHAR},
+            </if>
+            <if test="areaId != null">
+                #{areaId,jdbcType=VARCHAR},
+            </if>
+            <if test="addr != null">
+                #{addr,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null">
+                #{createAt,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null">
+                #{updateAt,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=CHAR},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey"  parameterType="com.ciaj.boot.modules.my.entity.po.MyFamilyPo">
+        UPDATE my_family
+        <set>
+            name = #{name},
+            code = #{code},
+            enabled = #{enabled},
+            area_id = #{areaId},
+            addr = #{addr},
+            description = #{description},
+            create_at = #{createAt},
+            create_time = #{createTime},
+            update_at = #{updateAt},
+            update_time = #{updateTime},
+            del_flag = #{delFlag},
+            version = #{version},
+        </set>
+         WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyAndVersion">
+        UPDATE my_family
+        <set>
+            name = #{record.name},
+            code = #{record.code},
+            enabled = #{record.enabled},
+            area_id = #{record.areaId},
+            addr = #{record.addr},
+            description = #{record.description},
+            create_at = #{record.createAt},
+            create_time = #{record.createTime},
+            update_at = #{record.updateAt},
+            update_time = #{record.updateTime},
+            del_flag = #{record.delFlag},
+            version = #{record.version},
+        </set>
+            WHERE id = #{record.id,jdbcType=VARCHAR} and version = #{oldVersion}
+    </update>
+    <update id="updateByPrimaryKeySelective"  parameterType="com.ciaj.boot.modules.my.entity.po.MyFamilyPo">
+        UPDATE my_family
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="code != null">
+                code = #{code},
+            </if>
+            <if test="enabled != null">
+                enabled = #{enabled},
+            </if>
+            <if test="areaId != null">
+                area_id = #{areaId},
+            </if>
+            <if test="addr != null">
+                addr = #{addr},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="createAt != null">
+                create_at = #{createAt},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateAt != null">
+                update_at = #{updateAt},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeySelectiveAndVersion">
+        UPDATE my_family
+        <set>
+            <if test="record.name != null">
+                name = #{record.name},
+            </if>
+            <if test="record.code != null">
+                code = #{record.code},
+            </if>
+            <if test="record.enabled != null">
+                enabled = #{record.enabled},
+            </if>
+            <if test="record.areaId != null">
+                area_id = #{record.areaId},
+            </if>
+            <if test="record.addr != null">
+                addr = #{record.addr},
+            </if>
+            <if test="record.description != null">
+                description = #{record.description},
+            </if>
+            <if test="record.createAt != null">
+                create_at = #{record.createAt},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime},
+            </if>
+            <if test="record.updateAt != null">
+                update_at = #{record.updateAt},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime},
+            </if>
+            <if test="record.delFlag != null">
+                del_flag = #{record.delFlag},
+            </if>
+            <if test="record.version != null">
+                version = #{record.version},
+            </if>
+        </set>
+            WHERE id = #{record.id,jdbcType=VARCHAR}  and version = #{oldVersion}
+    </update>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM my_family
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="selectListByKeys" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM my_family
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                and  id in
+                <foreach collection="keys" separator="," open="(" close=")" item="item">
+                    #{item}
+                </foreach>
+            </trim>
+        </where>
+    </select>
+
+    <sql id="base_query_condition_sql">
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null">
+                    AND m.id = #{id}
+                </if>
+                <if test="name != null">
+                    AND m.name = #{name}
+                </if>
+                <if test="code != null">
+                    AND m.code = #{code}
+                </if>
+                <if test="enabled != null">
+                    AND m.enabled = #{enabled}
+                </if>
+                <if test="areaId != null">
+                    AND m.area_id = #{areaId}
+                </if>
+                <if test="addr != null">
+                    AND m.addr = #{addr}
+                </if>
+                <if test="description != null">
+                    AND m.description = #{description}
+                </if>
+                <if test="createAt != null">
+                    AND m.create_at = #{createAt}
+                </if>
+                <if test="createTime != null">
+                    AND m.create_time = #{createTime}
+                </if>
+                <if test="updateAt != null">
+                    AND m.update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null">
+                    AND m.update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null">
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="version != null">
+                    AND m.version = #{version}
+                </if>
+            </trim>
+        </where>
+    </sql>
+    <select id="selectOne" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.my.entity.po.MyFamilyPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM my_family m
+        <include refid="base_query_condition_sql"/>
+    </select>
+
+    <select id="select" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.my.entity.po.MyFamilyPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM my_family m
+        <include refid="base_query_condition_sql"/>
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.ciaj.boot.modules.my.entity.po.MyFamilyPo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM my_family m
+        <include refid="base_query_condition_sql"/>
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap" parameterType="com.ciaj.boot.modules.my.entity.vo.MyFamilyVo">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>
+        FROM my_family m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+
+    <resultMap id="DTOResultMap" type="com.ciaj.boot.modules.my.entity.dto.MyFamilyDto" extends="BaseResultMap">
+    </resultMap>
+
+    <select id="selectDTOList" resultMap="DTOResultMap" parameterType="com.ciaj.boot.modules.my.entity.vo.MyFamilyVo">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>
+        FROM my_family m
+        <include refid="cust_query_condition_sql"/>
+    </select>
+    <sql id="cust_query_condition_sql">
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null  and id != ''">
+                    AND m.id = #{id}
+                </if>
+                <if test="name != null  and name != ''">
+                    AND m.name = #{name}
+                </if>
+                <if test="code != null  and code != ''">
+                    AND m.code = #{code}
+                </if>
+                <if test="enabled != null  and enabled != ''">
+                    AND m.enabled = #{enabled}
+                </if>
+                <if test="areaId != null  and areaId != ''">
+                    AND m.area_id = #{areaId}
+                </if>
+                <if test="addr != null  and addr != ''">
+                    AND m.addr = #{addr}
+                </if>
+                <if test="description != null  and description != ''">
+                    AND m.description = #{description}
+                </if>
+                <if test="createAt != null  and createAt != ''">
+                    AND m.create_at = #{createAt}
+                </if>
+                <if test="createTime != null ">
+                    AND m.create_time = #{createTime}
+                </if>
+                <if test="updateAt != null  and updateAt != ''">
+                    AND m.update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null ">
+                    AND m.update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null  and delFlag != ''">
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="version != null ">
+                    AND m.version = #{version}
+                </if>
+                <!--  keyword   -->
+                <if test="keyword != null and keyword != ''">
+                    AND ( m.name like CONCAT('%',#{keyword},'%')
+                    or m.code like CONCAT('%',#{keyword},'%')
+                    or m.addr like CONCAT('%',#{keyword},'%')
+                    or m.description like CONCAT('%',#{keyword},'%')
+                    )
+                </if>
+            </trim>
+        </where>
+    </sql>
+    <sql id="cust_multi_table_query_condition_sql">
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <if test="id != null  and id != ''">
+                    AND m.id = #{id}
+                </if>
+                <if test="name != null  and name != ''">
+                    AND m.name = #{name}
+                </if>
+                <if test="code != null  and code != ''">
+                    AND m.code = #{code}
+                </if>
+                <if test="enabled != null  and enabled != ''">
+                    AND m.enabled = #{enabled}
+                </if>
+                <if test="areaId != null  and areaId != ''">
+                    AND (m.area_id = #{areaId} or a.parent_ids LIKE CONCAT('%',#{areaId},'%'))
+                </if>
+                <if test="addr != null  and addr != ''">
+                    AND m.addr = #{addr}
+                </if>
+                <if test="description != null  and description != ''">
+                    AND m.description = #{description}
+                </if>
+                <if test="createAt != null  and createAt != ''">
+                    AND m.create_at = #{createAt}
+                </if>
+                <if test="createTime != null ">
+                    AND m.create_time = #{createTime}
+                </if>
+                <if test="updateAt != null  and updateAt != ''">
+                    AND m.update_at = #{updateAt}
+                </if>
+                <if test="updateTime != null ">
+                    AND m.update_time = #{updateTime}
+                </if>
+                <if test="delFlag != null  and delFlag != ''">
+                    AND m.del_flag = #{delFlag}
+                </if>
+                <if test="version != null ">
+                    AND m.version = #{version}
+                </if>
+                <!--  keyword   -->
+                <if test="keyword != null and keyword != ''">
+                    AND ( m.name like CONCAT('%',#{keyword},'%')
+                    or m.code like CONCAT('%',#{keyword},'%')
+                    or m.addr like CONCAT('%',#{keyword},'%')
+                    or m.description like CONCAT('%',#{keyword},'%')
+                    )
+                </if>
+            </trim>
+        </where>
+    </sql>
+    <resultMap id="DTOResultJoinMap" type="com.ciaj.boot.modules.my.entity.dto.MyFamilyDto" extends="DTOResultMap">
+        <association property="sysArea" javaType="com.ciaj.boot.modules.sys.entity.dto.SysAreaDto">
+            <id column="area_id" property="id"></id>
+            <id column="area_name" property="name"></id>
+            <id column="area_parent_ids" property="parentIds"></id>
+        </association>
+    </resultMap>
+
+    <select id="selectDTOListMultiTable" resultMap="DTOResultJoinMap" parameterType="com.ciaj.boot.modules.my.entity.vo.MyFamilyVo">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>,a.area_name,a.parent_ids as area_parent_ids
+        from my_family m left  join view_sys_area a on m.area_id = a.id
+        <include refid="cust_multi_table_query_condition_sql"/>
+    </select>
+</mapper>
