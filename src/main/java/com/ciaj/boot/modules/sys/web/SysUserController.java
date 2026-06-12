@@ -113,7 +113,7 @@ public class SysUserController extends AbstractController<SysUserPo, SysUserDto,
 	@Override
 	@Resubmit
 	@ApiOperation(value = "更新用户", produces = "application/json;charset=UTF-8")
-	@OperationLog(operation = "系统用户-管理", content = "添加系统用户")
+	@OperationLog(operation = "系统用户-管理", content = "更新系统用户")
 	@RequiresPermissions("sys:user:update")
 	@PutMapping("update")
 	public ResponseEntity update(@RequestBody SysUserDto entity) {

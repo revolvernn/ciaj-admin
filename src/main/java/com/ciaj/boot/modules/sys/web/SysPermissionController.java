@@ -114,7 +114,7 @@ public class SysPermissionController extends AbstractController<SysPermissionPo,
     @Override
     @Resubmit
     @ApiOperation(value = "更新系统权限", produces = "application/json;charset=UTF-8")
-    @OperationLog(operation = "系统权限-管理", content = "添加系统权限")
+    @OperationLog(operation = "系统权限-管理", content = "更新系统权限")
     @RequiresPermissions("sys:permission:update")
     @PutMapping("update")
     public ResponseEntity update(@RequestBody SysPermissionDto entity) {

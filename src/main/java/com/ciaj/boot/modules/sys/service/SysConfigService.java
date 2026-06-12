@@ -17,4 +17,11 @@ public interface SysConfigService extends BaseService<SysConfigPo, SysConfigDto,
      * @param clazz  Object对象
      */
     public <T> T getConfigObject(String key, Class<T> clazz);
+    /**
+     * 根据key，获取value的Object对象
+     * @param key    key
+     * @param status    状态
+     * @param clazz  Object对象
+     */
+    public <T> T getConfigObject(String key,String status, Class<T> clazz);
 }

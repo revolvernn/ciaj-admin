@@ -116,7 +116,7 @@ public class SysDictController extends AbstractController<SysDictPo, SysDictDto,
     @Override
     @Resubmit
     @ApiOperation(value = "更新系统字典", produces = "application/json;charset=UTF-8")
-    @OperationLog(operation = "系统字典-管理", content = "添加系统字典")
+    @OperationLog(operation = "系统字典-管理", content = "更新系统字典")
     @RequiresPermissions("sys:dict:update")
     @PutMapping("update")
     public ResponseEntity update(@RequestBody SysDictDto entity) {

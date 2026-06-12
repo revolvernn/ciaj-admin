@@ -8,10 +8,7 @@ import com.ciaj.boot.modules.sys.service.SysConfigService;
 import com.ciaj.boot.modules.sys.service.SysLogService;
 import com.ciaj.comm.annotation.OperationLog;
 import com.ciaj.comm.constant.DefaultConfigConstant;
-import com.ciaj.comm.utils.CommUtil;
-import com.ciaj.comm.utils.ExceptionsUtils;
-import com.ciaj.comm.utils.JSONUtils;
-import com.ciaj.comm.utils.RequestUtils;
+import com.ciaj.comm.utils.*;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.JoinPoint;
@@ -95,20 +92,19 @@ public class SysLogAspect {
             if (operationLog == null) {
                 return;
             }
-
-            LogFilter logFilter = sysConfigService.getConfigObject(DefaultConfigConstant.LOG_FILTER, LogFilter.class);
-
+            //
+            HttpServletRequest request = RequestUtils.getRequest();
+            String reqUrl = request.getRequestURL().toString();
+            LogFilter logFilter = sysConfigService.getConfigObject(DefaultConfigConstant.LOG_FILTER,"Y", LogFilter.class);
+            boolean filter = logFilter.filter(reqUrl, operationLog.content());
+            if (filter) {
+                log.debug("===========日志过滤：{} : {} ; {} : {}", reqUrl, logFilter.getUrl(), logFilter.getDesc(), operationLog.content());
+                return;
+            }
 
             SysLogPo sysLogPo = new SysLogPo();
             sysLogPo.setTime(time);
-            //
-            HttpServletRequest request = RequestUtils.getRequest();
-            sysLogPo.setUrl(request.getRequestURL().toString());
-            boolean filter = logFilter.filter(sysLogPo.getUrl(), operationLog.content());
-            if (filter) {
-                log.debug("===========日志过滤：{} : {} ; {} : {}", sysLogPo.getUrl(), logFilter.getUrl(), logFilter.getDesc(), operationLog.content());
-                return;
-            }
+            sysLogPo.setUrl(reqUrl);
             //设置IP地址
             sysLogPo.setIp(RequestUtils.getRemoteAddr(request));
             //注解上的描述
@@ -189,18 +185,21 @@ public class SysLogAspect {
         log.info("===========afterThrowing连接点方法为：{},参数为：{},异常为：{}", methodName, args, e);
     }
 
+    /**
+     *
+     */
     @Data
     public static class LogFilter {
         private String url;
         private String desc;
 
-        public boolean filter(String reqUrl, String desc) {
-            return url == null ?
-                    (desc == null ? false
-                            : (Arrays.stream(desc.split(";")).anyMatch(f -> desc.contains(f))))
+        public boolean filter(String reqUrl, String content) {
+            return StringUtil.isBlank(url) ?
+                    (StringUtil.isBlank(desc) ? false
+                            : (Arrays.stream(desc.split(";")).anyMatch(f -> content.contains(f))))
                     : (Arrays.stream(url.split(";")).anyMatch(f -> reqUrl.contains(f))
-                    || (desc == null ? false
-                    : (Arrays.stream(desc.split(";")).anyMatch(f -> desc.contains(f)))));
+                    || (StringUtil.isBlank(desc) ? false
+                    : (Arrays.stream(desc.split(";")).anyMatch(f -> content.contains(f)))));
         }
     }
 }

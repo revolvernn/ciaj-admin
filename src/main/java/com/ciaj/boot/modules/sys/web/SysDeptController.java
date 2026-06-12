@@ -111,7 +111,7 @@ public class SysDeptController extends AbstractController<SysDeptPo, SysDeptDto,
     @Override
     @Resubmit
     @ApiOperation(value = "更新系统部门", produces = "application/json;charset=UTF-8")
-    @OperationLog(operation = "系统部门-管理", content = "添加系统部门")
+    @OperationLog(operation = "系统部门-管理", content = "更新系统部门")
     @RequiresPermissions("sys:dept:update")
     @PutMapping("update")
     public ResponseEntity update(@RequestBody SysDeptDto entity) {

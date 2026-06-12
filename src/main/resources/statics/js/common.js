@@ -68,6 +68,15 @@ T.p = function (name) {
     return null;
 };
 
+T.millisecondsToHMS= function (ms) {
+    const seconds = Math.floor(ms / 1000);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    return `${hours}小时 ${minutes}分钟 ${remainingSeconds}秒`;
+}
+
 //日期格式化
 T.dateFmt = function (fmt, date) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';

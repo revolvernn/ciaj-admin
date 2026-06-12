@@ -171,7 +171,7 @@ public class SysOssController extends AbstractController<SysOssPo, SysOssDto, Sy
 	@Override
 	@Resubmit
 	@ApiOperation(value = "更新系统OSS", produces = "application/json;charset=UTF-8")
-	@OperationLog(operation = "系统OSS-管理", content = "添加系统OSS")
+	@OperationLog(operation = "系统OSS-管理", content = "更新系统OSS")
 	@RequiresPermissions("sys:oss:update")
 	@PutMapping("update")
 	public ResponseEntity update(@RequestBody SysOssDto entity) {
