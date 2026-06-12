@@ -9,10 +9,13 @@ import com.ciaj.boot.modules.sys.mapper.SysConfigMapper;
 import com.ciaj.boot.modules.sys.service.SysConfigService;
 import com.ciaj.comm.constant.DefaultConstant;
 import com.ciaj.comm.exception.BsRException;
+import com.ciaj.comm.utils.CollectionUtil;
 import com.ciaj.comm.utils.StringUtil;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Author: Ciaj.
@@ -28,19 +31,28 @@ public class SysConfigServiceImpl extends AbstractService<SysConfigPo, SysConfig
     private SysConfigMapper sysConfigMapper;
 
 
-    private String getValue(String key) {
+    private String getValue(String key, String status) {
 
         SysConfigPo entity = new SysConfigPo();
         entity.setConfigKey(key);
+        entity.setStatus(status);
         entity.setDelFlag(DefaultConstant.FLAG_N);
-        SysConfigPo config = sysConfigMapper.selectOne(entity);
-        return config == null ? null : config.getConfigValue();
+        List<SysConfigPo> select = sysConfigMapper.select(entity);
+        if (CollectionUtil.isNotEmpty(select)) {
+            return select.get(0).getConfigValue();
+        }
+        return null;
     }
 
     @Override
     public <T> T getConfigObject(String key, Class<T> clazz) {
-        String value = getValue(key);
-        if(StringUtil.isNotBlank(value)){
+        return getConfigObject(key, null, clazz);
+    }
+
+    @Override
+    public <T> T getConfigObject(String key, String status, Class<T> clazz) {
+        String value = getValue(key, status);
+        if (StringUtil.isNotBlank(value)) {
             return new Gson().fromJson(value, clazz);
         }
 

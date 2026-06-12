@@ -190,6 +190,7 @@
             <property name="templatePath" value="${templatePath}/html/index.ftl"/>
             <property name="jsModule" value="${html.jsModule}"/>
             <property name="jsName" value="${html.jsName}"/>
+            <property name="permissions" value="${html.permissions}"/>
             <property name="fileName" value="${html.jsName}.html"/>
             <property name="permission" value="${mvc.permission}"/>
             <!--默认值是下面这个，可以不配置-->
@@ -205,6 +206,7 @@
             <property name="jsModule" value="${html.jsModule}"/>
             <property name="mvcUrl" value="${mvc.requestMapping}"/>
             <property name="jsName" value="${html.jsName}"/>
+            <property name="permissions" value="${html.permissions}"/>
             <property name="fileName" value="${html.jsName}.js"/>
             <property name="permission" value="${mvc.permission}"/>
             <!--默认值是下面这个，可以不配置-->

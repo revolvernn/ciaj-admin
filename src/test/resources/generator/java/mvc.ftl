@@ -140,7 +140,7 @@ public class ${tableClass.shortClassName}Controller extends AbstractController<$
     @Override
     @Resubmit
     @ApiOperation(value = "更新${mvcDesc}", produces = "application/json;charset=UTF-8")
-    @OperationLog(operation = "${mvcDesc}-管理", content = "添加${mvcDesc}")
+    @OperationLog(operation = "${mvcDesc}-管理", content = "更新${mvcDesc}")
     @RequiresPermissions("${permission}:update")
     @PutMapping("update")
     public ResponseEntity update(@RequestBody ${tableClass.shortClassName}Dto entity) {

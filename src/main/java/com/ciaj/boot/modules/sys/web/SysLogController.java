@@ -99,7 +99,7 @@ public class SysLogController extends AbstractController<SysLogPo, SysLogDto, Sy
     @Override
     @Resubmit
     @ApiOperation(value = "更新系统日志", produces = "application/json;charset=UTF-8")
-    @OperationLog(operation = "系统日志-管理", content = "添加系统日志")
+    @OperationLog(operation = "系统日志-管理", content = "更新系统日志")
     @RequiresPermissions("sys:log:update")
     @PutMapping("update")
     public ResponseEntity update(@RequestBody SysLogDto entity) {

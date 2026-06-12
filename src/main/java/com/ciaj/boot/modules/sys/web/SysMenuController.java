@@ -112,7 +112,7 @@ public class SysMenuController extends AbstractController<SysMenuPo, SysMenuDto,
     @Override
     @Resubmit
     @ApiOperation(value = "更新系统菜单", produces = "application/json;charset=UTF-8")
-    @OperationLog(operation = "系统菜单-管理", content = "添加系统菜单")
+    @OperationLog(operation = "系统菜单-管理", content = "更新系统菜单")
     @RequiresPermissions("sys:menu:update")
     @PutMapping("update")
     public ResponseEntity update(@RequestBody SysMenuDto entity) {

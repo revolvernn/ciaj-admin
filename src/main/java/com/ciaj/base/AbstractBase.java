@@ -88,6 +88,27 @@ public abstract class AbstractBase<PO, DTO extends BaseEntity, VO extends VOEnti
 		}
 	}
 
+	/**
+	 * 反射设置字段值 T
+	 *
+	 * @param fieldName
+	 * @param fiedValue
+	 * @param record
+	 */
+	void setFieldByPO(String fieldName, Object fiedValue, PO record) {
+		try {
+			Field field = this.poClass.getDeclaredField(fieldName);
+
+			field.setAccessible(true);
+			if (fiedValue != null) {
+				field.set(record, fiedValue);
+			}
+			field.setAccessible(false);
+		} catch (IllegalAccessException e) {
+		} catch (NoSuchFieldException e) {
+		}
+	}
+
 
 	/**
 	 * 反射设置字段值 Q
