@@ -65,3 +65,6 @@ swagger:
   version: 1.0.1
 logging:
   config: classpath:logback-spring.xml
+ciaj:
+  scheduler:
+    enabled: true

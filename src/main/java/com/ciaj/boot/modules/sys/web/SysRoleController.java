@@ -114,7 +114,7 @@ public class SysRoleController extends AbstractController<SysRolePo, SysRoleDto,
 	@Override
 	@Resubmit
 	@ApiOperation(value = "更新系统角色", produces = "application/json;charset=UTF-8")
-	@OperationLog(operation = "系统角色-管理", content = "添加系统角色")
+	@OperationLog(operation = "系统角色-管理", content = "更新系统角色")
 	@RequiresPermissions("sys:role:update")
 	@PutMapping("update")
 	public ResponseEntity update(@RequestBody SysRoleDto entity) {
