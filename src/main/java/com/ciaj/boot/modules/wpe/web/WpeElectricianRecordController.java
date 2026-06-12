@@ -231,7 +231,7 @@ public class WpeElectricianRecordController extends AbstractController<WpeElectr
     @Override
     @Resubmit
     @ApiOperation(value = "更新水电工程记录", produces = "application/json;charset=UTF-8")
-    @OperationLog(operation = "水电工程记录-管理", content = "添加水电工程记录")
+    @OperationLog(operation = "水电工程记录-管理", content = "更新水电工程记录")
     @RequiresPermissions("wpe:electrician:record:update")
     @PutMapping("update")
     public ResponseEntity update(@RequestBody  @Valid WpeElectricianRecordDto entity) {

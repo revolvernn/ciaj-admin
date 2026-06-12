@@ -163,7 +163,7 @@ public class WpeFinalStatementController extends AbstractController<WpeFinalStat
     @Override
     @Resubmit
     @ApiOperation(value = "更新水电工结算单", produces = "application/json;charset=UTF-8")
-    @OperationLog(operation = "水电工结算单-管理", content = "添加水电工结算单")
+    @OperationLog(operation = "水电工结算单-管理", content = "更新水电工结算单")
     @RequiresPermissions("wpe:final:statement:update")
     @PutMapping("update")
     public ResponseEntity update(@RequestBody @Validated WpeFinalStatementDto entity) {

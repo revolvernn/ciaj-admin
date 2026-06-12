@@ -146,7 +146,7 @@ public class WpeProjectController extends AbstractController<WpeProjectPo, WpePr
     @Override
     @Resubmit
     @ApiOperation(value = "更新水电工程项目", produces = "application/json;charset=UTF-8")
-    @OperationLog(operation = "水电工程项目-管理", content = "添加水电工程项目")
+    @OperationLog(operation = "水电工程项目-管理", content = "更新水电工程项目")
     @RequiresPermissions("wpe:project:update")
     @PutMapping("update")
     public ResponseEntity update(@RequestBody @Valid WpeProjectDto entity) {
