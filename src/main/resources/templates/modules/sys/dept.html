@@ -42,7 +42,7 @@
         <el-dialog :close-on-click-modal="false":title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.deptFormVisible"
                    >
             <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.dept">
-                <el-form-item label="部门名称" prop="name" :label-width="addOrUpdateForm.deptFormLabelWidth">
+                <el-form-item label="部门名称" prop="name" :label-width="addOrUpdateForm.deptFormLabelWidth" required>
                     <el-input v-model="addOrUpdateForm.dept.name" autocomplete="off"
                               placeholder="部门名称"></el-input>
                 </el-form-item>
@@ -56,7 +56,7 @@
                                  :options="areaData" :show-all-levels="false" filterable
                                  clearable></el-cascader>
                 </el-form-item>
-                <el-form-item label="类型：" prop="type" :label-width="addOrUpdateForm.deptFormLabelWidth">
+                <el-form-item label="类型：" prop="type" :label-width="addOrUpdateForm.deptFormLabelWidth" required>
                     <my-dict-select v-model="addOrUpdateForm.dept.type" type="dept_type"></my-dict-select>
                 </el-form-item>
                 <el-form-item label="父级" prop="parentId" :label-width="addOrUpdateForm.deptFormLabelWidth">
@@ -68,7 +68,7 @@
                 <el-form-item label="排序" prop="sequence" :label-width="addOrUpdateForm.deptFormLabelWidth">
                     <el-input-number :min="0" v-model="addOrUpdateForm.dept.sequence" style="width: 85%;"/>
                 </el-form-item>
-                <el-form-item label="是否可用" prop="enabled" :label-width="addOrUpdateForm.deptFormLabelWidth">
+                <el-form-item label="是否可用" prop="enabled" :label-width="addOrUpdateForm.deptFormLabelWidth" required>
                     <my-dict-select v-model="addOrUpdateForm.dept.enabled" type="enabled"></my-dict-select>
                 </el-form-item>
                 <el-form-item label="描述" prop="description"

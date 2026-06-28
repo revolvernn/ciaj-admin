@@ -168,6 +168,7 @@ let userapp = new Vue({
             rules: {
                 account: [{required: true, message: '必填', trigger: 'blur'}],
                 username: [{required: true, message: '必填', trigger: 'blur'}],
+                locked: [{required: true, message: '必选', trigger: 'change'}],
                 mobile: [{
                     required: true,
                     pattern: /^1[3|4|5|6|7|8][0-9]\d{8}$/,

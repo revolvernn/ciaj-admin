@@ -101,7 +101,9 @@ let permissionapp = new Vue({
                 }
             },
             rules: {
-                //username: [{required: true, message: '必填', trigger: 'blur'}]
+                name: [{required: true, message: '必填', trigger: 'blur'}],
+                type: [{required: true, message: '必填', trigger: 'blur'}],
+                available: [{required: true, message: '必选', trigger: 'change'}]
             }
         }
     },

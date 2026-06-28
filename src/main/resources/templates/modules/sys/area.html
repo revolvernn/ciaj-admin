@@ -30,22 +30,22 @@
 		</my-table>
 		<el-dialog :close-on-click-modal="false":title="addOrUpdateForm.title"  :visible.sync="addOrUpdateForm.areaFormVisible" >
 			<el-form  ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.area">
-                <el-form-item label="名称" prop="name" :label-width="addOrUpdateForm.areaFormLabelWidth" >
+                <el-form-item label="名称" prop="name" :label-width="addOrUpdateForm.areaFormLabelWidth" required>
                		 <el-input v-model="addOrUpdateForm.area.name" autocomplete="off" placeholder="城市名称"></el-input>
                	</el-form-item>
-                <el-form-item label="编码" prop="code" :label-width="addOrUpdateForm.areaFormLabelWidth" >
+                <el-form-item label="编码" prop="code" :label-width="addOrUpdateForm.areaFormLabelWidth" required>
                		 <el-input v-model="addOrUpdateForm.area.code" autocomplete="off" placeholder="城市编码"></el-input>
                	</el-form-item>
                 <el-form-item label="父级" prop="parentId" :label-width="addOrUpdateForm.areaFormLabelWidth" >
 					<el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.cascaderModel" @change="cascaderChange" :options="areaData" :show-all-levels="false" filterable change-on-select clearable></el-cascader>
                	</el-form-item>
-                <el-form-item label="类型" prop="type" :label-width="addOrUpdateForm.areaFormLabelWidth" >
+                <el-form-item label="类型" prop="type" :label-width="addOrUpdateForm.areaFormLabelWidth" required>
 					<my-dict-select v-model="addOrUpdateForm.area.type" type="area_type"></my-dict-select>
                	</el-form-item>
-				<el-form-item label="排序" prop="sequence" :label-width="addOrUpdateForm.areaFormLabelWidth" >
+				<el-form-item label="排序" prop="sequence" :label-width="addOrUpdateForm.areaFormLabelWidth" required>
 					<el-input type="number" min="0" v-model="addOrUpdateForm.area.sequence" autocomplete="off" placeholder="排序"></el-input>
 				</el-form-item>
-				<el-form-item label="启用" prop="enabled" :label-width="addOrUpdateForm.areaFormLabelWidth" >
+				<el-form-item label="启用" prop="enabled" :label-width="addOrUpdateForm.areaFormLabelWidth" required>
 					<my-dict-select v-model="addOrUpdateForm.area.enabled" type="enabled"></my-dict-select>
 				</el-form-item>
 			</el-form>

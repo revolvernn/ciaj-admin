@@ -116,7 +116,7 @@ let dictapp = new Vue({
                 name: [{required: true, message: '必填', trigger: 'blur'}],
                 code: [{required: true, message: '必填', trigger: 'blur'}],
                 type: [{required: true, message: '必填', trigger: 'blur'}],
-                enabled: [{required: true, message: '必填', trigger: 'blur'}]
+                enabled: [{required: true, message: '必选', trigger: 'change'}]
             }
         }
     },
