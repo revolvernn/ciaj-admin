@@ -102,8 +102,8 @@ let projectapp = new Vue({
             rules: {
                 projectName: [{required: true, message: '请填写工程项目名称', trigger: 'blur'}],
                 addr: [{required: true, message: '请填写地址', trigger: 'blur'}],
-                houseType: [{required: true, message: '请选择项目户型', trigger: 'blur'}],
-                decorationType: [{required: true, message: '请选择装修类型', trigger: 'blur'}]
+                houseType: [{required: true, message: '请选择项目户型', trigger: 'change'}],
+                decorationType: [{required: true, message: '请选择装修类型', trigger: 'change'}]
             }
         }
     },
