@@ -139,7 +139,7 @@ let mySearchSelectT = Vue.extend({
         },
         remoteMethod(query) {
             let that = this;
-            if (query !== '' && that.searchUrl !== '') {
+            if (that.searchUrl !== '') {
                 that.loading = true;
                 setTimeout(() => {
                     that.loading = false;

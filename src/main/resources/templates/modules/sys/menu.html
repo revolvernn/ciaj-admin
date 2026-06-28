@@ -46,7 +46,7 @@
                     <el-dialog :close-on-click-modal="false":title="addOrUpdateForm.title" :visible.sync="addOrUpdateForm.menuFormVisible"
                                >
                         <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.menu">
-                            <el-form-item label="菜单名称" prop="name" :label-width="addOrUpdateForm.menuFormLabelWidth">
+                            <el-form-item label="菜单名称" prop="name" :label-width="addOrUpdateForm.menuFormLabelWidth" required>
                                 <el-input v-model="addOrUpdateForm.menu.name" autocomplete="off"
                                           placeholder="name"></el-input>
                             </el-form-item>
@@ -65,7 +65,7 @@
                                 <el-input v-model="addOrUpdateForm.menu.permissionCode" autocomplete="off"
                                           placeholder="权限码"></el-input>
                             </el-form-item>
-                            <el-form-item label="类型" prop="type" :label-width="addOrUpdateForm.menuFormLabelWidth">
+                            <el-form-item label="类型" prop="type" :label-width="addOrUpdateForm.menuFormLabelWidth" required>
                                 <my-dict-select v-model="addOrUpdateForm.menu.type" type="menu_type"></my-dict-select>
                             </el-form-item>
                             <el-form-item label="图标" prop="icon" :label-width="addOrUpdateForm.menuFormLabelWidth">

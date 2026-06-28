@@ -100,7 +100,11 @@ let areaapp = new Vue({
                 }
             },
             rules: {
-                //username: [{required: true, message: '必填', trigger: 'blur'}]
+                name: [{required: true, message: '必填', trigger: 'blur'}],
+                code: [{required: true, message: '必填', trigger: 'blur'}],
+                type: [{required: true, message: '必填', trigger: 'blur'}],
+                sequence: [{required: true, message: '必填', trigger: 'blur'}],
+                enabled: [{required: true, message: '必选', trigger: 'change'}]
             }
         }
     },
@@ -253,7 +257,8 @@ let areaapp = new Vue({
             let that = this;
             httpUtil.get({url: "sys/area/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
-                    that.page = result.data
+                    that.page = result.data;
+                    that.page.expand = true;
                 }
             });
         }

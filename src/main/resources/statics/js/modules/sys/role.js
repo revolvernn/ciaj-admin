@@ -113,7 +113,10 @@ new Vue({
                 }
             },
             rules: {
-                //username: [{required: true, message: '必填', trigger: 'blur'}]
+                name: [{required: true, message: '必填', trigger: 'blur'}],
+                code: [{required: true, message: '必填', trigger: 'blur'}],
+                type: [{required: true, message: '必填', trigger: 'blur'}],
+                available: [{required: true, message: '必选', trigger: 'change'}]
             }
         }
     },
@@ -286,7 +289,8 @@ new Vue({
             let that = this;
             httpUtil.get({url: "sys/role/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
-                    that.page = result.data
+                    that.page = result.data;
+                    that.page.expand = true;
                 }
             });
         }

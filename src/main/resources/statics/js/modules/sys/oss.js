@@ -131,6 +131,7 @@ let ossapp = new Vue({
             httpUtil.get({url: "sys/oss/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data
+                    that.page.expand = true;
                 }
             });
         }
