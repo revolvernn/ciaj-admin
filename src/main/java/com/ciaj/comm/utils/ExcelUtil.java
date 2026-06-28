@@ -3,6 +3,7 @@ package com.ciaj.comm.utils;
 import com.ciaj.boot.component.serializer.DateTimeFormat;
 import com.ciaj.boot.component.serializer.DecimalFormat;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
@@ -163,9 +164,10 @@ public class ExcelUtil {
      * @throws Exception
      */
     private Object invokeMethod(Object owner, String fieldname) throws Exception {
+        Object invoke = PropertyUtils.getNestedProperty(owner, fieldname);
         String methodName = "get" + StringUtil.underlineToHumpUpperCase(fieldname);
         Class<?> ownerClass = owner.getClass();
-        Object invoke = ownerClass.getMethod(methodName).invoke(owner);
+        //Object invoke = ownerClass.getMethod(methodName).invoke(owner);
         String value = "";
         if (invoke == null) {
             return value;

@@ -154,6 +154,15 @@ public interface BaseService<PO, DTO extends BaseEntity, VO extends VOEntity> ex
 	 * @return Page<PO>
 	 */
 	Page<PO> selectPOPage(VO entity);
+	/**
+	 * 分页查询
+	 *
+	 * @param entity VO
+	 * @return Page<PO>
+	 */
+	default Page<DTO> selectDTOListMultiTablePage(VO entity){
+		return selectDTOPage(entity);
+	}
 
 	/**
 	 * 分页查询
