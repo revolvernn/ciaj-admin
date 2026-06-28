@@ -67,7 +67,7 @@
                                 <el-input type="number" min="0" v-model="addOrUpdateForm.dict.sequence"
                                           autocomplete="off" placeholder="排序"></el-input>
                             </el-form-item>
-                            <el-form-item label="启用" prop="enabled" :label-width="addOrUpdateForm.dictFormLabelWidth">
+                            <el-form-item label="启用" prop="enabled" :label-width="addOrUpdateForm.dictFormLabelWidth" required>
                                 <el-select v-model="addOrUpdateForm.dict.enabled" placeholder="启用">
                                     <el-option label="是" value="Y"></el-option>
                                     <el-option label="否" value="N"></el-option>

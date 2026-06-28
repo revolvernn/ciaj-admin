@@ -6,6 +6,8 @@ let configapp = new Vue({
     el: '#configapp',
     data() {
         return {
+            rowParams: '',
+            rowDialogVisible: false,
             queryForm: {
                 pageEnabled: true,
                 pageNo: 1,
@@ -15,13 +17,17 @@ let configapp = new Vue({
             },
             tableColumns: [
                 {
+                    name: 'status',
+                    dict: 'status',
+                    label: '启用状态'
+                },
+                {
                     name: 'configKey',
                     label: 'KEY'
                 },
                 {
-                    name: 'status',
-                    dict: 'status',
-                    label: '状态'
+                    name: 'configValue',
+                    label: 'VALUE'
                 },
                 {
                     name: 'remark',
@@ -40,6 +46,12 @@ let configapp = new Vue({
                     fixed: 'right',
                     width: '180px',
                     buttons: [
+                        {
+                            label: '详情',
+                            icon: 'el-icon-view',
+                            click: this.rowParamsInfo,
+                            type: 'success'
+                        },
                         {
                             auth: 'sys:config:update',
                             label: '修改',
@@ -77,7 +89,36 @@ let configapp = new Vue({
                 }
             },
             rules: {
-                //username: [{required: true, message: '必填', trigger: 'blur'}]
+                configKey: [{required: true, message: '必填', trigger: 'blur'}],
+                configValue: [{required: true, message: '必填', trigger: 'blur'}],
+                status: [{required: true, message: '必选', trigger: 'change'}]
+            },
+            ossRules: {
+                type: [{required: true, message: '必选', trigger: 'change'}],
+                fileQuality: [{required: true, message: '必填', trigger: 'blur'}],
+                localFilePath: [{required: true, message: '必填', trigger: 'blur'}],
+                localFileMapping: [{required: true, message: '必填', trigger: 'blur'}],
+                localFilePrefix: [{required: true, message: '必填', trigger: 'blur'}],
+                aliyunDomain: [{required: true, message: '必填', trigger: 'blur'}],
+                aliyunPrefix: [{required: true, message: '必填', trigger: 'blur'}],
+                aliyunEndPoint: [{required: true, message: '必填', trigger: 'blur'}],
+                aliyunAccessKeyId: [{required: true, message: '必填', trigger: 'blur'}],
+                aliyunAccessKeySecret: [{required: true, message: '必填', trigger: 'blur'}],
+                aliyunBucketName: [{required: true, message: '必填', trigger: 'blur'}],
+                qiniuDomain: [{required: true, message: '必填', trigger: 'blur'}],
+                qiniuPrefix: [{required: true, message: '必填', trigger: 'blur'}],
+                qiniuAccessKey: [{required: true, message: '必填', trigger: 'blur'}],
+                qiniuSecretKey: [{required: true, message: '必填', trigger: 'blur'}],
+                qiniuBucketName: [{required: true, message: '必填', trigger: 'blur'}],
+                qcloudDomain: [{required: true, message: '必填', trigger: 'blur'}],
+                qcloudPrefix: [{required: true, message: '必填', trigger: 'blur'}],
+                qcloudAppId: [{required: true, message: '必填', trigger: 'blur'}],
+                qcloudSecretId: [{required: true, message: '必填', trigger: 'blur'}],
+                qcloudSecretKey: [{required: true, message: '必填', trigger: 'blur'}],
+                qcloudBucketName: [{required: true, message: '必填', trigger: 'blur'}],
+                qcloudRegion: [{required: true, message: '必填', trigger: 'blur'}],
+                fileCompress: [{required: true, message: '必选', trigger: 'change'}],
+                status: [{required: true, message: '必选', trigger: 'change'}]
             },
             ossForm: {
                 uploadFormVisible: false,
@@ -111,13 +152,20 @@ let configapp = new Vue({
                     qcloudBucketName: null,
                     qcloudRegion: null
                 }
-            },
+            }
         }
     },
     created: function () {
         this.loadData();
     },
     methods: {
+        rowParamsInfo (index, row) {
+            let that = this;
+            that.rowDialogVisible = true;
+            let b ={};
+            b.p = row.configValue || '-------无参数-------';
+            that.rowParams = b.p.replace(/\,/g,',<br/>').replace(/\)/g,')<br/>');
+        },
         resetForm(formName) {
             try {
                 this.$refs[formName].resetFields();
@@ -244,7 +292,8 @@ let configapp = new Vue({
             let that = this;
             httpUtil.get({url: "sys/config/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
-                    that.page = result.data
+                    that.page = result.data;
+                    that.page.expand = true;
                 }
             });
         }

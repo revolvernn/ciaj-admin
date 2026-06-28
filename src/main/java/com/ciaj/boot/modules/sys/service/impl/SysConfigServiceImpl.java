@@ -39,7 +39,8 @@ public class SysConfigServiceImpl extends AbstractService<SysConfigPo, SysConfig
         entity.setDelFlag(DefaultConstant.FLAG_N);
         List<SysConfigPo> select = sysConfigMapper.select(entity);
         if (CollectionUtil.isNotEmpty(select)) {
-            return select.get(0).getConfigValue();
+            SysConfigPo sysConfigPo = select.get(0);
+            return sysConfigPo.getConfigValue();
         }
         return null;
     }

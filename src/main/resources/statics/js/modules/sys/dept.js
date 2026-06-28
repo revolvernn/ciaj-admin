@@ -104,6 +104,7 @@ let deptapp = new Vue({
                 deptFormVisible: false,
                 dept:{
                     name: null,
+                    code: null,
                     areaId: null,
                     level: null,
                     type: null,
@@ -115,7 +116,9 @@ let deptapp = new Vue({
                 }
             },
             rules: {
-                //username: [{required: true, message: '必填', trigger: 'blur'}]
+                name: [{required: true, message: '必填', trigger: 'blur'}],
+                type: [{required: true, message: '必填', trigger: 'blur'}],
+                enabled: [{required: true, message: '必选', trigger: 'change'}]
             }
         }
     },
@@ -204,6 +207,7 @@ let deptapp = new Vue({
             that.addOrUpdateForm.areaModel = [];
             that.addOrUpdateForm.dept = {
                 name: null,
+                code: null,
                 areaId: null,
                 level: null,
                 type: null,
@@ -299,6 +303,7 @@ let deptapp = new Vue({
             httpUtil.get({url: "sys/dept/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data;
+                    that.page.expand = true;
                 }
             });
         }
