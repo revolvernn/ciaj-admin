@@ -32,11 +32,11 @@
                    :visible.sync="addOrUpdateForm.schedulerFormVisible">
             <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.scheduler">
                         <el-form-item label="类型" prop="type"
-                                      :label-width="addOrUpdateForm.schedulerFormLabelWidth">
+                                      :label-width="addOrUpdateForm.schedulerFormLabelWidth" required>
                             <my-dict-select v-model="addOrUpdateForm.scheduler.type" type="taskType"></my-dict-select>
                         </el-form-item>
                         <el-form-item label="名称" prop="name"
-                                      :label-width="addOrUpdateForm.schedulerFormLabelWidth">
+                                      :label-width="addOrUpdateForm.schedulerFormLabelWidth" required>
                             <el-input v-model="addOrUpdateForm.scheduler.name" autocomplete="off"
                                       placeholder="名称"></el-input>
                         </el-form-item>
@@ -47,25 +47,25 @@
                                       placeholder="描述"></el-input>
                         </el-form-item>
                         <el-form-item label="bean名称" prop="beanName"
-                                      :label-width="addOrUpdateForm.schedulerFormLabelWidth">
+                                      :label-width="addOrUpdateForm.schedulerFormLabelWidth" required>
                             <el-input :disabled="true" v-model="addOrUpdateForm.scheduler.beanName" autocomplete="off"
                                       placeholder="bean名称"></el-input>
                         </el-form-item>
                         <el-form-item label="cron表达式" prop="cron" v-if="addOrUpdateForm.scheduler.type == 'cron'"
-                                      :label-width="addOrUpdateForm.schedulerFormLabelWidth">
+                                      :label-width="addOrUpdateForm.schedulerFormLabelWidth" required>
                             <el-input type="textarea"
                                       :autosize="{ minRows: 2, maxRows: 4}" v-model="addOrUpdateForm.scheduler.cron" autocomplete="off"
                                       placeholder="cron表达式"></el-input>
                         </el-form-item>
                         <el-form-item label="间隔毫秒" prop="delay"  v-if="addOrUpdateForm.scheduler.type !== 'cron'"
-                                      :label-width="addOrUpdateForm.schedulerFormLabelWidth">
+                                      :label-width="addOrUpdateForm.schedulerFormLabelWidth" required>
                             <el-input v-model="addOrUpdateForm.scheduler.delay" autocomplete="off"
                                       placeholder="间隔毫秒">
                             </el-input>
                             {{delayFmt}}
                         </el-form-item>
                         <el-form-item label="状态" prop="status"
-                                      :label-width="addOrUpdateForm.schedulerFormLabelWidth">
+                                      :label-width="addOrUpdateForm.schedulerFormLabelWidth" required>
                             <my-dict-select v-model="addOrUpdateForm.scheduler.status" type="taskStatus"></my-dict-select>
                         </el-form-item>
             </el-form>
