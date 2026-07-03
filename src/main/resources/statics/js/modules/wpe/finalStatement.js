@@ -104,7 +104,7 @@ let finalStatementapp = new Vue({
             },
             rules: {
                 userId: [{required: true, message: '请选择用户', trigger: 'change'}],
-                day: [{type: 'date', required: true, message: '请选择结算日', trigger: 'blur'}],
+                day: [{required: true, message: '请选择结算日', trigger: 'blur'}],
                 money: [{required: true, message: '请填写款项金额', trigger: 'blur'}]
             }
         }

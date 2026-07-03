@@ -154,7 +154,7 @@ let electricianRecordapp = new Vue({
             rules: {
                 userId: [{required: true, message: '请选择用户', trigger: 'change'}],
                 projectId: [{required: true, message: '请选择工程', trigger: 'change'}],
-                workday: [{type: 'date', required: true, message: '请选择工作日', trigger: 'change'}],
+                workday: [{required: true, message: '请选择工作日', trigger: 'change'}],
                 status: [{required: true, message: '请选择工作状态', trigger: 'change'}],
                 workType: [{required: true, message: '请选择工作方式', trigger: 'change'}],
                 labourCost: [{required: true, message: '请填写工价', trigger: 'blur'}]
