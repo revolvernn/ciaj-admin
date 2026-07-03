@@ -109,7 +109,12 @@ let schedulerapp = new Vue({
                 }
             },
             rules: {
-                //username: [{required: true, message: '必填', trigger: 'blur'}]
+                type: [{required: true, message: '必选', trigger: 'change'}],
+                name: [{required: true, message: '必填', trigger: 'blur'}],
+                beanName: [{required: true, message: '必填', trigger: 'blur'}],
+                cron: [{required: true, message: '必填', trigger: 'blur'}],
+                delay: [{required: true, message: '必填', trigger: 'blur'}],
+                status: [{required: true, message: '必选', trigger: 'change'}]
             },
             delayFmt: ''
         }
