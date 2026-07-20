@@ -3,6 +3,7 @@ package com.ciaj.boot.modules.my.service.impl;
 import com.ciaj.base.AbstractService;
 import com.ciaj.comm.utils.Page;
 import com.ciaj.comm.utils.PageUtils;
+import com.ciaj.comm.utils.Safes;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.ciaj.boot.modules.my.mapper.MyFamilyMapper;
@@ -12,6 +13,7 @@ import com.ciaj.boot.modules.my.entity.vo.MyFamilyVo;
 import com.ciaj.boot.modules.my.entity.dto.MyFamilyDto;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author: Ciaj.
@@ -37,6 +39,6 @@ public class MyFamilyServiceImpl extends AbstractService<MyFamilyPo, MyFamilyDto
         MyFamilyVo entity = new MyFamilyVo();
         entity.setId(id);
         List<MyFamilyDto> sysDeptDtos = myFamilyMapper.selectDTOListMultiTable(entity);
-        return sysDeptDtos.get(0);
+        return Safes.of(sysDeptDtos).findFirst().orElse(null);
     }
 }

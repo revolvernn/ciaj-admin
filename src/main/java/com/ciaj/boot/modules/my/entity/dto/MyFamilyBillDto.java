@@ -1,21 +1,17 @@
 package com.ciaj.boot.modules.my.entity.dto;
 
-import com.ciaj.boot.modules.my.entity.po.MyFamilyMemberPo;
+import com.ciaj.boot.modules.my.entity.po.MyFamilyBillPo;
 import com.ciaj.boot.modules.sys.entity.dto.SysUserDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @Author: Ciaj.
- * @Date: 2026-01-14 16:48:58
+ * @Date: 2026-07-13 22:34:02
  * @Description: www.ciaj.com gen DTO
  */
-@ApiModel(value = "MyFamilyMember")
-public class MyFamilyMemberDto extends MyFamilyMemberPo {
-
-    private SysUserDto user;
-    private MyFamilyDto family;
-
+@ApiModel(value = "MyFamilyBill")
+public class MyFamilyBillDto extends MyFamilyBillPo {
     public SysUserDto getUser() {
         return user;
     }
@@ -24,26 +20,18 @@ public class MyFamilyMemberDto extends MyFamilyMemberPo {
         this.user = user;
     }
 
-    public MyFamilyDto getFamily() {
-        return family;
-    }
+    /**
+     * 用户
+     */
+    private SysUserDto user;
 
-    public void setFamily(MyFamilyDto family) {
-        this.family = family;
-    }
+
 
     //@javax.validation.constraints.NotBlank(message = "")
     @Override
     @ApiModelProperty("主键")
     public java.lang.String getId() {
         return super.getId();
-    }
-
-    //@javax.validation.constraints.NotBlank(message = "")
-    @Override
-    @ApiModelProperty("家庭ID")
-    public java.lang.String getFamilyId() {
-        return super.getFamilyId();
     }
 
     //@javax.validation.constraints.NotBlank(message = "")
@@ -55,9 +43,37 @@ public class MyFamilyMemberDto extends MyFamilyMemberPo {
 
     //@javax.validation.constraints.NotBlank(message = "")
     @Override
-    @ApiModelProperty("成员类型")
+    @ApiModelProperty("类型")
     public java.lang.String getType() {
         return super.getType();
+    }
+
+    //@javax.validation.constraints.NotBlank(message = "")
+    @Override
+    @ApiModelProperty("日期")
+    public java.util.Date getDay() {
+        return super.getDay();
+    }
+
+    //@javax.validation.constraints.NotBlank(message = "")
+    @Override
+    @ApiModelProperty("款项")
+    public java.math.BigDecimal getMoney() {
+        return super.getMoney();
+    }
+
+    //@javax.validation.constraints.NotBlank(message = "")
+    @Override
+    @ApiModelProperty("地址")
+    public java.lang.String getAddr() {
+        return super.getAddr();
+    }
+
+    //@javax.validation.constraints.NotBlank(message = "")
+    @Override
+    @ApiModelProperty("备注")
+    public java.lang.String getRemark() {
+        return super.getRemark();
     }
 
     //@javax.validation.constraints.NotBlank(message = "")

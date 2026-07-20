@@ -4,8 +4,8 @@ Vue.component('myBtn', myBtnT);
 Vue.component('myDictSelect', myDictSelectT);
 Vue.component('mySearchSelect', mySearchSelectT);
 
-let familyMemberapp = new Vue({
-    el: '#familyMemberapp',
+let familyBillapp = new Vue({
+    el: '#familyBillapp',
     data() {
         return {
             defaultSort: {prop: 'createTime', order: 'descending'},
@@ -16,22 +16,9 @@ let familyMemberapp = new Vue({
                 pageSize: 10,
                 keyword: null,
                 userId: null,
-                familyId: null,
                 type: null
             },
             tableColumns: [
-                {
-                    name: 'familyId',
-                    label: '家庭ID'
-                },
-                {
-                    name: 'family.name',
-                    label: '家庭名称'
-                },
-                {
-                    name: 'family.code',
-                    label: '家庭编码'
-                },
                 {
                     name: 'userId',
                     label: '用户ID'
@@ -42,30 +29,51 @@ let familyMemberapp = new Vue({
                 },
                 {
                     name: 'type',
-                    dict: 'memberType',
-                    label: '成员类型'
+                    dict: 'billType',
+                    label: '类型'
+                },
+                {
+                    name: 'day',
+                    date: 'yyyy-MM-dd',
+                    label: '日期'
+                },
+                {
+                    name: 'money',
+                    cny: 'cny',
+                    sum: 'cny',
+                    label: '款项'
+                },
+                {
+                    name: 'addr',
+                    label: '地址'
+                },
+                {
+                    name: 'remark',
+                    label: '备注'
                 },
                 {
                     name: 'createTime',
                     label: '创建时间'
                 },
                 {
-                    name: 'updateTime',
-                    label: '更新时间'
+                   name: 'updateTime',
+                   sortable: 'custom',
+                   sortBy: 'm.update_time',
+                   label: '更新时间'
                 },
                 {
                     label: '操作',
                     width: '180px',
                     buttons: [
                         {
-                            auth:'my:family:member:update',
+                            auth:'my:family:bill:update',
                             label: '修改',
                             icon: 'el-icon-edit',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
-                            auth:'my:family:member:delFlag',
+                            auth:'my:family:bill:delFlag',
                             label: '删除',
                             icon: 'el-icon-delete',
                             click: this.myDel,
@@ -78,17 +86,20 @@ let familyMemberapp = new Vue({
             page: {},
             addOrUpdateForm: {
                 title: '新增',
-                familyMemberFormLabelWidth: '200px',
-                familyMemberFormVisible: false,
+                familyBillFormLabelWidth: '200px',
+                familyBillFormVisible: false,
                 pickerOptions: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
                     }
                 },
-                familyMember:{
-                    familyId: null,
+                familyBill:{
                     userId: null,
-                    type: null
+                    type: null,
+                    day: null,
+                    money: null,
+                    addr: null,
+                    remark: null
                 }
             },
             rules: {
@@ -132,22 +143,25 @@ let familyMemberapp = new Vue({
         myAdd() {
             let that = this;
             that.addOrUpdateForm.title = '新增';
-            that.addOrUpdateForm.familyMemberFormVisible = true;
-            that.addOrUpdateForm.familyMember = {
-                                             familyId: null,
+            that.addOrUpdateForm.familyBillFormVisible = true;
+            that.addOrUpdateForm.familyBill = {
                                              userId: null,
-                                             type: null
+                                             type: null,
+                                             day: null,
+                                             money: null,
+                                             addr: null,
+                                             remark: null
                                          }
             that.resetForm('addOrUpdateFormRef');
         },
         myUpdate(index, row) {
             let that = this;
             that.addOrUpdateForm.title = '修改';
-            that.addOrUpdateForm.familyMemberFormVisible = true;
+            that.addOrUpdateForm.familyBillFormVisible = true;
             that.resetForm('addOrUpdateFormRef');
-            httpUtil.get({url: "my/family/member/getById/" + row.id}, function (result) {
+            httpUtil.get({url: "my/family/bill/getById/" + row.id}, function (result) {
                   if (result.code == 0) {
-                      that.addOrUpdateForm.familyMember = result.data;
+                      that.addOrUpdateForm.familyBill = result.data;
                   }
             });
         },
@@ -161,13 +175,13 @@ let familyMemberapp = new Vue({
                                             spinner: 'el-icon-loading',
                                             background: 'rgba(0, 0, 0, 0.7)'
                     });
-                    let url = that.addOrUpdateForm.familyMember.id == null ? "my/family/member/add" : "my/family/member/update";
-                    let type = that.addOrUpdateForm.familyMember.id == null ? "POST" : "PUT";
-                    httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.familyMember)}, function (r) {
+                    let url = that.addOrUpdateForm.familyBill.id == null ? "my/family/bill/add" : "my/family/bill/update";
+                    let type = that.addOrUpdateForm.familyBill.id == null ? "POST" : "PUT";
+                    httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.familyBill)}, function (r) {
                         loading.close();
                         if (r.code == 0) {
                             that.myQuery();
-                            that.addOrUpdateForm.familyMemberFormVisible = false;
+                            that.addOrUpdateForm.familyBillFormVisible = false;
                         }
                         alertMsg(that, r);
                     });
@@ -181,7 +195,7 @@ let familyMemberapp = new Vue({
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                httpUtil.del({url: "my/family/member/delFlag/" + row.id}, function (r) {
+                httpUtil.del({url: "my/family/bill/delFlag/" + row.id}, function (r) {
                     that.myQuery();
                     alertMsg(that, r);
                 });
@@ -189,7 +203,7 @@ let familyMemberapp = new Vue({
         },
         loadData() {
             let that = this;
-            httpUtil.get({url: "my/family/member/list", data: that.queryForm}, function (result) {
+            httpUtil.get({url: "my/family/bill/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data;
                     that.page.expand = true;
@@ -204,7 +218,7 @@ let familyMemberapp = new Vue({
                 pageEnabled: false,
                 keyword: that.queryForm.keyword
             }
-            httpUtil.fileDownload(that, {url: "my/family/member/list/export",data: data});
+            httpUtil.fileDownload(that, {url: "my/family/bill/list/export",data: data});
         }
     }
 });

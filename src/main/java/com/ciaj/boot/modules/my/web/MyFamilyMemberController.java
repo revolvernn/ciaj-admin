@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.ciaj.comm.utils.ExcelUtil;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -38,7 +39,6 @@ public class MyFamilyMemberController extends AbstractController<MyFamilyMemberP
      * 根据ID获取信息
      *
      * @param id
-     *
      * @return
      */
     @Override
@@ -48,7 +48,8 @@ public class MyFamilyMemberController extends AbstractController<MyFamilyMemberP
     @RequiresPermissions("my:family:member:getById")
     @GetMapping("getById/{id}")
     public ResponseEntity<MyFamilyMemberDto> getById(@PathVariable("id") String id) {
-        return super.getById(id);
+
+        return new ResponseEntity<MyFamilyMemberDto>().put(myFamilyMemberService.selectById(id));
     }
 
     /**
@@ -58,20 +59,22 @@ public class MyFamilyMemberController extends AbstractController<MyFamilyMemberP
      */
     @ApiOperation("获取家庭成员列表")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "orderBy", value = "排序：xxx-desc,xxx-asc,xxx ", paramType = "query"),
-        @ApiImplicitParam(name = "orderByEnabled", value = "是否开启排序:true/false 默认-false", dataType = "Boolean", paramType = "query"),
-        @ApiImplicitParam(name = "pageEnabled", value = "是否开启分页:true/false 默认-false", dataType = "Boolean", paramType = "query"),
-        @ApiImplicitParam(name = "pageSize", value = "每页记录数：默认每页十条", dataType = "int", paramType = "query"),
-        @ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
-        @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query")
+            @ApiImplicitParam(name = "orderBy", value = "排序：xxx-desc,xxx-asc,xxx ", paramType = "query"),
+            @ApiImplicitParam(name = "orderByEnabled", value = "是否开启排序:true/false 默认-false", dataType = "Boolean", paramType = "query"),
+            @ApiImplicitParam(name = "pageEnabled", value = "是否开启分页:true/false 默认-false", dataType = "Boolean", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页记录数：默认每页十条", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
+            @ApiImplicitParam(name = "type", value = "类型", paramType = "query")
     })
     @OperationLog(operation = "家庭成员-管理", content = "获取家庭成员列表")
     @RequiresPermissions("my:family:member:list")
     @GetMapping("list")
-    public ResponseEntity<Page<MyFamilyMemberDto>> list(String keyword) {
+    public ResponseEntity<Page<MyFamilyMemberDto>> list(String keyword, String type) {
         MyFamilyMemberVo entity = new MyFamilyMemberVo();
         entity.setKeyword(keyword);
-        return super.listDTOPage(entity);
+        entity.setType(type);
+        return super.listMultiTablePage(entity);
     }
 
     /**
@@ -81,38 +84,39 @@ public class MyFamilyMemberController extends AbstractController<MyFamilyMemberP
      */
     @ApiOperation("家庭成员列表导出")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "orderBy", value = "排序：xxx-desc,xxx-asc,xxx ", paramType = "query"),
-        @ApiImplicitParam(name = "orderByEnabled", value = "是否开启排序:true/false 默认-false", dataType = "Boolean", paramType = "query"),
-        @ApiImplicitParam(name = "pageEnabled", value = "是否开启分页:true/false 默认-false", dataType = "Boolean", paramType = "query"),
-        @ApiImplicitParam(name = "pageSize", value = "每页记录数：默认每页十条", dataType = "int", paramType = "query"),
-        @ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
-        @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query")
+            @ApiImplicitParam(name = "orderBy", value = "排序：xxx-desc,xxx-asc,xxx ", paramType = "query"),
+            @ApiImplicitParam(name = "orderByEnabled", value = "是否开启排序:true/false 默认-false", dataType = "Boolean", paramType = "query"),
+            @ApiImplicitParam(name = "pageEnabled", value = "是否开启分页:true/false 默认-false", dataType = "Boolean", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页记录数：默认每页十条", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
+            @ApiImplicitParam(name = "type", value = "类型", paramType = "query")
     })
     @OperationLog(operation = "家庭成员-管理", content = "家庭成员列表导出")
     @RequiresPermissions("my:family:member:list:export")
     @GetMapping("list/export")
-    public void listExport(String keyword, HttpServletResponse response, HttpServletRequest request) {
+    public void listExport(String keyword, String type, HttpServletResponse response, HttpServletRequest request) {
         MyFamilyMemberVo entity = new MyFamilyMemberVo();
         entity.setKeyword(keyword);
+        entity.setType(type);
         entity.setDelFlag("N");
         //
-        Page<MyFamilyMemberDto> page = myFamilyMemberService.selectDTOPage(entity);
+        Page<MyFamilyMemberDto> page = myFamilyMemberService.selectDTOListMultiTablePage(entity);
         List<MyFamilyMemberDto> data = page.getList();
         //
         new ExcelUtil().build("家庭成员导出",
-        new String[]{
-            "id","familyId","userId","type","createAt","createTime","updateAt","updateTime","delFlag","version"
-        },
-        new String[]{
-            "主键","家庭ID","用户ID","成员类型","创建人","创建时间","更新人","更新时间","删除标记","版本号0为不可修改，1+可修改"
-        }, data).exportExcel(request, response);
+                new String[]{
+                        "id", "familyId", "family.name", "family.code", "userId", "user.nickname", "user.username", "type", "createTime", "updateTime"
+                },
+                new String[]{
+                        "主键", "家庭ID", "家庭名称", "家庭编号", "用户ID", "用户昵称", "用户名", "成员类型", "创建时间", "更新时间"
+                }, data).exportExcel(request, response);
     }
 
     /**
      * 添加
      *
      * @param entity
-     *
      * @return
      */
     @Override
@@ -129,7 +133,6 @@ public class MyFamilyMemberController extends AbstractController<MyFamilyMemberP
      * 更新
      *
      * @param entity
-     *
      * @return
      */
     @Override
@@ -146,7 +149,6 @@ public class MyFamilyMemberController extends AbstractController<MyFamilyMemberP
      * 软删除
      *
      * @param id
-     *
      * @return
      */
     @Override

@@ -12,4 +12,12 @@ import com.ciaj.boot.modules.my.entity.dto.MyFamilyMemberDto;
  */
 public interface MyFamilyMemberService extends BaseService<MyFamilyMemberPo, MyFamilyMemberDto, MyFamilyMemberVo> {
 
+    /**
+     * 根据ID查询
+     *
+     * @param id
+     * @return
+     */
+    public MyFamilyMemberDto selectById(String id);
+
 }

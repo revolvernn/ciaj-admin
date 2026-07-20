@@ -32,3 +32,22 @@ CREATE TABLE `my_family_member`  (
  `version` int DEFAULT 1 COMMENT '版本号0为不可修改，1+可修改',
  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB COMMENT = '我的家庭-成员' ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `my_family_bill`;
+CREATE TABLE `my_family_bill`  (
+ `id` varchar(32)  NOT NULL COMMENT '主键',
+ `user_id` varchar(32)  NOT NULL COMMENT '用户ID',
+ `type` varchar(32)  DEFAULT null COMMENT '类型',
+ `day` datetime DEFAULT NULL COMMENT '日期',
+ `money` decimal(10,2) DEFAULT '0.00' COMMENT '款项',
+ `addr` varchar(255) DEFAULT NULL COMMENT '地址',
+ `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+ `create_at` varchar(32)  DEFAULT NULL COMMENT '创建人',
+ `create_time` datetime(0) DEFAULT NULL COMMENT '创建时间',
+ `update_at` varchar(32)  DEFAULT NULL COMMENT '更新人',
+ `update_time` datetime(0) DEFAULT NULL COMMENT '更新时间',
+ `del_flag` char(1)  DEFAULT 'N' COMMENT '删除标记',
+ `last_modify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+ `version` int DEFAULT 1 COMMENT '版本号0为不可修改，1+可修改',
+ PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB COMMENT = '我的家庭-账单' ROW_FORMAT = Dynamic;
