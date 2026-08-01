@@ -49,7 +49,7 @@
             <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.familyMember">
                         <el-form-item label="家庭" prop="familyId"
                                       :label-width="addOrUpdateForm.familyMemberFormLabelWidth">
-                            <my-search-select v-model="addOrUpdateForm.familyMember.familyId"
+                            <my-search-select is-enabled="true" v-model="addOrUpdateForm.familyMember.familyId"
                                               search-url="/my/family/list"
                                               search-param="orderBy-create_time desc,orderByEnabled-true"
                                               search-field-name="keyword"
@@ -59,7 +59,7 @@
                         </el-form-item>
                         <el-form-item label="用户" prop="userId"
                                       :label-width="addOrUpdateForm.familyMemberFormLabelWidth">
-                            <my-search-select v-model="addOrUpdateForm.familyMember.userId"
+                            <my-search-select is-enabled="true" v-model="addOrUpdateForm.familyMember.userId"
                                               search-url="/sys/user/list"
                                               search-param="orderBy-create_time desc,orderByEnabled-true"
                                               search-field-name="keyword"

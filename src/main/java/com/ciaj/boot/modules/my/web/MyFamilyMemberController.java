@@ -65,14 +65,18 @@ public class MyFamilyMemberController extends AbstractController<MyFamilyMemberP
             @ApiImplicitParam(name = "pageSize", value = "每页记录数：默认每页十条", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
+            @ApiImplicitParam(name = "userId", value = "用户ID", paramType = "query"),
+            @ApiImplicitParam(name = "familyId", value = "家庭ID", paramType = "query"),
             @ApiImplicitParam(name = "type", value = "类型", paramType = "query")
     })
     @OperationLog(operation = "家庭成员-管理", content = "获取家庭成员列表")
     @RequiresPermissions("my:family:member:list")
     @GetMapping("list")
-    public ResponseEntity<Page<MyFamilyMemberDto>> list(String keyword, String type) {
+    public ResponseEntity<Page<MyFamilyMemberDto>> list(String keyword,String userId, String familyId, String type) {
         MyFamilyMemberVo entity = new MyFamilyMemberVo();
         entity.setKeyword(keyword);
+        entity.setUserId(userId);
+        entity.setFamilyId(familyId);
         entity.setType(type);
         return super.listMultiTablePage(entity);
     }
@@ -90,15 +94,19 @@ public class MyFamilyMemberController extends AbstractController<MyFamilyMemberP
             @ApiImplicitParam(name = "pageSize", value = "每页记录数：默认每页十条", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "pageNo", value = "当前页数：默认第一页", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
+            @ApiImplicitParam(name = "userId", value = "用户ID", paramType = "query"),
+            @ApiImplicitParam(name = "familyId", value = "家庭ID", paramType = "query"),
             @ApiImplicitParam(name = "type", value = "类型", paramType = "query")
     })
     @OperationLog(operation = "家庭成员-管理", content = "家庭成员列表导出")
     @RequiresPermissions("my:family:member:list:export")
     @GetMapping("list/export")
-    public void listExport(String keyword, String type, HttpServletResponse response, HttpServletRequest request) {
+    public void listExport(String keyword,String userId, String familyId, String type, HttpServletResponse response, HttpServletRequest request) {
         MyFamilyMemberVo entity = new MyFamilyMemberVo();
         entity.setKeyword(keyword);
         entity.setType(type);
+        entity.setUserId(userId);
+        entity.setFamilyId(familyId);
         entity.setDelFlag("N");
         //
         Page<MyFamilyMemberDto> page = myFamilyMemberService.selectDTOListMultiTablePage(entity);
