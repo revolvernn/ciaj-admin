@@ -1,0 +1,78 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header"/>
+<body>
+<div id="familyapp" v-cloak>
+    <div>
+        <el-form :inline="true" ref="queryFormRef" :model="queryForm" class="demo-form-inline">
+            <el-row type="flex" class="row-bg">
+                <el-form-item label="关键字" prop="keyword">
+                    <el-input v-model="queryForm.keyword" placeholder="关键字"></el-input>
+                </el-form-item>
+                <el-form-item label="是否可用" prop="enabled">
+                    <my-dict-select v-model="queryForm.enabled" type="enabled"></my-dict-select>
+                </el-form-item>
+                <el-form-item label="区域" prop="areaModel">
+                    <el-cascader placeholder="试试搜索" v-model="areaModel" @change="areaModelQueryChange"
+                                 :options="areaData" :show-all-levels="false" filterable change-on-select
+                                 clearable>
+                    </el-cascader>
+                </el-form-item>
+            </el-row>
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-form-item>
+                    <el-button type="primary" @click="myQuery" icon="el-icon-search">查询</el-button>
+                    <el-button @click="myQueryReset">重置</el-button>
+                    <my-btn label="新增" type="primary" icon="el-icon-circle-plus" @click="myAdd" auth="my:family:add"></my-btn>
+                    <my-btn label="导出" type="info" icon="el-icon-download" @click="listExport"  auth="my:family:list:export"></my-btn>
+                </el-form-item>
+            </el-row>
+        </el-form>
+        <my-table :columns="tableColumns" :page="page" :table-loading="tableLoading" @sortChange="sortchange" :default-sort="defaultSort"
+                  v-on:pagesizechange="pagesizechange" v-on:currentpagechange="currentpagechange">
+        </my-table>
+        <el-dialog :close-on-click-modal="false" :title="addOrUpdateForm.title"
+                   :visible.sync="addOrUpdateForm.familyFormVisible">
+            <el-form ref="addOrUpdateFormRef" :rules="rules" :model="addOrUpdateForm.family">
+                        <el-form-item label="家庭名称" prop="name"
+                                      :label-width="addOrUpdateForm.familyFormLabelWidth">
+                            <el-input v-model="addOrUpdateForm.family.name" autocomplete="off"
+                                      placeholder="家庭名称"></el-input>
+                        </el-form-item>
+                        <el-form-item label="家庭编码" prop="code"
+                                      :label-width="addOrUpdateForm.familyFormLabelWidth">
+                            <el-input v-model="addOrUpdateForm.family.code" autocomplete="off"
+                                      placeholder="家庭编码"></el-input>
+                        </el-form-item>
+                        <el-form-item label="是否可用" prop="enabled"
+                                      :label-width="addOrUpdateForm.familyFormLabelWidth">
+                            <my-dict-select v-model="addOrUpdateForm.family.enabled" type="enabled"></my-dict-select>
+                        </el-form-item>
+                        <el-form-item label="家庭区域" prop="areaId"
+                                      :label-width="addOrUpdateForm.familyFormLabelWidth">
+                            <el-cascader placeholder="试试搜索" v-model="addOrUpdateForm.areaModel"
+                                         @change="areaModelFormChange"
+                                         :options="areaData" :show-all-levels="false" filterable
+                                         clearable></el-cascader>
+                        </el-form-item>
+                        <el-form-item label="家庭详细地址" prop="addr"
+                                      :label-width="addOrUpdateForm.familyFormLabelWidth">
+                            <el-input v-model="addOrUpdateForm.family.addr" autocomplete="off"
+                                      placeholder="家庭详细地址"></el-input>
+                        </el-form-item>
+                        <el-form-item label="家庭描述" prop="description"
+                                      :label-width="addOrUpdateForm.familyFormLabelWidth">
+                            <el-input v-model="addOrUpdateForm.family.description" autocomplete="off"
+                                      placeholder="家庭描述"></el-input>
+                        </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="addOrUpdateForm.familyFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+<script src="/statics/js/modules/my/family.js"></script>
+</body>
+</html>

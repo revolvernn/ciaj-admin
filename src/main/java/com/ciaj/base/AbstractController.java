@@ -88,6 +88,21 @@ public abstract class AbstractController<PO, DTO extends BaseEntity, VO extends 
 	}
 
 	/**
+	 * 多表实体查询页面
+	 *
+	 * @param entity
+	 * @return
+	 */
+	public ResponseEntity<Page<DTO>> listMultiTablePage(VO entity) {
+		//
+		super.setFieldByVO(DEL_FLAG, DefaultConstant.FLAG_N, entity);
+
+		Page<DTO> page = baseService.selectDTOListMultiTablePage(entity);
+		//
+		return new ResponseEntity<Page<DTO>>("查询成功").put(page);
+	}
+
+	/**
 	 * 添加
 	 *
 	 * @param t
