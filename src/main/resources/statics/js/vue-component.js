@@ -106,6 +106,9 @@ let mySearchSelectT = Vue.extend({
         labelFieldValue: {
             default: null
         },
+        isEnabled: {
+            default: false
+        },
         disabled: {
             default: false
         },
@@ -170,20 +173,21 @@ let mySearchSelectT = Vue.extend({
             }
             const queryObj = Object.fromEntries(queryForm);
             let os = [];
+            let enabled = that.isEnabled;
             httpUtil.syncGet({url: that.searchUrl, data: queryObj}, function (r) {
                 if (r.code == 0) {
                     os = r.data.list;
                     os.forEach(function (v, index, arr) {
-                        if (v.locked == 'Y') {
-                            v.disabled = true;
-                        }
                         v.name = v[that.labelFieldName];
                         v.code = v[that.labelFieldValue];
                         v.rightLabelFieldName = '';
                         if(that.rightLabelFieldName){
                             v.rightLabelFieldName = v[that.rightLabelFieldName] || '';
                         }
-
+                        if ((enabled && v.locked == 'Y') || (enabled && v.enabled)) {
+                            v.disabled = true;
+                            v.rightLabelFieldName = [v.rightLabelFieldName,'已禁用'].join(" ")
+                        }
                     });
                     that.options = os;
                 }
@@ -585,6 +589,7 @@ let myTableT = Vue.extend({
         '           <el-form-item :label="item.label"  v-for="item in columns" v-if="item.label!==\'操作\'">',
         '           <span v-if="item.date">：{{ getDateFormat(props.row,item.name,item.date)}}</span>',
         '           <span v-if="item.msfmt">：{{ getMsFmt(props.row,item.name)}}</span>',
+        '           <span v-if="item.cny">：{{ getCny(props.row, item.name, item.cny, item.locales)}}</span>',
         '           <span v-else-if="item.dict">：{{ getDictLabel(item.dict,props.row,item.name)}}</span>',
         '           <span v-else-if="item.image" v-html="getImage(props.row,item.name)"></span>',
         '           <span v-else-if="item.icon" v-html="getIcon(props.row,item.name)"></span>',

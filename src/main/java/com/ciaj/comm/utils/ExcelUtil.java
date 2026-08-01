@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
@@ -163,29 +164,34 @@ public class ExcelUtil {
      * @return
      * @throws Exception
      */
-    private Object invokeMethod(Object owner, String fieldname) throws Exception {
-        Object invoke = PropertyUtils.getNestedProperty(owner, fieldname);
-        String methodName = "get" + StringUtil.underlineToHumpUpperCase(fieldname);
-        Class<?> ownerClass = owner.getClass();
-        //Object invoke = ownerClass.getMethod(methodName).invoke(owner);
+    private Object invokeMethod(Object owner, String fieldname) {
         String value = "";
-        if (invoke == null) {
-            return value;
-        }
-        value = invoke.toString();
-
-        if (invoke instanceof BigDecimal) {
-            DecimalFormat d = FieldUtil.getClassFirstAnnotation(ownerClass, methodName, DecimalFormat.class);
-            if (d != null) {
-                BigDecimal b = (BigDecimal) invoke;
-                BigDecimal bigDecimal = new BigDecimal(b.toString()).setScale(d.scale(), d.roundingMode());
-                value = bigDecimal.toString();
+        try {
+            Object invoke = PropertyUtils.getNestedProperty(owner, fieldname);
+            if (invoke == null) {
+                return value;
             }
+            value = invoke.toString();
 
-        } else if (invoke instanceof Date) {
-            Date date = (Date) invoke;
-            DateTimeFormat d = FieldUtil.getClassFirstAnnotation(ownerClass, methodName, DateTimeFormat.class);
-            value = CalendarUtils.format(date, d != null ? d.pattern() : CalendarUtils.DATE_TIME_PATTERN);
+            if (invoke instanceof BigDecimal) {
+                String methodName = "get" + StringUtil.underlineToHumpUpperCase(fieldname);
+                Class<?> ownerClass = owner.getClass();
+                DecimalFormat d = FieldUtil.getClassFirstAnnotation(ownerClass, methodName, DecimalFormat.class);
+                if (d != null) {
+                    BigDecimal b = (BigDecimal) invoke;
+                    BigDecimal bigDecimal = new BigDecimal(b.toString()).setScale(d.scale(), d.roundingMode());
+                    value = bigDecimal.toString();
+                }
+
+            } else if (invoke instanceof Date) {
+                String methodName = "get" + StringUtil.underlineToHumpUpperCase(fieldname);
+                Class<?> ownerClass = owner.getClass();
+                Date date = (Date) invoke;
+                DateTimeFormat d = FieldUtil.getClassFirstAnnotation(ownerClass, methodName, DateTimeFormat.class);
+                value = CalendarUtils.format(date, d != null ? d.pattern() : CalendarUtils.DATE_TIME_PATTERN);
+            }
+        } catch (Exception e) {
+            log.info("表格赋值失败！", e);
         }
 
         return value;
