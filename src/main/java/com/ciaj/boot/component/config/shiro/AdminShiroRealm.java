@@ -14,6 +14,7 @@ import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.apache.shiro.util.CollectionUtils;
@@ -97,8 +98,13 @@ public class AdminShiroRealm extends AuthorizingRealm {
                 ByteSource.Util.bytes(sysAuth.getSalt()),//salt=username+salt
                 getName()  //realm name
         );
+
         ShiroUser loginUser = shiroService.selectShiroUser(sysAuth.getUserId());
-        SecurityUtils.getSubject().getSession().setAttribute(DefaultConstant.LOGIN_USER, loginUser);
+        Session session = SecurityUtils.getSubject().getSession();
+        session.setAttribute(DefaultConstant.LOGIN_USER, loginUser);
+        //更新登录token
+        sysAuth.setToken(session.getId().toString());
+        sysAuthService.updateByPrimaryKeySelective(sysAuth);
         return authenticationInfo;
     }
 
