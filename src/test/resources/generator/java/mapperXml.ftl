@@ -242,17 +242,42 @@
         </where>
     </sql>
     <resultMap id="DTOMultiTableResultMap" type="${dtoPo}.${tableClass.shortClassName}Dto" extends="BaseResultMap">
-            <!--        <association property="user" javaType="com.ciaj.boot.modules.sys.entity.dto.SysUserDto">-->
-            <!--            <id property="id" column="user_id"/>-->
-            <!--            <result property="username" column="u_username"/>-->
-            <!--            <result property="nickname" column="u_nickname"/>-->
-            <!--        </association>-->
+        <association property="user" javaType="com.ciaj.boot.modules.sys.entity.dto.SysUserDto">
+            <id property="id" column="user_id"/>
+            <result property="username" column="u_username"/>
+            <result property="nickname" column="u_nickname"/>
+        </association>
+        <association property="dict" javaType="com.ciaj.boot.modules.sys.entity.dto.SysDictDto">
+            <id property="id" column="d_id"/>
+            <result property="name" column="d_name"/>
+            <result property="code" column="d_code"/>
+        </association>
     </resultMap>
     <select id="selectDTOListMultiTable"
             resultMap="DTOMultiTableResultMap"  parameterType="${voQm}.${tableClass.shortClassName}Vo">
         SELECT
         <include refid="Base_Alias_Column_List"/>
+        ,u.username as "u_username"
+        ,u.nickname as "u_nickname"
+        ,d.id as "d_id"
+        ,d.name as "d_name"
+        ,d.code as "d_code"
         FROM ${tableClass.tableName} m
+        LEFT JOIN sys_user u on m.user_id = u.id
+        LEFT JOIN sys_dict d on d.code = m.type and d.type='${tableClass.tableName}Type'
         <include refid="cust_query_condition_sql"/>
+        <!--  keyword   -->
+        <if test="keyword != null and keyword != ''">
+            and (m.user_id like CONCAT('%',<#noparse>#</#noparse>{keyword},'%')
+            or m.id like CONCAT('%',<#noparse>#</#noparse>{keyword},'%')
+            or m.remark like CONCAT('%',<#noparse>#</#noparse>{keyword},'%')
+            or m.addr like CONCAT('%',<#noparse>#</#noparse>{keyword},'%')
+            or u.username like CONCAT('%',<#noparse>#</#noparse>{keyword},'%')
+            or u.nickname like CONCAT('%',<#noparse>#</#noparse>{keyword},'%')
+            or u.dept_names like CONCAT('%',<#noparse>#</#noparse>{keyword},'%')
+            or u.mobile like CONCAT('%',<#noparse>#</#noparse>{keyword},'%')
+            or d.name like CONCAT('%',<#noparse>#</#noparse>{keyword},'%')
+            )
+        </if>
     </select>
 </mapper>

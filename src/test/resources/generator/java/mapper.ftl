@@ -5,6 +5,7 @@ import ${baseMapper};
 import ${voQm}.${tableClass.shortClassName}Vo;
 import ${dtoPo}.${tableClass.shortClassName}Dto;
 import com.ciaj.comm.annotation.MultiTableJoins;
+import com.ciaj.boot.modules.sys.mapper.SysDictMapper;
 import com.ciaj.boot.modules.sys.mapper.SysUserMapper;
 import java.util.List;
 
@@ -20,6 +21,6 @@ public interface ${tableClass.shortClassName}${mapperSuffix} extends Mapper<${ta
     * @param entity
     * @return
     */
-    @MultiTableJoins(mappers = {SysUserMapper.class})
+    @MultiTableJoins(mappers = {SysUserMapper.class, SysDictMapper.class})
     List<${tableClass.shortClassName}Dto> selectDTOListMultiTable(${tableClass.shortClassName}Vo entity);
 }

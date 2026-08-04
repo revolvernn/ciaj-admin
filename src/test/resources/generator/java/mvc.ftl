@@ -97,7 +97,7 @@ public class ${tableClass.shortClassName}Controller extends AbstractController<$
         entity.setKeyword(keyword);
         entity.setDelFlag("N");
         //
-        Page<${tableClass.shortClassName}Dto> page = ${tableClass.variableName}Service.selectDTOPage(entity);
+        Page<${tableClass.shortClassName}Dto> page = ${tableClass.variableName}Service.selectDTOListMultiTablePage(entity);
         List<${tableClass.shortClassName}Dto> data = page.getList();
         //
         new ExcelUtil().build("${mvcDesc}导出",
