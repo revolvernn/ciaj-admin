@@ -104,12 +104,12 @@ public class MyFamilyDebitController extends AbstractController<MyFamilyDebitPo,
         entity.setType(type);
         entity.setUserId(userId);
         //
-        Page<MyFamilyDebitDto> page = myFamilyDebitService.selectDTOPage(entity);
+        Page<MyFamilyDebitDto> page = myFamilyDebitService.selectDTOListMultiTablePage(entity);
         List<MyFamilyDebitDto> data = page.getList();
         //
         new ExcelUtil().build("家庭借记导出",
                 new String[]{
-                        "userId","user.nickname","type","day","money","addr","remark","createTime","updateTime"
+                        "userId","user.nickname","dict.name","day","money","addr","remark","createTime","updateTime"
                 },
                 new String[]{
                         "用户ID","用户名","类型","日期","款项","地址","备注","创建时间","更新时间"

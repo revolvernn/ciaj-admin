@@ -456,6 +456,11 @@
             <result property="username" column="u_username"/>
             <result property="nickname" column="u_nickname"/>
         </association>
+        <association property="dict" javaType="com.ciaj.boot.modules.sys.entity.dto.SysDictDto">
+            <id property="id" column="d_id"/>
+            <result property="name" column="d_name"/>
+            <result property="code" column="d_code"/>
+        </association>
     </resultMap>
     <select id="selectDTOListMultiTable"
             resultMap="DTOMultiTableResultMap"  parameterType="com.ciaj.boot.modules.my.entity.vo.MyFamilyDebitVo">
@@ -463,8 +468,12 @@
         <include refid="Base_Alias_Column_List"/>
         ,u.username as "u_username"
         ,u.nickname as "u_nickname"
+        ,d.id as "d_id"
+        ,d.name as "d_name"
+        ,d.code as "d_code"
         FROM my_family_debit m
         LEFT JOIN sys_user u on m.user_id = u.id
+        LEFT JOIN sys_dict d on d.code = m.type and d.type='debitType'
         <include refid="cust_query_condition_sql"/>
         <!--  keyword   -->
         <if test="keyword != null and keyword != ''">
@@ -476,6 +485,7 @@
             or u.nickname like CONCAT('%',#{keyword},'%')
             or u.dept_names like CONCAT('%',#{keyword},'%')
             or u.mobile like CONCAT('%',#{keyword},'%')
+            or d.name like CONCAT('%',#{keyword},'%')
             )
         </if>
     </select>

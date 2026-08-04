@@ -4,6 +4,7 @@ import com.ciaj.boot.modules.my.entity.po.MyFamilyDebitPo;
 import com.ciaj.base.Mapper;
 import com.ciaj.boot.modules.my.entity.vo.MyFamilyDebitVo;
 import com.ciaj.boot.modules.my.entity.dto.MyFamilyDebitDto;
+import com.ciaj.boot.modules.sys.mapper.SysDictMapper;
 import com.ciaj.boot.modules.sys.mapper.SysUserMapper;
 import com.ciaj.comm.annotation.MultiTableJoins;
 
@@ -20,6 +21,6 @@ public interface MyFamilyDebitMapper extends Mapper<MyFamilyDebitPo, MyFamilyDeb
     * @param entity
     * @return
     */
-    @MultiTableJoins(mappers = {SysUserMapper.class})
+    @MultiTableJoins(mappers = {SysUserMapper.class, SysDictMapper.class})
     List<MyFamilyDebitDto> selectDTOListMultiTable(MyFamilyDebitVo entity);
 }

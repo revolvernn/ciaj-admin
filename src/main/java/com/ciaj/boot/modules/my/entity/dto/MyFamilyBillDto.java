@@ -1,6 +1,7 @@
 package com.ciaj.boot.modules.my.entity.dto;
 
 import com.ciaj.boot.modules.my.entity.po.MyFamilyBillPo;
+import com.ciaj.boot.modules.sys.entity.dto.SysDictDto;
 import com.ciaj.boot.modules.sys.entity.dto.SysUserDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -26,7 +27,19 @@ public class MyFamilyBillDto extends MyFamilyBillPo {
     @ApiModelProperty("用户")
     private SysUserDto user;
 
+    public SysDictDto getDict() {
+        return dict;
+    }
 
+    public void setDict(SysDictDto dict) {
+        this.dict = dict;
+    }
+
+    /**
+     * 字典
+     */
+    @ApiModelProperty("字典")
+    private SysDictDto dict;
 
     //@javax.validation.constraints.NotBlank(message = "")
     @Override
