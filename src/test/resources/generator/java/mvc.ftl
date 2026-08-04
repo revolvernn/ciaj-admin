@@ -49,7 +49,7 @@ public class ${tableClass.shortClassName}Controller extends AbstractController<$
     @RequiresPermissions("${permission}:getById")
     @GetMapping("getById/{id}")
     public ResponseEntity<${tableClass.shortClassName}Dto> getById(@PathVariable("id") String id) {
-        return super.getById(id);
+        return new ResponseEntity<${tableClass.shortClassName}Dto>().put(${tableClass.variableName}Service.selectById(id));
     }
 
     /**
@@ -72,7 +72,7 @@ public class ${tableClass.shortClassName}Controller extends AbstractController<$
     public ResponseEntity<Page<${tableClass.shortClassName}Dto>> list(String keyword) {
         ${tableClass.shortClassName}Vo entity = new ${tableClass.shortClassName}Vo();
         entity.setKeyword(keyword);
-        return super.listDTOPage(entity);
+        return super.listMultiTablePage(entity);
     }
 
     /**

@@ -30,6 +30,12 @@ let ${jsName}app = new Vue({
                 //    sortBy: 'm.update_time',
                 //    label: '更新时间'
                 //},
+                //{
+                //    name: 'money',
+                //    ny: 'cny',
+                //    sum: 'cny',
+                //    label: '款项'
+                //},
             </#if>
                 {
                     label: '操作',
@@ -71,7 +77,12 @@ let ${jsName}app = new Vue({
                 }
             },
             rules: {
+                //projectId: [{required: true, message: '必选', trigger: 'change'}],
                 //username: [{required: true, message: '必填', trigger: 'blur'}]
+            <#if tableClass.allFields??>
+            <#list tableClass.allFields as field>
+                ${field.fieldName}: [{required: true, message: '必填', trigger: 'blur'}]<#if field_has_next>,</#if>
+            </#list></#if>
             }
         }
     },

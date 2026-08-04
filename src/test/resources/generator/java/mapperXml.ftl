@@ -241,4 +241,18 @@
             </trim>
         </where>
     </sql>
+    <resultMap id="DTOMultiTableResultMap" type="${dtoPo}.${tableClass.shortClassName}Dto" extends="BaseResultMap">
+            <!--        <association property="user" javaType="com.ciaj.boot.modules.sys.entity.dto.SysUserDto">-->
+            <!--            <id property="id" column="user_id"/>-->
+            <!--            <result property="username" column="u_username"/>-->
+            <!--            <result property="nickname" column="u_nickname"/>-->
+            <!--        </association>-->
+    </resultMap>
+    <select id="selectDTOListMultiTable"
+            resultMap="DTOMultiTableResultMap"  parameterType="${voQm}.${tableClass.shortClassName}Vo">
+        SELECT
+        <include refid="Base_Alias_Column_List"/>
+        FROM ${tableClass.tableName} m
+        <include refid="cust_query_condition_sql"/>
+    </select>
 </mapper>

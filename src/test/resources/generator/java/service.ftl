@@ -12,5 +12,10 @@ import ${dtoPo}.${tableClass.shortClassName}Dto;
  * @Description: ${description} service  接口
  */
 public interface ${tableClass.shortClassName}Service extends BaseService<${tableClass.shortClassName}Po, ${tableClass.shortClassName}Dto, ${tableClass.shortClassName}Vo> {
-
+     /**
+     * 根据ID查询
+     * @param id
+     * @return
+     */
+     public ${tableClass.shortClassName}Dto selectById(String id);
 }
