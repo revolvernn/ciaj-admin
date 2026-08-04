@@ -92,7 +92,9 @@ let familyMemberapp = new Vue({
                 }
             },
             rules: {
-                //username: [{required: true, message: '必填', trigger: 'blur'}]
+                familyId: [{required: true, message: '必选', trigger: 'change'}],
+                userId: [{required: true, message: '必选', trigger: 'change'}],
+                type: [{required: true, message: '必选', trigger: 'change'}]
             }
         }
     },

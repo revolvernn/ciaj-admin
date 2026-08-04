@@ -1,8 +1,6 @@
 package com.ciaj.boot.modules.my.service.impl;
 
 import com.ciaj.base.AbstractService;
-import com.ciaj.boot.modules.sys.mapper.SysUserMapper;
-import com.ciaj.boot.modules.sys.service.SysUserService;
 import com.ciaj.comm.utils.Page;
 import com.ciaj.comm.utils.PageUtils;
 import com.ciaj.comm.utils.Safes;

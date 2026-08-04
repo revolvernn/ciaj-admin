@@ -13,7 +13,9 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "MyFamilyMember")
 public class MyFamilyMemberDto extends MyFamilyMemberPo {
 
+    @ApiModelProperty("用户")
     private SysUserDto user;
+    @ApiModelProperty("家庭")
     private MyFamilyDto family;
 
     public SysUserDto getUser() {

@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "MyFamily")
 public class MyFamilyDto extends MyFamilyPo {
 
+    @ApiModelProperty("区域")
     private SysAreaDto sysArea;
 
     public SysAreaDto getSysArea() {

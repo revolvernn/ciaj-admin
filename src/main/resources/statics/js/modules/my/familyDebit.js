@@ -4,8 +4,8 @@ Vue.component('myBtn', myBtnT);
 Vue.component('myDictSelect', myDictSelectT);
 Vue.component('mySearchSelect', mySearchSelectT);
 
-let familyBillapp = new Vue({
-    el: '#familyBillapp',
+let familyDebitapp = new Vue({
+    el: '#familyDebitapp',
     data() {
         return {
             defaultSort: {prop: 'createTime', order: 'descending'},
@@ -25,7 +25,7 @@ let familyBillapp = new Vue({
                 },
                 {
                     name: 'type',
-                    dict: 'billType',
+                    dict: 'debitType',
                     label: '类型'
                 },
                 {
@@ -35,7 +35,7 @@ let familyBillapp = new Vue({
                 },
                 {
                     name: 'money',
-                    cny: 'cny',
+                    ny: 'cny',
                     sum: 'cny',
                     label: '款项'
                 },
@@ -52,24 +52,24 @@ let familyBillapp = new Vue({
                     label: '创建时间'
                 },
                 {
-                   name: 'updateTime',
-                   sortable: 'custom',
-                   sortBy: 'm.update_time',
-                   label: '更新时间'
+                    name: 'updateTime',
+                    sortable: 'custom',
+                    sortBy: 'm.update_time',
+                    label: '更新时间'
                 },
                 {
                     label: '操作',
                     width: '180px',
                     buttons: [
                         {
-                            auth:'my:family:bill:update',
+                            auth:'my:family:debit:update',
                             label: '修改',
                             icon: 'el-icon-edit',
                             click: this.myUpdate,
                             type: 'success'
                         },
                         {
-                            auth:'my:family:bill:delFlag',
+                            auth:'my:family:debit:delFlag',
                             label: '删除',
                             icon: 'el-icon-delete',
                             click: this.myDel,
@@ -82,14 +82,14 @@ let familyBillapp = new Vue({
             page: {},
             addOrUpdateForm: {
                 title: '新增',
-                familyBillFormLabelWidth: '200px',
-                familyBillFormVisible: false,
+                familyDebitFormLabelWidth: '200px',
+                familyDebitFormVisible: false,
                 pickerOptions: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
                     }
                 },
-                familyBill:{
+                familyDebit:{
                     userId: null,
                     type: null,
                     day: null,
@@ -142,25 +142,32 @@ let familyBillapp = new Vue({
         myAdd() {
             let that = this;
             that.addOrUpdateForm.title = '新增';
-            that.addOrUpdateForm.familyBillFormVisible = true;
-            that.addOrUpdateForm.familyBill = {
+            that.addOrUpdateForm.familyDebitFormVisible = true;
+            that.addOrUpdateForm.familyDebit = {
+                                             id: null,
                                              userId: null,
                                              type: null,
                                              day: null,
                                              money: null,
                                              addr: null,
-                                             remark: null
+                                             remark: null,
+                                             createAt: null,
+                                             createTime: null,
+                                             updateAt: null,
+                                             updateTime: null,
+                                             delFlag: null,
+                                             version: null
                                          }
             that.resetForm('addOrUpdateFormRef');
         },
         myUpdate(index, row) {
             let that = this;
             that.addOrUpdateForm.title = '修改';
-            that.addOrUpdateForm.familyBillFormVisible = true;
+            that.addOrUpdateForm.familyDebitFormVisible = true;
             that.resetForm('addOrUpdateFormRef');
-            httpUtil.get({url: "my/family/bill/getById/" + row.id}, function (result) {
+            httpUtil.get({url: "my/family/debit/getById/" + row.id}, function (result) {
                   if (result.code == 0) {
-                      that.addOrUpdateForm.familyBill = result.data;
+                      that.addOrUpdateForm.familyDebit = result.data;
                   }
             });
         },
@@ -174,13 +181,13 @@ let familyBillapp = new Vue({
                                             spinner: 'el-icon-loading',
                                             background: 'rgba(0, 0, 0, 0.7)'
                     });
-                    let url = that.addOrUpdateForm.familyBill.id == null ? "my/family/bill/add" : "my/family/bill/update";
-                    let type = that.addOrUpdateForm.familyBill.id == null ? "POST" : "PUT";
-                    httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.familyBill)}, function (r) {
+                    let url = that.addOrUpdateForm.familyDebit.id == null ? "my/family/debit/add" : "my/family/debit/update";
+                    let type = that.addOrUpdateForm.familyDebit.id == null ? "POST" : "PUT";
+                    httpUtil.post({url: url, type: type, data: JSON.stringify(that.addOrUpdateForm.familyDebit)}, function (r) {
                         loading.close();
                         if (r.code == 0) {
                             that.myQuery();
-                            that.addOrUpdateForm.familyBillFormVisible = false;
+                            that.addOrUpdateForm.familyDebitFormVisible = false;
                         }
                         alertMsg(that, r);
                     });
@@ -194,7 +201,7 @@ let familyBillapp = new Vue({
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                httpUtil.del({url: "my/family/bill/delFlag/" + row.id}, function (r) {
+                httpUtil.del({url: "my/family/debit/delFlag/" + row.id}, function (r) {
                     that.myQuery();
                     alertMsg(that, r);
                 });
@@ -202,7 +209,7 @@ let familyBillapp = new Vue({
         },
         loadData() {
             let that = this;
-            httpUtil.get({url: "my/family/bill/list", data: that.queryForm}, function (result) {
+            httpUtil.get({url: "my/family/debit/list", data: that.queryForm}, function (result) {
                 if (result.code == 0) {
                     that.page = result.data;
                     that.page.expand = true;
@@ -217,7 +224,7 @@ let familyBillapp = new Vue({
                 pageEnabled: false,
                 keyword: that.queryForm.keyword
             }
-            httpUtil.fileDownload(that, {url: "my/family/bill/list/export",data: data});
+            httpUtil.fileDownload(that, {url: "my/family/debit/list/export",data: data});
         }
     }
 });
