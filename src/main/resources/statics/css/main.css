@@ -25,7 +25,7 @@ body{
     color: #444;
     border-top: 1px solid #eee;
 }
- .el-dialog__footer,.el-table td,.el-table th{
+ .el-dialog__footer,.el-table th{
      text-align: center;
  }
 .el-form .el-input, .el-form .el-input-number{

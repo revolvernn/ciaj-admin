@@ -1,0 +1,100 @@
+<!DOCTYPE html >
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="header">
+<body>
+<div id="batchrenametoolapp" v-cloak>
+    <div>
+<!--        <input hidden="hidden" type="file" id="folderInput" webkitdirectory directory multiple>-->
+        <el-form ref="batchRenameToolRef" :rules="rules.toolForm" :model="toolForm.renameConfig">
+            <el-form-item label="目录" prop="directory" :label-width="toolForm.toolFormLabelWidth"  required>
+                <el-input v-model="toolForm.renameConfig.directory" autocomplete="off"
+                          placeholder="/oss/file or c:\oss\file"></el-input>
+<!--                <el-button @click="selectFolder">选择文件夹</el-button>-->
+            </el-form-item>
+            <el-form-item label="递归目录" prop="recursive" :label-width="toolForm.toolFormLabelWidth" required>
+                    <el-radio v-model="toolForm.renameConfig.recursive" :label="true">是</el-radio>
+                    <el-radio v-model="toolForm.renameConfig.recursive" :label="false">否</el-radio>
+            </el-form-item>
+            <el-form-item label="模式" prop="mode" :label-width="toolForm.toolFormLabelWidth"  required>
+                <el-radio-group v-model="toolForm.renameConfig.mode">
+                    <el-radio-button label="TIMESTAMP">时间戳</el-radio-button>
+                    <el-radio-button label="REPLACE">字符串替换</el-radio-button>
+                    <el-radio-button label="PREFIX">添加前缀</el-radio-button>
+                    <el-radio-button label="SUFFIX">添加后缀</el-radio-button>
+                    <el-radio-button label="REGEX">正则表达式替换</el-radio-button>
+                    <el-radio-button label="SEQUENCE">序号重命名</el-radio-button>
+                    <el-radio-button label="LOWERCASE">转小写</el-radio-button>
+                    <el-radio-button label="UPPERCASE">转大写</el-radio-button>
+                    <el-radio-button label="REMOVE_SPACES">移除空格</el-radio-button>
+                    <el-radio-button label="DATE_PREFIX">日期前缀</el-radio-button>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item v-if="toolForm.renameConfig.mode==='REPLACE'" label="旧字符串" prop="oldText" 
+                          :label-width="toolForm.toolFormLabelWidth" required>
+                <el-input v-model="toolForm.renameConfig.oldText" autocomplete="off"
+                          placeholder="旧字符串"></el-input>
+            </el-form-item>
+            <el-form-item v-if="toolForm.renameConfig.mode==='REPLACE'" label="新字符串" prop="newText" 
+                          :label-width="toolForm.toolFormLabelWidth" required>
+                <el-input v-model="toolForm.renameConfig.newText" autocomplete="off"
+                          placeholder="新字符串"></el-input>
+            </el-form-item>
+            <el-form-item v-if="toolForm.renameConfig.mode==='PREFIX'" label="前缀" prop="prefix" 
+                          :label-width="toolForm.toolFormLabelWidth" required>
+                <el-input v-model="toolForm.renameConfig.prefix" autocomplete="off"
+                          placeholder="前缀"></el-input>
+            </el-form-item>
+            <el-form-item v-if="toolForm.renameConfig.mode==='SUFFIX'" label="后缀" prop="suffix"
+                          :label-width="toolForm.toolFormLabelWidth" required>
+                <el-input v-model="toolForm.renameConfig.suffix" autocomplete="off"
+                          placeholder="后缀"></el-input>
+            </el-form-item>
+            <el-form-item v-if="toolForm.renameConfig.mode==='REGEX'" label="正则表达式" prop="pattern"
+                          :label-width="toolForm.toolFormLabelWidth" required>
+                <el-input v-model="toolForm.renameConfig.pattern" autocomplete="off"
+                          placeholder="正则表达式"></el-input>
+            </el-form-item>
+            <el-form-item v-if="toolForm.renameConfig.mode==='REGEX'" label="替换的文本" prop="replacement"
+                          :label-width="toolForm.toolFormLabelWidth" >
+                <el-input v-model="toolForm.renameConfig.replacement" autocomplete="off"
+                          placeholder="替换"></el-input>
+            </el-form-item>
+            <el-form-item v-if="toolForm.renameConfig.mode==='SEQUENCE'" label="序号起数" prop="startNumber"
+                          :label-width="toolForm.toolFormLabelWidth" required>
+                <el-input-number v-model="toolForm.renameConfig.startNumber" :min="1" />
+            </el-form-item>
+            <el-form-item v-if="toolForm.renameConfig.mode==='SEQUENCE'" label="序号起步数" prop="step"
+                          :label-width="toolForm.toolFormLabelWidth" required>
+                <el-input-number v-model="toolForm.renameConfig.step" :min="1" />
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer" style="text-align: center;">
+            <el-button @click="previewConfig" type="info">变更预览</el-button>
+            <el-button type="primary" @click="renameConfig">执行变更</el-button>
+        </div>
+        <el-dialog :close-on-click-modal="false"title="文件名变更预览" :visible.sync="previewConfigVisible">
+            <my-table @sortChange="sortchange" :columns="tableColumns" :page="page"
+                      v-on:pagesizechange="pagesizechange"
+                      v-on:currentpagechange="currentpagechange">
+            </my-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="previewConfigVisible = false">关闭</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+<script src="/statics/js/modules/sys/batchRenameTool.js"></script>
+<style>
+    .time {
+        font-size: 13px;
+        color: #999;
+    }
+
+    .image {
+        width: 100%;
+        display: block;
+    }
+</style>
+</body>
+</html>
